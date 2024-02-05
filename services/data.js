@@ -1,4 +1,4 @@
-import { getToken, getAlbumInfo, getArtistAlbums } from './spotifyAPI.js';
+import { getToken, getAlbumInfo, getArtistAlbums, getArtistInfo } from './spotifyAPI.js';
 import db from "../src/lib/db.js"
 
 const accessToken = await getToken();
@@ -40,6 +40,8 @@ async function createAlbums(artistID) {
 }
 
 async function createArtist(name, artistID) {
+  const artistData = await getArtistInfo(accessToken, artistID);
+  console.log(artistData);
 
   // Sprawdź, czy artysta już istnieje w bazie danych
   const existingArtist = await prisma.artist.findUnique({
@@ -49,9 +51,10 @@ async function createArtist(name, artistID) {
   });
 
   if (existingArtist) {
-    console.log('Artysta już istnieje w bazie danych.');
+    console.log('Artist exist in database');
     return;
   }
+
 
   const albums = await createAlbums(artistID);
 
@@ -59,7 +62,7 @@ async function createArtist(name, artistID) {
     data: {
       name: name,
       avg_rate: 0,
-      img: "img for artist",
+      img: artistData.images[0].url,
       albums: {
         create: albums.map((album) => ({
           title: album.title,
@@ -88,12 +91,17 @@ async function createArtist(name, artistID) {
 }
 
 
-const path = './artists.txt';
+const path = './artists2.txt';
 const file = Bun.file(path);
 const arrBuf = await file.arrayBuffer();
 
 const decoder = new TextDecoder();
 const str = decoder.decode(arrBuf);
+
+const name = "TACONAFIDE";
+const spotifyId = "5vgHNLPDrYD3hztA8yKoxP";
+
+await createArtist(name, spotifyId);
 
 
 await Promise.all(str.split("\n").map(async item => {

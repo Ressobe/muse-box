@@ -1,4 +1,5 @@
 import { appendFileSync } from "node:fs";
+import { getToken } from "./spotifyAPI.js";
 
 async function getPlaylistsId(accessToken) {
   const categoryId = 'hiphop';
@@ -17,6 +18,9 @@ async function getPlaylistsId(accessToken) {
   });
 
   const playlistData = await response.json();
+
+  console.log(playlistData);
+
   if (playlistData.playlists && playlistData.playlists.items && playlistData.playlists.items.length > 0) {
     return playlistData.playlists.items;
   } else {

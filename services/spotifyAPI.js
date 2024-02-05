@@ -37,7 +37,7 @@ export async function getAlbumInfo(accessToken, albumId) {
     method: 'GET',
     headers: albumHeaders,
     verbose: true,
-    timeout: 15000, // Przykładowy limit czasu w milisekundach
+    timeout: 25000, // Przykładowy limit czasu w milisekundach
   })    
   const albumData = await response.json();
   return albumData;
@@ -53,9 +53,26 @@ export async function getArtistAlbums(accessToken, artistID) {
     method: 'GET',
     headers: albumsHeaders,
     verbose: true,
-    timeout: 15000, // Przykładowy limit czasu w milisekundach
+    timeout: 25000, // Przykładowy limit czasu w milisekundach
   });
 
   const albumsData = await response.json();
   return albumsData;
+}
+
+export async function getArtistInfo(accessToken, artistID) {
+  const artistURL = `https://api.spotify.com/v1/artists/${artistID}`
+  const artistHeader = {
+    Authorization: `Bearer ${accessToken}`,
+  };
+
+  const response = await fetch(`${artistURL}`, {
+    method: 'GET',
+    headers: artistHeader,
+    verbose: true,
+    timeout: 25000, // Przykładowy limit czasu w milisekundach
+  });
+
+  const artistData = await response.json();
+  return artistData;
 }

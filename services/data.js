@@ -40,9 +40,6 @@ async function createAlbums(artistID) {
 }
 
 async function createArtist(name, artistID) {
-  const artistData = await getArtistInfo(accessToken, artistID);
-  console.log(artistData);
-
   // Sprawdź, czy artysta już istnieje w bazie danych
   const existingArtist = await prisma.artist.findUnique({
     where: {
@@ -55,8 +52,9 @@ async function createArtist(name, artistID) {
     return;
   }
 
-
+  const artistData = await getArtistInfo(accessToken, artistID);
   const albums = await createAlbums(artistID);
+
 
  await prisma.artist.create({
     data: {
@@ -98,16 +96,15 @@ const arrBuf = await file.arrayBuffer();
 const decoder = new TextDecoder();
 const str = decoder.decode(arrBuf);
 
-const name = "TACONAFIDE";
-const spotifyId = "5vgHNLPDrYD3hztA8yKoxP";
 
-await createArtist(name, spotifyId);
+const artistsData = str.split("\n").map(item => {
+  const [name, spotifyId] = item.split(",");
+  if (name.length > 0) {
+    return { name, spotifyId };
+  }
+}).filter(Boolean); // Usuń wartości null lub undefined
 
-
-await Promise.all(str.split("\n").map(async item => {
-    const [name, spotifyId] = item.split(",");
-     if (name.length > 0) {
-        await createArtist(name, spotifyId);
-     };
-  })
-)
+for (const artistData of artistsData) {
+  await createArtist(artistData.name, artistData.spotifyId);
+  await new Promise(resolve => setTimeout(resolve, 5000));
+}

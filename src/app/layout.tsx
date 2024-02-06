@@ -3,8 +3,8 @@ import './globals.css'
 
 
 export const metadata: Metadata = {
-  title: 'Config Crafters',
-  description: 'Website for people that love linux and sharing config with world',
+  title: 'Muse Box',
+  description: '',
 }
 
 export default function RootLayout({

@@ -1,17 +1,74 @@
 generator client {
-  provider = "prisma-client-js" 
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "sqlite"
-  url = "file:./dev.db"
+  url      = "file:./dev.db"
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  email       String   @unique
-  username    String   @unique
-  password    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  username  String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  comments  Comment[]
+}
+
+model Artist {
+  id         Int       @id @default(autoincrement())
+  name       String    @unique
+  img        String
+  avg_rate   Int
+  spotify_id String
+  country    String?
+  albums     Album[]
+  comments   Comment[]
+}
+
+model Album {
+  id           Int       @id @default(autoincrement())
+  creatorId    Int
+  title        String
+  img          String
+  total_tracks Int
+  spotify_link String
+  creator      Artist    @relation(fields: [creatorId], references: [id])
+  comments     Comment[]
+  songs        Song[]
+}
+
+model Song {
+  id           Int       @id @default(autoincrement())
+  title        String
+  albumId      Int
+  track_number Int
+  duration_ms  Int
+  genreId      Int
+  spotify_link String
+  comments     Comment[]
+  genre        Genre     @relation(fields: [genreId], references: [id])
+  album        Album     @relation(fields: [albumId], references: [id])
+}
+
+model Genre {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  songs Song[]
+}
+
+model Comment {
+  id       Int     @id @default(autoincrement())
+  content  String
+  rate     Int
+  userId   Int
+  songId   Int?
+  albumId  Int?
+  artistId Int?
+  artist   Artist? @relation(fields: [artistId], references: [id])
+  album    Album?  @relation(fields: [albumId], references: [id])
+  song     Song?   @relation(fields: [songId], references: [id])
+  user     User    @relation(fields: [userId], references: [id])
 }

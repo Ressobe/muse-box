@@ -8,12 +8,14 @@ const config: Config = {
   ],
   plugins: [],
   theme: {
-    colors: {
-      'background-color': '#171819',
-      'text-color': '#ffffff',
-      'primary-color': '#6F2DA8',
-      'secondary-color': '#4B0082',
-      'accent-color': '#800080',
+    extend: {
+      colors: {
+        'background-color': '#171819',
+        'text-color': '#ffffff',
+        'primary-color': '#6F2DA8',
+        'secondary-color': '#4B0082',
+        'accent-color': '#800080',
+      }
     }
   }
 }

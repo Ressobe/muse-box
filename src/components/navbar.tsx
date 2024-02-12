@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { authOptions } from "../lib/auth";
-import SignOutButton from "./SignOutButton";
+import SignOutButton from "./sign-out-button";
 
 export default async function Navbar() {
     const session = await getServerSession(authOptions);
@@ -10,7 +10,7 @@ export default async function Navbar() {
         <>
         <nav className="flex w-full justify-between  px-4 pt-8 items-center gap-2">
         <Link href="/" className="hover:underline hover:font-bold flex items-center gap-x-2">
-          <img src="/music-box.png" className="w-10"  />  MuseBox.com
+          <img src="/music-box.png" className="w-10" alt="music box icon"  />  MuseBox.com
         </Link>
 
             {session ? (
@@ -21,7 +21,7 @@ export default async function Navbar() {
                 </div>
             ) : (
                 <div className="flex gap-x-2">
-                    <Link className="border border-black px-3 py-2 rounded-lg hover:underline" href="sign-in">Sign In</Link>
+                    <Link className="border border-black px-3 py-2 rounded-lg hover:underline" href="/sign-in">Sign In</Link>
                 </div>
             )}
     

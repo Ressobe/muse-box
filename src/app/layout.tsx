@@ -5,6 +5,7 @@ import Footer from '../components/footer'
 import SessionProvider from '../context/SessionProvider'
 import { Inter as FontSans } from "next/font/google"
 import { cn } from '@/lib/utils'
+import { Toaster } from "@/src/components/ui/toaster"
 
 export const fontSans = FontSans({
   subsets: ["latin"],
@@ -33,8 +34,9 @@ export default function RootLayout({
         <SessionProvider>
           <Navbar />
           {children}
-          <Footer/>
+          {/* <Footer/> */}
         </SessionProvider>
+        <Toaster />
       </body>
     </html>
   )

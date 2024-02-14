@@ -64,6 +64,7 @@ export function SignUpForm({onSuccess}: SignUpFormProps) {
           description: "Now log into your new account" 
         }
       );
+      return;
     }
 
     if (!data.errors) {
@@ -77,8 +78,9 @@ export function SignUpForm({onSuccess}: SignUpFormProps) {
 
   return (
     <Form {...form}>
-      <form method="post" onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex flex-col">
+      <form method="post" onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex flex-col p-4">
         <FormField
+            control={form.control}
             name="email" 
             render={({field}) => (
                 <FormItem>
@@ -91,6 +93,7 @@ export function SignUpForm({onSuccess}: SignUpFormProps) {
             )}
         />
         <FormField
+          control={form.control}
           name="username"
           render={({ field }) => (
             <FormItem>
@@ -106,6 +109,7 @@ export function SignUpForm({onSuccess}: SignUpFormProps) {
           )}
         />
         <FormField
+          control={form.control}
           name="password"
           render={({ field }) => (
             <FormItem>
@@ -118,6 +122,7 @@ export function SignUpForm({onSuccess}: SignUpFormProps) {
           )}
         />
         <FormField
+          control={form.control}
           name="confirmPassword"
           render={({ field }) => (
             <FormItem>

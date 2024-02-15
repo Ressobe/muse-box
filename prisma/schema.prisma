@@ -3,15 +3,19 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
+
+// ---------------------------------------------------------------------
+// User
+// ---------------------------------------------------------------------
 
 model User {
   id         String   @id @default(uuid())
   email      String   @unique
   username   String   @unique
-  avatar_img String
+  avatar_img String   @default("/user.png")
   password   String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -19,155 +23,269 @@ model User {
 }
 
 model Profile {
-  id String @id @default(uuid())
+  id      String @id @default(uuid())
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String @unique
+  name    String
+  surname String
+  age     Int    @db.SmallInt
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @unique
+  comment  Comment[]
+  playlist Playlist[]
 
   artistId String?
   albumId  String?
   songId   String?
 
-  favourite_artist Artist? @relation(fields: [artistId], references: [id])
-  favourite_album  Album?  @relation(fields: [albumId], references: [id])
-  favourite_song   Track?  @relation(fields: [songId], references: [id])
+  favourite_artist Artist?    @relation(fields: [artistId], references: [id])
+  favourite_album  Recording? @relation(fields: [albumId], references: [id])
+  favourite_song   Track?     @relation(fields: [songId], references: [id])
 
-  comments Comment[]
-  friends  Profile[] @relation("Friends")
-  friendOf Profile[] @relation("Friends")
+  invitationsSent     Invitation[]  @relation("sentBy")
+  invitationsReceived Invitation[]  @relation("receivedBy")
+  stats               ProfileStats?
+  friends             Profile[]     @relation("Friends")
+  friendsOf           Profile[]     @relation("Friends")
+}
 
-  invitationsSent     Invitation[]   @relation("sentBy")
-  invitationsReceived Invitation[]   @relation("receivedBy")
-  notifications       Notification[]
-  Playlist            Playlist[]
+model ProfileStats {
+  id Int @id @default(autoincrement())
+
+  owner   Profile @relation(fields: [ownerId], references: [id])
+  ownerId String  @unique
+
+  amount_of_ratings   Int
+  amount_of_followers Int
+  amount_of_following Int
 }
 
 model Playlist {
-  id      String  @id @default(uuid())
-  name    String
-  owner   Profile @relation(fields: [ownerId], references: [id])
-  ownerId String
-  tracks  Track[]
+  id   String @id @default(uuid())
+  name String
+
+  isPublic Boolean
+  owner    Profile @relation(fields: [ownerId], references: [id])
+  ownerId  String
+
+  tracks     Track[]
+  recordings Recording[]
 }
 
-model Notification {
-  id Int @id @default(autoincrement())
-
-  Profile   Profile? @relation(fields: [profileId], references: [id])
-  profileId String?
-
-  type       String
-  from       Int
-  resourceId Int
-  isRead     Boolean
-
-  createdAt DateTime @default(now())
+enum InvitationState {
+  PENDING
+  ACCEPTED
+  REJECTED
 }
 
 model Invitation {
-  id         Int     @id @default(autoincrement())
-  sender     Profile @relation(name: "sentBy", fields: [senderId], references: [id])
-  senderId   String
+  id String @id @default(uuid())
+
+  sender   Profile @relation(name: "sentBy", fields: [senderId], references: [id])
+  senderId String
+
   receiver   Profile @relation(name: "receivedBy", fields: [receiverId], references: [id])
   receiverId String
+
+  state InvitationState
 
   createdAt DateTime @default(now())
 
   @@unique([senderId, receiverId])
 }
 
-model Artist {
-  id             String  @id @default(uuid())
-  nick           String  @unique
-  name           String  @default("")
-  surname        String  @default("")
-  age            Int     @default(10)
-  place_of_birth String  @default("")
-  nationality    String  @default("")
-  language       String  @default("")
-  avatar_img     String
-  banner_img     String?
-
-  views              Int @default(0)
-  avg_rate           Int @default(0)
-  amount_of_comments Int @default(0)
-
-  about           String?
-  spotify_link    String?
-  youtube_link    String?
-  soundcloud_link String?
-  instagram_link  String?
-  twitter_link    String?
-
-  albums    Album[]
-  comments  Comment[]
-  favourite Profile[]
-  genres    Genre[]   @relation("ArtistGenres")
+enum NotificationType {
+  NEW_ALBUM
+  NEW_SONG
+  NEW_RATE_FROM_FRIEND
+  INVITE
 }
 
-model Album {
-  id              String     @id @default(uuid())
-  creatorId       String
-  title           String
-  img             String
-  total_tracks    Int
-  spotify_link    String
-  youtube_link    String?
-  soundcloud_link String?
-  release_year    Int
-  release_month   Int?
-  release_day     Int?
-  language        String
-  typeId          Int
-  type            Album_Type @relation(fields: [typeId], references: [id])
-  creator         Artist     @relation(fields: [creatorId], references: [id])
-  comments        Comment[]
-  songs           Track[]
-  favourite       Profile[]
+model Notification {
+  id         Int              @id @default(autoincrement())
+  type       NotificationType
+  resourceId String
 }
 
-model Album_Type {
-  id    Int     @id @default(autoincrement())
-  type  String  @unique
-  Album Album[]
-}
-
-model Track {
-  id              String    @id @default(uuid())
-  title           String
-  albumId         String
-  track_number    Int
-  duration_ms     Int
-  genreId         Int
-  spotify_link    String
-  youtube_link    String?
-  soundcloud_link String?
-  language        String    @default("")
-  album           Album     @relation(fields: [albumId], references: [id])
-  comments        Comment[]
-  favourite       Profile[]
-  Playlist        Playlist? @relation(fields: [playlistId], references: [id])
-  playlistId      String?
-}
-
-model Genre {
-  id      Int      @id @default(autoincrement())
-  name    String   @unique
-  artists Artist[] @relation("ArtistGenres")
+enum CommentType {
+  ARTIST
+  RECORDING
+  TRACK
 }
 
 model Comment {
-  id        Int      @id @default(autoincrement())
-  content   String
-  rate      Int
-  userId    Int
-  songId    String?
-  albumId   String?
-  artistId  String?
-  artist    Artist?  @relation(fields: [artistId], references: [id])
-  album     Album?   @relation(fields: [albumId], references: [id])
-  song      Track?   @relation(fields: [songId], references: [id])
-  Profile   Profile  @relation(fields: [profileId], references: [id])
-  profileId String
+  id      Int         @id @default(autoincrement())
+  rate    Int
+  type    CommentType
+  content String
+  owner   Profile     @relation(fields: [ownerId], references: [id])
+  ownerId String
+
+  artistId    String?
+  recordingId String?
+  trackId     String?
+
+  artist    Artist?    @relation(fields: [artistId], references: [id])
+  recording Recording? @relation(fields: [recordingId], references: [id])
+  track     Track?     @relation(fields: [trackId], references: [id])
+
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------
+// ARTIST
+// ---------------------------------------------------------------------
+
+enum ArtistType {
+  PERSON
+  GROUP
+  ORCHESTRA
+  CHOIR
+  CHARACTER
+  OTHER
+}
+
+enum GenderType {
+  MALE
+  FEMALE
+  NEITHER
+}
+
+model Artist {
+  id     String     @id @default(uuid())
+  name   String
+  type   ArtistType
+  gender GenderType
+
+  begin_date_day   Int @db.SmallInt
+  begin_date_month Int @db.SmallInt
+  begin_date_year  Int @db.SmallInt
+
+  end_date_day   Int @db.SmallInt
+  end_date_month Int @db.SmallInt
+  end_date_year  Int @db.SmallInt
+
+  genre   Genre  @relation(fields: [genreId], references: [id])
+  genreId String
+
+  about  String
+  albums Recording[]
+
+  mbid String @unique
+
+  stats ArtistStats?
+
+  external_links ExternalLinkArtist[]
+  comments       Comment[]
+  fav_artist     Profile[]
+}
+
+model ArtistStats {
+  id                Int    @id @default(autoincrement())
+  rating            Float
+  amount_of_ratings Int
+  owner             Artist @relation(fields: [ownerId], references: [id])
+  ownerId           String @unique
+}
+
+model ExternalLinkArtist {
+  id      Int    @id @default(autoincrement())
+  link    String
+  owner   Artist @relation(fields: [ownerId], references: [id])
+  ownerId String
+}
+
+model Genre {
+  id      String   @id @default(uuid())
+  name    String   @unique
+  artists Artist[]
+}
+
+// ---------------------------------------------------------------------
+// Recording
+// ---------------------------------------------------------------------
+
+model Label {
+  id         String      @id @default(uuid())
+  name       String      @unique
+  recordings Recording[]
+}
+
+enum RecordingType {
+  ALBUM
+  SINGLE
+  EP
+  COMPILATION
+  SOUNDTRACK
+  REMIX
+  MIXTAPE
+  OTHER
+}
+
+model Recording {
+  id             String                  @id @default(uuid())
+  name           String
+  mbid           String                  @unique
+  cover_img      String?
+  type           RecordingType
+  artist         Artist                  @relation(fields: [artistId], references: [id])
+  artistId       String
+  tracks         Track[]
+  length         Int
+  about          String
+  label          Label?                  @relation(fields: [labelId], references: [id])
+  labelId        String?
+  external_links ExternalLinkRecording[]
+  stats          RecordingStats?
+  playlists      Playlist[]
+  comments       Comment[]
+  fav_recording  Profile[]
+}
+
+model RecordingStats {
+  id                Int       @id @default(autoincrement())
+  rating            Float
+  amount_of_ratings Int
+  owner             Recording @relation(fields: [ownerId], references: [id])
+  ownerId           String    @unique
+}
+
+model ExternalLinkRecording {
+  id      Int       @id @default(autoincrement())
+  link    String
+  owner   Recording @relation(fields: [ownerId], references: [id])
+  ownerId String
+}
+
+// ---------------------------------------------------------------------
+// Track
+// ---------------------------------------------------------------------
+
+model Track {
+  id             String              @id @default(uuid())
+  name           String
+  recording      Recording           @relation(fields: [recordingId], references: [id])
+  recordingId    String
+  position       Int                 @db.SmallInt
+  length         Int
+  stats          TrackStats?
+  external_links ExternalLinkTrack[]
+  playlists      Playlist[]
+  comments       Comment[]
+  fav_track      Profile[]
+}
+
+model TrackStats {
+  id                Int    @id @default(autoincrement())
+  rating            Float
+  amount_of_ratings Int
+  owner             Track  @relation(fields: [ownerId], references: [id])
+  ownerId           String @unique
+}
+
+model ExternalLinkTrack {
+  id      Int    @id @default(autoincrement())
+  link    String
+  owner   Track  @relation(fields: [ownerId], references: [id])
+  ownerId String
 }

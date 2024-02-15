@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @default(uuid())
   email      String   @unique
   username   String   @unique
   avatar_img String
@@ -19,79 +19,111 @@ model User {
 }
 
 model Profile {
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
 
-  user   User @relation(fields: [userId], references: [id])
-  userId Int  @unique
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
 
-  artistId Int?
-  albumId  Int?
-  songId   Int?
+  artistId String?
+  albumId  String?
+  songId   String?
 
   favourite_artist Artist? @relation(fields: [artistId], references: [id])
   favourite_album  Album?  @relation(fields: [albumId], references: [id])
-  favourite_song   Song?   @relation(fields: [songId], references: [id])
+  favourite_song   Track?  @relation(fields: [songId], references: [id])
 
-  comments  Comment[]
-  friends   Profile[]   @relation("Friends")
-  friendOf  Profile[]   @relation("Friends")
-  Following Following[]
+  comments Comment[]
+  friends  Profile[] @relation("Friends")
+  friendOf Profile[] @relation("Friends")
+
+  invitationsSent     Invitation[]   @relation("sentBy")
+  invitationsReceived Invitation[]   @relation("receivedBy")
+  notifications       Notification[]
+  Playlist            Playlist[]
 }
 
-model Following {
-  id        Int     @id @default(autoincrement())
-  profile   Profile @relation(fields: [profileId], references: [id])
-  profileId Int
-  artist    Artist  @relation(fields: [artistId], references: [id])
-  artistId  Int
+model Playlist {
+  id      String  @id @default(uuid())
+  name    String
+  owner   Profile @relation(fields: [ownerId], references: [id])
+  ownerId String
+  tracks  Track[]
+}
 
-  @@unique([profileId, artistId])
+model Notification {
+  id Int @id @default(autoincrement())
+
+  Profile   Profile? @relation(fields: [profileId], references: [id])
+  profileId String?
+
+  type       String
+  from       Int
+  resourceId Int
+  isRead     Boolean
+
+  createdAt DateTime @default(now())
+}
+
+model Invitation {
+  id         Int     @id @default(autoincrement())
+  sender     Profile @relation(name: "sentBy", fields: [senderId], references: [id])
+  senderId   String
+  receiver   Profile @relation(name: "receivedBy", fields: [receiverId], references: [id])
+  receiverId String
+
+  createdAt DateTime @default(now())
+
+  @@unique([senderId, receiverId])
 }
 
 model Artist {
-  id                 Int         @id @default(autoincrement())
-  nick               String      @unique
-  name               String
-  surname            String
-  age                Int
-  place_of_birth     String
-  nationality        String
-  language           String
-  avatar_img         String
-  banner_img         String?
-  views              Int         @default(0)
-  avg_rate           Int         @default(0)
-  amount_of_comments Int         @default(0)
-  about              String?
-  spotify_link       String?
-  youtube_link       String?
-  soundcloud_link    String?
-  instagram_link     String?
-  twitter_link       String?
-  albums             Album[]
-  comments           Comment[]
-  favourite          Profile[]
-  genres             Genre[]     @relation("ArtistGenres")
-  Following          Following[]
+  id             String  @id @default(uuid())
+  nick           String  @unique
+  name           String  @default("")
+  surname        String  @default("")
+  age            Int     @default(10)
+  place_of_birth String  @default("")
+  nationality    String  @default("")
+  language       String  @default("")
+  avatar_img     String
+  banner_img     String?
+
+  views              Int @default(0)
+  avg_rate           Int @default(0)
+  amount_of_comments Int @default(0)
+
+  about           String?
+  spotify_link    String?
+  youtube_link    String?
+  soundcloud_link String?
+  instagram_link  String?
+  twitter_link    String?
+
+  albums    Album[]
+  comments  Comment[]
+  favourite Profile[]
+  genres    Genre[]   @relation("ArtistGenres")
 }
 
 model Album {
-  id            Int        @id @default(autoincrement())
-  creatorId     Int
-  title         String
-  img           String
-  total_tracks  Int
-  spotify_link  String
-  release_year  Int
-  release_month Int?
-  release_day   Int?
-  language      String
-  typeId        Int
-  type          Album_Type @relation(fields: [typeId], references: [id])
-  creator       Artist     @relation(fields: [creatorId], references: [id])
-  comments      Comment[]
-  songs         Song[]
-  favourite     Profile[]
+  id              String     @id @default(uuid())
+  creatorId       String
+  title           String
+  img             String
+  total_tracks    Int
+  spotify_link    String
+  youtube_link    String?
+  soundcloud_link String?
+  release_year    Int
+  release_month   Int?
+  release_day     Int?
+  language        String
+  typeId          Int
+  type            Album_Type @relation(fields: [typeId], references: [id])
+  creator         Artist     @relation(fields: [creatorId], references: [id])
+  comments        Comment[]
+  songs           Track[]
+  favourite       Profile[]
 }
 
 model Album_Type {
@@ -100,18 +132,22 @@ model Album_Type {
   Album Album[]
 }
 
-model Song {
-  id           Int       @id @default(autoincrement())
-  title        String
-  albumId      Int
-  track_number Int
-  duration_ms  Int
-  genreId      Int
-  spotify_link String
-  language     String
-  album        Album     @relation(fields: [albumId], references: [id])
-  comments     Comment[]
-  favourite    Profile[]
+model Track {
+  id              String    @id @default(uuid())
+  title           String
+  albumId         String
+  track_number    Int
+  duration_ms     Int
+  genreId         Int
+  spotify_link    String
+  youtube_link    String?
+  soundcloud_link String?
+  language        String    @default("")
+  album           Album     @relation(fields: [albumId], references: [id])
+  comments        Comment[]
+  favourite       Profile[]
+  Playlist        Playlist? @relation(fields: [playlistId], references: [id])
+  playlistId      String?
 }
 
 model Genre {
@@ -121,16 +157,17 @@ model Genre {
 }
 
 model Comment {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   content   String
   rate      Int
   userId    Int
-  songId    Int?
-  albumId   Int?
-  artistId  Int?
-  artist    Artist? @relation(fields: [artistId], references: [id])
-  album     Album?  @relation(fields: [albumId], references: [id])
-  song      Song?   @relation(fields: [songId], references: [id])
-  Profile   Profile @relation(fields: [profileId], references: [id])
-  profileId Int
+  songId    String?
+  albumId   String?
+  artistId  String?
+  artist    Artist?  @relation(fields: [artistId], references: [id])
+  album     Album?   @relation(fields: [albumId], references: [id])
+  song      Track?   @relation(fields: [songId], references: [id])
+  Profile   Profile  @relation(fields: [profileId], references: [id])
+  profileId String
+  createdAt DateTime @default(now())
 }

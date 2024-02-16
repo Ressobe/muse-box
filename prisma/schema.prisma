@@ -148,7 +148,7 @@ enum ArtistType {
 enum GenderType {
   MALE
   FEMALE
-  NEITHER
+  OTHER
 }
 
 model Artist {
@@ -157,33 +157,30 @@ model Artist {
   type   ArtistType
   gender GenderType
 
-  begin_date_day   Int @db.SmallInt
-  begin_date_month Int @db.SmallInt
-  begin_date_year  Int @db.SmallInt
+  mbid  String
+  about String?
 
-  end_date_day   Int @db.SmallInt
-  end_date_month Int @db.SmallInt
-  end_date_year  Int @db.SmallInt
+  begin_date_day   Int? @db.SmallInt
+  begin_date_month Int? @db.SmallInt
+  begin_date_year  Int? @db.SmallInt
 
-  genre   Genre  @relation(fields: [genreId], references: [id])
-  genreId String
+  end_date_day   Int? @db.SmallInt
+  end_date_month Int? @db.SmallInt
+  end_date_year  Int? @db.SmallInt
 
-  about  String
-  albums Recording[]
-
-  mbid String @unique
-
-  stats ArtistStats?
-
+  albums         Recording[]
+  genre          Genre[]
+  stats          ArtistStats?
   external_links ExternalLinkArtist[]
-  comments       Comment[]
-  fav_artist     Profile[]
+
+  comments   Comment[]
+  fav_artist Profile[]
 }
 
 model ArtistStats {
   id                Int    @id @default(autoincrement())
-  rating            Float
-  amount_of_ratings Int
+  rating            Float  @default(0)
+  amount_of_ratings Int    @default(0)
   owner             Artist @relation(fields: [ownerId], references: [id])
   ownerId           String @unique
 }
@@ -207,7 +204,8 @@ model Genre {
 
 model Label {
   id         String      @id @default(uuid())
-  name       String      @unique
+  name       String
+  mbid       String
   recordings Recording[]
 }
 
@@ -225,14 +223,14 @@ enum RecordingType {
 model Recording {
   id             String                  @id @default(uuid())
   name           String
-  mbid           String                  @unique
+  mbid           String
   cover_img      String?
   type           RecordingType
   artist         Artist                  @relation(fields: [artistId], references: [id])
   artistId       String
   tracks         Track[]
   length         Int
-  about          String
+  about          String?
   label          Label?                  @relation(fields: [labelId], references: [id])
   labelId        String?
   external_links ExternalLinkRecording[]
@@ -244,8 +242,8 @@ model Recording {
 
 model RecordingStats {
   id                Int       @id @default(autoincrement())
-  rating            Float
-  amount_of_ratings Int
+  rating            Float     @default(0)
+  amount_of_ratings Int       @default(0)
   owner             Recording @relation(fields: [ownerId], references: [id])
   ownerId           String    @unique
 }
@@ -262,12 +260,15 @@ model ExternalLinkRecording {
 // ---------------------------------------------------------------------
 
 model Track {
-  id             String              @id @default(uuid())
-  name           String
-  recording      Recording           @relation(fields: [recordingId], references: [id])
-  recordingId    String
-  position       Int                 @db.SmallInt
-  length         Int
+  id   String @id @default(uuid())
+  name String
+  mbid String
+
+  recording   Recording @relation(fields: [recordingId], references: [id])
+  recordingId String
+  position    Int       @db.SmallInt
+  length      Int
+
   stats          TrackStats?
   external_links ExternalLinkTrack[]
   playlists      Playlist[]
@@ -277,8 +278,8 @@ model Track {
 
 model TrackStats {
   id                Int    @id @default(autoincrement())
-  rating            Float
-  amount_of_ratings Int
+  rating            Float  @default(0)
+  amount_of_ratings Int    @default(0)
   owner             Track  @relation(fields: [ownerId], references: [id])
   ownerId           String @unique
 }

@@ -26,12 +26,16 @@ model Profile {
   id      String @id @default(uuid())
   user    User   @relation(fields: [userId], references: [id])
   userId  String @unique
-  name    String
-  surname String
-  age     Int    @db.SmallInt
+  name    String @default("")
+  surname String @default("")
+  age     Int    @default(0) @db.SmallInt
 
-  comment  Comment[]
-  playlist Playlist[]
+  comment       Comment[]
+  playlist      Playlist[]
+  notifications Notification[] @relation("ProfileNotifications")
+
+  followers Profile[] @relation("Following")
+  following Profile[] @relation("Following")
 
   artistId String?
   albumId  String?
@@ -104,6 +108,7 @@ model Notification {
   id         Int              @id @default(autoincrement())
   type       NotificationType
   resourceId String
+  profiles   Profile[]        @relation("ProfileNotifications")
 }
 
 enum CommentType {

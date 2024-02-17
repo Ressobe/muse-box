@@ -169,7 +169,7 @@ model Artist {
   end_date_year  Int? @db.SmallInt
 
   albums         Recording[]
-  genre          Genre[]
+  tags           Tag[]
   stats          ArtistStats?
   external_links ExternalLinkArtist[]
 
@@ -192,7 +192,7 @@ model ExternalLinkArtist {
   ownerId String
 }
 
-model Genre {
+model Tag {
   id      String   @id @default(uuid())
   name    String   @unique
   artists Artist[]
@@ -229,7 +229,7 @@ model Recording {
   artist         Artist                  @relation(fields: [artistId], references: [id])
   artistId       String
   tracks         Track[]
-  length         Int
+  length         Int?
   about          String?
   label          Label?                  @relation(fields: [labelId], references: [id])
   labelId        String?
@@ -267,7 +267,7 @@ model Track {
   recording   Recording @relation(fields: [recordingId], references: [id])
   recordingId String
   position    Int       @db.SmallInt
-  length      Int
+  length      Int?
 
   stats          TrackStats?
   external_links ExternalLinkTrack[]

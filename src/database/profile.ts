@@ -34,6 +34,16 @@ export async function acceptInvitationFriend(userWhoAccept: string, senderId: st
         }
     });
 
+    await db.notification.deleteMany({
+        where: {
+            type: "INVITE",
+            resourceId: senderId,
+            profiles: {
+                some: { id: userWhoAccept }
+            }
+        }
+    })
+
     await db.invitation.update({
         where: {id: invitation?.id},
         data: {
@@ -57,7 +67,7 @@ export async function acceptInvitationFriend(userWhoAccept: string, senderId: st
                 connect: {id: userWhoAccept}
             }
         }
-    })
+    });
 
     await db.notification.create({
         data: {
@@ -77,6 +87,16 @@ export async function rejectInvitationFriend(userWhoReject: string, senderId: st
             receiverId: userWhoReject,
         }
     });
+
+    await db.notification.deleteMany({
+        where: {
+            type: "INVITE",
+            resourceId: senderId,
+            profiles: {
+                some: { id: userWhoReject }
+            }
+        }
+    })
 
     await db.invitation.update({
         where: {id: invitation?.id},
@@ -174,7 +194,13 @@ export async function getProfile(profileId: string) {
 }
 
 export async function getNotifications(profileId: string) {
-
+    const profile = await db.profile.findUnique({
+        where: {id: profileId},
+        include: {
+            notifications: true,
+        }
+    })
+    return profile?.notifications;
 }
 
 export async function updateComment(commentId: string, rate: number, comment: string) {
@@ -191,4 +217,23 @@ export async function deleteComment(commentId: string) {
     await db.comment.delete({
         where: {id: commentId}
     });
+}
+
+export async function getLatestProfileComments(profileId: string) {
+    await db.comment.findMany({
+        where: {ownerId: profileId},
+        orderBy: {
+            createdAt: 'desc',
+        },
+       take: 5, 
+    })
+}
+
+export async function removeNotification(notificationId: number, resourceId: string) {
+    await db.notification.delete({
+        where: {
+            id: notificationId,
+            resourceId: resourceId,
+        }
+    })
 }

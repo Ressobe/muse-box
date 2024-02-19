@@ -39,11 +39,13 @@ model Profile {
 
   artistId String?
   albumId  String?
-  songId   String?
+  trackId  String?
+  genreId  String?
 
   favourite_artist Artist?    @relation(fields: [artistId], references: [id])
   favourite_album  Recording? @relation(fields: [albumId], references: [id])
-  favourite_song   Track?     @relation(fields: [songId], references: [id])
+  favourite_song   Track?     @relation(fields: [trackId], references: [id])
+  favourite_genre  Genre?     @relation(fields: [genreId], references: [id])
 
   invitationsSent     Invitation[]  @relation("sentBy")
   invitationsReceived Invitation[]  @relation("receivedBy")
@@ -93,14 +95,14 @@ model Invitation {
   state InvitationState
 
   createdAt DateTime @default(now())
-
-  @@unique([senderId, receiverId])
 }
 
 enum NotificationType {
   NEW_ALBUM
   NEW_SONG
   NEW_RATE_FROM_FRIEND
+  NEW_FOLLOWER
+  ACCEPTED_INVITATION
   INVITE
 }
 
@@ -108,6 +110,7 @@ model Notification {
   id         Int              @id @default(autoincrement())
   type       NotificationType
   resourceId String
+  isReaded   Boolean          @default(false)
   profiles   Profile[]        @relation("ProfileNotifications")
 }
 
@@ -118,7 +121,7 @@ enum CommentType {
 }
 
 model Comment {
-  id      Int         @id @default(autoincrement())
+  id      String      @id @default(uuid())
   rate    Int
   type    CommentType
   content String
@@ -165,6 +168,9 @@ model Artist {
   mbid  String
   about String?
 
+  area   Area?   @relation(fields: [areaId], references: [id])
+  areaId String?
+
   begin_date_day   Int? @db.SmallInt
   begin_date_month Int? @db.SmallInt
   begin_date_year  Int? @db.SmallInt
@@ -173,7 +179,9 @@ model Artist {
   end_date_month Int? @db.SmallInt
   end_date_year  Int? @db.SmallInt
 
+  popularity     Int                  @default(0)
   albums         Recording[]
+  genres         Genre[]
   tags           Tag[]
   stats          ArtistStats?
   external_links ExternalLinkArtist[]
@@ -184,8 +192,9 @@ model Artist {
 
 model ArtistStats {
   id                Int    @id @default(autoincrement())
-  rating            Float  @default(0)
+  avg_rating        Float  @default(0)
   amount_of_ratings Int    @default(0)
+  visits            Int    @default(0)
   owner             Artist @relation(fields: [ownerId], references: [id])
   ownerId           String @unique
 }
@@ -197,9 +206,43 @@ model ExternalLinkArtist {
   ownerId String
 }
 
+model Genre {
+  id      String    @id @default(uuid())
+  name    String    @unique
+  artists Artist[]
+  Profile Profile[]
+}
+
 model Tag {
   id      String   @id @default(uuid())
   name    String   @unique
+  artists Artist[]
+}
+
+enum AreaType {
+  COUNTRY
+  SUBDIVISION
+  CITY
+  MUNICIPALITY
+  DISTRICT
+  ISLAND
+  OTHER
+}
+
+model Area {
+  id   String @id @default(uuid())
+  mbid String
+  name String @unique
+
+  begin_date_day   Int? @db.SmallInt
+  begin_date_month Int? @db.SmallInt
+  begin_date_year  Int? @db.SmallInt
+
+  end_date_day   Int? @db.SmallInt
+  end_date_month Int? @db.SmallInt
+  end_date_year  Int? @db.SmallInt
+
+  type    AreaType
   artists Artist[]
 }
 
@@ -209,8 +252,8 @@ model Tag {
 
 model Label {
   id         String      @id @default(uuid())
-  name       String
-  mbid       String
+  name       String      @unique
+  mbid       String      @unique
   recordings Recording[]
 }
 
@@ -226,29 +269,41 @@ enum RecordingType {
 }
 
 model Recording {
-  id             String                  @id @default(uuid())
-  name           String
-  mbid           String
-  cover_img      String?
-  type           RecordingType
-  artist         Artist                  @relation(fields: [artistId], references: [id])
-  artistId       String
-  tracks         Track[]
-  length         Int?
-  about          String?
-  label          Label?                  @relation(fields: [labelId], references: [id])
-  labelId        String?
+  id         String        @id @default(uuid())
+  name       String
+  mbid       String
+  cover_img  String?
+  type       RecordingType
+  artist     Artist        @relation(fields: [artistId], references: [id])
+  artistId   String
+  tracks     Track[]
+  length     Int?
+  about      String?
+  label      Label?        @relation(fields: [labelId], references: [id])
+  labelId    String?
+  language   Language?     @relation(fields: [languageId], references: [id])
+  languageId Int?
+  popularity Int           @default(0)
+
   external_links ExternalLinkRecording[]
   stats          RecordingStats?
-  playlists      Playlist[]
-  comments       Comment[]
-  fav_recording  Profile[]
+
+  playlists     Playlist[]
+  comments      Comment[]
+  fav_recording Profile[]
+}
+
+model Language {
+  id        Int         @id @default(autoincrement())
+  name      String      @unique
+  Recording Recording[]
 }
 
 model RecordingStats {
   id                Int       @id @default(autoincrement())
-  rating            Float     @default(0)
+  avg_rating        Float     @default(0)
   amount_of_ratings Int       @default(0)
+  visits            Int       @default(0)
   owner             Recording @relation(fields: [ownerId], references: [id])
   ownerId           String    @unique
 }
@@ -274,6 +329,7 @@ model Track {
   position    Int       @db.SmallInt
   length      Int?
 
+  popularity     Int                 @default(0)
   stats          TrackStats?
   external_links ExternalLinkTrack[]
   playlists      Playlist[]
@@ -283,8 +339,9 @@ model Track {
 
 model TrackStats {
   id                Int    @id @default(autoincrement())
-  rating            Float  @default(0)
+  avg_rating        Float  @default(0)
   amount_of_ratings Int    @default(0)
+  visits            Int    @default(0)
   owner             Track  @relation(fields: [ownerId], references: [id])
   ownerId           String @unique
 }

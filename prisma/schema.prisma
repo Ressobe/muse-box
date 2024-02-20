@@ -34,8 +34,9 @@ model Profile {
   playlist      Playlist[]
   notifications Notification[] @relation("ProfileNotifications")
 
-  followers Profile[] @relation("Following")
-  following Profile[] @relation("Following")
+  followers       Profile[] @relation("Following")
+  following       Profile[] @relation("Following")
+  followedArtists Artist[]  @relation("FollowedArtists")
 
   artistId String?
   albumId  String?
@@ -188,15 +189,23 @@ model Artist {
 
   comments   Comment[]
   fav_artist Profile[]
+  followedBy Profile[] @relation("FollowedArtists")
 }
 
 model ArtistStats {
-  id                Int    @id @default(autoincrement())
-  avg_rating        Float  @default(0)
-  amount_of_ratings Int    @default(0)
-  visits            Int    @default(0)
-  owner             Artist @relation(fields: [ownerId], references: [id])
-  ownerId           String @unique
+  id                Int   @id @default(autoincrement())
+  avg_rating        Float @default(0)
+  amount_of_ratings Int   @default(0)
+
+  amount_of_albums  Int @default(0)
+  amount_of_singles Int @default(0)
+  amount_of_tracks  Int @default(0)
+
+  amount_of_followers Int @default(0)
+
+  visits  Int    @default(0)
+  owner   Artist @relation(fields: [ownerId], references: [id])
+  ownerId String @unique
 }
 
 model ExternalLinkArtist {

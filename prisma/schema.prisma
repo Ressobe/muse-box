@@ -294,6 +294,10 @@ model Recording {
   languageId Int?
   popularity Int           @default(0)
 
+  date_day   Int? @db.SmallInt
+  date_month Int? @db.SmallInt
+  date_year  Int? @db.SmallInt
+
   external_links ExternalLinkRecording[]
   stats          RecordingStats?
 

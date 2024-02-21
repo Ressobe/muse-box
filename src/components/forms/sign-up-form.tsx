@@ -82,6 +82,7 @@ export function SignUpForm({onSuccess}: SignUpFormProps) {
         <FormField
             control={form.control}
             name="email" 
+            defaultValue=""
             render={({field}) => (
                 <FormItem>
                     <FormLabel>Email</FormLabel>
@@ -95,6 +96,7 @@ export function SignUpForm({onSuccess}: SignUpFormProps) {
         <FormField
           control={form.control}
           name="username"
+          defaultValue=""
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
@@ -111,6 +113,7 @@ export function SignUpForm({onSuccess}: SignUpFormProps) {
         <FormField
           control={form.control}
           name="password"
+          defaultValue=""
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
@@ -124,6 +127,7 @@ export function SignUpForm({onSuccess}: SignUpFormProps) {
         <FormField
           control={form.control}
           name="confirmPassword"
+          defaultValue=""
           render={({ field }) => (
             <FormItem>
               <FormLabel>Confirm password</FormLabel>

@@ -48,11 +48,12 @@ model Profile {
   favourite_song   Track?     @relation(fields: [trackId], references: [id])
   favourite_genre  Genre?     @relation(fields: [genreId], references: [id])
 
-  invitationsSent     Invitation[]  @relation("sentBy")
-  invitationsReceived Invitation[]  @relation("receivedBy")
-  stats               ProfileStats?
-  friends             Profile[]     @relation("Friends")
-  friendsOf           Profile[]     @relation("Friends")
+  invitationsSent      Invitation[]   @relation("sentBy")
+  invitationsReceived  Invitation[]   @relation("receivedBy")
+  stats                ProfileStats?
+  friends              Profile[]      @relation("Friends")
+  friendsOf            Profile[]      @relation("Friends")
+  createdNotifications Notification[]
 }
 
 model ProfileStats {
@@ -110,8 +111,12 @@ enum NotificationType {
 model Notification {
   id         Int              @id @default(autoincrement())
   type       NotificationType
-  resourceId String
-  isReaded   Boolean          @default(false)
+  resourceId String?
+  isRead     Boolean          @default(false)
+  isSeen     Boolean          @default(false)
+  from       Profile          @relation(fields: [fromId], references: [id])
+  fromId     String
+  createdAt  DateTime         @default(now())
   profiles   Profile[]        @relation("ProfileNotifications")
 }
 

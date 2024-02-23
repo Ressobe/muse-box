@@ -4,6 +4,18 @@ export async function sendInvitationFriend(
   senderId: string,
   reciverId: string
 ) {
+  const invitation = await db.invitation.findFirst({
+    where: {
+      senderId: senderId,
+      receiverId: reciverId,
+      state: "PENDING",
+    },
+  });
+
+  if (invitation) {
+    return null;
+  }
+
   await db.invitation.create({
     data: {
       senderId: senderId,
@@ -16,6 +28,7 @@ export async function sendInvitationFriend(
     data: {
       type: "INVITE",
       resourceId: senderId,
+      fromId: senderId,
     },
   });
 
@@ -79,6 +92,7 @@ export async function acceptInvitationFriend(
     data: {
       type: "ACCEPTED_INVITATION",
       resourceId: userWhoAccept,
+      fromId: userWhoAccept,
       profiles: {
         connect: { id: senderId },
       },
@@ -119,12 +133,23 @@ export async function followProfile(
   followedProfileId: string,
   followerProfileId: string
 ) {
-  const notification = await db.notification.create({
-    data: {
+  let notification = await db.notification.findFirst({
+    where: {
       type: "NEW_FOLLOWER",
       resourceId: followerProfileId,
+      fromId: followerProfileId,
     },
   });
+
+  if (!notification) {
+    notification = await db.notification.create({
+      data: {
+        type: "NEW_FOLLOWER",
+        resourceId: followerProfileId,
+        fromId: followerProfileId,
+      },
+    });
+  }
 
   await db.profile.update({
     where: { id: followedProfileId },
@@ -133,8 +158,14 @@ export async function followProfile(
         connect: { id: followerProfileId },
       },
       stats: {
-        update: {
-          amount_of_followers: { increment: 1 },
+        upsert: {
+          where: { ownerId: followedProfileId },
+          create: {
+            amount_of_followers: 1,
+            amount_of_following: 0,
+            amount_of_ratings: 0,
+          },
+          update: { amount_of_followers: { increment: 1 } },
         },
       },
       notifications: {
@@ -147,11 +178,17 @@ export async function followProfile(
     where: { id: followerProfileId },
     data: {
       following: {
-        connect: { id: followerProfileId },
+        connect: { id: followedProfileId },
       },
       stats: {
-        update: {
-          amount_of_following: { increment: 1 },
+        upsert: {
+          where: { ownerId: followerProfileId },
+          create: {
+            amount_of_followers: 0,
+            amount_of_following: 1,
+            amount_of_ratings: 0,
+          },
+          update: { amount_of_following: { increment: 1 } },
         },
       },
     },
@@ -162,6 +199,20 @@ export async function unfollowProfile(
   followedProfileId: string,
   followerProfileId: string
 ) {
+  let notification = await db.notification.findFirst({
+    where: {
+      type: "NEW_FOLLOWER",
+      resourceId: followerProfileId,
+      fromId: followerProfileId,
+    },
+  });
+
+  if (notification) {
+    await db.notification.delete({
+      where: { id: notification.id },
+    });
+  }
+
   await db.profile.update({
     where: { id: followedProfileId },
     data: {
@@ -180,7 +231,7 @@ export async function unfollowProfile(
     where: { id: followerProfileId },
     data: {
       following: {
-        disconnect: { id: followerProfileId },
+        disconnect: { id: followedProfileId },
       },
       stats: {
         update: {
@@ -191,13 +242,14 @@ export async function unfollowProfile(
   });
 }
 
-export async function getProfile(profileId: string | undefined) {
-  if (profileId === undefined) {
+export async function getProfile(userId: string | undefined) {
+  if (userId === undefined) {
     return null;
   }
   const profile = await db.profile.findUnique({
-    where: { id: profileId },
+    where: { userId: userId },
     include: {
+      notifications: true,
       followers: true,
       stats: true,
       friends: true,
@@ -209,14 +261,95 @@ export async function getProfile(profileId: string | undefined) {
   return profile;
 }
 
-export async function getNotifications(profileId: string) {
+export async function isFollowingProfile(
+  followerId: string | undefined,
+  followedId: string
+) {
+  if (!followerId) {
+    return false;
+  }
+
+  const profile = await db.profile.findUnique({
+    where: {
+      id: followerId,
+    },
+    include: {
+      following: true,
+    },
+  });
+
+  if (!profile || !profile.following) {
+    return false;
+  }
+
+  const isFollowing = profile.following.some(
+    (followed) => followed.id === followedId
+  );
+
+  return isFollowing;
+}
+
+export async function isFriendProfile(
+  profileToCheckId: string,
+  profileCheckerId: string | undefined
+) {
+  if (!profileCheckerId) {
+    return false;
+  }
+
+  const profile = await db.profile.findUnique({
+    where: { id: profileToCheckId },
+    include: { friends: true },
+  });
+
+  if (!profile) {
+    return false;
+  }
+
+  const isFriend = profile.friends.some(
+    (friend) => friend.id === profileCheckerId
+  );
+
+  return isFriend;
+}
+
+export async function isInvitedToFriendProfile(
+  profileToCheckId: string,
+  profileCheckerId: string | undefined
+) {
+  if (!profileCheckerId) {
+    return false;
+  }
+  const profile = await db.profile.findUnique({
+    where: { id: profileToCheckId },
+    include: { invitationsReceived: true },
+  });
+
+  if (!profile) {
+    return false;
+  }
+
+  const isInvited = profile.invitationsReceived.some(
+    (invitation) => invitation.senderId === profileCheckerId
+  );
+
+  return isInvited;
+}
+
+export async function getProfileByProfileId(profileId: string) {
   const profile = await db.profile.findUnique({
     where: { id: profileId },
     include: {
       notifications: true,
+      followers: true,
+      stats: true,
+      friends: true,
+      favourite_album: true,
+      favourite_artist: true,
+      favourite_song: true,
     },
   });
-  return profile?.notifications;
+  return profile;
 }
 
 export async function updateComment(
@@ -261,17 +394,6 @@ export async function removeNotification(
   });
 }
 
-// export async function removeNotification(notificationId: number, profileId: string) {
-//     await db.notification.deleteMany({
-//         where: {
-//             id: notificationId,
-//             profiles: {
-//                 some: { id: profileId }
-//             }
-//         }
-//     })
-// }
-
 export async function setFavouriteArtist(artistId: string, profileId: string) {
   await db.profile.update({
     where: { id: profileId },
@@ -294,4 +416,32 @@ export async function setFavouriteTrack(trackId: string, profileId: string) {
     where: { id: profileId },
     data: { trackId: trackId },
   });
+}
+
+export async function isFollowingArtist(
+  profileId: string | undefined,
+  artistId: string
+) {
+  if (!profileId) {
+    return false;
+  }
+
+  const profile = await db.profile.findUnique({
+    where: {
+      id: profileId,
+    },
+    include: {
+      followedArtists: true,
+    },
+  });
+
+  if (!profile || !profile.followedArtists) {
+    return false;
+  }
+
+  const isFollowing = profile.followedArtists.some(
+    (artist) => artist.id === artistId
+  );
+
+  return isFollowing;
 }

@@ -1,7 +1,8 @@
 import { getProfileByProfileId } from "@/src/database/profile";
-import { SubmitButton } from "../submit-button";
 import { formatTimeDiff } from "@/src/lib/utils";
 import Link from "next/link";
+import AcceptToFriendButton from "./accept-to-friend-button";
+import RejectToFriendButton from "./reject-to-friend-button";
 
 type NewInviteProps = {
   reciverId: string;
@@ -42,10 +43,18 @@ export default async function NewInvite({
           </Link>
           <span className="text-xm">has invited you to friends!</span>
         </div>
-        <form className="flex space-x-2">
-          <SubmitButton>Accept</SubmitButton>
-          <SubmitButton>Reject</SubmitButton>
-        </form>
+        <div className="flex gap-x-2">
+          <AcceptToFriendButton
+            profileWhoAcceptId={reciverId}
+            profileWhoIsBeingAcceptedId={senderId}
+            profileName={senderProfile.name}
+          />
+          <RejectToFriendButton
+            profileWhoRejectId={reciverId}
+            profileWhoIsBeingRejectedId={senderId}
+            profileName={senderProfile.name}
+          />
+        </div>
       </div>
       <div className="flex pt-2">
         <div className="w-[50px]"></div>

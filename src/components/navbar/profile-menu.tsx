@@ -63,7 +63,7 @@ export default async function ProfileMenu({
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+            <Link href="/account/settings">Settings</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
 
@@ -86,7 +86,9 @@ export default async function ProfileMenu({
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <Users className="mr-2 h-4 w-4" />
-            <span>Friends</span>
+            <Link className="cursor-pointer" href="/account/friends">
+              Friends
+            </Link>
           </DropdownMenuItem>
 
           <DropdownMenuItem>

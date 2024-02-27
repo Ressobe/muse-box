@@ -2,9 +2,9 @@ import {
   getProfileByProfileId,
   isFollowingProfile,
 } from "@/src/database/profile";
-import { SubmitButton } from "../submit-button";
 import { formatTimeDiff } from "@/src/lib/utils";
 import Link from "next/link";
+import FollowButton from "./follow-button";
 
 type NewFollowerProps = {
   reciverId: string;
@@ -21,6 +21,7 @@ export default async function NewFollower({
   if (!senderProfile) {
     return null;
   }
+
   const isFollowing = await isFollowingProfile(reciverId, senderId);
 
   return (
@@ -44,12 +45,12 @@ export default async function NewFollower({
           <Link href={`/profile/${senderProfile.id}`} className="text-xm">
             is now following you!
           </Link>
+          <FollowButton
+            senderId={senderId}
+            reciverId={reciverId}
+            isFollowing={isFollowing}
+          />
         </div>
-        {!isFollowing ? (
-          <form className="flex space-x-2">
-            <SubmitButton>Follow</SubmitButton>
-          </form>
-        ) : null}
       </div>
       <div className="flex pt-2">
         <div className="w-[50px]"></div>

@@ -15,7 +15,6 @@ model User {
   id         String   @id @default(uuid())
   email      String   @unique
   username   String   @unique
-  avatar_img String   @default("/user.png")
   password   String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -23,12 +22,20 @@ model User {
 }
 
 model Profile {
-  id      String @id @default(uuid())
-  user    User   @relation(fields: [userId], references: [id])
-  userId  String @unique
-  name    String @default("")
-  surname String @default("")
-  age     Int    @default(0) @db.SmallInt
+  id       String @id @default(uuid())
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String @unique
+
+  username   String  @unique
+  avatar_img String  @default("/user.png")
+
+  name     String @default("")
+  surname  String @default("")
+
+  birthDay DateTime?
+  age      Int    @default(0) @db.SmallInt
+  bio      String?
+
 
   comment       Comment[]
   playlist      Playlist[]
@@ -74,7 +81,7 @@ model Playlist {
   isPublic Boolean
   owner    Profile @relation(fields: [ownerId], references: [id])
   ownerId  String
-
+  artists    Artist[]
   tracks     Track[]
   recordings Recording[]
 }
@@ -106,6 +113,7 @@ enum NotificationType {
   NEW_FOLLOWER
   ACCEPTED_INVITATION
   INVITE
+  NEW_COMMENT_FRIEND
 }
 
 model Notification {
@@ -192,6 +200,7 @@ model Artist {
   stats          ArtistStats?
   external_links ExternalLinkArtist[]
 
+  playlists  Playlist[]
   comments   Comment[]
   fav_artist Profile[]
   followedBy Profile[] @relation("FollowedArtists")

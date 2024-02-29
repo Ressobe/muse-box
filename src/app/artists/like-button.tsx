@@ -33,13 +33,13 @@ export default function LikeButton({
     }
 
     if (liked) {
-      await unlikeArtistAction(artistId, profileId);
       setLiked(false);
+      await unlikeArtistAction(artistId, profileId);
       return;
     }
 
-    await likeArtistAction(artistId, profileId);
     setLiked(true);
+    await likeArtistAction(artistId, profileId);
     return;
   };
 

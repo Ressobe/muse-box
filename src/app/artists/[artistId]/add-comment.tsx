@@ -1,9 +1,11 @@
+"use client";
+
 import { Label } from "@/src/components/ui/label";
 import { Textarea } from "@/src/components/ui/textarea";
-import addCommentAction from "./_actions/comment";
 import { Button } from "@/src/components/ui/button";
-import { StarIcon } from "lucide-react";
 import Rating from "@/src/components/rating";
+import addCommentAction from "./_actions/comment";
+import { useToast } from "@/src/components/ui/use-toast";
 
 type CommentProps = {
   artistId: string;
@@ -11,19 +13,19 @@ type CommentProps = {
 };
 
 export default function AddComment({ artistId, profileId }: CommentProps) {
-  if (!profileId) {
-    return null;
-  }
-  const numbers = Array.from({ length: 10 }, (_, index) => index + 1);
+  const { toast } = useToast();
 
-  // const handleSubmit = async (formData: FormData) => {
-  //   "use server";
-  //   const comment = formData.get("comment") as string;
-  //   await addCommentAction(artistId, profileId, 3, comment);
-  // };
-
-  const handleSubmit = async () => {
-    "use server";
+  const handleSubmit = async (formData: FormData) => {
+    if (!profileId) {
+      toast({
+        variant: "destructive",
+        title: "You have to log in",
+      });
+      return;
+    }
+    const comment = formData.get("comment") as string;
+    const rating = Number(localStorage.getItem("starRating"));
+    await addCommentAction(artistId, profileId, rating, comment);
   };
 
   return (
@@ -36,13 +38,16 @@ export default function AddComment({ artistId, profileId }: CommentProps) {
           <span className="text-xl font-bold">Rate</span>
           <span className="pl-4 text-muted-foreground text-sm">(required)</span>
         </Label>
-        <Rating initialRate={0} />
+        <Rating size={30} defaultRate={1} />
         <Textarea
           className="h-[120px] sm:h-[150px]"
           id="comment-2"
+          name="comment"
           placeholder="Type your comment here. Is not required"
         />
-        <Button size="sm">Post Comment</Button>
+        <Button type="submit" size="sm">
+          Post Comment
+        </Button>
       </form>
     </>
   );

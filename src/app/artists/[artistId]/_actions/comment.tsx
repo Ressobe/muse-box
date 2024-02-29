@@ -1,3 +1,4 @@
+"use server";
 import { createArtistComment } from "@/src/database/artist";
 import { revalidatePath } from "next/cache";
 

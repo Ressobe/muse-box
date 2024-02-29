@@ -7,18 +7,22 @@ export async function getAllArtists(take: number, profileId?: string) {
     include: { stats: true },
   });
 
-  const artistsWithFollowStatus = await Promise.all(
+  const artists2 = await Promise.all(
     artists.map(async (artist) => {
       const isFollowed = await isFollowingArtist(profileId, artist.id);
-      return { ...artist, isFollowed };
-    })
+      const isLiked = await isArtistLiked(artist.id, profileId);
+      return { ...artist, isFollowed, isLiked };
+    }),
   );
 
-  return artistsWithFollowStatus;
+  return artists2;
 }
 
-export async function getArtist(artistId: string) {
-  return await db.artist.findUnique({
+export async function getArtist(
+  artistId: string,
+  profileId: string | undefined,
+) {
+  const artist = await db.artist.findUnique({
     where: {
       id: artistId,
     },
@@ -31,11 +35,15 @@ export async function getArtist(artistId: string) {
       genres: true,
     },
   });
+  const isFollowed = await isFollowingArtist(profileId, artistId);
+  const isCommented = await isArtistCommentedByProfile(artistId, profileId);
+
+  return { ...artist, isFollowed, isCommented };
 }
 
 export async function followArtist(
   artistId: string,
-  profileId: string | undefined
+  profileId: string | undefined,
 ) {
   if (!profileId) {
     return null;
@@ -96,8 +104,43 @@ export async function createArtistComment(
   artistId: string,
   creatorId: string,
   rate: number,
-  comment: string
+  comment: string,
 ) {
+  const profile = await db.profile.findUnique({
+    where: { id: creatorId },
+  });
+
+  const com = await db.comment.findFirst({
+    where: {
+      artistId: artistId,
+      ownerId: creatorId,
+      ownerName: profile?.name,
+    },
+  });
+
+  if (com) {
+    await db.artist.update({
+      where: { id: artistId },
+      data: {
+        comments: {
+          update: {
+            where: {
+              id: com.id,
+            },
+            data: {
+              rate: rate,
+              content: comment,
+              ownerId: creatorId,
+              ownerName: profile?.name,
+              type: "ARTIST",
+            },
+          },
+        },
+      },
+    });
+    return;
+  }
+
   await db.artist.update({
     where: { id: artistId },
     data: {
@@ -106,6 +149,7 @@ export async function createArtistComment(
           rate: rate,
           content: comment,
           ownerId: creatorId,
+          ownerName: profile?.name,
           type: "ARTIST",
         },
       },
@@ -157,6 +201,60 @@ export async function updateStats() {
             amount_of_tracks: amountOfTracks,
           },
         },
+      },
+    });
+  }
+}
+
+export async function isArtistLiked(
+  artistId: string,
+  profileId: string | undefined,
+) {
+  if (!profileId) {
+    return false;
+  }
+  const playlist = await db.playlist.findFirst({
+    where: {
+      ownerId: profileId,
+      name: "Fav Artists",
+      artists: { some: { id: artistId } },
+    },
+  });
+
+  return !!playlist;
+}
+
+export default async function isArtistCommentedByProfile(
+  artistId: string,
+  profileId?: string,
+) {
+  const comment = await db.comment.findFirst({
+    where: {
+      artistId: artistId,
+      ownerId: profileId,
+      type: "ARTIST",
+    },
+  });
+  if (!comment) {
+    return false;
+  }
+  return true;
+}
+
+export async function unlikeArtist(artistId: string, profileId: string) {
+  const existingPlaylist = await db.playlist.findFirst({
+    where: {
+      ownerId: profileId,
+      name: "Fav Artists",
+      artists: { some: { id: artistId } },
+    },
+  });
+
+  if (existingPlaylist) {
+    await db.playlist.update({
+      where: { id: existingPlaylist.id },
+      data: {
+        artists: { disconnect: { id: artistId } },
       },
     });
   }

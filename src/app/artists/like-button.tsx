@@ -4,6 +4,8 @@ import { SubmitButton } from "@/src/components/submit-button";
 import { useToast } from "@/src/components/ui/use-toast";
 import { Heart } from "lucide-react";
 import { useState } from "react";
+import likeArtistAction from "./_actions/like-artist";
+import unlikeArtistAction from "./_actions/unlike-artist";
 
 type LikeButtonProps = {
   artistId: string;
@@ -31,12 +33,12 @@ export default function LikeButton({
     }
 
     if (liked) {
-      // call to database (unlike)
+      await unlikeArtistAction(artistId, profileId);
       setLiked(false);
       return;
     }
 
-    // call to database (like)
+    await likeArtistAction(artistId, profileId);
     setLiked(true);
     return;
   };

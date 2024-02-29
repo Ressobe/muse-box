@@ -1,8 +1,16 @@
 import db from "@/src/lib/db";
 
+export async function deleteAccount(profileId: string) {
+  await db.profile.delete({
+    where: {
+      id: profileId,
+    },
+  });
+}
+
 export async function sendInvitationFriend(
   senderId: string,
-  reciverId: string
+  reciverId: string,
 ) {
   const invitation = await db.invitation.findFirst({
     where: {
@@ -44,7 +52,7 @@ export async function sendInvitationFriend(
 
 export async function acceptInvitationFriend(
   userWhoAccept: string,
-  senderId: string
+  senderId: string,
 ) {
   const invitation = await db.invitation.findFirst({
     where: {
@@ -102,7 +110,7 @@ export async function acceptInvitationFriend(
 
 export async function rejectInvitationFriend(
   userWhoReject: string,
-  senderId: string
+  senderId: string,
 ) {
   const invitation = await db.invitation.findFirst({
     where: {
@@ -131,7 +139,7 @@ export async function rejectInvitationFriend(
 
 export async function followProfile(
   followedProfileId: string,
-  followerProfileId: string
+  followerProfileId: string,
 ) {
   let notification = await db.notification.findFirst({
     where: {
@@ -197,7 +205,7 @@ export async function followProfile(
 
 export async function unfollowProfile(
   followedProfileId: string,
-  followerProfileId: string
+  followerProfileId: string,
 ) {
   let notification = await db.notification.findFirst({
     where: {
@@ -253,6 +261,7 @@ export async function getProfile(userId: string | undefined) {
       followers: true,
       stats: true,
       friends: true,
+      friendsOf: true,
       favourite_album: true,
       favourite_artist: true,
       favourite_song: true,
@@ -263,7 +272,7 @@ export async function getProfile(userId: string | undefined) {
 
 export async function isFollowingProfile(
   followerId: string | undefined,
-  followedId: string
+  followedId: string,
 ) {
   if (!followerId) {
     return false;
@@ -283,7 +292,7 @@ export async function isFollowingProfile(
   }
 
   const isFollowing = profile.following.some(
-    (followed) => followed.id === followedId
+    (followed) => followed.id === followedId,
   );
 
   return isFollowing;
@@ -291,7 +300,7 @@ export async function isFollowingProfile(
 
 export async function isFriendProfile(
   profileToCheckId: string,
-  profileCheckerId: string | undefined
+  profileCheckerId: string | undefined,
 ) {
   if (!profileCheckerId) {
     return false;
@@ -307,7 +316,7 @@ export async function isFriendProfile(
   }
 
   const isFriend = profile.friends.some(
-    (friend) => friend.id === profileCheckerId
+    (friend) => friend.id === profileCheckerId,
   );
 
   return isFriend;
@@ -315,7 +324,7 @@ export async function isFriendProfile(
 
 export async function isInvitedToFriendProfile(
   profileToCheckId: string,
-  profileCheckerId: string | undefined
+  profileCheckerId: string | undefined,
 ) {
   if (!profileCheckerId) {
     return false;
@@ -330,7 +339,7 @@ export async function isInvitedToFriendProfile(
   }
 
   const isInvited = profile.invitationsReceived.some(
-    (invitation) => invitation.senderId === profileCheckerId
+    (invitation) => invitation.senderId === profileCheckerId,
   );
 
   return isInvited;
@@ -355,7 +364,7 @@ export async function getProfileByProfileId(profileId: string) {
 export async function updateComment(
   commentId: string,
   rate: number,
-  comment: string
+  comment: string,
 ) {
   await db.comment.update({
     where: { id: commentId },
@@ -384,7 +393,7 @@ export async function getLatestProfileComments(profileId: string) {
 
 export async function removeNotification(
   notificationId: number,
-  resourceId: string
+  resourceId: string,
 ) {
   await db.notification.delete({
     where: {
@@ -403,7 +412,7 @@ export async function setFavouriteArtist(artistId: string, profileId: string) {
 
 export async function setFavouriteRecording(
   recordingId: string,
-  profileId: string
+  profileId: string,
 ) {
   await db.profile.update({
     where: { id: profileId },
@@ -420,7 +429,7 @@ export async function setFavouriteTrack(trackId: string, profileId: string) {
 
 export async function isFollowingArtist(
   profileId: string | undefined,
-  artistId: string
+  artistId: string,
 ) {
   if (!profileId) {
     return false;
@@ -440,8 +449,51 @@ export async function isFollowingArtist(
   }
 
   const isFollowing = profile.followedArtists.some(
-    (artist) => artist.id === artistId
+    (artist) => artist.id === artistId,
   );
 
   return isFollowing;
+}
+
+export async function updateName(profileId: string, newName: string) {
+  await db.profile.update({
+    where: { id: profileId },
+    data: {
+      name: newName,
+    },
+  });
+}
+
+export async function updateSurname(profileId: string, newSurname: string) {
+  await db.profile.update({
+    where: { id: profileId },
+    data: {
+      surname: newSurname,
+    },
+  });
+}
+
+export async function updateBio(profileId: string, newBio: string) {
+  await db.profile.update({
+    where: { id: profileId },
+    data: {
+      bio: newBio,
+    },
+  });
+}
+
+export async function updateBirthday(profileId: string, newBirthday: Date) {
+  await db.profile.update({
+    where: { id: profileId },
+    data: {
+      birthDay: newBirthday,
+    },
+  });
+}
+
+export async function updateAvatar(profileId: string, newAvatar: string) {
+  await db.profile.update({
+    where: { id: profileId },
+    data: {},
+  });
 }

@@ -1,11 +1,11 @@
 "use client";
 
-import { Label } from "@/src/components/ui/label";
-import { Textarea } from "@/src/components/ui/textarea";
 import { Button } from "@/src/components/ui/button";
 import Rating from "@/src/components/rating";
 import addCommentAction from "./_actions/comment";
 import { useToast } from "@/src/components/ui/use-toast";
+import { useEffect, useRef, useState } from "react";
+import { SubmitButton } from "@/src/components/submit-button";
 
 type CommentProps = {
   artistId: string;
@@ -14,6 +14,17 @@ type CommentProps = {
 
 export default function AddComment({ artistId, profileId }: CommentProps) {
   const { toast } = useToast();
+
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+  const [comment, setComment] = useState("");
+
+  useEffect(() => {
+    if (textAreaRef.current) {
+      textAreaRef.current.style.height = "auto";
+      textAreaRef.current.style.height =
+        textAreaRef.current.scrollHeight + "px";
+    }
+  }, [comment]);
 
   const handleSubmit = async (formData: FormData) => {
     if (!profileId) {
@@ -28,27 +39,47 @@ export default function AddComment({ artistId, profileId }: CommentProps) {
     await addCommentAction(artistId, profileId, rating, comment);
   };
 
+  const resetForm = () => {
+    setComment("");
+  };
+
   return (
-    <>
-      <form
-        action={handleSubmit}
-        className="w-full flex flex-col max-w-lg space-y-2 pt-10"
-      >
-        <Label htmlFor="comment-2">
-          <span className="text-xl font-bold">Rate</span>
-          <span className="pl-4 text-muted-foreground text-sm">(required)</span>
-        </Label>
-        <Rating size={30} defaultRate={1} />
-        <Textarea
-          className="h-[120px] sm:h-[150px]"
-          id="comment-2"
-          name="comment"
-          placeholder="Type your comment here. Is not required"
-        />
-        <Button type="submit" size="sm">
-          Post Comment
-        </Button>
+    <div className="relative">
+      <div
+        className="rounded-full fixed top-0 w-[40px] h-[40px] border"
+        style={{
+          aspectRatio: "40/40",
+          objectFit: "cover",
+        }}
+      ></div>
+      <form action={handleSubmit} className="pl-10 w-full flex gap-x-6  pt-10">
+        <div className="flex items-center max-h-fit"></div>
+        <div>
+          <Rating size={30} defaultRate={1} />
+          <textarea
+            className="w-full text-md outline-none active:outline-none border-b border-muted-foreground focus:outline-none resize-none bg-background text-foreground  focus:border-b-2 focus:border-foreground mt-4 mb-3 pb-1 pr-3"
+            rows={1}
+            id="comment"
+            name="comment"
+            placeholder="Type your comment here."
+            value={comment}
+            ref={textAreaRef}
+            onChange={(e) => setComment(e.target.value)}
+          />
+        </div>
+        <div className="w-full flex flex-row-reverse gap-x-4">
+          <SubmitButton>Rate</SubmitButton>
+          <Button
+            onClick={() => resetForm()}
+            type="button"
+            className=""
+            variant="secondary"
+            size="sm"
+          >
+            Cancel
+          </Button>
+        </div>
       </form>
-    </>
+    </div>
   );
 }

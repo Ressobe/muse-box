@@ -1,36 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Muse Box - Music Platform
 
-## Getting Started
+Muse Box is a cutting-edge music platform where you can discover, rate, and share music and artists with your friends. Although still under construction, Muse Box promises to revolutionize the way you engage with music.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Discover New Music:** Explore a vast library of music and discover hidden gems from various artists and genres.
+- **Rate and Review:** Rate your favorite artists and albums, and leave reviews to share your thoughts with the community.
+- **Invite Friends:** Invite your friends to join Muse Box and see how they rate and review music.
+- **Personalized Profiles:** Customize your profile, showcase your favorite artists, albums, and genres, and connect with like-minded music enthusiasts.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Coming Soon
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Stay tuned for exciting updates and new features as Muse Box continues to evolve. I'm working hard to bring you the ultimate music experience.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Tech Stack
 
-## Learn More
+Muse Box leverages the latest technologies to provide a seamless user experience:
 
-To learn more about Next.js, take a look at the following resources:
+- **Next.js:** A React framework for building fast and scalable web applications.
+- **Tailwind CSS:** A utility-first CSS framework for building custom designs quickly.
+- **Prisma:** A modern database toolkit for Node.js that simplifies database access.
+- **Spotify API:** Integration with the Spotify API to fetch artist and album data.
+- **Vite.js:** A fast development server for modern JavaScript projects.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+© 2024 Muse Box. All rights reserved.

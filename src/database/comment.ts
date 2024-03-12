@@ -1,6 +1,6 @@
 import db from "@/src/lib/db";
-import { CommentType } from "@prisma/client";
-import { CommentResult } from "../types/database";
+import { Comment, CommentType } from "@prisma/client";
+import { CommentResult, Result } from "../types/database";
 
 export async function createComment(
   ownerId: string,
@@ -8,7 +8,7 @@ export async function createComment(
   type: CommentType,
   rate: number,
   content: string,
-): Promise<CommentResult> {
+): Promise<Result<Comment, Error>> {
   try {
     if (type === "ARTIST") {
       const comment = await db.comment.create({
@@ -74,7 +74,9 @@ export async function updateComment(
   }
 }
 
-export async function readComment(commentId: string): Promise<CommentResult> {
+export async function readComment(
+  commentId: string,
+): Promise<Result<Comment, Error>> {
   try {
     const comment = await db.comment.findUnique({ where: { id: commentId } });
     if (!comment) {
@@ -86,7 +88,9 @@ export async function readComment(commentId: string): Promise<CommentResult> {
   }
 }
 
-export async function deleteComment(commentId: string): Promise<CommentResult> {
+export async function deleteComment(
+  commentId: string,
+): Promise<Result<Comment, Error>> {
   try {
     const comment = await db.comment.delete({ where: { id: commentId } });
     return [comment, null];
@@ -99,7 +103,7 @@ export async function findComment(
   ownerId: string,
   commentedId: string,
   type: CommentType,
-): Promise<CommentResult> {
+): Promise<Result<Comment, Error>> {
   try {
     let comment = null;
     switch (type) {

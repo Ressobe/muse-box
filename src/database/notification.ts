@@ -1,5 +1,6 @@
 import db from "@/src/lib/db";
-import { NotificationType } from "@prisma/client";
+import { Notification, NotificationType } from "@prisma/client";
+import { Result } from "../types/database";
 
 export async function getNotifications(profileId: string) {
   const profile = await db.profile.findUnique({
@@ -47,17 +48,36 @@ export async function markAllSeenNotifications(profileId: string) {
   });
 }
 
+export async function createNotification(
+  resourceId: string,
+  fromId: string,
+  type: NotificationType,
+): Promise<Result<Notification, Error>> {
+  try {
+    const notification = await db.notification.create({
+      data: {
+        resourceId,
+        fromId,
+        type,
+      },
+    });
+    return [notification, null];
+  } catch (error) {
+    return [null, error as Error];
+  }
+}
+
 export async function createNewCommentNotification(
   resourceId: string,
   fromId: string,
 ) {
-  const notification = await db.notification.create({
-    data: {
-      type: "INVITE",
-      resourceId: resourceId,
-      fromId: fromId,
-    },
-  });
+  const [notification, notificationNotCreatedError] = await createNotification(
+    resourceId,
+    fromId,
+    "NEW_COMMENT_FRIEND",
+  );
+  if (notificationNotCreatedError) throw notificationNotCreatedError;
+
   const profile = await db.profile.findUnique({
     where: { id: fromId },
     include: { friendsOf: true },
@@ -78,5 +98,16 @@ export async function createNewCommentNotification(
         },
       },
     });
+  }
+}
+
+export async function deleteNotification(notificationId: number) {
+  try {
+    const notification = await db.notification.delete({
+      where: { id: notificationId },
+    });
+    return [notification, null];
+  } catch (error) {
+    return [null, error as Error];
   }
 }

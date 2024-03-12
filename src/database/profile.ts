@@ -1,4 +1,5 @@
 import db from "@/src/lib/db";
+import { Profile } from "@prisma/client";
 
 export async function deleteAccount(profileId: string) {
   await db.profile.delete({
@@ -270,6 +271,17 @@ export async function getProfile(userId: string | undefined) {
   return profile;
 }
 
+export async function readProfile(
+  profileId: string,
+): Promise<[Profile | null, Error | null]> {
+  try {
+    const profile = await db.profile.findUnique({ where: { id: profileId } });
+    return [profile, null];
+  } catch (error) {
+    return [null, error as Error];
+  }
+}
+
 export async function isFollowingProfile(
   followerId: string | undefined,
   followedId: string,
@@ -372,12 +384,6 @@ export async function updateComment(
       rate: rate,
       content: comment,
     },
-  });
-}
-
-export async function deleteComment(commentId: string) {
-  await db.comment.delete({
-    where: { id: commentId },
   });
 }
 

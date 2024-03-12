@@ -298,11 +298,10 @@ export async function updateArtistStats(artistId: string) {
       throw new Error("Artist not found");
     }
 
-    const comments = artist.comments;
     let totalRate = 0;
     let numberOfRatings = 0;
 
-    for (const comment of comments) {
+    for (const comment of artist.comments) {
       totalRate += comment.rate;
       numberOfRatings++;
     }

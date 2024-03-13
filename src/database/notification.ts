@@ -2,36 +2,48 @@ import db from "@/src/lib/db";
 import { Notification, NotificationType } from "@prisma/client";
 import { Result } from "../types/database";
 
-export async function getNotifications(profileId: string) {
-  const profile = await db.profile.findUnique({
-    where: { id: profileId },
-    include: {
-      notifications: true,
-    },
-  });
-  return profile?.notifications;
+export async function getNotifications(
+  profileId: string,
+): Promise<Result<Notification[], Error>> {
+  try {
+    const profile = await db.profile.findUnique({
+      where: { id: profileId },
+      include: {
+        notifications: true,
+      },
+    });
+    if (!profile) throw Error("Profile was not found");
+
+    return [profile.notifications, null];
+  } catch (error) {
+    return [null, error as Error];
+  }
 }
 
-export async function isNewNotification(profileId: string) {
-  const profile = await db.profile.findUnique({
-    where: { id: profileId },
-    include: {
-      notifications: {
-        where: {
-          isSeen: false,
+export async function isNewNotification(
+  profileId: string,
+): Promise<Result<Boolean, Error>> {
+  try {
+    const profile = await db.profile.findUnique({
+      where: { id: profileId },
+      include: {
+        notifications: {
+          where: {
+            isSeen: false,
+          },
         },
       },
-    },
-  });
+    });
+    if (!profile) throw Error("Profile was not found");
 
-  if (!profile) {
-    return false;
-  }
-  if (profile.notifications.length > 0) {
-    return true;
-  }
+    if (profile.notifications.length > 0) {
+      return [true, null];
+    }
 
-  return false;
+    return [false, null];
+  } catch (error) {
+    return [null, error as Error];
+  }
 }
 
 export async function markAllSeenNotifications(profileId: string) {
@@ -70,34 +82,33 @@ export async function createNotification(
 export async function createNewCommentNotification(
   resourceId: string,
   fromId: string,
-) {
-  const [notification, notificationNotCreatedError] = await createNotification(
-    resourceId,
-    fromId,
-    "NEW_COMMENT_FRIEND",
-  );
-  if (notificationNotCreatedError) throw notificationNotCreatedError;
+): Promise<Result<Notification, Error>> {
+  try {
+    const [notification, notificationNotCreatedError] =
+      await createNotification(resourceId, fromId, "NEW_COMMENT_FRIEND");
+    if (notificationNotCreatedError) throw notificationNotCreatedError;
 
-  const profile = await db.profile.findUnique({
-    where: { id: fromId },
-    include: { friendsOf: true },
-  });
+    const profile = await db.profile.findUnique({
+      where: { id: fromId },
+      include: { friendsOf: true },
+    });
+    if (!profile) throw Error("Profile was not found");
 
-  if (!profile || !profile.friendsOf) {
-    return null;
-  }
-
-  for (const friend of profile.friendsOf) {
-    await db.profile.update({
-      where: { id: friend.id },
-      data: {
-        notifications: {
-          connect: {
-            id: notification.id,
+    for (const friend of profile.friendsOf) {
+      await db.profile.update({
+        where: { id: friend.id },
+        data: {
+          notifications: {
+            connect: {
+              id: notification.id,
+            },
           },
         },
-      },
-    });
+      });
+    }
+    return [notification, null];
+  } catch (error) {
+    return [null, error as Error];
   }
 }
 

@@ -373,20 +373,6 @@ export async function getProfileByProfileId(profileId: string) {
   return profile;
 }
 
-export async function updateComment(
-  commentId: string,
-  rate: number,
-  comment: string,
-) {
-  await db.comment.update({
-    where: { id: commentId },
-    data: {
-      rate: rate,
-      content: comment,
-    },
-  });
-}
-
 export async function getLatestProfileComments(profileId: string) {
   await db.comment.findMany({
     where: { ownerId: profileId },

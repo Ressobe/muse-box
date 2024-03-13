@@ -33,10 +33,15 @@ export const authOptions: NextAuthOptions = {
 
         if (!passwordMatched) { return null; }
 
+        const profile = await db.profile.findUnique({
+          where: {id: existingUser.id}
+        });
+
         return {
-          id: existingUser.id ,
+          id: existingUser.id,
           username: existingUser.username,
           email: existingUser.email,
+          profileId: profile?.id,
         }
 
       }
@@ -49,6 +54,7 @@ export const authOptions: NextAuthOptions = {
           ...token,
           username: user.username,
           userid: user.id,
+          profileId: user.profileId,
         }
       }
       return token;
@@ -60,6 +66,7 @@ export const authOptions: NextAuthOptions = {
           ...session.user,
           username: token.username,
           userid: token.userid,
+          profileId: token.profileId,
         }
       }
     },

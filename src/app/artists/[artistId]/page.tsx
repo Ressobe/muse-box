@@ -1,111 +1,183 @@
-import { createArtistComment, getArtist } from "@/src/database/artist";
-import { getAlbums, getLatestRecordings } from "@/src/database/recording";
+import { getArtist } from "@/src/database/artist";
+import getServerProfileSession from "@/src/lib/session";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { MusicIcon } from "lucide-react";
+import FollowButton from "../follow-button";
+import { SubmitButton } from "@/src/components/submit-button";
+import { CardContent, Card } from "@/src/components/ui/card";
+import ArtistComments from "./comments";
+import { ArtistProvider } from "@/src/context/artist-context";
 
 export default async function Artist({
   params,
 }: {
   params: { artistId: string };
 }) {
-  const artist = await getArtist(params.artistId);
-  const latestRecordings = await getLatestRecordings(params.artistId, 5);
-  const albums = await getAlbums(params.artistId, 10);
+  if (!params.artistId) {
+    notFound();
+  }
+  const profile = await getServerProfileSession();
+  const artist = await getArtist(params.artistId, profile?.id);
+
+  // const latestRecordings = await getLatestRecordings(params.artistId, 5);
+  // const albums = await getAlbums(params.artistId, 10);
 
   if (!artist) {
-    return null;
-  }
-
-  async function addComment(formData: FormData) {
-    "use server";
-    console.log(formData.get("rate"));
-    const com = formData.get("comment") as string;
-    await createArtistComment(params.artistId, 3, com);
+    notFound();
   }
 
   return (
-    <div className="max-w-5xl flex justify-center gap-x-20 mt-10 mx-auto px-4  gap-6">
-      <div className="">
-        <div>
-          Birthday: {artist.begin_date_day}.{artist.begin_date_month}.
-          {artist.begin_date_year}
-        </div>
-        <div>Gender: {artist.gender} </div>
-        <div>Age: </div>
-        <div></div>
-        <div>
-          Genres:
-          {artist.genres.map((item) => (
-            <span>{item.name}</span>
-          ))}
-        </div>
-        <div>
-          Tags:
-          {artist.tags.map((item) => (
-            <span>{item.name}</span>
-          ))}
-        </div>
-      </div>
-      <section>
-        <div className="flex items-center justify-center p-6">
-          <img
-            alt="Artist"
-            className="object-cover rounded-lg"
-            height={200}
-            src="/user.png"
-            style={{
-              aspectRatio: "200/200",
-              objectFit: "cover",
-            }}
-            width={200}
-          />
-        </div>
-        <h1 className="font-bold text-5xl text-center">{artist.name}</h1>
-        <div className="pt-10">
-          <h2>Latest Releases</h2>
-          <section>
-            {latestRecordings.map((rec) => {
-              return <div key={rec.id}>{rec.name}</div>;
-            })}
-          </section>
-          <h2>Albums</h2>
-          <section>
-            {albums.map((alb) => {
-              return <div key={alb.id}>{alb.name}</div>;
-            })}
-          </section>
-          <h2>Tracks</h2>
-        </div>
-
-        <div className="my-20">
-          <ul>
-            {artist.comments.map((com) => {
-              return (
-                <li>
-                  <span>{com.rate}</span>
-                  <span>{com.content}</span>
-                </li>
-              );
-            })}
-          </ul>
-          <form action={addComment} className="pt-10 flex flex-col">
-            <div className="flex gap-4 pb-2">
-              <input type="radio" name="rate" />
-              <input type="radio" name="rate" />
-              <input type="radio" name="rate" />
-              <input type="radio" name="rate" />
-              <input type="radio" name="rate" />
+    <>
+      <div className="flex max-w-4xl mx-auto mt-20">
+        <div className="w-1/3 flex flex-col justify-center items-center gap-2">
+          <div className="aspect-square rounded-full object-cover border border-gray-200 dark:border-gray-800 h-[200px] width-[200px]"></div>
+          <h1 className="font-bold text-4xl">{artist.name}</h1>
+          <h2 className="font-medium text-sm text-muted-foreground dark:text-muted-foreground">
+            @djbeats
+            {artist.about}
+          </h2>
+          <div className="space-y-4">
+            <div className="pt-5 flex items-center gap-3">
+              <FollowButton
+                artistId={artist.id}
+                profileId={profile?.id}
+                isFollowed={artist.isFollowed}
+                addOptimisticFollower={() => () => {}}
+                removeOptimisticFollower={() => () => {}}
+              />
+              <span className="text-muted-foreground">10303 followers</span>
             </div>
-            <textarea name="comment" className="text-background" />
-            <button>send comment</button>
-          </form>
+            <div className="flex items-center gap-3">
+              <SubmitButton>Rate</SubmitButton>
+              <span className="text-muted-foreground">3.4 rate</span>
+            </div>
+          </div>
         </div>
-      </section>
-      <div className="">
-        <ul>
-          <li>Spotify</li>
-          <li>Instagram</li>
-          <li>Facebook</li>
-        </ul>
+        <div className="pl-20 flex w-2/3 justify-between items-start  gap-4 ">
+          <div className="grid gap-4">
+            <div>
+              <p className="text-sm text-muted-foreground">Country</p>
+              <p className="text-xl font-bold">Poland</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Birthday </p>
+              <p className="text-xl font-bold">11.12.2002</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Also Known as </p>
+              <p className="text-xl font-bold">Taco, Szef Totalny</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Genres</p>
+              <p className="text-xl font-bold">Hip Hop, Rap, Trap</p>
+            </div>
+          </div>
+          <div className="grid gap-2">
+            <span className="flex gap-3 items-center">
+              <MusicIcon className="w-6 h-6" />
+              <Link href="" className="text-xl">
+                Spotify
+              </Link>
+            </span>
+            <span className="flex gap-3 items-center">
+              <MusicIcon className="w-6 h-6" />
+              <Link href="" className="text-xl">
+                Youtube
+              </Link>
+            </span>
+            <span className="flex gap-3 items-center">
+              <MusicIcon className="w-6 h-6" />
+              <Link href="" className="text-xl">
+                Soundcloud
+              </Link>
+            </span>
+            <span className="flex gap-3 items-center">
+              <MusicIcon className="w-6 h-6" />
+              <Link href="" className="text-xl">
+                Soundcloud
+              </Link>
+            </span>
+          </div>
+        </div>
       </div>
-    </div>
+      <div className="max-w-4xl mx-auto mt-20 space-y-5">
+        <div className="w-full flex items-center justify-between">
+          <h1 className="text-right text-3xl font-bold">Latest Recordings</h1>
+          <span>View All</span>
+        </div>
+        <div className="grid md:grid-cols-2 gap-4 lg:gap-8 py-4">
+          <Card>
+            <CardContent className="p-4">
+              <h3 className="font-bold">Summer Groove</h3>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                A collection of beats to make your summer memorable.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <h3 className="font-bold">Summer Groove</h3>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                A collection of beats to make your summer memorable.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+      <div className="max-w-4xl mx-auto mt-20 space-y-5">
+        <div className="w-full flex items-center justify-between">
+          <h1 className="text-right text-3xl font-bold">Albums</h1>
+          <span>View All</span>
+        </div>
+        <div className="grid md:grid-cols-2 gap-4 lg:gap-8 py-4">
+          <Card>
+            <CardContent className="p-4">
+              <h3 className="font-bold">Summer Groove</h3>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                A collection of beats to make your summer memorable.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <h3 className="font-bold">Summer Groove</h3>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                A collection of beats to make your summer memorable.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+      <div className="max-w-4xl mx-auto mt-20 space-y-5">
+        <div className="w-full flex items-center justify-between">
+          <h1 className="text-right text-3xl font-bold">Songs</h1>
+          <span>View All</span>
+        </div>
+        <div className="grid md:grid-cols-2 gap-4 lg:gap-8 py-4">
+          <Card>
+            <CardContent className="p-4">
+              <h3 className="font-bold">Summer Groove</h3>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                A collection of beats to make your summer memorable.
+              </p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4">
+              <h3 className="font-bold">Summer Groove</h3>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                A collection of beats to make your summer memorable.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+      <section className="max-w-4xl mx-auto my-20 space-y-5">
+        <ArtistProvider artist={artist}>
+          <ArtistComments />
+        </ArtistProvider>
+      </section>
+    </>
   );
 }

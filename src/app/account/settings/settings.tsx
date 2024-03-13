@@ -9,8 +9,17 @@ import {
 import { Label } from "@/src/components/ui/label";
 import { Input } from "@/src/components/ui/input";
 import { Button } from "@/src/components/ui/button";
+import { writeFile } from "fs/promises";
+import { SubmitButton } from "@/src/components/submit-button";
 
 export default function Settings() {
+  const changeAvatar = async (formData: FormData) => {
+    "use server";
+    const file = formData.get("file") as File;
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    await writeFile("/home/relow/code/muse-box/public/file.png", buffer);
+  };
   return (
     <Card className="w-full max-w-3xl">
       <CardHeader>
@@ -32,6 +41,10 @@ export default function Settings() {
         </div>
         <div className="grid gap-2">
           <h1>Avatar</h1>
+          <form action={changeAvatar}>
+            <Input className="text-white" type="file" name="file" />
+            <SubmitButton>Change avatar</SubmitButton>
+          </form>
         </div>
         <div className="grid gap-2">
           <h1>Notifications</h1>

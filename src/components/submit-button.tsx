@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 import { useFormStatus } from "react-dom";
 
 type SubmitButtonProps = {
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
   disabled?: boolean;
 };

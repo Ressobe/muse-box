@@ -1,0 +1,6 @@
+
+'background-color': '#171819' -> hsl(210, 4%, 9%)
+'text-color': '#ffffff',    -> hsl(0, 0%, 100%)
+'primary-color': '#6F2DA8',   -> hsl(272, 58%, 42%)
+'secondary-color': '#4B0082', ->  hsl(275, 100%, 25%)
+'accent-color': '#800080',  ->  	hsl(300, 100%, 25%)

@@ -6,14 +6,26 @@ import { Result } from "../types/database";
 export async function getAllArtists(take: number, profileId?: string) {
   const artists = await db.artist.findMany({
     take: take,
-    include: { stats: true },
+    include: {
+      albums: true,
+      comments: true,
+      stats: true,
+      external_links: true,
+      tags: true,
+      genres: true,
+    },
   });
 
   const artists2 = await Promise.all(
     artists.map(async (artist) => {
       const isFollowed = await isFollowingArtist(profileId, artist.id);
+      const isCommented = await isArtistCommentedByProfile(
+        artist.id,
+        profileId,
+      );
       const isLiked = await isArtistLiked(artist.id, profileId);
-      return { ...artist, isFollowed, isLiked };
+
+      return { ...artist, isFollowed, isLiked, isCommented };
     }),
   );
 

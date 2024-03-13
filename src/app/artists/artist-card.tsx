@@ -6,34 +6,19 @@ import FollowButton from "./follow-button";
 import { Button } from "@/src/components/ui/button";
 import Link from "next/link";
 import ArtistInfo from "./artist-info";
-
-type Artist = {
-  id: string;
-  name: string;
-  stats?: {
-    id?: number;
-    avg_rating?: number;
-    amount_of_ratings?: number;
-    amount_of_albums?: number;
-    amount_of_singles?: number;
-    amount_of_tracks?: number;
-    amount_of_followers?: number;
-    visits?: number;
-    ownerId?: string;
-  } | null;
-  popularity: number;
-  isFollowed: boolean;
-};
+import LikeButton from "./like-button";
+import { useArtist } from "@/src/context/artist-context";
 
 type ArtistCardProps = {
-  artist: Artist;
   profileId?: string;
 };
 
-export default function ArtistCard({ artist, profileId }: ArtistCardProps) {
+export default function ArtistCard({ profileId }: ArtistCardProps) {
+  const { artist } = useArtist();
+
   const [optimisiticFollowers, addOptimisticFollowers] = useOptimistic(
     artist.stats?.amount_of_followers || 0,
-    (state, f) => state + Number(f)
+    (state, f) => state + Number(f),
   );
 
   return (
@@ -49,7 +34,12 @@ export default function ArtistCard({ artist, profileId }: ArtistCardProps) {
         amountOfFollowers={optimisiticFollowers}
         popularity={artist.popularity}
       />
-      <div className="flex gap-x-4">
+      <div className="flex items-center gap-x-4">
+        <LikeButton
+          artistId={artist.id}
+          profileId={profileId}
+          isLiked={artist.isLiked}
+        />
         <FollowButton
           artistId={artist.id}
           profileId={profileId}

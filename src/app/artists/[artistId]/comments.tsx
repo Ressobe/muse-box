@@ -1,6 +1,4 @@
-import getServerProfileSession from "@/src/lib/session";
 import AddComment from "./add-comment";
-import { getArtist } from "@/src/database/artist";
 import Link from "next/link";
 import { options } from "@/src/types/data";
 import {
@@ -9,17 +7,10 @@ import {
   PopoverTrigger,
 } from "@/src/components/ui/popover";
 import { FlagIcon, GripVertical, PencilIcon, TrashIcon } from "lucide-react";
-import { Card, CardContent } from "@/src/components/ui/card";
+import { useArtist } from "@/src/context/artist-context";
 
-type ArtistCommentsProps = {
-  artistId: string;
-};
-
-export default async function ArtistComments({
-  artistId,
-}: ArtistCommentsProps) {
-  const profile = await getServerProfileSession();
-  const artist = await getArtist(artistId, profile?.id);
+export default async function ArtistComments() {
+  const { artist } = useArtist();
 
   if (!artist) {
     return null;
@@ -44,6 +35,7 @@ export default async function ArtistComments({
 }
 
 type CommentProps = {
+  id: string;
   ownerId: string;
   ownerName: string | null;
   rate: number;
@@ -53,6 +45,7 @@ type CommentProps = {
 };
 
 function Comment({
+  id,
   ownerId,
   ownerName,
   content,
@@ -94,7 +87,7 @@ function Comment({
             <div className="pt-4 flex items-center justify-between">
               <p>{content}</p>
               {ownerId === profileId ? (
-                <EditCommentPopover />
+                <EditCommentPopover commentId={id} />
               ) : (
                 <ReportCommentPopover />
               )}
@@ -106,7 +99,11 @@ function Comment({
   );
 }
 
-function EditCommentPopover() {
+type EditCommentPopoverProps = {
+  commentId: string;
+};
+
+function EditCommentPopover({ commentId }: EditCommentPopoverProps) {
   return (
     <Popover>
       <PopoverTrigger>
@@ -117,9 +114,11 @@ function EditCommentPopover() {
           <button className="flex w-full items-center gap-x-4 pl-2 py-2 pr-12 rounded hover:bg-zinc-700">
             <PencilIcon className="w-5 h-5" /> Edit
           </button>
-          <button className="flex w-full items-center gap-x-4 pl-2 py-2 pr-12 rounded hover:bg-zinc-700">
-            <TrashIcon className="w-5 h-5" /> Delete
-          </button>
+          <form>
+            <button className="flex w-full items-center gap-x-4 pl-2 py-2 pr-12 rounded hover:bg-zinc-700">
+              <TrashIcon className="w-5 h-5" /> Delete
+            </button>
+          </form>
         </div>
       </PopoverContent>
     </Popover>

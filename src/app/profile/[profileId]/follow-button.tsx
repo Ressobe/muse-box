@@ -21,12 +21,12 @@ export default function FollowButton({
   addOptimisticFollower,
   removeOptimisticFollower,
 }: FollowButtonProps) {
+  const { toast } = useToast();
+  const [followed, setFollowed] = useState(isFollowed);
+
   if (profileId === profileSessionId) {
     return null;
   }
-
-  const { toast } = useToast();
-  const [followed, setFollowed] = useState(isFollowed);
 
   const handleSubmit = async () => {
     if (!profileSessionId) {

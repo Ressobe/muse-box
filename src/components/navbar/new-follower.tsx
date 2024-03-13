@@ -39,9 +39,12 @@ export default async function NewFollower({
             }}
             width={50}
           />
-          <h1 className="pl-4 pr-2 font-bold cursor-pointer hover:underline">
+          <Link
+            href={`/profile/${senderProfile.id}`}
+            className="pl-4 pr-2 font-bold cursor-pointer hover:underline"
+          >
             {senderProfile.name}
-          </h1>
+          </Link>
           <Link href={`/profile/${senderProfile.id}`} className="text-xm">
             is now following you!
           </Link>

@@ -2,10 +2,10 @@
 
 import { Button } from "@/src/components/ui/button";
 import Rating from "@/src/components/rating";
-import addCommentAction from "./_actions/comment";
 import { useToast } from "@/src/components/ui/use-toast";
 import { useEffect, useRef, useState } from "react";
 import { SubmitButton } from "@/src/components/submit-button";
+import addCommentAction from "./_actions/comment";
 
 type CommentProps = {
   artistId: string;
@@ -45,13 +45,6 @@ export default function AddComment({ artistId, profileId }: CommentProps) {
 
   return (
     <div className="relative">
-      <div
-        className="rounded-full fixed top-0 w-[40px] h-[40px] border"
-        style={{
-          aspectRatio: "40/40",
-          objectFit: "cover",
-        }}
-      ></div>
       <form action={handleSubmit} className="pl-10 w-full flex gap-x-6  pt-10">
         <div className="flex items-center max-h-fit"></div>
         <div>

@@ -1,9 +1,9 @@
 "use client";
 
 import { useToast } from "@/src/components/ui/use-toast";
-import { followAction } from "./_actions/follow";
+import { followAction } from "./_actions/follow-artist";
 import { useState } from "react";
-import { unfollowAction } from "./_actions/unfollow";
+import { unfollowAction } from "./_actions/unfollow-artist";
 import { SubmitButton } from "../../components/submit-button";
 
 type FollowButtonProps = {
@@ -48,7 +48,7 @@ export default function FollowButton({
 
   return (
     <form action={handleSubmit}>
-      <SubmitButton text={followed ? "Unfollow" : "Follow"} />
+      <SubmitButton>{followed ? "Unfollow" : "Follow"}</SubmitButton>
     </form>
   );
 }

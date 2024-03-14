@@ -1,54 +1,196 @@
 import db from "@/src/lib/db";
-import { Profile } from "@prisma/client";
+import { Invitation, InvitationState, Profile } from "@prisma/client";
+import { Result } from "../types/database";
+import { createNotification } from "./notification";
 
-export async function deleteAccount(profileId: string) {
-  await db.profile.delete({
-    where: {
-      id: profileId,
-    },
-  });
+export async function readProfile(
+  profileId: string,
+): Promise<Result<Profile, Error>> {
+  try {
+    const profile = await db.profile.findUnique({ where: { id: profileId } });
+    if (!profile) throw Error("Profile was not found");
+    return [profile, null];
+  } catch (error) {
+    return [null, error as Error];
+  }
+}
+
+export async function deleteProfile(
+  profileId: string,
+): Promise<Result<Profile, Error>> {
+  try {
+    const profile = await db.profile.delete({
+      where: {
+        id: profileId,
+      },
+    });
+    return [profile, null];
+  } catch (error) {
+    return [null, error as Error];
+  }
+}
+
+export async function updateProfile(
+  profileId: string,
+  avatarImg: string,
+  name: string,
+  surname: string,
+  birthDay: Date,
+  bio: string,
+): Promise<Result<Profile, Error>> {
+  try {
+    const [, notFoundProfileError] = await readProfile(profileId);
+    if (notFoundProfileError) throw notFoundProfileError;
+
+    const profile = await db.profile.update({
+      where: { id: profileId },
+      data: {
+        name: name,
+        avatar_img: avatarImg,
+        surname: surname,
+        birthDay: birthDay,
+        bio: bio,
+      },
+    });
+    return [profile, null];
+  } catch (error) {
+    return [null, error as Error];
+  }
+}
+
+export async function createInvitation(
+  senderId: string,
+  receiverId: string,
+  state: InvitationState,
+): Promise<Result<Invitation, Error>> {
+  try {
+    const invitation = await db.invitation.create({
+      data: {
+        senderId,
+        receiverId,
+        state,
+      },
+    });
+    return [invitation, null];
+  } catch (error) {
+    return [null, error as Error];
+  }
+}
+
+export async function findInvitation(
+  senderId: string,
+  receiverId: string,
+  state: InvitationState,
+): Promise<Result<Invitation, Error>> {
+  try {
+    const invitation = await db.invitation.findFirst({
+      where: {
+        senderId,
+        receiverId,
+        state,
+      },
+    });
+    if (!invitation) throw Error("Invitation was not found");
+    return [invitation, null];
+  } catch (error) {
+    return [null, error as Error];
+  }
+}
+
+export async function readInvitation(
+  invitationId: string,
+): Promise<Result<Invitation, Error>> {
+  try {
+    const invitation = await db.invitation.findUnique({
+      where: { id: invitationId },
+    });
+    if (!invitation) throw Error("Invitation was not found");
+
+    return [invitation, null];
+  } catch (error) {
+    return [null, error as Error];
+  }
+}
+
+export async function updateInvitation(
+  invitationId: string,
+  state: InvitationState,
+): Promise<Result<Invitation, Error>> {
+  try {
+    const [, invitationNotFoundError] = await readInvitation(invitationId);
+    if (invitationNotFoundError) throw invitationNotFoundError;
+
+    const invitation = await db.invitation.update({
+      where: { id: invitationId },
+      data: {
+        state,
+      },
+    });
+
+    return [invitation, null];
+  } catch (error) {
+    return [null, error as Error];
+  }
+}
+
+export async function deleteInvitation(
+  invitationId: string,
+): Promise<Result<Invitation, Error>> {
+  try {
+    const [, invitationNotFoundError] = await readInvitation(invitationId);
+    if (invitationNotFoundError) throw invitationNotFoundError;
+
+    const invitation = await db.invitation.delete({
+      where: { id: invitationId },
+    });
+
+    return [invitation, null];
+  } catch (error) {
+    return [null, error as Error];
+  }
 }
 
 export async function sendInvitationFriend(
   senderId: string,
   reciverId: string,
 ) {
-  const invitation = await db.invitation.findFirst({
-    where: {
-      senderId: senderId,
-      receiverId: reciverId,
-      state: "PENDING",
-    },
-  });
-
-  if (invitation) {
-    return null;
-  }
-
-  await db.invitation.create({
-    data: {
-      senderId: senderId,
-      receiverId: reciverId,
-      state: "PENDING",
-    },
-  });
-
-  const inviteNotification = await db.notification.create({
-    data: {
-      type: "INVITE",
-      resourceId: senderId,
-      fromId: senderId,
-    },
-  });
-
-  await db.profile.update({
-    where: { id: reciverId },
-    data: {
-      notifications: {
-        connect: { id: inviteNotification.id },
+  try {
+    const invitation = await db.invitation.findFirst({
+      where: {
+        senderId: senderId,
+        receiverId: reciverId,
+        state: "PENDING",
       },
-    },
-  });
+    });
+
+    if (invitation) {
+      return null;
+    }
+
+    await db.invitation.create({
+      data: {
+        senderId: senderId,
+        receiverId: reciverId,
+        state: "PENDING",
+      },
+    });
+
+    const [inviteNotification, inviteNotificationNotCreatedError] =
+      await createNotification(senderId, senderId, "INVITE");
+    if (inviteNotificationNotCreatedError)
+      throw inviteNotificationNotCreatedError;
+
+    await db.profile.update({
+      where: { id: reciverId },
+      data: {
+        notifications: {
+          connect: { id: inviteNotification.id },
+        },
+      },
+    });
+  } catch (error) {
+    return [null, error as Error];
+  }
 }
 
 export async function acceptInvitationFriend(
@@ -269,17 +411,6 @@ export async function getProfile(userId: string | undefined) {
     },
   });
   return profile;
-}
-
-export async function readProfile(
-  profileId: string,
-): Promise<[Profile | null, Error | null]> {
-  try {
-    const profile = await db.profile.findUnique({ where: { id: profileId } });
-    return [profile, null];
-  } catch (error) {
-    return [null, error as Error];
-  }
 }
 
 export async function isFollowingProfile(

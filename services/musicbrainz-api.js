@@ -47,7 +47,7 @@ async function getReleasesForReleaseGroup(releaseGroupId) {
   return release;
 }
 
-async function getArtist(artistId) {
+async function getAlbums(artistId) {
   const endpoint = "release-group";
 
   const queryParams = new URLSearchParams({
@@ -72,9 +72,40 @@ async function getArtist(artistId) {
   return data;
 }
 
+async function getArtistInfo(artistId) {
+  const endpoint = "artist";
+  const queryParams = new URLSearchParams({
+    inc: "aliases+url-rels+genres+tags",
+    fmt: "json",
+  });
+
+  const url = `${API_URL}/${endpoint}/${artistId}?${queryParams}`;
+  const response = await fetch(url);
+  const data = await response.json();
+
+  return data;
+}
+
+async function searchArtists() {
+  const endpoint = "artist";
+  const queryParams = new URLSearchParams({
+    query: "tag:rap AND country:PL",
+    fmt: "json",
+  });
+
+  const url = `${API_URL}/${endpoint}/?${queryParams}`;
+  const response = await fetch(url);
+  const data = await response.json();
+
+  return data;
+}
+
 async function main() {
-  const artist = await getArtist("24b679c1-fc3d-4300-82e2-fea54e79dc89");
+  const artist = await getArtistInfo("24b679c1-fc3d-4300-82e2-fea54e79dc89");
+
+  // const albums = await getAlbums("24b679c1-fc3d-4300-82e2-fea54e79dc89");
   console.log(artist);
+  // console.log(artist);
 }
 
 await main();

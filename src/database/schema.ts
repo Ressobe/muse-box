@@ -1,25 +1,23 @@
 import {
-  boolean,
-  timestamp,
-  pgTable,
+  integer,
+  sqliteTable,
   text,
   primaryKey,
-  integer,
-} from "drizzle-orm/pg-core";
+} from "drizzle-orm/sqlite-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 
-export const users = pgTable("user", {
+export const users = sqliteTable("user", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name"),
   email: text("email").notNull(),
-  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
   password: text("password"),
   image: text("image"),
 });
 
-export const accounts = pgTable(
+export const accounts = sqliteTable(
   "account",
   {
     userId: text("userId")
@@ -43,24 +41,24 @@ export const accounts = pgTable(
   }),
 );
 
-export const sessions = pgTable("session", {
+export const sessions = sqliteTable("session", {
   sessionToken: text("sessionToken").primaryKey(),
   userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  expires: timestamp("expires", { mode: "date" }).notNull(),
+  expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
 });
 
-export const verificationTokens = pgTable("verificationToken", {
+export const verificationTokens = sqliteTable("verificationTokens", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   token: text("token").notNull(),
-  expires: timestamp("expires", { mode: "date" }).notNull(),
+  expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
   email: text("email").notNull(),
 });
 
-export const authenticators = pgTable(
+export const authenticators = sqliteTable(
   "authenticator",
   {
     credentialID: text("credentialID").notNull().unique(),
@@ -71,7 +69,9 @@ export const authenticators = pgTable(
     credentialPublicKey: text("credentialPublicKey").notNull(),
     counter: integer("counter").notNull(),
     credentialDeviceType: text("credentialDeviceType").notNull(),
-    credentialBackedUp: boolean("credentialBackedUp").notNull(),
+    credentialBackedUp: integer("credentialBackedUp", {
+      mode: "boolean",
+    }).notNull(),
     transports: text("transports"),
   },
   (authenticator) => ({

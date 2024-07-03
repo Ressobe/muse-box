@@ -22,6 +22,7 @@ import { Input } from "@/components/ui/input";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { FormSucess } from "@/components/form-sucess";
 import { FormError } from "@/components/form-error";
+import { TailSpin } from "react-loader-spinner";
 
 export default function SettingsPage() {
   const user = useCurrentUser();
@@ -61,10 +62,11 @@ export default function SettingsPage() {
       }
     });
   };
+
   return (
-    <Card className="w-2/3">
+    <Card className="w-2/3 text-left border-none">
       <CardHeader>
-        <p className="text-2xl font-semibold text-center">Settings</p>
+        <p className="text-2xl font-semibold">Settings</p>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -149,7 +151,25 @@ export default function SettingsPage() {
             </div>
             <FormSucess message={sucess} />
             <FormError message={error} />
-            <Button type="submit">Save</Button>
+            <div className="w-full flex flex-row-reverse">
+              <Button disabled={isPending} type="submit" className="px-8">
+                {isPending ? (
+                  <>
+                    <TailSpin
+                      visible={true}
+                      height="25"
+                      width="25"
+                      color="#6d28d9"
+                      ariaLabel="tail-spin-loading"
+                      radius="1"
+                      wrapperClass=""
+                    />
+                  </>
+                ) : (
+                  <>Save</>
+                )}
+              </Button>
+            </div>
           </form>
         </Form>
       </CardContent>

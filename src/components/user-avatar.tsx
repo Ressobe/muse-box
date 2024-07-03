@@ -7,10 +7,10 @@ type UserAvatarProps = {
 
 export function UserAvatar({ avatarUrl }: UserAvatarProps) {
   return (
-    <Avatar className="h-28  w-28">
+    <Avatar className="h-12  w-12">
       <AvatarImage src={avatarUrl || ""} />
       <AvatarFallback>
-        <FaUser className="w-10 h-10" />
+        <FaUser className="w-8 h-8" />
       </AvatarFallback>
     </Avatar>
   );

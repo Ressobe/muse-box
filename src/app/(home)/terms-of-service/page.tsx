@@ -116,9 +116,10 @@ export default function TermsOfServicePage() {
         <section className="space-y-4">
           <h2 className="text-2xl font-bold">X. Disclaimer of Warranties</h2>
           <p className="text-gray-500">
-            Our Services are provided "as is" and "as available" without
-            warranties of any kind, either express or implied. We do not warrant
-            that the Services will be uninterrupted or error-free.
+            Our Services are provided &quot;as is&quot; and &quot;as
+            available&quot; without warranties of any kind, either express or
+            implied. We do not warrant that the Services will be uninterrupted
+            or error-free.
           </p>
         </section>
         <section className="space-y-4">
@@ -172,7 +173,7 @@ export default function TermsOfServicePage() {
           <h2 className="text-2xl font-bold">XIV. Contact Information</h2>
           <p className="text-gray-500">
             If you have any questions about these Terms of Service, please
-            contact us at{" "}
+            contact us at
             <span className="text-primary underline">{CONTACT_EMAIL}</span>
           </p>
         </section>

@@ -34,7 +34,7 @@ export function Hero() {
           </Link>
         </p>
       </div>
-      <Image src={LOGO} width={250} height={250} alt="nextcraft-logo" />
+      <Image src={LOGO} width={270} height={270} alt="nextcraft-logo" />
     </div>
   );
 }

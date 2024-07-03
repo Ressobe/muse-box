@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import LoginButton from "@/components/auth/login-button";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { Button } from "@/components/ui/button";
@@ -5,7 +6,7 @@ import { APP_NAME } from "@/config";
 import Link from "next/link";
 
 export async function Navbar() {
-  // const session = await auth();
+  const session = await auth();
 
   return (
     <nav className="bg-background flex justify-between items-center p-4 w-full">
@@ -17,24 +18,15 @@ export async function Navbar() {
           {APP_NAME}
         </h1>
       </Link>
-      <div className="flex items-center gap-x-10">
-        <span>How it Works</span>
+      {!session?.user ? (
         <LoginButton>
           <Button className="transform transition-all active:scale-110 hover:bg-muted-foreground ">
             Sign in
           </Button>
         </LoginButton>
-      </div>
-
-      {/* {!session?.user ? ( */}
-      {/*   <LoginButton> */}
-      {/*     <Button className="transform transition-all active:scale-110 hover:bg-muted-foreground "> */}
-      {/*       Sign in */}
-      {/*     </Button> */}
-      {/*   </LoginButton> */}
-      {/* ) : ( */}
-      {/*   <LogoutButton>Logout</LogoutButton> */}
-      {/* )} */}
+      ) : (
+        <LogoutButton>Logout</LogoutButton>
+      )}
     </nav>
   );
 }

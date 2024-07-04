@@ -64,11 +64,11 @@ export default function SettingsPage() {
   };
 
   return (
-    <Card className="w-2/3 text-left border-none">
-      <CardHeader>
+    <Card className="w-3/4 text-left border-none">
+      <CardHeader className="p-0 pb-4">
         <p className="text-2xl font-semibold">Settings</p>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-0">
         <Form {...form}>
           <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
             <div className="space-y-4">

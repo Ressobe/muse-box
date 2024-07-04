@@ -7,12 +7,12 @@ type ProtectedLayoutProps = {
 
 export default function ProtectedLayout({ children }: ProtectedLayoutProps) {
   return (
-    <div className="h-full w-full flex">
+    <div className="h-screen w-screen flex overflow-hidden">
       <Sidebar />
-      <section className="w-full">
+      <div className="flex flex-col flex-1 overflow-hidden">
         <Topbar />
-        <div className="flex">{children}</div>
-      </section>
+        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+      </div>
     </div>
   );
 }

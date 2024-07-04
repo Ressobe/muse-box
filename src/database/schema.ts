@@ -89,3 +89,12 @@ export const authenticators = sqliteTable(
     }),
   }),
 );
+
+export const artist = sqliteTable("artist", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull(),
+  bio: text("bio"),
+  country: text("country"),
+});

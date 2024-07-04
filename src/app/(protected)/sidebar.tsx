@@ -6,7 +6,6 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import Icon from "@/components/icon";
 import { LogOutIcon } from "lucide-react";
-
 import { icons } from "lucide-react";
 type IconName = keyof typeof icons;
 
@@ -53,7 +52,7 @@ export function Sidebar() {
             <Link key={item.href} href={item.href}>
               <span
                 className={cn(
-                  "flex items-center gap-x-2 py-1.5 pl-2 pr-8 text-lg rounded",
+                  "flex items-center gap-x-2 py-1.5 pl-2 pr-8 text-md rounded hover:bg-secondary transition-all",
                   pathname === item.href ? "bg-secondary" : "",
                 )}
               >

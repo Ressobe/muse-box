@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -6,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { HeartIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -49,6 +51,7 @@ export default function DiscographyPage({
               <TableHead className="w-[100px]">#</TableHead>
               <TableHead>Title</TableHead>
               <TableHead>Likes</TableHead>
+              <TableHead></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -64,6 +67,11 @@ export default function DiscographyPage({
                 </Link>
               </TableCell>
               <TableCell>10000</TableCell>
+              <TableCell>
+                <Button variant="ghost" className="hover:bg-background">
+                  <HeartIcon className="w-6 h-6" />
+                </Button>
+              </TableCell>
             </TableRow>
             <TableRow className="p-0">
               <TableCell className="font-medium">2</TableCell>
@@ -72,6 +80,11 @@ export default function DiscographyPage({
                 Witaj w hotelu Marmur
               </TableCell>
               <TableCell>10000</TableCell>
+              <TableCell>
+                <Button variant="ghost" className="hover:bg-background">
+                  <HeartIcon className="w-6 h-6" />
+                </Button>
+              </TableCell>
             </TableRow>
             <TableRow className="p-0">
               <TableCell className="font-medium">3</TableCell>
@@ -80,6 +93,11 @@ export default function DiscographyPage({
                 Żyrandol
               </TableCell>
               <TableCell>10000</TableCell>
+              <TableCell>
+                <Button variant="ghost" className="hover:bg-background">
+                  <HeartIcon className="w-6 h-6" />
+                </Button>
+              </TableCell>
             </TableRow>
             <TableRow className="p-0">
               <TableCell className="font-medium">4</TableCell>
@@ -88,6 +106,11 @@ export default function DiscographyPage({
                 Krwawa jesień
               </TableCell>
               <TableCell>10000</TableCell>
+              <TableCell>
+                <Button variant="ghost" className="hover:bg-background">
+                  <HeartIcon className="w-6 h-6" />
+                </Button>
+              </TableCell>
             </TableRow>
             <TableRow className="p-0">
               <TableCell className="font-medium">5</TableCell>
@@ -96,6 +119,11 @@ export default function DiscographyPage({
                 Grubo-chude psy
               </TableCell>
               <TableCell>10000</TableCell>
+              <TableCell>
+                <Button variant="ghost" className="hover:bg-background">
+                  <HeartIcon className="w-6 h-6" />
+                </Button>
+              </TableCell>
             </TableRow>
             <TableRow className="p-0">
               <TableCell className="font-medium">6</TableCell>
@@ -104,6 +132,11 @@ export default function DiscographyPage({
                 Portier!
               </TableCell>
               <TableCell>10000</TableCell>
+              <TableCell>
+                <Button variant="ghost" className="hover:bg-background">
+                  <HeartIcon className="w-6 h-6" />
+                </Button>
+              </TableCell>
             </TableRow>
             <TableRow className="p-0">
               <TableCell className="font-medium">7</TableCell>
@@ -112,6 +145,11 @@ export default function DiscographyPage({
                 Mgła I (Siwe włosy)
               </TableCell>
               <TableCell>10000</TableCell>
+              <TableCell>
+                <Button variant="ghost" className="hover:bg-background">
+                  <HeartIcon className="w-6 h-6" />
+                </Button>
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>

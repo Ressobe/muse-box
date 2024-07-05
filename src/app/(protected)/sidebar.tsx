@@ -20,13 +20,18 @@ const LINKS: {
     icon: "MicVocal",
   },
   {
-    title: "Library",
-    href: "",
+    title: "Albums",
+    href: "/albums",
     icon: "Disc3",
   },
   {
+    title: "Songs",
+    href: "/tracks",
+    icon: "Music",
+  },
+  {
     title: "Playlists",
-    href: "",
+    href: "/playlists",
     icon: "ListMusic",
   },
   {

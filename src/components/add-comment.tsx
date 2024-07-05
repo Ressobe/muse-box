@@ -1,4 +1,5 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
 import Rating from "@/components/rating";
 import { useToast } from "@/components/ui/use-toast";
@@ -12,7 +13,7 @@ type CommentProps = {
   profileId?: string;
 };
 
-export default function AddComment({ artistId, profileId }: CommentProps) {
+export function AddComment({ artistId, profileId }: CommentProps) {
   const { toast } = useToast();
 
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);

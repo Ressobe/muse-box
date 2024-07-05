@@ -1,10 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { AddComment } from "./add-comment";
 import { Comment } from "./comment";
+import Link from "next/link";
 
-export function Reviews() {
+type ReviewsProps = {
+  artistId: string;
+};
+
+export function Reviews({ artistId }: ReviewsProps) {
   return (
-    <div className="pt-20">
+    <div className="pt-20 w-full">
       <h2 className="font-bold text-2xl pb-4">User Reviews</h2>
       <AddComment artistId="dkdkdk" />
       <div className="pt-10 w-full grid grid-cols-2 gap-x-10">
@@ -55,7 +60,9 @@ export function Reviews() {
         />
       </div>
       <div className="pt-10 flex justify-center">
-        <Button variant="secondary">See all reviews</Button>
+        <Link href={`/reviews/artists/${artistId}`}>
+          <Button variant="secondary">See all reviews</Button>
+        </Link>
       </div>
     </div>
   );

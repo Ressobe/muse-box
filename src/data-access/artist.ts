@@ -1,5 +1,5 @@
 import { db } from "@/database/db";
-import { artist } from "@/database/schema";
+import { artists } from "@/database/schema";
 import { eq } from "drizzle-orm";
 
 export async function insertSampleArtists() {
@@ -27,15 +27,15 @@ export async function insertSampleArtists() {
       country: "USA",
     },
   ];
-  await db.insert(artist).values(sampleArtists);
+  await db.insert(artists).values(sampleArtists);
 }
 
 export async function getArtists() {
-  return await db.query.artist.findMany();
+  return await db.query.artists.findMany();
 }
 
 export async function getArtistById(artistId: string) {
-  return await db.query.artist.findFirst({
-    where: eq(artist.id, artistId),
+  return await db.query.artists.findFirst({
+    where: eq(artists.id, artistId),
   });
 }

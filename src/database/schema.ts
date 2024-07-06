@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   integer,
   sqliteTable,
@@ -16,6 +17,32 @@ export const users = sqliteTable("user", {
   password: text("password"),
   image: text("image"),
 });
+
+export const userProfiles = sqliteTable("userProfiles", {
+  userId: text("userId")
+    .primaryKey()
+    .references(() => users.id, { onDelete: "cascade" }),
+  favoriteArtistId: text("favoriteArtistId").references(() => artists.id),
+  favoriteAlbumId: text("favoriteAlbumId").references(() => albums.id),
+  favoriteTrackId: text("favoriteTrackId").references(() => tracks.id),
+});
+
+export const follows = sqliteTable(
+  "follows",
+  {
+    followerId: text("followerId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    followingId: text("followingId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+  },
+  (follows) => ({
+    compoundKey: primaryKey({
+      columns: [follows.followerId, follows.followingId],
+    }),
+  }),
+);
 
 export const accounts = sqliteTable(
   "account",
@@ -90,7 +117,7 @@ export const authenticators = sqliteTable(
   }),
 );
 
-export const artist = sqliteTable("artist", {
+export const artists = sqliteTable("artists", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
@@ -98,3 +125,36 @@ export const artist = sqliteTable("artist", {
   bio: text("bio"),
   country: text("country"),
 });
+
+export const artistsRelations = relations(artists, ({ many }) => ({
+  albums: many(albums),
+}));
+
+export const albums = sqliteTable("albums", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  artistId: text("artistId").references(() => artists.id, {
+    onDelete: "cascade",
+  }),
+  title: text("title").notNull(),
+});
+
+export const albumsRelations = relations(albums, ({ one }) => ({
+  artist: one(artists),
+}));
+
+export const tracks = sqliteTable("tracks", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  position: integer("position").notNull(),
+  title: text("title").notNull(),
+  albumId: text("albumId").references(() => albums.id, {
+    onDelete: "cascade",
+  }),
+});
+
+export const tracksRelations = relations(tracks, ({ one }) => ({
+  album: one(albums),
+}));

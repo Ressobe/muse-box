@@ -1,8 +1,12 @@
 import { Bell, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { UserAvatar } from "@/components/user-avatar";
+import { auth } from "@/auth";
+import Link from "next/link";
 
-export function Topbar() {
+export async function Topbar() {
+  const session = await auth();
+
   return (
     <header className="border-b p-3 flex justify-between items-center">
       <div className="relative">
@@ -15,7 +19,9 @@ export function Topbar() {
       </div>
       <div className="flex gap-x-10 items-center">
         <Bell className="w-8 h-8" />
-        <UserAvatar />
+        <Link href={`/profiles/${session?.user.id}`}>
+          <UserAvatar />
+        </Link>
       </div>
     </header>
   );

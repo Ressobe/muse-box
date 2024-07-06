@@ -1,18 +1,26 @@
-import { Button } from "@/components/ui/button";
-import { AddComment } from "./add-comment";
-import { Comment } from "./comment";
-import Link from "next/link";
+import { ArtistHeader } from "@/components/artist-header";
+import { Comment } from "@/components/comment";
+import { getArtistUseCase } from "@/use-cases/artist";
+import { notFound } from "next/navigation";
 
-type ReviewsProps = {
-  artistId: string;
-};
+export default async function ArtistReviewsPage({
+  params,
+}: {
+  params: { artistId: string };
+}) {
+  const { artistId } = params;
+  const artist = await getArtistUseCase(artistId);
+  if (!artist) {
+    notFound();
+  }
 
-export function Reviews({ artistId }: ReviewsProps) {
+  // TODO: Lazy loading of more reviews
+
   return (
-    <div className="pt-20 w-full">
-      <h2 className="font-bold text-2xl pb-4">User Reviews</h2>
-      <AddComment artistId="dkdkdk" />
-      <div className="pt-10 w-full grid grid-cols-2 gap-x-10">
+    <section className="space-y-12">
+      <ArtistHeader name={artist.name} />
+      <h2 className="font-bold text-4xl">Reviews</h2>
+      <div className="w-full grid grid-cols-2 gap-x-10">
         <Comment
           id="dkd"
           rate={3}
@@ -59,11 +67,6 @@ export function Reviews({ artistId }: ReviewsProps) {
           ownerName="bartek"
         />
       </div>
-      <div className="pt-10 flex justify-center">
-        <Link href={`/reviews/artists/${artistId}`}>
-          <Button variant="secondary">See all reviews</Button>
-        </Link>
-      </div>
-    </div>
+    </section>
   );
 }

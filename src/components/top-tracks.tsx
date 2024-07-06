@@ -6,8 +6,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { HeartIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export function TopTracks() {
   return (
@@ -20,6 +22,7 @@ export function TopTracks() {
             <TableHead>Title</TableHead>
             <TableHead>Album</TableHead>
             <TableHead>Likes</TableHead>
+            <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -42,7 +45,12 @@ export function TopTracks() {
                 1-800-OŚWIECENIE
               </Link>
             </TableCell>
-            <TableCell>10000</TableCell>
+            <TableCell>1000</TableCell>
+            <TableCell>
+              <Button variant="ghost" className="hover:bg-background">
+                <HeartIcon className="w-6 h-6" />
+              </Button>
+            </TableCell>
           </TableRow>
           <TableRow className="p-0">
             <TableCell className="font-medium">2</TableCell>
@@ -64,6 +72,11 @@ export function TopTracks() {
               </Link>
             </TableCell>
             <TableCell>10000</TableCell>
+            <TableCell>
+              <Button variant="ghost" className="hover:bg-background">
+                <HeartIcon className="w-6 h-6" />
+              </Button>
+            </TableCell>
           </TableRow>
           <TableRow className="p-0">
             <TableCell className="font-medium">3</TableCell>
@@ -85,6 +98,11 @@ export function TopTracks() {
               </Link>
             </TableCell>
             <TableCell>10000</TableCell>
+            <TableCell>
+              <Button variant="ghost" className="hover:bg-background">
+                <HeartIcon className="w-6 h-6" />
+              </Button>
+            </TableCell>
           </TableRow>
           <TableRow className="p-0">
             <TableCell className="font-medium">4</TableCell>
@@ -106,6 +124,11 @@ export function TopTracks() {
               </Link>
             </TableCell>
             <TableCell>10000</TableCell>
+            <TableCell>
+              <Button variant="ghost" className="hover:bg-background">
+                <HeartIcon className="w-6 h-6" />
+              </Button>
+            </TableCell>
           </TableRow>
           <TableRow className="p-0">
             <TableCell className="font-medium">5</TableCell>
@@ -127,6 +150,11 @@ export function TopTracks() {
               </Link>
             </TableCell>
             <TableCell>10000</TableCell>
+            <TableCell>
+              <Button variant="ghost" className="hover:bg-background">
+                <HeartIcon className="w-6 h-6" />
+              </Button>
+            </TableCell>
           </TableRow>
         </TableBody>
       </Table>

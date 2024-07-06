@@ -15,6 +15,11 @@ const LINKS: {
   icon: IconName;
 }[] = [
   {
+    title: "Home",
+    href: "/home",
+    icon: "House",
+  },
+  {
     title: "Artists",
     href: "/artists",
     icon: "MicVocal",

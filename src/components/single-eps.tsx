@@ -3,9 +3,15 @@ import Link from "next/link";
 
 type SingleEpsProps = {
   artistId: string;
+  singleEps: {
+    artistId: string | null;
+    id: string;
+    title: string;
+    typeId: number;
+  }[];
 };
 
-export function SingleEps({ artistId }: SingleEpsProps) {
+export function SingleEps({ artistId, singleEps }: SingleEpsProps) {
   return (
     <div>
       <div className="flex justify-between">
@@ -18,57 +24,27 @@ export function SingleEps({ artistId }: SingleEpsProps) {
         </Link>
       </div>
       <ul className="flex gap-x-10">
-        <Link
-          href={`/albums/{album_id}`}
-          className="transition-all p-4 hover:bg-secondary/40 rounded"
-        >
-          <li>
-            <Image src="/taco3.jpeg" width={200} height={200} alt="dkdk" />
-            <div className="pt-4">Marmur</div>
-            <div className="text-muted-foreground">2016</div>
-          </li>
-        </Link>
-        <Link
-          href={`/albums/{album_id}`}
-          className="transition-all p-4 hover:bg-secondary/40 rounded"
-        >
-          <li>
-            <Image src="/taco3.jpeg" width={200} height={200} alt="dkdk" />
-            <div className="pt-4">Szprycer</div>
-            <div className="text-muted-foreground">2016</div>
-          </li>
-        </Link>
-        <Link
-          href={`/albums/{album_id}`}
-          className="transition-all p-4 hover:bg-secondary/40 rounded"
-        >
-          <li>
-            <Image src="/taco3.jpeg" width={200} height={200} alt="dkdk" />
-            <div className="pt-4">Europa</div>
-            <div className="text-muted-foreground">2016</div>
-          </li>
-        </Link>
-        <Link
-          href={`/albums/{album_id}`}
-          className="transition-all p-4 hover:bg-secondary/40 rounded"
-        >
-          <li>
-            <Image src="/taco3.jpeg" width={200} height={200} alt="dkdk" />
-            <div className="pt-4">Flagey</div>
-            <div className="text-muted-foreground">2016</div>
-          </li>
-        </Link>
-        <Link
-          href={`/albums/{album_id}`}
-          className="transition-all p-4 hover:bg-secondary/40 rounded"
-        >
-          <li>
-            <Image src="/taco3.jpeg" width={200} height={200} alt="dkdk" />
-            <div className="pt-4">Wosk</div>
-            <div className="text-muted-foreground">2016</div>
-          </li>
-        </Link>
+        {singleEps.map((item) => {
+          return (
+            <Link
+              key={item.id}
+              href={`/albums/${item.id}`}
+              className="transition-all p-4 hover:bg-secondary/40 rounded"
+            >
+              <li>
+                <Image src="/taco3.jpeg" width={200} height={200} alt="dkdk" />
+                <div className="pt-4">{item.title}</div>
+                <div className="text-muted-foreground">2016</div>
+              </li>
+            </Link>
+          );
+        })}
       </ul>
+      <div className="flex justify-center w-full">
+        {singleEps.length === 0 ? (
+          <h3 className="font-bold text-lg">Not Single and Eps yet</h3>
+        ) : null}
+      </div>
     </div>
   );
 }

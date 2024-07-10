@@ -1,4 +1,4 @@
-ALTER TABLE `tracks` ADD `albumId` text REFERENCES albums(id);--> statement-breakpoint
+ALTER TABLE `tracks` ADD `artistId` text NOT NULL REFERENCES artists(id);--> statement-breakpoint
 /*
  SQLite does not support "Creating foreign key on existing column" out of the box, we do not generate automatic migration for that, so it has to be done manually
  Please refer to: https://www.techonthenet.com/sqlite/tables/alter_table.php

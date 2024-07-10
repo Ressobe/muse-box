@@ -1,4 +1,4 @@
-ALTER TABLE `albums` RENAME COLUMN `userId` TO `artistId`;--> statement-breakpoint
+ALTER TABLE `genresToArtists` RENAME COLUMN `userId` TO `artistId`;--> statement-breakpoint
 /*
  SQLite does not support "Dropping foreign key" out of the box, we do not generate automatic migration for that, so it has to be done manually
  Please refer to: https://www.techonthenet.com/sqlite/tables/alter_table.php

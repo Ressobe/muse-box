@@ -3,9 +3,13 @@ import Link from "next/link";
 
 type AlbumsProps = {
   artistId: string;
+  albums: {
+    id: string;
+    title: string;
+  }[];
 };
 
-export function Albums({ artistId }: AlbumsProps) {
+export function Albums({ artistId, albums }: AlbumsProps) {
   return (
     <div>
       <div className="flex justify-between">
@@ -18,57 +22,27 @@ export function Albums({ artistId }: AlbumsProps) {
         </Link>
       </div>
       <ul className="flex gap-x-10">
-        <Link
-          href={``}
-          className="transition-all p-4 hover:bg-secondary/40 rounded"
-        >
-          <li>
-            <Image src="/taco2.jpeg" width={200} height={200} alt="dkdk" />
-            <div className="pt-4">Marmur</div>
-            <div className="text-muted-foreground">2016</div>
-          </li>
-        </Link>
-        <Link
-          href={`/albums/{album_id}`}
-          className="transition-all p-4 hover:bg-secondary/40 rounded"
-        >
-          <li>
-            <Image src="/taco2.jpeg" width={200} height={200} alt="dkdk" />
-            <div className="pt-4">Szprycer</div>
-            <div className="text-muted-foreground">2016</div>
-          </li>
-        </Link>
-        <Link
-          href={`/albums/{album_id}`}
-          className="transition-all p-4 hover:bg-secondary/40 rounded"
-        >
-          <li>
-            <Image src="/taco2.jpeg" width={200} height={200} alt="dkdk" />
-            <div className="pt-4">Europa</div>
-            <div className="text-muted-foreground">2016</div>
-          </li>
-        </Link>
-        <Link
-          href={`/albums/{album_id}`}
-          className="transition-all p-4 hover:bg-secondary/40 rounded"
-        >
-          <li>
-            <Image src="/taco2.jpeg" width={200} height={200} alt="dkdk" />
-            <div className="pt-4">Flagey</div>
-            <div className="text-muted-foreground">2016</div>
-          </li>
-        </Link>
-        <Link
-          href={`/albums/{album_id}`}
-          className="transition-all p-4 hover:bg-secondary/40 rounded"
-        >
-          <li>
-            <Image src="/taco2.jpeg" width={200} height={200} alt="dkdk" />
-            <div className="pt-4">Wosk</div>
-            <div className="text-muted-foreground">2016</div>
-          </li>
-        </Link>
+        {albums.map((alb) => {
+          return (
+            <Link
+              key={alb.id}
+              href={`/albums/${alb.id}`}
+              className="transition-all p-4 hover:bg-secondary/40 rounded"
+            >
+              <li>
+                <Image src="/taco2.jpeg" width={200} height={200} alt="dkdk" />
+                <div className="pt-4">{alb.title}</div>
+                <div className="text-muted-foreground">2016</div>
+              </li>
+            </Link>
+          );
+        })}
       </ul>
+      <div className="flex justify-center w-full">
+        {albums.length === 0 ? (
+          <h3 className="font-bold text-lg">Not albums yet</h3>
+        ) : null}
+      </div>
     </div>
   );
 }

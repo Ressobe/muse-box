@@ -17,9 +17,7 @@ export default async function AlbumsPage() {
         <h1 className="font-bold text-3xl">Top albums</h1>
         <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
           {topAlbums.map((album) => {
-            return (
-              <AlbumCard key={album.id} name={album.title} id={album.id} />
-            );
+            return <AlbumCard key={album.id} album={album} />;
           })}
         </div>
       </section>
@@ -28,9 +26,7 @@ export default async function AlbumsPage() {
         <h1 className="font-bold text-3xl">Popular albums</h1>
         <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
           {popularAlbums.map((album) => {
-            return (
-              <AlbumCard key={album.id} name={album.title} id={album.id} />
-            );
+            return <AlbumCard key={album.id} album={album} />;
           })}
         </div>
       </section>
@@ -39,9 +35,7 @@ export default async function AlbumsPage() {
         <h1 className="font-bold text-3xl">New albums</h1>
         <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
           {newAlbums.map((album) => {
-            return (
-              <AlbumCard key={album.id} name={album.title} id={album.id} />
-            );
+            return <AlbumCard key={album.id} album={album} />;
           })}
         </div>
       </section>
@@ -49,15 +43,25 @@ export default async function AlbumsPage() {
   );
 }
 
-function AlbumCard({ name, id }: { name: string; id: string }) {
+type TAlbum = {
+  id: string;
+  artistId: string | null;
+  title: string;
+};
+
+type AlbumCardProps = {
+  album: TAlbum;
+};
+
+function AlbumCard({ album }: AlbumCardProps) {
   return (
     <Link
-      href={`/albums/${id}`}
+      href={`/albums/${album.id}`}
       className="transition-all p-4 hover:bg-secondary/40 rounded"
     >
       <div>
         <Image src="/taco2.jpeg" width={200} height={200} alt="dkdk" />
-        <div className="pt-4">{name}</div>
+        <div className="pt-4">{album.title}</div>
         <div className="text-muted-foreground">2016</div>
       </div>
     </Link>

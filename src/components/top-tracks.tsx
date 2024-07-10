@@ -11,7 +11,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export function TopTracks() {
+type TopTracksProps = {
+  tracks: {
+    id: string;
+    title: string;
+    albumId: string;
+    artistId: string;
+    position: number;
+    album: {
+      id: string;
+      title: string;
+      artistId: string | null;
+      typeId: number;
+    };
+  }[];
+};
+
+export function TopTracks({ tracks }: TopTracksProps) {
   return (
     <div>
       <h2 className="font-bold text-3xl pb-6">Top tracks</h2>
@@ -26,136 +42,36 @@ export function TopTracks() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow className="p-0">
-            <TableCell className="font-medium">1</TableCell>
-            <TableCell className="flex items-center gap-x-4">
-              <Image src="/taco1.jpeg" width={70} height={70} alt="dkdk" />
-              <Link
-                href={`/tracks/track_id`}
-                className="transition-all underline-offset-2 hover:underline"
-              >
-                Gelato
-              </Link>
-            </TableCell>
-            <TableCell>
-              <Link
-                href={`/albums/album_id`}
-                className="transition-all underline-offset-2 hover:underline"
-              >
-                1-800-OŚWIECENIE
-              </Link>
-            </TableCell>
-            <TableCell>1000</TableCell>
-            <TableCell>
-              <Button variant="ghost" className="hover:bg-background">
-                <HeartIcon className="w-6 h-6" />
-              </Button>
-            </TableCell>
-          </TableRow>
-          <TableRow className="p-0">
-            <TableCell className="font-medium">2</TableCell>
-            <TableCell className="flex items-center gap-x-4">
-              <Image src="/taco1.jpeg" width={70} height={70} alt="dkdk" />
-              <Link
-                href={`/tracks/track_id`}
-                className="transition-all underline-offset-2 hover:underline"
-              >
-                Cichosza
-              </Link>
-            </TableCell>
-            <TableCell>
-              <Link
-                href={`/albums/album_id`}
-                className="transition-all underline-offset-2 hover:underline"
-              >
-                1-800-OŚWIECENIE
-              </Link>
-            </TableCell>
-            <TableCell>10000</TableCell>
-            <TableCell>
-              <Button variant="ghost" className="hover:bg-background">
-                <HeartIcon className="w-6 h-6" />
-              </Button>
-            </TableCell>
-          </TableRow>
-          <TableRow className="p-0">
-            <TableCell className="font-medium">3</TableCell>
-            <TableCell className="flex items-center gap-x-4">
-              <Image src="/taco1.jpeg" width={70} height={70} alt="dkdk" />
-              <Link
-                href={`/tracks/track_id`}
-                className="transition-all underline-offset-2 hover:underline"
-              >
-                Może to coś zmieni?
-              </Link>
-            </TableCell>
-            <TableCell>
-              <Link
-                href={`/albums/album_id`}
-                className="transition-all underline-offset-2 hover:underline"
-              >
-                1-800-OŚWIECENIE
-              </Link>
-            </TableCell>
-            <TableCell>10000</TableCell>
-            <TableCell>
-              <Button variant="ghost" className="hover:bg-background">
-                <HeartIcon className="w-6 h-6" />
-              </Button>
-            </TableCell>
-          </TableRow>
-          <TableRow className="p-0">
-            <TableCell className="font-medium">4</TableCell>
-            <TableCell className="flex items-center gap-x-4">
-              <Image src="/taco1.jpeg" width={70} height={70} alt="dkdk" />
-              <Link
-                href={`/tracks/track_id`}
-                className="transition-all underline-offset-2 hover:underline"
-              >
-                Pakiet Platinium
-              </Link>
-            </TableCell>
-            <TableCell>
-              <Link
-                href={`/albums/album_id`}
-                className="transition-all underline-offset-2 hover:underline"
-              >
-                1-800-OŚWIECENIE
-              </Link>
-            </TableCell>
-            <TableCell>10000</TableCell>
-            <TableCell>
-              <Button variant="ghost" className="hover:bg-background">
-                <HeartIcon className="w-6 h-6" />
-              </Button>
-            </TableCell>
-          </TableRow>
-          <TableRow className="p-0">
-            <TableCell className="font-medium">5</TableCell>
-            <TableCell className="flex items-center gap-x-4">
-              <Image src="/taco1.jpeg" width={70} height={70} alt="dkdk" />
-              <Link
-                href={`/tracks/track_id`}
-                className="transition-all underline-offset-2 hover:underline"
-              >
-                Mix Sałat
-              </Link>
-            </TableCell>
-            <TableCell>
-              <Link
-                href={`/tracks/track_id`}
-                className="transition-all underline-offset-2 hover:underline"
-              >
-                1-800-OŚWIECENIE
-              </Link>
-            </TableCell>
-            <TableCell>10000</TableCell>
-            <TableCell>
-              <Button variant="ghost" className="hover:bg-background">
-                <HeartIcon className="w-6 h-6" />
-              </Button>
-            </TableCell>
-          </TableRow>
+          {tracks.map((item, idx) => {
+            return (
+              <TableRow key={item.id} className="p-0">
+                <TableCell className="font-medium">{idx + 1}</TableCell>
+                <TableCell className="flex items-center gap-x-4">
+                  <Image src="/taco1.jpeg" width={70} height={70} alt="dkdk" />
+                  <Link
+                    href={`/tracks/${item.id}`}
+                    className="transition-all underline-offset-2 hover:underline"
+                  >
+                    {item.title}
+                  </Link>
+                </TableCell>
+                <TableCell>
+                  <Link
+                    href={`/albums/${item.albumId}`}
+                    className="transition-all underline-offset-2 hover:underline"
+                  >
+                    {item.album.title}
+                  </Link>
+                </TableCell>
+                <TableCell>1000</TableCell>
+                <TableCell>
+                  <Button variant="ghost" className="hover:bg-background">
+                    <HeartIcon className="w-6 h-6" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>

@@ -1,4 +1,4 @@
-import { getTracks } from "@/data-access/track";
+import { getTrackById, getTracks } from "@/data-access/track";
 
 export async function getTopTracksUseCase() {
   const tracks = await getTracks();
@@ -13,4 +13,9 @@ export async function getPopularTracksUseCase() {
 export async function getNewTracksUseCase() {
   const tracks = await getTracks();
   return tracks;
+}
+
+export async function getTrackUseCase(trackId: string) {
+  const track = await getTrackById(trackId);
+  return track;
 }

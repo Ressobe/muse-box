@@ -5,64 +5,43 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1720084749868,
-      "tag": "0000_wealthy_gargoyle",
+      "when": 1720514470922,
+      "tag": "0000_supreme_the_hood",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "6",
-      "when": 1720084825052,
-      "tag": "0001_curious_namorita",
+      "when": 1720517727031,
+      "tag": "0001_aromatic_vance_astro",
       "breakpoints": true
     },
     {
       "idx": 2,
       "version": "6",
-      "when": 1720265261654,
-      "tag": "0002_shocking_killmonger",
+      "when": 1720521706885,
+      "tag": "0002_abnormal_queen_noir",
       "breakpoints": true
     },
     {
       "idx": 3,
       "version": "6",
-      "when": 1720266282161,
-      "tag": "0003_nasty_bastion",
+      "when": 1720631646396,
+      "tag": "0003_certain_the_order",
       "breakpoints": true
     },
     {
       "idx": 4,
       "version": "6",
-      "when": 1720266566468,
-      "tag": "0004_petite_havok",
+      "when": 1720634567048,
+      "tag": "0004_magenta_butterfly",
       "breakpoints": true
     },
     {
       "idx": 5,
       "version": "6",
-      "when": 1720266993887,
-      "tag": "0005_abnormal_gertrude_yorkes",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1720267535878,
-      "tag": "0006_gifted_shocker",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "6",
-      "when": 1720268018327,
-      "tag": "0007_premium_dracula",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "6",
-      "when": 1720276152737,
-      "tag": "0008_dear_lockjaw",
+      "when": 1720634765331,
+      "tag": "0005_massive_reavers",
       "breakpoints": true
     }
   ]

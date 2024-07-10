@@ -8,8 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getAlbumUseCase } from "@/use-cases/album";
+import { notFound } from "next/navigation";
+import { albums } from "@/database/schema";
 
-export default function AlbumPage({
+export default async function AlbumPage({
   params,
 }: {
   params: {
@@ -17,6 +20,11 @@ export default function AlbumPage({
   };
 }) {
   const { albumId } = params;
+  const album = await getAlbumUseCase(albumId);
+  if (!album) {
+    notFound();
+  }
+
   return (
     <section className="space-y-12">
       <div className="flex items-center gap-x-16">
@@ -24,7 +32,7 @@ export default function AlbumPage({
         <div className="space-y-8">
           <div>
             <div>Album</div>
-            <h1 className="font-bold text-5xl">Marmur</h1>
+            <h1 className="font-bold text-5xl">{album.title}</h1>
           </div>
           <div className="flex items-center gap-x-4 text-sm">
             <Image
@@ -34,8 +42,11 @@ export default function AlbumPage({
               alt="dkdk"
               className="rounded-full"
             />
-            <Link href={`/artists/{artistsId}`}>
-              <span>Taco Hemingway</span>
+            <Link
+              href={`/artists/${album.artistId}`}
+              className="underline-offset-2 hover:underline"
+            >
+              <span>{album.artist?.name}</span>
             </Link>
             <span>2016</span>
             <span>17 songs, 57min 37sec</span>
@@ -51,67 +62,23 @@ export default function AlbumPage({
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow className="p-0">
-            <TableCell className="font-medium">1</TableCell>
-            <TableCell className="flex items-center gap-x-4">
-              <Image src="/taco2.jpeg" width={70} height={70} alt="dkdk" />
-              <Link
-                href={`/tracks/track_id`}
-                className="transition-all underline-offset-2 hover:underline"
-              >
-                Marmur
-              </Link>
-            </TableCell>
-            <TableCell>10000</TableCell>
-          </TableRow>
-          <TableRow className="p-0">
-            <TableCell className="font-medium">2</TableCell>
-            <TableCell className="flex items-center gap-x-4">
-              <Image src="/taco2.jpeg" width={70} height={70} alt="dkdk" />
-              Witaj w hotelu Marmur
-            </TableCell>
-            <TableCell>10000</TableCell>
-          </TableRow>
-          <TableRow className="p-0">
-            <TableCell className="font-medium">3</TableCell>
-            <TableCell className="flex items-center gap-x-4">
-              <Image src="/taco2.jpeg" width={70} height={70} alt="dkdk" />
-              Żyrandol
-            </TableCell>
-            <TableCell>10000</TableCell>
-          </TableRow>
-          <TableRow className="p-0">
-            <TableCell className="font-medium">4</TableCell>
-            <TableCell className="flex items-center gap-x-4">
-              <Image src="/taco2.jpeg" width={70} height={70} alt="dkdk" />
-              Krwawa jesień
-            </TableCell>
-            <TableCell>10000</TableCell>
-          </TableRow>
-          <TableRow className="p-0">
-            <TableCell className="font-medium">5</TableCell>
-            <TableCell className="flex items-center gap-x-4">
-              <Image src="/taco2.jpeg" width={70} height={70} alt="dkdk" />
-              Grubo-chude psy
-            </TableCell>
-            <TableCell>10000</TableCell>
-          </TableRow>
-          <TableRow className="p-0">
-            <TableCell className="font-medium">6</TableCell>
-            <TableCell className="flex items-center gap-x-4">
-              <Image src="/taco2.jpeg" width={70} height={70} alt="dkdk" />
-              Portier!
-            </TableCell>
-            <TableCell>10000</TableCell>
-          </TableRow>
-          <TableRow className="p-0">
-            <TableCell className="font-medium">7</TableCell>
-            <TableCell className="flex items-center gap-x-4">
-              <Image src="/taco2.jpeg" width={70} height={70} alt="dkdk" />
-              Mgła I (Siwe włosy)
-            </TableCell>
-            <TableCell>10000</TableCell>
-          </TableRow>
+          {album.tracks.map((track) => {
+            return (
+              <TableRow key={track.id} className="p-0">
+                <TableCell className="font-medium">{track.position}</TableCell>
+                <TableCell className="flex items-center gap-x-4">
+                  <Image src="/taco2.jpeg" width={70} height={70} alt="dkdk" />
+                  <Link
+                    href={`/tracks/${track.id}`}
+                    className="transition-all underline-offset-2 hover:underline"
+                  >
+                    {track.title}
+                  </Link>
+                </TableCell>
+                <TableCell>10000</TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </section>

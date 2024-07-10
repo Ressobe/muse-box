@@ -1,4 +1,11 @@
-import { getArtistUseCase } from "@/use-cases/artist";
+import {
+  getArtistAlbumsUseCase,
+  getArtistGenresUseCase,
+  getArtistReviewsUseCase,
+  getArtistSingleEpsUseCase,
+  getArtistTopTracksUseCase,
+  getArtistUseCase,
+} from "@/use-cases/artist";
 import { notFound } from "next/navigation";
 import { TopTracks } from "@/components/top-tracks";
 import { Albums } from "@/components/albums";
@@ -17,13 +24,19 @@ export default async function Artist({
     notFound();
   }
 
+  const albums = await getArtistAlbumsUseCase(artist.id);
+  const singleEps = await getArtistSingleEpsUseCase(artist.id);
+  const reviews = await getArtistReviewsUseCase(artist.id);
+  const topTracks = await getArtistTopTracksUseCase(artist.id);
+  const genres = await getArtistGenresUseCase(artist.id);
+
   return (
     <section className="space-y-12">
-      <ArtistHeader name={artist.name} />
-      <TopTracks />
-      <Albums artistId={artistId} />
-      <SingleEps artistId={artistId} />
-      <Reviews artistId={artistId} />
+      <ArtistHeader name={artist.name} genres={genres} />
+      <TopTracks tracks={topTracks} />
+      <Albums artistId={artistId} albums={albums} />
+      <SingleEps artistId={artistId} singleEps={singleEps} />
+      <Reviews artistId={artistId} reviews={reviews} />
     </section>
   );
 }

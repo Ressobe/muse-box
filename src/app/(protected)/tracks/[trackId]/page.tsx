@@ -1,7 +1,10 @@
+import { getArtistUseCase } from "@/use-cases/artist";
+import { getTrackUseCase } from "@/use-cases/track";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
-export default function TrackPage({
+export default async function TrackPage({
   params,
 }: {
   params: {
@@ -9,6 +12,17 @@ export default function TrackPage({
   };
 }) {
   const { trackId } = params;
+  const track = await getTrackUseCase(trackId);
+
+  if (!track) {
+    return notFound();
+  }
+
+  if (!track.album.artistId) {
+    return notFound();
+  }
+
+  const artist = await getArtistUseCase(track.album.artistId);
 
   return (
     <section className="space-y-12">
@@ -17,7 +31,7 @@ export default function TrackPage({
         <div className="space-y-8">
           <div>
             <div>Song</div>
-            <h1 className="font-bold text-5xl">Witaj w hotelu Marmur</h1>
+            <h1 className="font-bold text-5xl">{track.title}</h1>
           </div>
           <div className="flex items-center gap-x-4 text-sm">
             <Image
@@ -27,9 +41,19 @@ export default function TrackPage({
               alt="dkdk"
               className="rounded-full"
             />
-            <Link href={`/artists/{artistsId}`}>Taco Hemingway</Link>
+            <Link
+              href={`/artists/${artist.id}`}
+              className="transition-all underline-offset-2 hover:underline"
+            >
+              {artist.name}
+            </Link>
             <span>2016</span>
-            <Link href={`/albums/{albumId}`}>Marmur</Link>
+            <Link
+              href={`/albums/${track.album.id}`}
+              className="transition-all underline-offset-2 hover:underline"
+            >
+              {track.album.title}
+            </Link>
             <span>3:50</span>
           </div>
         </div>

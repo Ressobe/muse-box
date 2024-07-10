@@ -4,9 +4,17 @@ import { FaUser } from "react-icons/fa";
 
 type ArtistHeaderProps = {
   name: string;
+  genres: {
+    artistId: string;
+    genreId: number;
+    genre: {
+      id: number;
+      name: string;
+    };
+  }[];
 };
 
-export function ArtistHeader({ name }: ArtistHeaderProps) {
+export function ArtistHeader({ name, genres }: ArtistHeaderProps) {
   return (
     <div className="flex items-center gap-x-20">
       <Avatar className="h-40 w-40">
@@ -19,16 +27,16 @@ export function ArtistHeader({ name }: ArtistHeaderProps) {
         <div>Artist</div>
         <h1 className="font-bold text-4xl">{name}</h1>
         <ul className="flex py-4 gap-x-6">
-          <li className="border p-2 transition-all hover:bg-secondary">
-            Heavy metal
-          </li>
-          <li className="border p-2 transition-all hover:bg-secondary">Rock</li>
-          <li className="border p-2 transition-all hover:bg-secondary">
-            Thrash metal
-          </li>
-          <li className="border p-2 transition-all hover:bg-secondary">
-            Death metal
-          </li>
+          {genres.map((item) => {
+            return (
+              <li
+                key={item.genreId}
+                className="border p-2 transition-all hover:bg-secondary"
+              >
+                {item.genre.name}
+              </li>
+            );
+          })}
         </ul>
       </div>
       <div className="flex gap-x-4">

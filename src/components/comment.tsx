@@ -6,7 +6,7 @@ type CommentProps = {
   ownerId: string;
   ownerName: string | null;
   rate: number;
-  content: string;
+  content: string | null;
   createdAt: Date;
   profileId?: string;
 };

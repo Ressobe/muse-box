@@ -1,6 +1,6 @@
 import { ArtistHeader } from "@/components/artist-header";
 import { Comment } from "@/components/comment";
-import { getArtistUseCase } from "@/use-cases/artist";
+import { getArtistGenresUseCase, getArtistUseCase } from "@/use-cases/artist";
 import { notFound } from "next/navigation";
 
 export default async function ArtistReviewsPage({
@@ -13,12 +13,13 @@ export default async function ArtistReviewsPage({
   if (!artist) {
     notFound();
   }
+  const genres = await getArtistGenresUseCase(artist.id);
 
   // TODO: Lazy loading of more reviews
 
   return (
     <section className="space-y-12">
-      <ArtistHeader name={artist.name} />
+      <ArtistHeader name={artist.name} genres={genres} />
       <h2 className="font-bold text-4xl">Reviews</h2>
       <div className="w-full grid grid-cols-2 gap-x-10">
         <Comment

@@ -43,6 +43,27 @@
       "when": 1720634765331,
       "tag": "0005_massive_reavers",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1720698937097,
+      "tag": "0006_majestic_vampiro",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1720699381436,
+      "tag": "0007_lyrical_harry_osborn",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1720701970337,
+      "tag": "0008_overjoyed_sir_ram",
+      "breakpoints": true
     }
   ]
 }

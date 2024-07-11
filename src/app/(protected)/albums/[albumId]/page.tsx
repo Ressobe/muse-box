@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/table";
 import { getAlbumUseCase } from "@/use-cases/album";
 import { notFound } from "next/navigation";
-import { albums } from "@/database/schema";
 
 export default async function AlbumPage({
   params,
@@ -31,7 +30,7 @@ export default async function AlbumPage({
         <Image src="/taco2.jpeg" width={200} height={200} alt="dkdk" />
         <div className="space-y-8">
           <div>
-            <div>Album</div>
+            <div>{album.albumType.name}</div>
             <h1 className="font-bold text-5xl">{album.title}</h1>
           </div>
           <div className="flex items-center gap-x-4 text-sm">

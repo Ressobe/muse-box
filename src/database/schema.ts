@@ -27,6 +27,13 @@ export const userProfiles = sqliteTable("userProfiles", {
   favoriteTrackId: text("favoriteTrackId").references(() => tracks.id),
 });
 
+export const userProfilesRelations = relations(userProfiles, ({ one }) => ({
+  user: one(users, {
+    fields: [userProfiles.userId],
+    references: [users.id],
+  }),
+}));
+
 export const follows = sqliteTable(
   "follows",
   {
@@ -124,12 +131,21 @@ export const artists = sqliteTable("artists", {
   name: text("name").notNull(),
   bio: text("bio"),
   country: text("country"),
+  image: text("image"),
 });
 
 export const artistsRelations = relations(artists, ({ many }) => ({
   albums: many(albums),
-  reviews: many(reviews),
+  reviews: many(reviewsArtists),
 }));
+
+export const artistsStats = sqliteTable("artistsStats", {
+  artistId: text("artistId")
+    .primaryKey()
+    .references(() => artists.id),
+  likes: integer("likes").default(0),
+  popularity: integer("popularity").default(0),
+});
 
 export const albums = sqliteTable("albums", {
   id: text("id")
@@ -140,10 +156,13 @@ export const albums = sqliteTable("albums", {
       onDelete: "cascade",
     })
     .notNull(),
-  title: text("title").notNull(),
   typeId: integer("typeId")
     .references(() => albumsTypes.id)
     .notNull(),
+  title: text("title").notNull(),
+  image: text("image"),
+  length: integer("length"),
+  releaseDate: integer("releaseDate", { mode: "timestamp" }),
 });
 
 export const albumsRelations = relations(albums, ({ one, many }) => ({
@@ -158,6 +177,14 @@ export const albumsRelations = relations(albums, ({ one, many }) => ({
   tracks: many(tracks),
 }));
 
+export const albumsStats = sqliteTable("albumsStats", {
+  albumId: text("albumId")
+    .primaryKey()
+    .references(() => albums.id),
+  likes: integer("likes").default(0),
+  popularity: integer("popularity").default(0),
+});
+
 export const albumsTypes = sqliteTable("albumsTypes", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull().unique(),
@@ -167,8 +194,6 @@ export const tracks = sqliteTable("tracks", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  position: integer("position").notNull(),
-  title: text("title").notNull(),
   artistId: text("artistId")
     .references(() => artists.id, {
       onDelete: "cascade",
@@ -179,6 +204,10 @@ export const tracks = sqliteTable("tracks", {
       onDelete: "cascade",
     })
     .notNull(),
+  position: integer("position").notNull(),
+  title: text("title").notNull(),
+  image: text("image"),
+  length: integer("length"),
 });
 
 export const tracksRelations = relations(tracks, ({ one }) => ({
@@ -191,6 +220,14 @@ export const tracksRelations = relations(tracks, ({ one }) => ({
     references: [artists.id],
   }),
 }));
+
+export const tracksStats = sqliteTable("tracksStats", {
+  trackId: text("trackId")
+    .primaryKey()
+    .references(() => tracks.id),
+  likes: integer("likes").default(0),
+  popularity: integer("popularity").default(0),
+});
 
 export const genres = sqliteTable("genres", {
   id: integer("id").primaryKey({ autoIncrement: true }),
@@ -220,7 +257,7 @@ export const genresToArtistsRelations = relations(
   }),
 );
 
-export const reviews = sqliteTable("reviews", {
+export const reviewsArtists = sqliteTable("reviewsArtists", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
@@ -234,13 +271,72 @@ export const reviews = sqliteTable("reviews", {
   comment: text("comment"),
 });
 
-export const reviewsRelations = relations(reviews, ({ one }) => ({
+export const reviewsArtistsRelations = relations(reviewsArtists, ({ one }) => ({
   artist: one(artists, {
-    fields: [reviews.artistId],
+    fields: [reviewsArtists.artistId],
     references: [artists.id],
   }),
   user: one(users, {
-    fields: [reviews.userId],
+    fields: [reviewsArtists.userId],
     references: [users.id],
   }),
 }));
+
+export const reviewsAlbums = sqliteTable("reviewsAlbums", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  albumId: text("albumId")
+    .notNull()
+    .references(() => albums.id, { onDelete: "cascade" }),
+  rating: integer("rating").notNull(),
+  comment: text("comment"),
+});
+
+export const reviewsAlbumsRelations = relations(reviewsAlbums, ({ one }) => ({
+  artist: one(albums, {
+    fields: [reviewsAlbums.albumId],
+    references: [albums.id],
+  }),
+  user: one(users, {
+    fields: [reviewsAlbums.userId],
+    references: [users.id],
+  }),
+}));
+
+export const reviewsTracks = sqliteTable("reviewsTracks", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  trackId: text("trackId")
+    .notNull()
+    .references(() => tracks.id, { onDelete: "cascade" }),
+  rating: integer("rating").notNull(),
+  comment: text("comment"),
+});
+
+export const reviewsTracksRelations = relations(reviewsTracks, ({ one }) => ({
+  artist: one(tracks, {
+    fields: [reviewsTracks.trackId],
+    references: [tracks.id],
+  }),
+  user: one(users, {
+    fields: [reviewsTracks.userId],
+    references: [users.id],
+  }),
+}));
+
+export const playlists = sqliteTable("playlists", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+});

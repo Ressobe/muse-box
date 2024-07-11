@@ -14,5 +14,8 @@ export async function createProfile(userId: string) {
 export async function getProfileByUserId(userId: string) {
   return await db.query.userProfiles.findFirst({
     where: eq(userProfiles.userId, userId),
+    with: {
+      user: true,
+    },
   });
 }

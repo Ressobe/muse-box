@@ -3,9 +3,10 @@
 import * as z from "zod";
 import { RegisterSchema } from "@/schemas";
 import bcrypt from "bcryptjs";
-import { createUser, getUserByEmail } from "@/data-access/user";
+import { getUserByEmail } from "@/data-access/user";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
+import { createUserUseCase } from "@/use-cases/user";
 
 export async function registerAction(formData: z.infer<typeof RegisterSchema>) {
   const validatedFormData = RegisterSchema.safeParse(formData);
@@ -22,7 +23,7 @@ export async function registerAction(formData: z.infer<typeof RegisterSchema>) {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  await createUser(email, name, hashedPassword);
+  await createUserUseCase(email, name, hashedPassword);
 
   const verificationToken = await generateVerificationToken(email);
   if (!verificationToken) {

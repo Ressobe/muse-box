@@ -129,14 +129,18 @@ export const artists = sqliteTable("artists", {
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
-  bio: text("bio"),
-  country: text("country"),
-  image: text("image"),
+  bio: text("bio").default(""),
+  country: text("country").default(""),
+  image: text("image").default(""),
 });
 
-export const artistsRelations = relations(artists, ({ many }) => ({
+export const artistsRelations = relations(artists, ({ many, one }) => ({
   albums: many(albums),
   reviews: many(reviewsArtists),
+  stats: one(artistsStats, {
+    fields: [artists.id],
+    references: [artistsStats.artistId],
+  }),
 }));
 
 export const artistsStats = sqliteTable("artistsStats", {
@@ -160,9 +164,11 @@ export const albums = sqliteTable("albums", {
     .references(() => albumsTypes.id)
     .notNull(),
   title: text("title").notNull(),
-  image: text("image"),
-  length: integer("length"),
-  releaseDate: integer("releaseDate", { mode: "timestamp" }),
+  image: text("image").default(""),
+  length: integer("length").default(0),
+  releaseDate: integer("releaseDate", { mode: "timestamp" }).default(
+    new Date(),
+  ),
 });
 
 export const albumsRelations = relations(albums, ({ one, many }) => ({
@@ -173,6 +179,10 @@ export const albumsRelations = relations(albums, ({ one, many }) => ({
   albumType: one(albumsTypes, {
     fields: [albums.typeId],
     references: [albumsTypes.id],
+  }),
+  stats: one(albumsStats, {
+    fields: [albums.id],
+    references: [albumsStats.albumId],
   }),
   tracks: many(tracks),
 }));
@@ -206,8 +216,8 @@ export const tracks = sqliteTable("tracks", {
     .notNull(),
   position: integer("position").notNull(),
   title: text("title").notNull(),
-  image: text("image"),
-  length: integer("length"),
+  image: text("image").default(""),
+  length: integer("length").default(0),
 });
 
 export const tracksRelations = relations(tracks, ({ one }) => ({
@@ -218,6 +228,10 @@ export const tracksRelations = relations(tracks, ({ one }) => ({
   artist: one(artists, {
     fields: [tracks.artistId],
     references: [artists.id],
+  }),
+  stats: one(tracksStats, {
+    fields: [tracks.id],
+    references: [tracksStats.trackId],
   }),
 }));
 
@@ -264,16 +278,17 @@ export const reviewsArtists = sqliteTable("reviewsArtists", {
   userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  artistId: text("artistId")
+  entityId: text("entityId")
     .notNull()
     .references(() => artists.id, { onDelete: "cascade" }),
   rating: integer("rating").notNull(),
   comment: text("comment"),
+  createdAt: integer("createdAt", { mode: "timestamp" }).default(new Date()),
 });
 
 export const reviewsArtistsRelations = relations(reviewsArtists, ({ one }) => ({
   artist: one(artists, {
-    fields: [reviewsArtists.artistId],
+    fields: [reviewsArtists.entityId],
     references: [artists.id],
   }),
   user: one(users, {
@@ -289,16 +304,17 @@ export const reviewsAlbums = sqliteTable("reviewsAlbums", {
   userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  albumId: text("albumId")
+  entityId: text("entityId")
     .notNull()
     .references(() => albums.id, { onDelete: "cascade" }),
   rating: integer("rating").notNull(),
   comment: text("comment"),
+  createdAt: integer("createdAt", { mode: "timestamp" }).default(new Date()),
 });
 
 export const reviewsAlbumsRelations = relations(reviewsAlbums, ({ one }) => ({
   artist: one(albums, {
-    fields: [reviewsAlbums.albumId],
+    fields: [reviewsAlbums.entityId],
     references: [albums.id],
   }),
   user: one(users, {
@@ -314,16 +330,17 @@ export const reviewsTracks = sqliteTable("reviewsTracks", {
   userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  trackId: text("trackId")
+  entityId: text("entityId")
     .notNull()
     .references(() => tracks.id, { onDelete: "cascade" }),
   rating: integer("rating").notNull(),
   comment: text("comment"),
+  createdAt: integer("createdAt", { mode: "timestamp" }).default(new Date()),
 });
 
 export const reviewsTracksRelations = relations(reviewsTracks, ({ one }) => ({
   artist: one(tracks, {
-    fields: [reviewsTracks.trackId],
+    fields: [reviewsTracks.entityId],
     references: [tracks.id],
   }),
   user: one(users, {

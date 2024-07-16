@@ -4,21 +4,29 @@ import { Button } from "@/components/ui/button";
 import Rating from "@/components/rating";
 import { useToast } from "@/components/ui/use-toast";
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-// import { SubmitButton } from "@/components/submit-button";
-// import addCommentAction from "./_actions/comment";
+import { SubmitButton } from "@/components/submit-button";
+import { Review } from "./reviews";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { addReviewAction } from "@/actions/reviews";
+import { Entity } from "@/types";
 
 type CommentProps = {
-  artistId: string;
-  profileId?: string;
+  entityId: string;
+  type: Entity;
+  addOptimisticReview: (action: Review) => void;
 };
 
-export function AddComment({ artistId, profileId }: CommentProps) {
+export function AddComment({
+  entityId,
+  type,
+  addOptimisticReview,
+}: CommentProps) {
+  const user = useCurrentUser();
+
   const { toast } = useToast();
 
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
   const [comment, setComment] = useState("");
-  const [isTextAreaActive, setIsTextAreaActive] = useState(false);
 
   useEffect(() => {
     if (textAreaRef.current) {
@@ -29,36 +37,61 @@ export function AddComment({ artistId, profileId }: CommentProps) {
   }, [comment]);
 
   const handleSubmit = async (formData: FormData) => {
-    if (!profileId) {
+    if (!user) {
       toast({
         variant: "destructive",
         title: "You have to log in",
       });
       return;
     }
+    if (!user.id) {
+      toast({
+        variant: "destructive",
+        title: "You have to log in",
+      });
+      return;
+    }
+
+    if (!user.name) {
+      toast({
+        variant: "destructive",
+        title: "You have to log in",
+      });
+      return;
+    }
+
     const comment = formData.get("comment") as string;
     const rating = Number(localStorage.getItem("starRating"));
-    // await addCommentAction(artistId, profileId, rating, comment);
+
+    const reviewOptimistic = {
+      id: crypto.randomUUID(),
+      rating: rating,
+      comment: comment,
+      userId: user.id,
+      user: {
+        id: user.id,
+        name: user.name ?? "",
+        email: user.email ?? "",
+        image: user.image ?? null,
+        emailVerified: null,
+        password: null,
+      },
+      createdAt: new Date(),
+      entityId: entityId,
+    };
+
+    addOptimisticReview(reviewOptimistic);
+
+    await addReviewAction(entityId, user.id, comment, rating, type);
   };
 
   const resetForm = () => {
     setComment("");
-    setIsTextAreaActive(false);
-  };
-
-  const handleFocus = () => {
-    setIsTextAreaActive(true);
-  };
-
-  const handleBlur = () => {
-    if (comment === "") {
-      setIsTextAreaActive(false);
-    }
   };
 
   return (
     <>
-      <form action={handleSubmit} className="w-full flex gap-x-6">
+      <form action={handleSubmit} className="w-1/3 flex flex-col gap-x-6">
         <div>
           <Rating size={30} defaultRate={1} />
           <textarea
@@ -69,36 +102,22 @@ export function AddComment({ artistId, profileId }: CommentProps) {
             placeholder="Type your review here."
             value={comment}
             ref={textAreaRef}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
             onChange={(e) => setComment(e.target.value)}
           />
         </div>
-      </form>
-      <AnimatePresence>
-        {isTextAreaActive && (
-          <motion.div
-            className="w-full space-x-6 py-2"
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
+        <div className="w-full space-x-6 py-2">
+          <Button
+            onClick={() => resetForm()}
+            type="button"
+            className=""
+            variant="secondary"
+            size="sm"
           >
-            <Button
-              onClick={() => resetForm()}
-              type="button"
-              className=""
-              variant="secondary"
-              size="sm"
-            >
-              Cancel
-            </Button>
-            <Button type="button" className="" variant="default" size="sm">
-              Rate
-            </Button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            Cancel
+          </Button>
+          <SubmitButton>Rate</SubmitButton>
+        </div>
+      </form>
     </>
   );
 }

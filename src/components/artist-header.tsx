@@ -3,7 +3,13 @@ import { HeartIcon, SquarePlus } from "lucide-react";
 import { FaUser } from "react-icons/fa";
 
 type ArtistHeaderProps = {
-  name: string;
+  artist: {
+    id: string;
+    name: string;
+    image: string | null;
+    bio: string | null;
+    country: string | null;
+  };
   genres: {
     artistId: string;
     genreId: number;
@@ -14,18 +20,18 @@ type ArtistHeaderProps = {
   }[];
 };
 
-export function ArtistHeader({ name, genres }: ArtistHeaderProps) {
+export function ArtistHeader({ artist, genres }: ArtistHeaderProps) {
   return (
     <div className="flex items-center gap-x-20">
       <Avatar className="h-40 w-40">
-        <AvatarImage src="" />
+        <AvatarImage src={artist.image ?? ""} />
         <AvatarFallback>
           <FaUser className="w-20 h-20" />
         </AvatarFallback>
       </Avatar>
       <div className="text-left">
         <div>Artist</div>
-        <h1 className="font-bold text-4xl">{name}</h1>
+        <h1 className="font-bold text-4xl">{artist.name}</h1>
         <ul className="flex py-4 gap-x-6">
           {genres.map((item) => {
             return (

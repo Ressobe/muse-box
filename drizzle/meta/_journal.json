@@ -71,6 +71,41 @@
       "when": 1720769804827,
       "tag": "0009_gifted_hellfire_club",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1720862997634,
+      "tag": "0010_illegal_hedge_knight",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1720863945882,
+      "tag": "0011_square_magneto",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1721126615713,
+      "tag": "0012_slow_tyrannus",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1721127615112,
+      "tag": "0013_elite_triathlon",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1721129140882,
+      "tag": "0014_eminent_giant_man",
+      "breakpoints": true
     }
   ]
 }

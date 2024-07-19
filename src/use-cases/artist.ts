@@ -5,6 +5,7 @@ import {
   getArtistGenres,
   getArtistReviews,
   getArtistSinglesEps,
+  getArtistStats,
   getArtistTracks,
 } from "@/data-access/artist";
 
@@ -64,4 +65,12 @@ export async function getArtistDiscographyUseCase(artistId: string) {
     throw "Discography not found";
   }
   return discography;
+}
+
+export async function getArtistStatsUseCase(artistId: string) {
+  const stats = await getArtistStats(artistId);
+  if (!stats) {
+    throw "Stats not found";
+  }
+  return stats;
 }

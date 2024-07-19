@@ -1,11 +1,7 @@
-// import { insertSampleAlbums } from "@/data-access/album";
-// import { insertSampleArtists } from "@/data-access/artist";
-// import { insertSampleGenres } from "@/data-access/genres";
+// import { insertTacoHemingway } from "@/data-access/artist";
 
 export default async function HomePage() {
-  // await insertSampleArtists();
-  // await insertSampleAlbums();
-  // await insertSampleGenres();
+  // await insertTacoHemingway();
   return (
     <div>
       <h1>Home page</h1>

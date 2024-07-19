@@ -10,7 +10,9 @@ import {
 } from "@/components/ui/table";
 import { getAlbumUseCase } from "@/use-cases/album";
 import { notFound } from "next/navigation";
-import { albums } from "@/database/schema";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { FaUser } from "react-icons/fa";
+import { getTime, getYear, getFullAlbumTime } from "@/lib/utils";
 
 export default async function AlbumPage({
   params,
@@ -28,28 +30,32 @@ export default async function AlbumPage({
   return (
     <section className="space-y-12">
       <div className="flex items-center gap-x-16">
-        <Image src="/taco2.jpeg" width={200} height={200} alt="dkdk" />
+        <Image src={album.image ?? ""} width={200} height={200} alt="dkdk" />
         <div className="space-y-8">
           <div>
-            <div>Album</div>
+            <div>{album.albumType.name}</div>
             <h1 className="font-bold text-5xl">{album.title}</h1>
           </div>
           <div className="flex items-center gap-x-4 text-sm">
-            <Image
-              src="/taco2.jpeg"
-              width={60}
-              height={60}
-              alt="dkdk"
-              className="rounded-full"
-            />
+            <Avatar className="h-16 w-16">
+              <AvatarImage src={album.artist.image ?? ""} />
+              <AvatarFallback>
+                <FaUser className="w-8 h-8" />
+              </AvatarFallback>
+            </Avatar>
             <Link
               href={`/artists/${album.artistId}`}
               className="underline-offset-2 hover:underline"
             >
               <span>{album.artist?.name}</span>
             </Link>
-            <span>2016</span>
-            <span>17 songs, 57min 37sec</span>
+            <span>{getYear(album.releaseDate)}</span>
+            <span>
+              {album.tracks.length > 1
+                ? `${album.tracks.length} songs`
+                : `${album.tracks.length} song`}
+              , {getTime(getFullAlbumTime(album.tracks))}
+            </span>
           </div>
         </div>
       </div>
@@ -67,7 +73,12 @@ export default async function AlbumPage({
               <TableRow key={track.id} className="p-0">
                 <TableCell className="font-medium">{track.position}</TableCell>
                 <TableCell className="flex items-center gap-x-4">
-                  <Image src="/taco2.jpeg" width={70} height={70} alt="dkdk" />
+                  <Image
+                    src={album.image ?? ""}
+                    width={70}
+                    height={70}
+                    alt="dkdk"
+                  />
                   <Link
                     href={`/tracks/${track.id}`}
                     className="transition-all underline-offset-2 hover:underline"

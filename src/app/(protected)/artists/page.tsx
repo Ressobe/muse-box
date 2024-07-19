@@ -18,7 +18,7 @@ export default async function Artists() {
                 href={`/artists/${artist.id}`}
                 className="cursor-pointer"
               >
-                <ArtistCard name={artist.name} />
+                <ArtistCard artist={artist} />
               </Link>
             );
           })}
@@ -35,7 +35,7 @@ export default async function Artists() {
                 href={`/artists/${artist.id}`}
                 className="cursor-pointer"
               >
-                <ArtistCard name={artist.name} />
+                <ArtistCard artist={artist} />
               </Link>
             );
           })}
@@ -52,7 +52,7 @@ export default async function Artists() {
                 href={`/artists/${artist.id}`}
                 className="cursor-pointer"
               >
-                <ArtistCard name={artist.name} />
+                <ArtistCard artist={artist} />
               </Link>
             );
           })}
@@ -62,16 +62,26 @@ export default async function Artists() {
   );
 }
 
-function ArtistCard({ name }: { name: string }) {
+type ArtistCardProps = {
+  artist: {
+    id: string;
+    name: string;
+    image: string | null;
+    bio: string | null;
+    country: string | null;
+  };
+};
+
+function ArtistCard({ artist }: ArtistCardProps) {
   return (
     <div className="flex flex-col items-center text-center">
       <Avatar className="h-20 w-20 mb-2">
-        <AvatarImage src="" />
+        <AvatarImage src={artist.image ?? ""} />
         <AvatarFallback>
           <FaUser className="w-8 h-8" />
         </AvatarFallback>
       </Avatar>
-      <span className="whitespace-normal">{name}</span>
+      <span className="whitespace-normal">{artist.name}</span>
     </div>
   );
 }

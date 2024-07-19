@@ -18,3 +18,5 @@ export const options: DateTimeFormatOptions = {
   month: "long",
   day: "numeric",
 };
+
+export type Entity = "artist" | "album" | "track";

@@ -43,6 +43,83 @@
       "when": 1720634765331,
       "tag": "0005_massive_reavers",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1720698937097,
+      "tag": "0006_majestic_vampiro",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1720699381436,
+      "tag": "0007_lyrical_harry_osborn",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1720701970337,
+      "tag": "0008_overjoyed_sir_ram",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1720769804827,
+      "tag": "0009_gifted_hellfire_club",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1720862997634,
+      "tag": "0010_illegal_hedge_knight",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1720863945882,
+      "tag": "0011_square_magneto",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1721126615713,
+      "tag": "0012_slow_tyrannus",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1721127615112,
+      "tag": "0013_elite_triathlon",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1721129140882,
+      "tag": "0014_eminent_giant_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "6",
+      "when": 1721377064833,
+      "tag": "0015_cheerful_rhino",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "6",
+      "when": 1721377601560,
+      "tag": "0016_sturdy_king_cobra",
+      "breakpoints": true
     }
   ]
 }

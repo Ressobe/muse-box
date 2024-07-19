@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import bcrypt from "bcryptjs";
-import { SettingsSchema } from "@/schemas";
+import { SettingsSchema } from "@/schemas/auth";
 import { currentUser } from "@/lib/auth";
 import { getUserByEmail, getUserById, updateUser } from "@/data-access/user";
 import { generateVerificationToken } from "@/lib/tokens";

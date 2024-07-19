@@ -47,6 +47,7 @@ type TAlbum = {
   id: string;
   artistId: string | null;
   title: string;
+  image: string | null;
 };
 
 type AlbumCardProps = {
@@ -60,7 +61,7 @@ function AlbumCard({ album }: AlbumCardProps) {
       className="transition-all p-4 hover:bg-secondary/40 rounded"
     >
       <div>
-        <Image src="/taco2.jpeg" width={200} height={200} alt="dkdk" />
+        <Image src={album.image ?? ""} width={200} height={200} alt="dkdk" />
         <div className="pt-4">{album.title}</div>
         <div className="text-muted-foreground">2016</div>
       </div>

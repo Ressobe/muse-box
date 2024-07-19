@@ -1,3 +1,4 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -7,10 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getFullAlbumTime, getTime, getYear } from "@/lib/utils";
 import { getArtistDiscographyUseCase } from "@/use-cases/artist";
 import { HeartIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { FaUser } from "react-icons/fa";
 
 export default async function DiscographyPage({
   params,
@@ -28,28 +31,43 @@ export default async function DiscographyPage({
         return (
           <div key={item.id} className="space-y-12">
             <div className="flex items-center gap-x-16">
-              <Image src="/taco2.jpeg" width={200} height={200} alt="dkdk" />
+              <Image
+                src={item.image ?? ""}
+                width={200}
+                height={200}
+                alt="dkdk"
+              />
               <div className="space-y-8">
                 <div>
                   <div>{item.albumType.name}</div>
                   <h1 className="font-bold text-5xl">{item.title}</h1>
                 </div>
                 <div className="flex items-center gap-x-4 text-sm">
-                  <Image
-                    src="/taco2.jpeg"
-                    width={60}
-                    height={60}
-                    alt="dkdk"
-                    className="rounded-full"
-                  />
+                  <Avatar className="h-16 w-16">
+                    <AvatarImage src={item.artist.image ?? ""} />
+                    <AvatarFallback>
+                      <FaUser className="w-8 h-8" />
+                    </AvatarFallback>
+                  </Avatar>
                   <Link
-                    href={`/artists/${artistId}`}
+                    href={`/artists/${item.artist.id}`}
                     className="transition-all underline-offset-2 hover:underline"
                   >
-                    <span>{item.artist?.name}</span>
+                    {item.artist.name}
                   </Link>
-                  <span>2016</span>
-                  <span>17 songs, 57min 37sec</span>
+                  <span>{getYear(item.releaseDate)}</span>
+                  <Link
+                    href={`/albums/${item.id}`}
+                    className="transition-all underline-offset-2 hover:underline"
+                  >
+                    {item.title}
+                  </Link>
+                  <span>
+                    {item.tracks.length > 1
+                      ? `${item.tracks.length} songs`
+                      : `${item.tracks.length} song`}
+                    , {getTime(getFullAlbumTime(item.tracks))}
+                  </span>
                 </div>
               </div>
             </div>
@@ -69,7 +87,7 @@ export default async function DiscographyPage({
                       <TableCell className="font-medium">{idx + 1}</TableCell>
                       <TableCell className="flex items-center gap-x-4">
                         <Image
-                          src="/taco2.jpeg"
+                          src={item.image ?? ""}
                           width={70}
                           height={70}
                           alt="dkdk"

@@ -4,6 +4,7 @@ import {
   sqliteTable,
   text,
   primaryKey,
+  real,
 } from "drizzle-orm/sqlite-core";
 import type { AdapterAccountType } from "next-auth/adapters";
 
@@ -149,6 +150,9 @@ export const artistsStats = sqliteTable("artistsStats", {
     .references(() => artists.id),
   likes: integer("likes").default(0),
   popularity: integer("popularity").default(0),
+  ratingAvg: real("rating").default(0),
+  ratingSum: integer("ratingSum").default(0),
+  ratingCount: integer("ratingCount").default(0),
 });
 
 export const albums = sqliteTable("albums", {
@@ -193,6 +197,9 @@ export const albumsStats = sqliteTable("albumsStats", {
     .references(() => albums.id),
   likes: integer("likes").default(0),
   popularity: integer("popularity").default(0),
+  ratingAvg: real("rating").default(0),
+  ratingSum: integer("ratingSum").default(0),
+  ratingCount: integer("ratingCount").default(0),
 });
 
 export const albumsTypes = sqliteTable("albumsTypes", {
@@ -241,6 +248,9 @@ export const tracksStats = sqliteTable("tracksStats", {
     .references(() => tracks.id),
   likes: integer("likes").default(0),
   popularity: integer("popularity").default(0),
+  ratingAvg: real("rating").default(0),
+  ratingSum: integer("ratingSum").default(0),
+  ratingCount: integer("ratingCount").default(0),
 });
 
 export const genres = sqliteTable("genres", {

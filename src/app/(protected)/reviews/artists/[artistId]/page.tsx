@@ -1,10 +1,8 @@
+import { auth } from "@/auth";
 import { ArtistHeader } from "@/components/artist-header";
-import { Comment } from "@/components/comment";
-import {
-  getArtistGenresUseCase,
-  getArtistReviewsUseCase,
-  getArtistUseCase,
-} from "@/use-cases/artist";
+import { Reviews } from "@/components/reviews";
+import { getUserArtistReview } from "@/data-access/user";
+import { getArtistReviewsUseCase, getArtistUseCase } from "@/use-cases/artist";
 import { notFound } from "next/navigation";
 
 export default async function ArtistReviewsPage({
@@ -18,20 +16,26 @@ export default async function ArtistReviewsPage({
     notFound();
   }
 
-  const genres = await getArtistGenresUseCase(artist.id);
   const reviews = await getArtistReviewsUseCase(artist.id);
+  let showAddReview = true;
+  const session = await auth();
+  if (session && session.user.id) {
+    const review = await getUserArtistReview(session.user.id, artist.id);
+    showAddReview = !review;
+  }
 
   // TODO: Lazy loading of more reviews
 
   return (
     <section className="space-y-12">
-      <ArtistHeader artist={artist} genres={genres} />
+      <ArtistHeader artistId={artistId} />
       <h2 className="font-bold text-4xl">Reviews</h2>
-      <ul className="w-full grid grid-cols-2 gap-x-10">
-        {reviews.map((item) => {
-          return <Comment key={item.id} review={item} />;
-        })}
-      </ul>
+      <Reviews
+        reviews={reviews}
+        showAddReview={showAddReview}
+        type="artist"
+        entityId={artistId}
+      />
     </section>
   );
 }

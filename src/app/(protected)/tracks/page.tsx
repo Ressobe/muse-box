@@ -17,9 +17,7 @@ export default async function TracksPage() {
         <h1 className="font-bold text-3xl">Top songs</h1>
         <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
           {topTracks.map((track) => {
-            return (
-              <TrackCard key={track.id} name={track.title} id={track.id} />
-            );
+            return <TrackCard key={track.id} track={track} />;
           })}
         </div>
       </section>
@@ -28,9 +26,7 @@ export default async function TracksPage() {
         <h1 className="font-bold text-3xl">Popular songs</h1>
         <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
           {popularTracks.map((track) => {
-            return (
-              <TrackCard key={track.id} name={track.title} id={track.id} />
-            );
+            return <TrackCard key={track.id} track={track} />;
           })}
         </div>
       </section>
@@ -39,9 +35,7 @@ export default async function TracksPage() {
         <h1 className="font-bold text-3xl">New songs</h1>
         <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
           {newTracks.map((track) => {
-            return (
-              <TrackCard key={track.id} name={track.title} id={track.id} />
-            );
+            return <TrackCard key={track.id} track={track} />;
           })}
         </div>
       </section>
@@ -49,15 +43,23 @@ export default async function TracksPage() {
   );
 }
 
-function TrackCard({ name, id }: { name: string; id: string }) {
+type TrackCardProps = {
+  track: {
+    title: string;
+    id: string;
+    image: string | null;
+  };
+};
+
+function TrackCard({ track }: TrackCardProps) {
   return (
     <Link
-      href={`/tracks/${id}`}
+      href={`/tracks/${track.id}`}
       className="transition-all p-4 hover:bg-secondary/40 rounded"
     >
       <div>
-        <Image src="/taco3.jpeg" width={200} height={200} alt="dkdk" />
-        <div className="pt-4">{name}</div>
+        <Image src={track.image ?? ""} width={200} height={200} alt="dkdk" />
+        <div className="pt-4">{track.title}</div>
         <div className="text-muted-foreground">2012</div>
       </div>
     </Link>

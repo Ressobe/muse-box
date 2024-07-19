@@ -22,16 +22,12 @@ export default async function Artist({
 }) {
   const { artistId } = params;
   const artist = await getArtistUseCase(artistId);
+
   if (!artist) {
     notFound();
   }
 
-  const albums = await getArtistAlbumsUseCase(artist.id);
-  const singleEps = await getArtistSingleEpsUseCase(artist.id);
   const reviews = await getArtistReviewsUseCase(artist.id);
-  const topTracks = await getArtistTopTracksUseCase(artist.id);
-  const genres = await getArtistGenresUseCase(artist.id);
-
   let showAddReview = true;
   const session = await auth();
   if (session && session.user.id) {
@@ -41,10 +37,10 @@ export default async function Artist({
 
   return (
     <section className="space-y-12">
-      <ArtistHeader artist={artist} genres={genres} />
-      <TopTracks tracks={topTracks} />
-      <Albums artistId={artistId} albums={albums} />
-      <SingleEps artistId={artistId} singleEps={singleEps} />
+      <ArtistHeader artistId={artistId} />
+      <TopTracks artistId={artistId} />
+      <Albums artistId={artistId} />
+      <SingleEps artistId={artistId} />
       <Reviews
         reviews={reviews}
         showAddReview={showAddReview}

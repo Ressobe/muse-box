@@ -1,15 +1,14 @@
+import { getArtistAlbumsUseCase } from "@/use-cases/artist";
 import Image from "next/image";
 import Link from "next/link";
 
 type AlbumsProps = {
   artistId: string;
-  albums: {
-    id: string;
-    title: string;
-  }[];
 };
 
-export function Albums({ artistId, albums }: AlbumsProps) {
+export async function Albums({ artistId }: AlbumsProps) {
+  const albums = await getArtistAlbumsUseCase(artistId);
+
   return (
     <div>
       <div className="flex justify-between">
@@ -30,7 +29,12 @@ export function Albums({ artistId, albums }: AlbumsProps) {
               className="transition-all p-4 hover:bg-secondary/40 rounded"
             >
               <li>
-                <Image src="/taco2.jpeg" width={200} height={200} alt="dkdk" />
+                <Image
+                  src={alb.image ?? ""}
+                  width={200}
+                  height={200}
+                  alt="dkdk"
+                />
                 <div className="pt-4">{alb.title}</div>
                 <div className="text-muted-foreground">2016</div>
               </li>

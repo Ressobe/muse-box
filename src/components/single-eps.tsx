@@ -1,17 +1,14 @@
+import { getArtistSingleEpsUseCase } from "@/use-cases/artist";
 import Image from "next/image";
 import Link from "next/link";
 
 type SingleEpsProps = {
   artistId: string;
-  singleEps: {
-    artistId: string | null;
-    id: string;
-    title: string;
-    typeId: number;
-  }[];
 };
 
-export function SingleEps({ artistId, singleEps }: SingleEpsProps) {
+export async function SingleEps({ artistId }: SingleEpsProps) {
+  const singleEps = await getArtistSingleEpsUseCase(artistId);
+
   return (
     <div>
       <div className="flex justify-between">
@@ -32,7 +29,12 @@ export function SingleEps({ artistId, singleEps }: SingleEpsProps) {
               className="transition-all p-4 hover:bg-secondary/40 rounded"
             >
               <li>
-                <Image src="/taco3.jpeg" width={200} height={200} alt="dkdk" />
+                <Image
+                  src={item.image ?? ""}
+                  width={200}
+                  height={200}
+                  alt="dkdk"
+                />
                 <div className="pt-4">{item.title}</div>
                 <div className="text-muted-foreground">2016</div>
               </li>

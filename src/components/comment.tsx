@@ -1,40 +1,107 @@
-import { options } from "@/types";
+"use client";
+
+import { Entity, options } from "@/types";
 import Link from "next/link";
 import { UserAvatar } from "@/components/user-avatar";
+import { EllipsisVertical, Flag, Pencil, Trash } from "lucide-react";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { Button } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { removeReviewAction } from "@/actions/reviews";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useToast } from "@/components/ui/use-toast";
+import { Review } from "@/types/review";
+import { useState } from "react";
+import { EditComment } from "./edit-comment";
 
 type CommentProps = {
-  review: {
-    id: string;
-    userId: string;
-    entityId: string;
-    rating: number;
-    comment: string | null;
-    createdAt: Date | null;
-    user: {
-      image: string | null;
-      id: string;
-      name: string | null;
-      email: string;
-      emailVerified: Date | null;
-      password: string | null;
-    };
-  };
+  review: Review;
+  type: Entity;
+  entityId: string;
+  editOptimisticReview: (review: Review) => void;
+  deleteOptimisticReview: (reviewId: string) => void;
 };
 
-export function Comment({ review }: CommentProps) {
-  const { user } = review;
+export function Comment({
+  review,
+  type,
+  entityId,
+  editOptimisticReview,
+  deleteOptimisticReview,
+}: CommentProps) {
+  const [isEditing, setEditing] = useState(false);
+
+  const editComment = () => {
+    setEditing(true);
+  };
+
+  return (
+    <>
+      {!isEditing ? (
+        <ShowComment
+          review={review}
+          type={type}
+          editComment={editComment}
+          deleteOptimisticReview={deleteOptimisticReview}
+        />
+      ) : (
+        <EditComment
+          defaultRate={review.rating}
+          defaultComment={review.comment ?? ""}
+          type={type}
+          entityId={entityId}
+          reviewId={review.id}
+          setEditing={setEditing}
+          editOptimisticReview={editOptimisticReview}
+        />
+      )}
+    </>
+  );
+}
+
+type ShowCommentProps = {
+  review: Review;
+  type: Entity;
+  editComment: () => void;
+  deleteOptimisticReview: (reviewId: string) => void;
+};
+
+function ShowComment({
+  review,
+  type,
+  editComment,
+  deleteOptimisticReview,
+}: ShowCommentProps) {
+  const { user: reviewUser } = review;
+  const currentUser = useCurrentUser();
+  const isCurrentUserOwnerOfComment = currentUser?.id === reviewUser.id;
+
   return (
     <div className="pt-10 space-y-6">
       <div className="space-y-6">
         <div className="space-y-2">
           <div className="flex items-center space-x-4">
-            <UserAvatar avatarUrl={user.image} />
+            <UserAvatar avatarUrl={reviewUser.image} />
             <div className="space-y-1">
               <Link
                 href={`/profiles/${review.userId}`}
                 className="text-xl font-bold leading-none hover:underline"
               >
-                {user.name}
+                {reviewUser.name}
               </Link>
               <p className=" space-x-4">
                 <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -44,6 +111,15 @@ export function Comment({ review }: CommentProps) {
                 <span>Rate: {review.rating}</span>
               </p>
             </div>
+            <ActionMenu
+              editAction={isCurrentUserOwnerOfComment}
+              editComment={editComment}
+              commentId={review.id}
+              ownerId={reviewUser.id}
+              entityId={review.entityId}
+              type={type}
+              deleteOptimisticReview={deleteOptimisticReview}
+            />
           </div>
           <div className="border-b border-muted-foreground pb-4 border-gray-200">
             <p className="pt-4 flex items-center justify-between text-sm">
@@ -53,5 +129,110 @@ export function Comment({ review }: CommentProps) {
         </div>
       </div>
     </div>
+  );
+}
+
+type ActionMenuProps = {
+  editAction: boolean;
+  commentId: string;
+  type: Entity;
+  entityId: string;
+  ownerId: string;
+  deleteOptimisticReview: (reviewId: string) => void;
+  editComment: () => void;
+};
+
+function ActionMenu({
+  editAction,
+  commentId,
+  entityId,
+  type,
+  ownerId,
+  deleteOptimisticReview,
+  editComment,
+}: ActionMenuProps) {
+  const { toast } = useToast();
+
+  const handleRemoveButtonClick = async () => {
+    deleteOptimisticReview(commentId);
+
+    await removeReviewAction(entityId, type, ownerId, commentId);
+
+    toast({
+      title: "Review",
+      description: "Your review was sucessful removed!",
+      variant: "sucessful",
+    });
+  };
+
+  const handleEditButtonClick = () => {
+    editComment();
+  };
+
+  const handleReportButtonClick = async () => {
+    toast({
+      title: "Report",
+      description: "Your report was sended!",
+    });
+  };
+
+  return (
+    <>
+      <div className="flex-1"></div>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="ghost" className="rounded-full p-2">
+            <EllipsisVertical />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="absolute top-0 left-1 flex flex-col gap-y-3 items-center text-center w-32">
+          {editAction ? (
+            <>
+              <Button
+                variant="ghost"
+                onClick={handleEditButtonClick}
+                className="p-0 w-full flex items-center justify-center gap-x-3"
+              >
+                <Pencil className="w-6 h-6" /> <span>Edit</span>
+              </Button>
+
+              <AlertDialog>
+                <AlertDialogTrigger className="p-0" asChild>
+                  <Button
+                    variant="ghost"
+                    className="p-0 w-full flex items-center justify-center gap-x-3"
+                  >
+                    <Trash className="w-6 h-6" /> <span>Delete</span>
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      your account and remove your data from our servers.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <Button asChild variant="destructive">
+                      <AlertDialogAction onClick={handleRemoveButtonClick}>
+                        Delete
+                      </AlertDialogAction>
+                    </Button>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </>
+          ) : (
+            <Button onClick={handleReportButtonClick}>
+              <Flag className="w-6 h-6" />
+            </Button>
+          )}
+        </PopoverContent>
+      </Popover>
+    </>
   );
 }

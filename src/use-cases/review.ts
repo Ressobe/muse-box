@@ -1,4 +1,4 @@
-import { insertReview } from "@/data-access/review";
+import { deleteReview, insertReview, updateReview } from "@/data-access/review";
 import { Entity } from "@/types";
 
 export async function createReviewUseCase(
@@ -10,8 +10,42 @@ export async function createReviewUseCase(
 ) {
   // parse with drizzle zod
   const review = await insertReview(entityId, userId, comment, rating, type);
-  if (!review) {
-    throw "Review not created!";
+  if (review.length === 0) {
+    return null;
+  }
+  return review;
+}
+
+export async function removeReviewUseCase(
+  entityId: string,
+  type: Entity,
+  reviewId: string,
+) {
+  const review = await deleteReview(entityId, type, reviewId);
+  if (review.length === 0) {
+    return null;
+  }
+  return review;
+}
+
+export async function editReviewUseCase(
+  reviewId: string,
+  entityId: string,
+  userId: string,
+  comment: string,
+  rating: number,
+  type: Entity,
+) {
+  const review = await updateReview(
+    reviewId,
+    entityId,
+    userId,
+    comment,
+    rating,
+    type,
+  );
+  if (review.length === 0) {
+    return null;
   }
   return review;
 }

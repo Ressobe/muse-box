@@ -1,8 +1,8 @@
 import { db } from "@/database/db";
 import * as z from "zod";
-import { SettingsSchema } from "@/schemas";
-import { users } from "@/database/schema";
-import { eq } from "drizzle-orm";
+import { SettingsSchema } from "@/schemas/auth";
+import { reviewsArtists, users } from "@/database/schema";
+import { and, eq } from "drizzle-orm";
 
 export async function getUserByEmail(email: string) {
   return await db.query.users.findFirst({
@@ -63,4 +63,13 @@ export async function updateUser(
       ...values,
     })
     .where(eq(users.id, userId));
+}
+
+export async function getUserArtistReview(userId: string, artistId: string) {
+  return await db.query.reviewsArtists.findFirst({
+    where: and(
+      eq(reviewsArtists.userId, userId),
+      eq(reviewsArtists.entityId, artistId),
+    ),
+  });
 }

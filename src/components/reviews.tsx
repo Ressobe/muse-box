@@ -4,25 +4,9 @@ import { Button } from "@/components/ui/button";
 import { AddComment } from "./add-comment";
 import { Comment } from "./comment";
 import Link from "next/link";
-import { useOptimistic } from "react";
+import { useOptimistic, useState } from "react";
 import { Entity } from "@/types";
-
-export type Review = {
-  id: string;
-  userId: string;
-  entityId: string;
-  rating: number;
-  comment: string | null;
-  createdAt: Date | null;
-  user: {
-    id: string;
-    name: string | null;
-    email: string;
-    emailVerified: Date | null;
-    password: string | null;
-    image: string | null;
-  };
-};
+import { OptimisticAction, Review } from "@/types/review";
 
 type ReviewsProps = {
   entityId: string;
@@ -37,17 +21,43 @@ export function Reviews({
   reviews,
   showAddReview,
 }: ReviewsProps) {
-  const [optimisticReviews, addOptimisticReview] = useOptimistic<
+  const [optimisticReviews, setOptimisticReviews] = useOptimistic<
     Review[],
-    Review
-  >(reviews, (state, newReview) => [...state, newReview]);
+    OptimisticAction
+  >(reviews, (state, action) => {
+    switch (action.type) {
+      case "add":
+        return [action.review, ...state];
+      case "edit":
+        return state.map((review) =>
+          review.id === action.review.id ? action.review : review,
+        );
+      case "delete":
+        return state.filter((review) => review.id !== action.reviewId);
+      default:
+        return state;
+    }
+  });
 
-  console.log(showAddReview);
+  const [addReview, setAddReview] = useState(showAddReview);
+
+  const addOptimisticReview = (review: Review) => {
+    setAddReview(false);
+    setOptimisticReviews({ type: "add", review });
+  };
+
+  const editOptimisticReview = (review: Review) =>
+    setOptimisticReviews({ type: "edit", review });
+
+  const deleteOptimisticReview = (reviewId: string) => {
+    setAddReview(true);
+    setOptimisticReviews({ type: "delete", reviewId });
+  };
 
   return (
     <div className="pt-20 w-full">
       <h2 className="font-bold text-2xl pb-4">User Reviews</h2>
-      {showAddReview ? (
+      {addReview ? (
         <AddComment
           entityId={entityId}
           type={type}
@@ -56,7 +66,16 @@ export function Reviews({
       ) : null}
       <div className="pt-10 w-full grid grid-cols-2 gap-x-10">
         {optimisticReviews.map((item) => {
-          return <Comment key={item.id} review={item} />;
+          return (
+            <Comment
+              key={item.id}
+              entityId={entityId}
+              review={item}
+              type={type}
+              editOptimisticReview={editOptimisticReview}
+              deleteOptimisticReview={deleteOptimisticReview}
+            />
+          );
         })}
       </div>
 

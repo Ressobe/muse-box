@@ -22,7 +22,7 @@ export async function removeReviewUseCase(
   reviewId: string,
 ) {
   const review = await deleteReview(entityId, type, reviewId);
-  if (review.length === 0) {
+  if (!review) {
     return null;
   }
   return review;

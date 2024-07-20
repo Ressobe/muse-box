@@ -1,7 +1,9 @@
+import { auth } from "@/auth";
+import { Reviews } from "@/components/reviews";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getUserTrackReview } from "@/data-access/user";
 import { getTime, getYear } from "@/lib/utils";
-import { getArtistUseCase } from "@/use-cases/artist";
-import { getTrackUseCase } from "@/use-cases/track";
+import { getTrackReviewsUseCase, getTrackUseCase } from "@/use-cases/track";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -21,10 +23,13 @@ export default async function TrackPage({
     return notFound();
   }
 
-  const artist = await getArtistUseCase(track.album.artistId);
+  const reviews = await getTrackReviewsUseCase(track.id);
 
-  if (!artist) {
-    return notFound();
+  let showAddReview = true;
+  const session = await auth();
+  if (session && session.user.id) {
+    const review = await getUserTrackReview(session.user.id, track.id);
+    showAddReview = !review;
   }
 
   return (
@@ -35,19 +40,27 @@ export default async function TrackPage({
           <div>
             <div>Song</div>
             <h1 className="font-bold text-5xl">{track.title}</h1>
+            <div className="flex items-center gap-x-4 pt-3.5  text-2xl">
+              <span className="text-yellow-500">★</span>
+              {track.stats.ratingCount === 0 ? (
+                <span className="text-md">Not rated yet!</span>
+              ) : (
+                track.stats.ratingAvg
+              )}
+            </div>
           </div>
           <div className="flex items-center gap-x-4 text-sm">
             <Avatar className="h-16 w-16">
-              <AvatarImage src={artist.image ?? ""} />
+              <AvatarImage src={track.artist.image ?? ""} />
               <AvatarFallback>
                 <FaUser className="w-8 h-8" />
               </AvatarFallback>
             </Avatar>
             <Link
-              href={`/artists/${artist.id}`}
+              href={`/artists/${track.artist.id}`}
               className="transition-all underline-offset-2 hover:underline"
             >
-              {artist.name}
+              {track.artist.name}
             </Link>
             <span>{getYear(track.album.releaseDate)}</span>
             <Link
@@ -60,6 +73,12 @@ export default async function TrackPage({
           </div>
         </div>
       </div>
+      <Reviews
+        reviews={reviews}
+        showAddReview={showAddReview}
+        type="track"
+        entityId={trackId}
+      />
     </section>
   );
 }

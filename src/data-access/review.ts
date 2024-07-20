@@ -2,6 +2,23 @@ import { db } from "@/database/db";
 import { Entity } from "@/types";
 import { reviewTables } from "@/types/review";
 import { and, eq } from "drizzle-orm";
+import {
+  updateStatsDeleteRating,
+  updateStatsNewRating,
+  updateStatsUpdateRating,
+} from "@/data-access/stat";
+
+export async function getReviewById(reviewId: string, type: Entity) {
+  const table = reviewTables[type];
+
+  if (!table) {
+    throw new Error(`Unsupported entity type: ${type}`);
+  }
+
+  const [review] = await db.select().from(table).where(eq(table.id, reviewId));
+
+  return review;
+}
 
 export async function insertReview(
   entityId: string,
@@ -16,15 +33,21 @@ export async function insertReview(
     throw new Error(`Unsupported entity type: ${type}`);
   }
 
-  return await db
+  const [review] = await db
     .insert(table)
     .values({
-      rating,
-      comment,
-      entityId,
-      userId,
+      entityId: entityId,
+      userId: userId,
+      comment: comment,
+      rating: rating,
+      createdAt: new Date(),
     })
     .returning();
+
+  if (review) {
+    await updateStatsNewRating(entityId, type, rating);
+  }
+  return review;
 }
 
 export async function deleteReview(
@@ -38,10 +61,16 @@ export async function deleteReview(
     throw new Error(`Unsupported entity type: ${type}`);
   }
 
-  return await db
+  const [review] = await db
     .delete(table)
     .where(and(eq(table.entityId, entityId), eq(table.id, reviewId)))
     .returning();
+
+  if (review) {
+    await updateStatsDeleteRating(entityId, type, review.rating);
+  }
+
+  return review;
 }
 
 export async function updateReview(
@@ -58,7 +87,9 @@ export async function updateReview(
     throw new Error(`Unsupported entity type: ${type}`);
   }
 
-  return await db
+  const { rating: oldRating } = await getReviewById(reviewId, type);
+
+  const [review] = await db
     .update(table)
     .set({
       comment,
@@ -73,4 +104,10 @@ export async function updateReview(
       ),
     )
     .returning();
+
+  if (review) {
+    await updateStatsUpdateRating(entityId, type, oldRating, rating);
+  }
+
+  return review;
 }

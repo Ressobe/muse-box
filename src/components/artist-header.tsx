@@ -1,9 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  getArtistGenresUseCase,
-  getArtistStatsUseCase,
-  getArtistUseCase,
-} from "@/use-cases/artist";
+import { getArtistGenresUseCase, getArtistUseCase } from "@/use-cases/artist";
 import { HeartIcon, SquarePlus } from "lucide-react";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
@@ -21,7 +17,7 @@ export async function ArtistHeader({ artistId }: ArtistHeaderProps) {
   return (
     <div className="flex items-center gap-x-20">
       <Avatar className="h-40 w-40">
-        <AvatarImage src={artist.image ?? ""} />
+        <AvatarImage src={artist?.image ?? ""} />
         <AvatarFallback>
           <FaUser className="w-20 h-20" />
         </AvatarFallback>
@@ -30,11 +26,15 @@ export async function ArtistHeader({ artistId }: ArtistHeaderProps) {
         <div>Artist</div>
         <div className="relative">
           <Link href={`/artists/${artistId}`}>
-            <h1 className="font-bold text-4xl">{artist.name}</h1>
+            <h1 className="font-bold text-4xl">{artist?.name}</h1>
           </Link>
           <div className="flex items-center gap-x-4 pt-3 text-4xl">
             <span className="text-yellow-500">★</span>
-            10
+            {artist?.stats.ratingCount === 0 ? (
+              <span className="text-xl">Not rated yet!</span>
+            ) : (
+              artist?.stats.ratingAvg
+            )}
           </div>
         </div>
         <ul className="flex py-4 gap-x-6">

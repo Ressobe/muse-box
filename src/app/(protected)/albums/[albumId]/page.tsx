@@ -8,11 +8,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getAlbumUseCase } from "@/use-cases/album";
+import { getAlbumReviewsUseCase, getAlbumUseCase } from "@/use-cases/album";
 import { notFound } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FaUser } from "react-icons/fa";
 import { getTime, getYear, getFullAlbumTime } from "@/lib/utils";
+import { Reviews } from "@/components/reviews";
+import { auth } from "@/auth";
+import { getUserAlbumReview } from "@/data-access/user";
 
 export default async function AlbumPage({
   params,
@@ -23,8 +26,18 @@ export default async function AlbumPage({
 }) {
   const { albumId } = params;
   const album = await getAlbumUseCase(albumId);
+
   if (!album) {
     notFound();
+  }
+
+  const reviews = await getAlbumReviewsUseCase(album.id);
+
+  let showAddReview = true;
+  const session = await auth();
+  if (session && session.user.id) {
+    const review = await getUserAlbumReview(session.user.id, album.id);
+    showAddReview = !review;
   }
 
   return (
@@ -35,6 +48,14 @@ export default async function AlbumPage({
           <div>
             <div>{album.albumType.name}</div>
             <h1 className="font-bold text-5xl">{album.title}</h1>
+          </div>
+          <div className="flex items-center gap-x-4  text-2xl">
+            <span className="text-yellow-500">★</span>
+            {album.stats.ratingCount === 0 ? (
+              <span className="text-md">Not rated yet!</span>
+            ) : (
+              album.stats.ratingAvg
+            )}
           </div>
           <div className="flex items-center gap-x-4 text-sm">
             <Avatar className="h-16 w-16">
@@ -92,6 +113,13 @@ export default async function AlbumPage({
           })}
         </TableBody>
       </Table>
+
+      <Reviews
+        reviews={reviews}
+        showAddReview={showAddReview}
+        type="album"
+        entityId={albumId}
+      />
     </section>
   );
 }

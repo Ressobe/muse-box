@@ -1,11 +1,4 @@
-import {
-  getArtistAlbumsUseCase,
-  getArtistGenresUseCase,
-  getArtistReviewsUseCase,
-  getArtistSingleEpsUseCase,
-  getArtistTopTracksUseCase,
-  getArtistUseCase,
-} from "@/use-cases/artist";
+import { getArtistReviewsUseCase, getArtistUseCase } from "@/use-cases/artist";
 import { notFound } from "next/navigation";
 import { TopTracks } from "@/components/top-tracks";
 import { Albums } from "@/components/albums";
@@ -28,6 +21,7 @@ export default async function Artist({
   }
 
   const reviews = await getArtistReviewsUseCase(artist.id);
+
   let showAddReview = true;
   const session = await auth();
   if (session && session.user.id) {

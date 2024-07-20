@@ -10,7 +10,7 @@ export async function createReviewUseCase(
 ) {
   // parse with drizzle zod
   const review = await insertReview(entityId, userId, comment, rating, type);
-  if (review.length === 0) {
+  if (!review) {
     return null;
   }
   return review;
@@ -44,7 +44,7 @@ export async function editReviewUseCase(
     rating,
     type,
   );
-  if (review.length === 0) {
+  if (!review) {
     return null;
   }
   return review;

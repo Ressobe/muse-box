@@ -13,9 +13,6 @@ const LIMIT = 5;
 
 export async function getArtistUseCase(artistId: string) {
   const artist = await getArtistById(artistId);
-  if (!artist) {
-    throw "Artist not found";
-  }
   return artist;
 }
 

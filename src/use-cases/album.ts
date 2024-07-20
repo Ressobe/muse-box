@@ -1,4 +1,6 @@
-import { getAlbumById, getAlbums } from "@/data-access/album";
+import { getAlbumById, getAlbumReviews, getAlbums } from "@/data-access/album";
+
+const LIMIT = 10;
 
 export async function getTopAlbumsUseCase() {
   const albums = await getAlbums();
@@ -18,4 +20,9 @@ export async function getNewAlbumsUseCase() {
 export async function getAlbumUseCase(albumId: string) {
   const album = await getAlbumById(albumId);
   return album;
+}
+
+export async function getAlbumReviewsUseCase(albumId: string) {
+  const reviews = await getAlbumReviews(albumId, LIMIT);
+  return reviews;
 }

@@ -227,8 +227,12 @@ function ActionMenu({
               </AlertDialog>
             </>
           ) : (
-            <Button onClick={handleReportButtonClick}>
-              <Flag className="w-6 h-6" />
+            <Button
+              variant="ghost"
+              onClick={handleReportButtonClick}
+              className="p-0 w-full flex items-center justify-center gap-x-3"
+            >
+              <Flag className="w-6 h-6" /> <span>Report</span>
             </Button>
           )}
         </PopoverContent>

@@ -140,14 +140,14 @@ export const artistsRelations = relations(artists, ({ many, one }) => ({
   reviews: many(reviewsArtists),
   stats: one(artistsStats, {
     fields: [artists.id],
-    references: [artistsStats.artistId],
+    references: [artistsStats.entityId],
   }),
 }));
 
 export const artistsStats = sqliteTable("artistsStats", {
-  artistId: text("artistId")
+  entityId: text("entityId")
     .primaryKey()
-    .references(() => artists.id),
+    .references(() => artists.id, { onDelete: "cascade" }),
   likes: integer("likes").default(0),
   popularity: integer("popularity").default(0),
   ratingAvg: real("rating").default(0),
@@ -186,15 +186,15 @@ export const albumsRelations = relations(albums, ({ one, many }) => ({
   }),
   stats: one(albumsStats, {
     fields: [albums.id],
-    references: [albumsStats.albumId],
+    references: [albumsStats.entityId],
   }),
   tracks: many(tracks),
 }));
 
 export const albumsStats = sqliteTable("albumsStats", {
-  albumId: text("albumId")
+  entityId: text("entityId")
     .primaryKey()
-    .references(() => albums.id),
+    .references(() => albums.id, { onDelete: "cascade" }),
   likes: integer("likes").default(0),
   popularity: integer("popularity").default(0),
   ratingAvg: real("rating").default(0),
@@ -238,14 +238,14 @@ export const tracksRelations = relations(tracks, ({ one }) => ({
   }),
   stats: one(tracksStats, {
     fields: [tracks.id],
-    references: [tracksStats.trackId],
+    references: [tracksStats.entityId],
   }),
 }));
 
 export const tracksStats = sqliteTable("tracksStats", {
-  trackId: text("trackId")
+  entityId: text("entityId")
     .primaryKey()
-    .references(() => tracks.id),
+    .references(() => tracks.id, { onDelete: "cascade" }),
   likes: integer("likes").default(0),
   popularity: integer("popularity").default(0),
   ratingAvg: real("rating").default(0),

@@ -1,7 +1,12 @@
 import { db } from "@/database/db";
 import * as z from "zod";
 import { SettingsSchema } from "@/schemas/auth";
-import { reviewsArtists, users } from "@/database/schema";
+import {
+  reviewsAlbums,
+  reviewsArtists,
+  reviewsTracks,
+  users,
+} from "@/database/schema";
 import { and, eq } from "drizzle-orm";
 
 export async function getUserByEmail(email: string) {
@@ -70,6 +75,24 @@ export async function getUserArtistReview(userId: string, artistId: string) {
     where: and(
       eq(reviewsArtists.userId, userId),
       eq(reviewsArtists.entityId, artistId),
+    ),
+  });
+}
+
+export async function getUserAlbumReview(userId: string, albumId: string) {
+  return await db.query.reviewsAlbums.findFirst({
+    where: and(
+      eq(reviewsAlbums.userId, userId),
+      eq(reviewsAlbums.entityId, albumId),
+    ),
+  });
+}
+
+export async function getUserTrackReview(userId: string, trackId: string) {
+  return await db.query.reviewsTracks.findFirst({
+    where: and(
+      eq(reviewsTracks.userId, userId),
+      eq(reviewsTracks.entityId, trackId),
     ),
   });
 }

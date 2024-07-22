@@ -141,6 +141,20 @@
       "when": 1721460752235,
       "tag": "0019_faithful_emma_frost",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "6",
+      "when": 1721539398071,
+      "tag": "0020_aberrant_sasquatch",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "6",
+      "when": 1721542571688,
+      "tag": "0021_curvy_morgan_stark",
+      "breakpoints": true
     }
   ]
 }

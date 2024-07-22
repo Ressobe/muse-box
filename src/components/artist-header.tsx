@@ -1,18 +1,37 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getArtistGenresUseCase, getArtistUseCase } from "@/use-cases/artist";
-import { HeartIcon, SquarePlus } from "lucide-react";
+import { SquarePlus } from "lucide-react";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
+import { LikeButton } from "@/components/like-button";
+import { notFound } from "next/navigation";
+import { auth } from "@/auth";
+import { isUserLikedItUseCase } from "@/use-cases/playlist";
 
 type ArtistHeaderProps = {
   artistId: string;
 };
 
 export async function ArtistHeader({ artistId }: ArtistHeaderProps) {
+  const session = await auth();
+  if (!session?.user) {
+    return null;
+  }
+  if (!session.user.id) {
+    return null;
+  }
+
   const artist = await getArtistUseCase(artistId);
-  // const stats = await getArtistStatsUseCase(artistId);
+  if (!artist) {
+    return notFound();
+  }
   const genres = await getArtistGenresUseCase(artistId);
+  const isLiked = await isUserLikedItUseCase(
+    session.user.id,
+    artistId,
+    "artist",
+  );
 
   return (
     <div className="flex items-center gap-x-20">
@@ -51,9 +70,12 @@ export async function ArtistHeader({ artistId }: ArtistHeaderProps) {
         </ul>
       </div>
       <div className="flex gap-x-4">
-        <Button variant="ghost" className="p-4">
-          <HeartIcon className="w-8 h-8" />
-        </Button>
+        <LikeButton
+          defaultLikeState={isLiked}
+          userId={session.user.id}
+          entityId={artist.id}
+          type="artist"
+        />
         <Button variant="ghost" className="p-4">
           <SquarePlus className="w-8 h-8" />
         </Button>

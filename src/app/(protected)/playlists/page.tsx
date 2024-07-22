@@ -1,64 +1,59 @@
+import { currentUser } from "@/lib/auth";
+import { getPlaylistImageUseCase } from "@/use-cases/playlist";
+import { getUserPlaylistsUseCase } from "@/use-cases/user";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function PlaylistsPage() {
+export default async function PlaylistsPage() {
+  const user = await currentUser();
+  if (!user) {
+    return null;
+  }
+
+  const playlists = await getUserPlaylistsUseCase(user.id);
+
+  const playlistsWithImages = await Promise.all(
+    playlists.map(async (playlist) => ({
+      ...playlist,
+      image: await getPlaylistImageUseCase(playlist.id),
+    })),
+  );
+
   return (
     <section className="space-y-12">
       <h1 className="font-bold text-4xl">Your playlists</h1>
-
       <ul className="grid">
-        <Link
-          href={`/playlists/{playlistId}`}
-          className="transition-all p-4 hover:bg-secondary/40 rounded"
-        >
-          <li className="flex gap-x-4 items-center">
-            <Image src="/taco2.jpeg" width={200} height={200} alt="dkdk" />
-            <div className="pt-4">
-              <div className="text-lg">Taco Best Songs</div>
-              <div className="text-sm text-muted-foreground">20 Tracks</div>
-              <div className="text-sm text-muted-foreground">1h 05m</div>
-            </div>
-          </li>
-        </Link>
-        <Link
-          href={`/playlists/{playlistId}`}
-          className="transition-all p-4 hover:bg-secondary/40 rounded"
-        >
-          <li className="flex gap-x-4 items-center">
-            <Image src="/taco1.jpeg" width={200} height={200} alt="dkdk" />
-            <div className="pt-4">
-              <div className="text-lg">Taco Best Songs 2</div>
-              <div className="text-sm text-muted-foreground">20 Tracks</div>
-              <div className="text-sm text-muted-foreground">1h 05m</div>
-            </div>
-          </li>
-        </Link>
-        <Link
-          href={`/playlists/{playlistId}`}
-          className="transition-all p-4 hover:bg-secondary/40 rounded"
-        >
-          <li className="flex gap-x-4 items-center">
-            <Image src="/taco3.jpeg" width={200} height={200} alt="dkdk" />
-            <div className="pt-4">
-              <div className="text-lg">Taco Best Songs 3</div>
-              <div className="text-sm text-muted-foreground">20 Tracks</div>
-              <div className="text-sm text-muted-foreground">1h 05m</div>
-            </div>
-          </li>
-        </Link>
-        <Link
-          href={`/playlists/{playlistId}`}
-          className="transition-all p-4 hover:bg-secondary/40 rounded"
-        >
-          <li className="flex gap-x-4 items-center">
-            <Image src="/taco2.jpeg" width={200} height={200} alt="dkdk" />
-            <div className="pt-4">
-              <div className="text-lg">Taco Best Songs 4</div>
-              <div className="text-sm text-muted-foreground">20 Tracks</div>
-              <div className="text-sm text-muted-foreground">1h 05m</div>
-            </div>
-          </li>
-        </Link>
+        {playlistsWithImages.map((playlist) => {
+          if (playlist.items.length === 0) {
+            return null;
+          }
+          return (
+            <Link
+              key={playlist.id}
+              href={`/playlists/${playlist.id}`}
+              className="transition-all p-4 hover:bg-secondary/40 rounded"
+            >
+              <li className="flex gap-x-4 items-center">
+                <div className="w-[200px] h-[200px] relative overflow-hidden">
+                  <Image
+                    src={playlist.image ?? ""}
+                    alt={`Playlist ${playlist.name} image`}
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                </div>
+                <div className="pt-4">
+                  <div className="text-lg">{playlist.name}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {playlist.items.length > 1
+                      ? `${playlist.items.length} Items`
+                      : `${playlist.items.length} Item`}
+                  </div>
+                </div>
+              </li>
+            </Link>
+          );
+        })}
       </ul>
     </section>
   );

@@ -1,5 +1,5 @@
 import { createProfile } from "@/data-access/profile";
-import { createUser } from "@/data-access/user";
+import { createUser, getUserPlaylists } from "@/data-access/user";
 
 export async function createUserUseCase(
   email: string,
@@ -9,4 +9,8 @@ export async function createUserUseCase(
   const user = await createUser(email, name, password);
   await createProfile(user.id);
   return user;
+}
+
+export async function getUserPlaylistsUseCase(userId: string) {
+  return await getUserPlaylists(userId);
 }

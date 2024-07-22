@@ -1,7 +1,7 @@
 "use server";
 
-import { auth } from "@/auth";
 import { getUserArtistReview } from "@/data-access/user";
+import { currentUser } from "@/lib/auth";
 import { Entity } from "@/types";
 import {
   createReviewUseCase,
@@ -17,17 +17,13 @@ export async function addReviewAction(
   rating: number,
   type: Entity,
 ) {
-  const session = await auth();
-  if (!session) {
-    return { error: "Not authorized access!" };
-  }
-
-  if (!session.user.id) {
+  const user = await currentUser();
+  if (!user) {
     return { error: "Not authorized access!" };
   }
 
   if (type === "artist") {
-    const review = await getUserArtistReview(session.user.id, entityId);
+    const review = await getUserArtistReview(user.id, entityId);
     if (review) {
       return { error: "Your review for this artist, already exist!" };
     }
@@ -55,16 +51,12 @@ export async function removeReviewAction(
   ownerId: string,
   commentId: string,
 ) {
-  const session = await auth();
-  if (!session) {
+  const user = await currentUser();
+  if (!user) {
     return { error: "Not authorized access!" };
   }
 
-  if (!session.user.id) {
-    return { error: "Not authorized access!" };
-  }
-
-  if (ownerId !== session.user.id) {
+  if (ownerId !== user.id) {
     return { error: "Not authorized access!" };
   }
 
@@ -80,12 +72,8 @@ export async function editReviewAction(
   rating: number,
   type: Entity,
 ) {
-  const session = await auth();
-  if (!session) {
-    return { error: "Not authorized access!" };
-  }
-
-  if (!session.user.id) {
+  const user = await currentUser();
+  if (!user) {
     return { error: "Not authorized access!" };
   }
 

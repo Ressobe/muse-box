@@ -10,7 +10,7 @@ import {
 import { Artist } from "@/schemas/artist";
 import { and, eq, or } from "drizzle-orm";
 import { createArtistStat } from "./stat";
-import { createAlbum } from "./album";
+import { createAlbum, createAlbumTypes } from "./album";
 import { createTrack } from "./track";
 
 export async function getArtists() {
@@ -104,7 +104,6 @@ export async function getArtistImage(artistId: string): Promise<string | null> {
 
 export async function insertTacoHemingway() {
   // await createAlbumTypes();
-
   const artist = await createArtist({
     name: "Taco Hemingway v2",
     bio: "Polish rapper known for his unique style and storytelling.",

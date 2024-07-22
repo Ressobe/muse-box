@@ -3,6 +3,8 @@ import { getArtists } from "@/data-access/artist";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
 
+export const dynamic = "force-dynamic";
+
 export default async function Artists() {
   const artists = await getArtists();
 

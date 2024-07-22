@@ -29,13 +29,6 @@ export const users = sqliteTable("user", {
   image: text("image"),
 });
 
-export const usersRelations = relations(users, ({ many }) => ({
-  playlists: many(playlists, {
-    fields: [users.id],
-    references: [playlists.userId],
-  }),
-}));
-
 export const userProfiles = sqliteTable("userProfiles", {
   userId: text("userId")
     .primaryKey()

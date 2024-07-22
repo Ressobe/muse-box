@@ -97,6 +97,11 @@ export async function createArtist(newArtist: Artist) {
   return artist;
 }
 
+export async function getArtistImage(artistId: string): Promise<string | null> {
+  const artist = await getArtistById(artistId);
+  return artist?.image || null;
+}
+
 export async function insertTacoHemingway() {
   // await createAlbumTypes();
 

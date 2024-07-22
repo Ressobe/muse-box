@@ -16,6 +16,9 @@ import { getTime, getYear, getFullAlbumTime } from "@/lib/utils";
 import { Reviews } from "@/components/reviews";
 import { auth } from "@/auth";
 import { getUserAlbumReview } from "@/data-access/user";
+import { currentUser } from "@/lib/auth";
+import { isUserLikedItUseCase } from "@/use-cases/playlist";
+import { LikeButton } from "@/components/like-button";
 
 export default async function AlbumPage({
   params,
@@ -25,12 +28,25 @@ export default async function AlbumPage({
   };
 }) {
   const { albumId } = params;
-  const album = await getAlbumUseCase(albumId);
 
+  const user = await currentUser();
+  if (!user) {
+    return null;
+  }
+
+  const album = await getAlbumUseCase(albumId);
   if (!album) {
     notFound();
   }
 
+  const tracksWithLikes = await Promise.all(
+    album.tracks.map(async (track) => ({
+      ...track,
+      isLiked: await isUserLikedItUseCase(user.id, track.id, "track"),
+    })),
+  );
+
+  const isAlbumLiked = await isUserLikedItUseCase(user.id, album.id, "album");
   const reviews = await getAlbumReviewsUseCase(album.id);
 
   let showAddReview = true;
@@ -77,6 +93,12 @@ export default async function AlbumPage({
                 : `${album.tracks.length} song`}
               , {getTime(getFullAlbumTime(album.tracks))}
             </span>
+            <LikeButton
+              defaultLikeState={isAlbumLiked}
+              entityId={album.id}
+              type="album"
+              userId={user.id}
+            />
           </div>
         </div>
       </div>
@@ -85,11 +107,11 @@ export default async function AlbumPage({
           <TableRow>
             <TableHead className="w-[100px]">#</TableHead>
             <TableHead>Title</TableHead>
-            <TableHead>Likes</TableHead>
+            <TableHead>Rating</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {album.tracks.map((track) => {
+          {tracksWithLikes.map((track) => {
             return (
               <TableRow key={track.id} className="p-0">
                 <TableCell className="font-medium">{track.position}</TableCell>
@@ -107,7 +129,15 @@ export default async function AlbumPage({
                     {track.title}
                   </Link>
                 </TableCell>
-                <TableCell>10000</TableCell>
+                <TableCell>5</TableCell>
+                <TableCell>
+                  <LikeButton
+                    defaultLikeState={track.isLiked}
+                    entityId={track.id}
+                    type="track"
+                    userId={user.id}
+                  />
+                </TableCell>
               </TableRow>
             );
           })}

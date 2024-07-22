@@ -43,6 +43,11 @@ export async function getAlbumReviews(albumId: string, limit?: number) {
   });
 }
 
+export async function getAlbumImage(albumId: string): Promise<string | null> {
+  const album = await getAlbumById(albumId);
+  return album?.image || null;
+}
+
 export async function createAlbumTypes() {
   await db.insert(albumsTypes).values([
     {

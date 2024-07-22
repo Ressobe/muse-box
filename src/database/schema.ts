@@ -5,8 +5,18 @@ import {
   text,
   primaryKey,
   real,
+  uniqueIndex,
 } from "drizzle-orm/sqlite-core";
 import type { AdapterAccountType } from "next-auth/adapters";
+
+export const PlaylistItemType = {
+  ARTIST: "artist",
+  ALBUM: "album",
+  TRACK: "track",
+};
+
+type PlaylistItemType =
+  (typeof PlaylistItemType)[keyof typeof PlaylistItemType];
 
 export const users = sqliteTable("user", {
   id: text("id")
@@ -18,6 +28,13 @@ export const users = sqliteTable("user", {
   password: text("password"),
   image: text("image"),
 });
+
+export const usersRelations = relations(users, ({ many }) => ({
+  playlists: many(playlists, {
+    fields: [users.id],
+    references: [playlists.userId],
+  }),
+}));
 
 export const userProfiles = sqliteTable("userProfiles", {
   userId: text("userId")
@@ -366,4 +383,41 @@ export const playlists = sqliteTable("playlists", {
   userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
 });
+
+export const playlistItems = sqliteTable(
+  "playlistItems",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    playlistId: text("playlistId")
+      .notNull()
+      .references(() => playlists.id, { onDelete: "cascade" }),
+    itemType: text("itemType").$type<PlaylistItemType>().notNull(),
+    itemId: text("itemId").notNull(),
+  },
+  (table) => ({
+    playlistIditemIdUniqueIndex: uniqueIndex("unique_playlist_item_index").on(
+      table.playlistId,
+      table.itemId,
+    ),
+  }),
+);
+
+// Relations for playlist items
+export const playlistItemsRelations = relations(playlistItems, ({ one }) => ({
+  playlist: one(playlists, {
+    fields: [playlistItems.playlistId],
+    references: [playlists.id],
+  }),
+}));
+
+export const playlistsRelations = relations(playlists, ({ one, many }) => ({
+  user: one(users, {
+    fields: [playlists.userId],
+    references: [users.id],
+  }),
+  items: many(playlistItems),
+}));

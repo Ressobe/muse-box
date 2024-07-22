@@ -6,11 +6,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { HeartIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { getArtistTopTracksUseCase } from "@/use-cases/artist";
+import { LikeButton } from "./like-button";
+import { isUserLikedItUseCase } from "@/use-cases/playlist";
+import { currentUser } from "@/lib/auth";
 
 type TopTracksProps = {
   artistId: string;
@@ -18,6 +19,18 @@ type TopTracksProps = {
 
 export async function TopTracks({ artistId }: TopTracksProps) {
   const tracks = await getArtistTopTracksUseCase(artistId);
+
+  const user = await currentUser();
+  if (!user) {
+    return null;
+  }
+
+  const tracksWithLikes = await Promise.all(
+    tracks.map(async (track) => ({
+      ...track,
+      isLiked: await isUserLikedItUseCase(user.id, track.id, "track"),
+    })),
+  );
 
   return (
     <div>
@@ -33,7 +46,7 @@ export async function TopTracks({ artistId }: TopTracksProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {tracks.map((item, idx) => {
+          {tracksWithLikes.map((item, idx) => {
             return (
               <TableRow key={item.id} className="p-0">
                 <TableCell className="font-medium">{idx + 1}</TableCell>
@@ -61,9 +74,12 @@ export async function TopTracks({ artistId }: TopTracksProps) {
                 </TableCell>
                 <TableCell>1000</TableCell>
                 <TableCell>
-                  <Button variant="ghost" className="hover:bg-background">
-                    <HeartIcon className="w-6 h-6" />
-                  </Button>
+                  <LikeButton
+                    defaultLikeState={item.isLiked}
+                    entityId={item.id}
+                    type="track"
+                    userId={user.id}
+                  />
                 </TableCell>
               </TableRow>
             );

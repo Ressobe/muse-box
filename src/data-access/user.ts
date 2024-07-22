@@ -2,6 +2,7 @@ import { db } from "@/database/db";
 import * as z from "zod";
 import { SettingsSchema } from "@/schemas/auth";
 import {
+  playlists,
   reviewsAlbums,
   reviewsArtists,
   reviewsTracks,
@@ -94,5 +95,14 @@ export async function getUserTrackReview(userId: string, trackId: string) {
       eq(reviewsTracks.userId, userId),
       eq(reviewsTracks.entityId, trackId),
     ),
+  });
+}
+
+export async function getUserPlaylists(userId: string) {
+  return await db.query.playlists.findMany({
+    where: eq(playlists.userId, userId),
+    with: {
+      items: true,
+    },
   });
 }

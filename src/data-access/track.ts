@@ -33,3 +33,8 @@ export async function getTrackReviews(trackId: string) {
     },
   });
 }
+
+export async function getTrackImage(trackId: string): Promise<string | null> {
+  const track = await getTrackById(trackId);
+  return track?.album?.image || null;
+}

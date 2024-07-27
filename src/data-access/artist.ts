@@ -8,7 +8,7 @@ import {
   tracks,
 } from "@/database/schema";
 import { Artist } from "@/schemas/artist";
-import { and, eq, or } from "drizzle-orm";
+import { and, desc, eq, not, or } from "drizzle-orm";
 import { createArtistStat } from "./stat";
 import { createAlbum, createAlbumTypes } from "./album";
 import { createTrack } from "./track";
@@ -23,6 +23,12 @@ export async function getArtistById(artistId: string) {
     with: {
       stats: true,
     },
+  });
+}
+
+export async function getArtist(artistId: string) {
+  return await db.query.artists.findFirst({
+    where: eq(artists.id, artistId),
   });
 }
 
@@ -43,13 +49,21 @@ export async function getArtistSinglesEps(artistId: string, limit?: number) {
   });
 }
 
-export async function getArtistReviews(artistId: string, limit?: number) {
+export async function getArtistReviews(
+  artistId: string,
+  userId: string,
+  limit?: number,
+) {
   return db.query.reviewsArtists.findMany({
-    where: eq(reviewsArtists.entityId, artistId),
+    where: and(
+      eq(reviewsArtists.entityId, artistId),
+      not(eq(reviewsArtists.userId, userId)),
+    ),
     with: {
       user: true,
     },
     limit,
+    orderBy: desc(reviewsArtists.createdAt),
   });
 }
 
@@ -58,6 +72,7 @@ export async function getArtistTracks(artistId: string, limit?: number) {
     where: eq(tracks.artistId, artistId),
     with: {
       album: true,
+      stats: true,
     },
     limit,
   });
@@ -78,7 +93,11 @@ export async function getArtistDiscography(artistId: string, limit?: number) {
     where: eq(albums.artistId, artistId),
     with: {
       artist: true,
-      tracks: true,
+      tracks: {
+        with: {
+          stats: true,
+        },
+      },
       albumType: true,
     },
     limit,
@@ -103,7 +122,7 @@ export async function getArtistImage(artistId: string): Promise<string | null> {
 }
 
 export async function insertTacoHemingway() {
-  // await createAlbumTypes();
+  await createAlbumTypes();
   const artist = await createArtist({
     name: "Taco Hemingway v2",
     bio: "Polish rapper known for his unique style and storytelling.",

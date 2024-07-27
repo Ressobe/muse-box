@@ -8,6 +8,8 @@ import {
   getArtistStats,
   getArtistTracks,
 } from "@/data-access/artist";
+import { getTopTracks } from "@/data-access/track";
+import { getUserArtistReview } from "@/data-access/user";
 
 const LIMIT = 5;
 
@@ -32,16 +34,23 @@ export async function getArtistSingleEpsUseCase(artistId: string) {
   return albums;
 }
 
-export async function getArtistReviewsUseCase(artistId: string) {
-  const reviews = await getArtistReviews(artistId, LIMIT);
+export async function getArtistReviewsUseCase(
+  artistId: string,
+  userId: string,
+) {
+  const reviews = await getArtistReviews(artistId, userId, LIMIT);
+  const userReview = await getUserArtistReview(userId, artistId);
   if (!reviews) {
-    throw "Reviews not found";
+    return [];
+  }
+  if (userReview) {
+    return [userReview, ...reviews];
   }
   return reviews;
 }
 
 export async function getArtistTopTracksUseCase(artistId: string) {
-  const tracks = await getArtistTracks(artistId, LIMIT);
+  const tracks = await getTopTracks(artistId, LIMIT);
   if (!tracks) {
     throw "Tracks not found";
   }

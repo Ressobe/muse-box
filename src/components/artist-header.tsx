@@ -76,9 +76,6 @@ export async function ArtistHeader({ artistId }: ArtistHeaderProps) {
           entityId={artist.id}
           type="artist"
         />
-        <Button variant="ghost" className="p-4">
-          <SquarePlus className="w-8 h-8" />
-        </Button>
       </div>
     </div>
   );

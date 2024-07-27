@@ -14,6 +14,8 @@ import {
 } from "@/use-cases/playlist";
 import { notFound } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export default async function PlaylistPage({
   params,
 }: {
@@ -57,7 +59,7 @@ export default async function PlaylistPage({
               <TableHead className="w-[100px]">#</TableHead>
               <TableHead>Title</TableHead>
               <TableHead>Album</TableHead>
-              <TableHead>Likes</TableHead>
+              <TableHead></TableHead>
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>

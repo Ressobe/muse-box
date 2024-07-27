@@ -1,8 +1,11 @@
 import { auth } from "@/auth";
+import { LikeButton } from "@/components/like-button";
 import { Reviews } from "@/components/reviews";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getUserTrackReview } from "@/data-access/user";
+import { currentUser } from "@/lib/auth";
 import { getTime, getYear } from "@/lib/utils";
+import { isUserLikedItUseCase } from "@/use-cases/playlist";
 import { getTrackReviewsUseCase, getTrackUseCase } from "@/use-cases/track";
 import Image from "next/image";
 import Link from "next/link";
@@ -22,8 +25,13 @@ export default async function TrackPage({
   if (!track) {
     return notFound();
   }
+  const user = await currentUser();
+  if (!user) {
+    return null;
+  }
 
   const reviews = await getTrackReviewsUseCase(track.id);
+  const isTrackLiked = await isUserLikedItUseCase(user.id, track.id, "track");
 
   let showAddReview = true;
   const session = await auth();
@@ -70,6 +78,12 @@ export default async function TrackPage({
               {track.album.title}
             </Link>
             <span>{getTime(track.length)}</span>
+            <LikeButton
+              defaultLikeState={isTrackLiked}
+              entityId={track.id}
+              type="track"
+              userId={user.id}
+            />
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { db } from "@/database/db";
 import { albums, albumsTypes, reviewsAlbums } from "@/database/schema";
 import { Album } from "@/schemas/album";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { createAlbumStat } from "./stat";
 
 export async function getAlbums() {
@@ -13,9 +13,22 @@ export async function getAlbumById(albumId: string) {
     where: eq(albums.id, albumId),
     with: {
       artist: true,
-      tracks: true,
+      tracks: {
+        with: {
+          stats: true,
+        },
+      },
       albumType: true,
       stats: true,
+    },
+  });
+}
+
+export async function getAlbum(albumId: string) {
+  return await db.query.albums.findFirst({
+    where: eq(albums.id, albumId),
+    with: {
+      artist: true,
     },
   });
 }
@@ -39,6 +52,7 @@ export async function getAlbumReviews(albumId: string, limit?: number) {
     with: {
       user: true,
     },
+    orderBy: desc(reviewsAlbums.createdAt),
     limit,
   });
 }

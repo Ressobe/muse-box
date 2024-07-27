@@ -9,6 +9,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { addReviewAction } from "@/actions/reviews";
 import { Entity } from "@/types";
 import { Review } from "@/types/review";
+import { CircleCheck, XIcon } from "lucide-react";
 
 type CommentProps = {
   entityId: string;
@@ -92,15 +93,27 @@ export function AddComment({
     if (response.sucess) {
       toast({
         variant: "sucessful",
-        title: "Review",
-        description: "Your review was added sucessful!",
+        description: (
+          <div className="flex items-center">
+            <CircleCheck className="mr-2 text-green-500" />
+            Your review was added sucessful!
+          </div>
+        ),
+        className: "bg-secondary opacity-90",
+        duration: 1000,
       });
     }
     if (response.error) {
       toast({
         variant: "destructive",
-        title: "Review",
-        description: "Something went wrong!",
+        description: (
+          <div className="flex items-center">
+            <XIcon className="mr-2 text-red-500" />
+            Something went wrong !
+          </div>
+        ),
+        className: "bg-secondary opacity-90",
+        duration: 1500,
       });
     }
   };

@@ -1,11 +1,13 @@
 "use client";
 
-import { HeartIcon } from "lucide-react";
+import { CircleCheck, HeartIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { likeAction, unlikeAction } from "@/actions/playlists";
 import { Entity } from "@/types";
 import { useState } from "react";
 import clsx from "clsx";
+import { useToast } from "./ui/use-toast";
+import { capitalizeFirstLetter } from "@/lib/utils";
 
 type LikeButtonProps = {
   defaultLikeState: boolean;
@@ -22,14 +24,35 @@ export function LikeButton({
   type,
   size = "lg",
 }: LikeButtonProps) {
+  const { toast } = useToast();
   const [like, setLike] = useState(defaultLikeState);
 
   const handleClick = async () => {
     if (!like) {
       setLike(true);
+      toast({
+        description: (
+          <div className="flex items-center">
+            <CircleCheck className="mr-2 text-green-500" />
+            {`Added to your liked ${capitalizeFirstLetter(type)}s`}
+          </div>
+        ),
+        className: "bg-secondary opacity-90",
+        duration: 1000,
+      });
       await likeAction(userId, entityId, type);
     } else {
       setLike(false);
+      toast({
+        description: (
+          <div className="flex items-center">
+            <CircleCheck className="mr-2 text-green-500" />
+            {`Removed from your liked ${capitalizeFirstLetter(type)}s`}
+          </div>
+        ),
+        className: "bg-secondary opacity-90",
+        duration: 1000,
+      });
       await unlikeAction(userId, entityId, type);
     }
   };

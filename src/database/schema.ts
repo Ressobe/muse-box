@@ -414,3 +414,68 @@ export const playlistsRelations = relations(playlists, ({ one, many }) => ({
   }),
   items: many(playlistItems),
 }));
+
+export const activityTypes = {
+  ARTIST_RATING: "artist_rating",
+  ALBUM_RATING: "album_rating",
+  TRACK_RATING: "track_rating",
+  LIKE_TRACK: "like_track",
+};
+
+type ActivityType = (typeof activityTypes)[keyof typeof activityTypes];
+
+export const userActivities = sqliteTable("userActivities", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  activityType: text("activityType").$type<ActivityType>().notNull(),
+  entityId: text("entityId").notNull(), // ID powiązanego obiektu, np. artysty, albumu, utworu
+  rating: integer("rating"), // Opcjonalnie, używane dla ocen
+  comment: text("comment"), // Opcjonalnie, używane dla komentarzy
+  createdAt: integer("createdAt", { mode: "timestamp" }).default(new Date()), // Data aktywności
+});
+
+export const userActivitiesRelations = relations(userActivities, ({ one }) => ({
+  user: one(users, {
+    fields: [userActivities.userId],
+    references: [users.id],
+  }),
+}));
+
+// Typy powiadomień (dostosuj do swoich potrzeb)
+export const notificationTypes = {
+  COMMENT: "comment", // Powiadomienie o nowym komentarzu
+  LIKE: "like", // Powiadomienie o nowym polubieniu
+  FOLLOW: "follow", // Powiadomienie o nowym obserwującym
+  // Dodaj inne typy powiadomień, które są potrzebne
+};
+
+type NotificationType =
+  (typeof notificationTypes)[keyof typeof notificationTypes];
+
+export const userNotifications = sqliteTable("userNotifications", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()), // Unikalny identyfikator powiadomienia
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }), // Identyfikator użytkownika
+  type: text("type").$type<NotificationType>().notNull(), // Typ powiadomienia
+  message: text("message").notNull(), // Treść powiadomienia
+  resourceId: text("resourceId"), // Identyfikator zasobu (opcjonalny)
+  isRead: integer("isRead", { mode: "boolean" }).default(false),
+  createdAt: integer("createdAt", { mode: "timestamp" }).default(new Date()), // Data i czas utworzenia powiadomienia
+});
+
+export const userNotificationsRelations = relations(
+  userNotifications,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [userNotifications.userId],
+      references: [users.id],
+    }),
+  }),
+);

@@ -6,9 +6,11 @@ import {
   reviewsAlbums,
   reviewsArtists,
   reviewsTracks,
+  userProfiles,
   users,
 } from "@/database/schema";
 import { and, eq } from "drizzle-orm";
+import { Entity } from "@/types";
 
 export async function getUserByEmail(email: string) {
   return await db.query.users.findFirst({
@@ -77,6 +79,9 @@ export async function getUserArtistReview(userId: string, artistId: string) {
       eq(reviewsArtists.userId, userId),
       eq(reviewsArtists.entityId, artistId),
     ),
+    with: {
+      user: true,
+    },
   });
 }
 
@@ -105,4 +110,72 @@ export async function getUserPlaylists(userId: string) {
       items: true,
     },
   });
+}
+
+export async function getUserFavourite(userId: string) {
+  return await db.query.userProfiles.findFirst({
+    where: eq(userProfiles.userId, userId),
+  });
+}
+
+export async function updateFavourite(
+  userId: string,
+  entityId: string,
+  type: Entity,
+) {
+  switch (type) {
+    case "artist":
+      return await db
+        .update(userProfiles)
+        .set({
+          favoriteArtistId: entityId,
+        })
+        .where(eq(userProfiles.userId, userId));
+    case "album":
+      return await db
+        .update(userProfiles)
+        .set({
+          favoriteAlbumId: entityId,
+        })
+        .where(eq(userProfiles.userId, userId));
+    case "track":
+      return await db
+        .update(userProfiles)
+        .set({
+          favoriteTrackId: entityId,
+        })
+        .where(eq(userProfiles.userId, userId));
+
+    default:
+      throw new Error(`Unknown item type: ${type}`);
+  }
+}
+
+export async function removeFavourite(userId: string, type: Entity) {
+  switch (type) {
+    case "artist":
+      return await db
+        .update(userProfiles)
+        .set({
+          favoriteArtistId: null,
+        })
+        .where(eq(userProfiles.userId, userId));
+    case "album":
+      return await db
+        .update(userProfiles)
+        .set({
+          favoriteAlbumId: null,
+        })
+        .where(eq(userProfiles.userId, userId));
+    case "track":
+      return await db
+        .update(userProfiles)
+        .set({
+          favoriteTrackId: null,
+        })
+        .where(eq(userProfiles.userId, userId));
+
+    default:
+      throw new Error(`Unknown item type: ${type}`);
+  }
 }

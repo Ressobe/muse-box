@@ -102,12 +102,13 @@ export default async function AlbumPage({
           </div>
         </div>
       </div>
-      <Table className="">
+      <Table className="w-full">
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">#</TableHead>
             <TableHead>Title</TableHead>
-            <TableHead>Rating</TableHead>
+            <TableHead></TableHead>
+            <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -129,7 +130,12 @@ export default async function AlbumPage({
                     {track.title}
                   </Link>
                 </TableCell>
-                <TableCell>5</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-4 ">
+                    <span className="text-yellow-500 text-2xl">★</span>
+                    {track.stats.ratingAvg}
+                  </div>
+                </TableCell>
                 <TableCell>
                   <LikeButton
                     defaultLikeState={track.isLiked}

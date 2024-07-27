@@ -1,6 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type RatingProps = {
   defaultRate: number;
@@ -48,20 +54,38 @@ export default function Rating({
           }
 
           return (
-            <div
-              className={`transition-colors duration-300  hover:cursor-pointer ${index + 1 === rating ? "scale-125" : ""}`}
-              key={index}
-              style={{
-                fontSize: size ? `${size}px` : "14px",
-                color: elementColor,
-                filter: `${isActiveColor ? "grayscale(0%)" : "grayscale(100%)"}`,
-              }}
-              onMouseEnter={() => setTemporaryRating(index + 1)}
-              onMouseLeave={() => setTemporaryRating(0)}
-              onClick={() => handleClick(index + 1)}
-            >
-              {icon ? icon : DEFAULT_ICON}
-            </div>
+            <TooltipProvider key={index}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div
+                    className={`transition-colors duration-300  hover:cursor-pointer ${index + 1 === rating ? "scale-125" : ""}`}
+                    style={{
+                      fontSize: size ? `${size}px` : "14px",
+                      color: elementColor,
+                      filter: `${isActiveColor ? "grayscale(0%)" : "grayscale(100%)"}`,
+                    }}
+                    onMouseEnter={() => setTemporaryRating(index + 1)}
+                    onMouseLeave={() => setTemporaryRating(0)}
+                    onClick={() => handleClick(index + 1)}
+                  >
+                    {icon ? icon : DEFAULT_ICON}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent className="text-lg">
+                  <p className="flex items-center">
+                    <div
+                      style={{
+                        fontSize: "25px",
+                        color: elementColor,
+                      }}
+                    >
+                      {icon ? icon : DEFAULT_ICON}
+                    </div>
+                    {index + 1}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           );
         })}
       </>

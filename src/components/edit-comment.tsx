@@ -9,6 +9,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { editReviewAction } from "@/actions/reviews";
 import { Entity } from "@/types";
 import { Review } from "@/types/review";
+import { CircleCheck, XIcon } from "lucide-react";
 
 type CommentProps = {
   reviewId: string;
@@ -102,16 +103,28 @@ export function EditComment({
     if (response.sucess) {
       toast({
         variant: "sucessful",
-        title: "Review",
-        description: "Your review was sucessful updated!",
+        description: (
+          <div className="flex items-center">
+            <CircleCheck className="mr-2 text-green-500" />
+            Your review was updated sucessful!
+          </div>
+        ),
+        className: "bg-secondary opacity-90",
+        duration: 1000,
       });
     }
 
     if (response.error) {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "Something went wrong!",
+        description: (
+          <div className="flex items-center">
+            <XIcon className="mr-2 text-red-500" />
+            Something went wrong !
+          </div>
+        ),
+        className: "bg-secondary opacity-90",
+        duration: 1000,
       });
     }
     setEditing(false);

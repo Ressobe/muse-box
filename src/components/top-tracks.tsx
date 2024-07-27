@@ -41,7 +41,7 @@ export async function TopTracks({ artistId }: TopTracksProps) {
             <TableHead className="w-[100px]">#</TableHead>
             <TableHead>Title</TableHead>
             <TableHead>Album</TableHead>
-            <TableHead>Likes</TableHead>
+            <TableHead></TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
@@ -72,7 +72,12 @@ export async function TopTracks({ artistId }: TopTracksProps) {
                     {item.album.title}
                   </Link>
                 </TableCell>
-                <TableCell>1000</TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-4 ">
+                    <span className="text-yellow-500 text-2xl">★</span>
+                    {item.stats.ratingAvg}
+                  </div>
+                </TableCell>
                 <TableCell>
                   <LikeButton
                     defaultLikeState={item.isLiked}

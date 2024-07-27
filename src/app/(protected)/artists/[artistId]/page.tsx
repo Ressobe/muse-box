@@ -7,6 +7,8 @@ import { Reviews } from "@/components/reviews";
 import { ArtistHeader } from "@/components/artist-header";
 import { getUserArtistReview } from "@/data-access/user";
 import { auth } from "@/auth";
+import { currentUser } from "@/lib/auth";
+import { shouldShowAddReview } from "@/lib/utils";
 
 export default async function Artist({
   params,
@@ -14,20 +16,18 @@ export default async function Artist({
   params: { artistId: string };
 }) {
   const { artistId } = params;
-  const artist = await getArtistUseCase(artistId);
 
+  const artist = await getArtistUseCase(artistId);
   if (!artist) {
     notFound();
   }
 
-  const reviews = await getArtistReviewsUseCase(artist.id);
-
-  let showAddReview = true;
-  const session = await auth();
-  if (session && session.user.id) {
-    const review = await getUserArtistReview(session.user.id, artist.id);
-    showAddReview = !review;
+  const user = await currentUser();
+  if (!user) {
+    return null;
   }
+  const reviews = await getArtistReviewsUseCase(artist.id, user.id);
+  const showAddReview = await shouldShowAddReview(artist.id);
 
   return (
     <section className="space-y-12">

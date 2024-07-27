@@ -31,6 +31,18 @@ export async function getPlaylistByUserIdAndName(userId: string, name: string) {
   });
 }
 
+export async function getPlaylistByUserIdAndNameWithItems(
+  userId: string,
+  name: string,
+) {
+  return await db.query.playlists.findFirst({
+    where: and(eq(playlists.name, name), eq(playlists.userId, userId)),
+    with: {
+      items: true,
+    },
+  });
+}
+
 export async function getItemFromPlaylist(
   playlistId: string,
   entityId: string,

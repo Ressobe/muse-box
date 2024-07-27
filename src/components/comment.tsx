@@ -3,7 +3,13 @@
 import { Entity, options } from "@/types";
 import Link from "next/link";
 import { UserAvatar } from "@/components/user-avatar";
-import { EllipsisVertical, Flag, Pencil, Trash } from "lucide-react";
+import {
+  CircleCheck,
+  EllipsisVertical,
+  Flag,
+  Pencil,
+  Trash,
+} from "lucide-react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { Button } from "@/components/ui/button";
 import {
@@ -91,41 +97,39 @@ function ShowComment({
   const isCurrentUserOwnerOfComment = currentUser?.id === reviewUser.id;
 
   return (
-    <div className="pt-10 space-y-6">
-      <div className="space-y-6">
-        <div className="space-y-2">
-          <div className="flex items-center space-x-4">
-            <UserAvatar avatarUrl={reviewUser.image} />
-            <div className="space-y-1">
-              <Link
-                href={`/profiles/${review.userId}`}
-                className="text-xl font-bold leading-none hover:underline"
-              >
-                {reviewUser.name}
-              </Link>
-              <p className=" space-x-4">
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  <span>Posted on </span>
-                  {review.createdAt?.toLocaleDateString("en-US", options)}
-                </span>
-                <span>Rate: {review.rating}</span>
-              </p>
-            </div>
-            <ActionMenu
-              editAction={isCurrentUserOwnerOfComment}
-              editComment={editComment}
-              commentId={review.id}
-              ownerId={reviewUser.id}
-              entityId={review.entityId}
-              type={type}
-              deleteOptimisticReview={deleteOptimisticReview}
-            />
-          </div>
-          <div className="border-b border-muted-foreground pb-4 border-gray-200">
-            <p className="pt-4 flex items-center justify-between text-sm">
-              {review.comment}
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <div className="flex items-center space-x-4">
+          <UserAvatar avatarUrl={reviewUser.image} />
+          <div className="space-y-1">
+            <Link
+              href={`/profiles/${review.userId}`}
+              className="text-xl font-bold leading-none hover:underline"
+            >
+              {reviewUser.name}
+            </Link>
+            <p className=" space-x-4">
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span>Posted on </span>
+                {review.createdAt?.toLocaleDateString("en-US", options)}
+              </span>
+              <span>Rate: {review.rating}</span>
             </p>
           </div>
+          <ActionMenu
+            editAction={isCurrentUserOwnerOfComment}
+            editComment={editComment}
+            commentId={review.id}
+            ownerId={reviewUser.id}
+            entityId={review.entityId}
+            type={type}
+            deleteOptimisticReview={deleteOptimisticReview}
+          />
+        </div>
+        <div className="border-b border-muted-foreground pb-4 border-gray-200">
+          <p className="pt-4 flex items-center justify-between text-sm">
+            {review.comment}
+          </p>
         </div>
       </div>
     </div>
@@ -159,9 +163,15 @@ function ActionMenu({
     await removeReviewAction(entityId, type, ownerId, commentId);
 
     toast({
-      title: "Review",
-      description: "Your review was sucessful removed!",
       variant: "sucessful",
+      description: (
+        <div className="flex items-center">
+          <CircleCheck className="mr-2 text-green-500" />
+          Your review was sucessful removed!
+        </div>
+      ),
+      className: "bg-secondary opacity-90",
+      duration: 1000,
     });
   };
 
@@ -172,7 +182,14 @@ function ActionMenu({
   const handleReportButtonClick = async () => {
     toast({
       title: "Report",
-      description: "Your report was sended!",
+      description: (
+        <div className="flex items-center">
+          <CircleCheck className="mr-2 text-green-500" />
+          Your report was sended!
+        </div>
+      ),
+      className: "bg-secondary opacity-90",
+      duration: 1000,
     });
   };
 

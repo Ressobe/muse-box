@@ -1,4 +1,4 @@
-import { getAlbum, getAlbumById, getAlbumImage } from "@/data-access/album";
+import { getAlbum, getAlbumImage } from "@/data-access/album";
 import { getArtistById, getArtistImage } from "@/data-access/artist";
 import {
   addToPlaylist,
@@ -9,7 +9,7 @@ import {
   getPlaylistByUserIdAndNameWithItems,
   removeFromPlaylist,
 } from "@/data-access/playlist";
-import { getTrack, getTrackById, getTrackImage } from "@/data-access/track";
+import { getTrack, getTrackImage } from "@/data-access/track";
 import { Entity, entityToPlaylists, PlaylistResponse } from "@/types";
 
 export async function addToPlaylistUseCase(

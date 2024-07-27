@@ -27,7 +27,75 @@ export const entityToPlaylists = {
   track: "Favourite Tracks",
 };
 
-type Artist = {
+export type Artist =
+  | {
+      id: string;
+      name: string;
+      image: string | null;
+      bio: string | null;
+      country: string | null;
+      stats: {
+        entityId: string;
+        likes: number | null;
+        popularity: number | null;
+        ratingAvg: number | null;
+        ratingSum: number | null;
+        ratingCount: number | null;
+      };
+    }
+  | undefined;
+
+export type Album =
+  | {
+      id: string;
+      image: string | null;
+      artistId: string;
+      typeId: number;
+      title: string;
+      length: number | null;
+      releaseDate: Date | null;
+      artist: {
+        id: string;
+        name: string;
+        image: string | null;
+        bio: string | null;
+        country: string | null;
+      };
+    }
+  | undefined;
+
+export type Track =
+  | {
+      id: string;
+      image: string | null;
+      artistId: string;
+      title: string;
+      length: number | null;
+      albumId: string;
+      position: number;
+      artist: {
+        id: string;
+        name: string;
+        image: string | null;
+        bio: string | null;
+        country: string | null;
+      };
+      album: {
+        id: string;
+        image: string | null;
+        artistId: string;
+        typeId: number;
+        title: string;
+        length: number | null;
+        releaseDate: Date | null;
+      };
+    }
+  | undefined;
+
+export type PlaylistItem = Artist | Album | Track;
+export type PlaylistResponse = Artist[] | Album[] | Track[];
+
+type LArtist = {
   id: string;
   name: string;
   image: string | null;
@@ -35,7 +103,7 @@ type Artist = {
   country: string | null;
 };
 
-type Album = {
+type LAlbum = {
   id: string;
   image: string | null;
   artistId: string;
@@ -43,10 +111,10 @@ type Album = {
   title: string;
   length: number | null;
   releaseDate: Date | null;
-  artist: Artist;
+  artist: LArtist;
 };
 
-type Track = {
+type LTrack = {
   id: string;
   image: string | null;
   artistId: string;
@@ -54,13 +122,13 @@ type Track = {
   length: number | null;
   albumId: string;
   position: number;
-  artist: Artist;
-  album: Omit<Album, "artist">;
+  artist: LArtist;
+  album: Omit<LAlbum, "artist">;
 };
 
-export type LikedArtists = Artist[];
-export type LikedAlbums = Album[];
-export type LikedTracks = Track[];
+export type LikedArtists = LArtist[];
+export type LikedAlbums = LAlbum[];
+export type LikedTracks = LTrack[];
 
 export type LikedItems =
   | { type: "artists"; items: LikedArtists }

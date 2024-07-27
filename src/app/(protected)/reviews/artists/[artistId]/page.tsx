@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { ArtistHeader } from "@/components/artist-header";
 import { Reviews } from "@/components/reviews";
 import { getUserArtistReview } from "@/data-access/user";
+import { currentUser } from "@/lib/auth";
 import { getArtistReviewsUseCase, getArtistUseCase } from "@/use-cases/artist";
 import { notFound } from "next/navigation";
 
@@ -16,7 +17,12 @@ export default async function ArtistReviewsPage({
     notFound();
   }
 
-  const reviews = await getArtistReviewsUseCase(artist.id);
+  const user = await currentUser();
+  if (!user) {
+    return null;
+  }
+
+  const reviews = await getArtistReviewsUseCase(artist.id, user.id);
   let showAddReview = true;
   const session = await auth();
   if (session && session.user.id) {

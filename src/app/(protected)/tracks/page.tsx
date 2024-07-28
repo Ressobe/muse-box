@@ -47,9 +47,22 @@ export default async function TracksPage() {
 
 type TrackCardProps = {
   track: {
-    title: string;
     id: string;
     image: string | null;
+    artistId: string;
+    title: string;
+    length: number | null;
+    albumId: string;
+    position: number;
+    album: {
+      id: string;
+      image: string | null;
+      artistId: string;
+      typeId: number;
+      title: string;
+      length: number | null;
+      releaseDate: Date | null;
+    };
   };
 };
 
@@ -62,7 +75,10 @@ function TrackCard({ track }: TrackCardProps) {
       <div>
         <Image src={track.image ?? ""} width={200} height={200} alt="dkdk" />
         <div className="pt-4">{track.title}</div>
-        <div className="text-muted-foreground">2012</div>
+        <div className="text-muted-foreground">
+          {track.album.releaseDate &&
+            new Date(track.album.releaseDate).getFullYear()}
+        </div>
       </div>
     </Link>
   );

@@ -122,7 +122,7 @@ export async function getArtistImage(artistId: string): Promise<string | null> {
 }
 
 export async function insertTacoHemingway() {
-  await createAlbumTypes();
+  // await createAlbumTypes();
   const artist = await createArtist({
     name: "Taco Hemingway v2",
     bio: "Polish rapper known for his unique style and storytelling.",

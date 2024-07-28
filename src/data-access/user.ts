@@ -6,10 +6,11 @@ import {
   reviewsAlbums,
   reviewsArtists,
   reviewsTracks,
+  userNotifications,
   userProfiles,
   users,
 } from "@/database/schema";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { Entity } from "@/types";
 
 export async function getUserByEmail(email: string) {
@@ -82,6 +83,15 @@ export async function getUserArtistReview(userId: string, artistId: string) {
     with: {
       user: true,
     },
+  });
+}
+
+export async function getUserArtistReview2(userId: string, artistId: string) {
+  return await db.query.reviewsArtists.findFirst({
+    where: and(
+      eq(reviewsArtists.userId, userId),
+      eq(reviewsArtists.entityId, artistId),
+    ),
   });
 }
 
@@ -178,4 +188,11 @@ export async function removeFavourite(userId: string, type: Entity) {
     default:
       throw new Error(`Unknown item type: ${type}`);
   }
+}
+
+export async function getUserNotifications(userId: string) {
+  return await db.query.userNotifications.findMany({
+    where: eq(userNotifications.ownerId, userId),
+    orderBy: desc(userNotifications.createdAt),
+  });
 }

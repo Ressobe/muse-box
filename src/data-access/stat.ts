@@ -65,7 +65,7 @@ export async function updateStatsNewRating(
     .set({
       ratingSum: newRatingSum,
       ratingCount: newReviewCount,
-      ratingAvg: Math.round(newAvgRating),
+      ratingAvg: Number(newAvgRating.toFixed(2)),
     })
     .where(eq(table.entityId, entityId));
 }

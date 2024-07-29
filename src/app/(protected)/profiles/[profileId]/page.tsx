@@ -1,5 +1,6 @@
 import { ActionFavouriteMenu } from "@/components/favs/action-favourite-menu";
 import { FavouriteMenu } from "@/components/favs/favourite-menu";
+import { FollowButton } from "@/components/follow-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { currentUser } from "@/lib/auth";
 import { getProfileUseCase } from "@/use-cases/profile";
@@ -8,6 +9,7 @@ import {
   getUserLikedAlbumsUseCase,
   getUserLikedArtistsUseCase,
   getUserLikedTracksUseCase,
+  isUserFollowingProfileUseCase,
 } from "@/use-cases/user";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,6 +32,10 @@ export default async function ProfilePage({
   const fav = await getUserFavourtiesUseCase(profileId);
 
   const isUserOwnsThisProfile = user.id === profileId;
+  const isUserFollowsThisProfile = await isUserFollowingProfileUseCase(
+    user.id,
+    profileId,
+  );
 
   let likedArists = null;
   let likedAlbums = null;
@@ -49,12 +55,18 @@ export default async function ProfilePage({
             <FaUser className="w-20 h-20" />
           </AvatarFallback>
         </Avatar>
-        <div className="text-left">
+        <div className="text-left space-y-6">
           <h1 className="font-bold text-4xl">{profile.user.name}</h1>
-          <ul className="flex py-4 gap-x-6"></ul>
+          {!isUserOwnsThisProfile && (
+            <FollowButton
+              defaultFollowState={isUserFollowsThisProfile}
+              followerId={user.id}
+              followingId={profile.userId}
+            />
+          )}
         </div>
       </div>
-      <ul className="grid grid-cols-3">
+      <ul className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:grid-cols-3">
         <li className="flex flex-col items-center gap-4">
           <h2 className="font-bold text-2xl">Favourite Artist</h2>
           {fav?.artist?.id ? (

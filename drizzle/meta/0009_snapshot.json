@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "a0f9891c-2d95-41ad-88a6-9170ba89d530",
-  "prevId": "15dddef1-8538-41b7-a2bd-5ef05e141a7e",
+  "id": "804ee245-1927-4d1a-94a4-93bbbe63fd18",
+  "prevId": "6d0564f3-5d4f-46fa-aff4-b7188c0f0cd8",
   "tables": {
     "account": {
       "name": "account",
@@ -87,10 +87,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "account_userId_user_id_fk": {
-          "name": "account_userId_user_id_fk",
+        "account_userId_users_id_fk": {
+          "name": "account_userId_users_id_fk",
           "tableFrom": "account",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "userId"
           ],
@@ -165,7 +165,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-07-12T07:36:44.808Z\"'"
+          "default": "'\"2024-07-29T18:25:23.290Z\"'"
         }
       },
       "indexes": {},
@@ -203,8 +203,8 @@
     "albumsStats": {
       "name": "albumsStats",
       "columns": {
-        "albumId": {
-          "name": "albumId",
+        "entityId": {
+          "name": "entityId",
           "type": "text",
           "primaryKey": true,
           "notNull": true,
@@ -225,21 +225,45 @@
           "notNull": false,
           "autoincrement": false,
           "default": 0
+        },
+        "rating": {
+          "name": "rating",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "ratingSum": {
+          "name": "ratingSum",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "ratingCount": {
+          "name": "ratingCount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "albumsStats_albumId_albums_id_fk": {
-          "name": "albumsStats_albumId_albums_id_fk",
+        "albumsStats_entityId_albums_id_fk": {
+          "name": "albumsStats_entityId_albums_id_fk",
           "tableFrom": "albumsStats",
           "tableTo": "albums",
           "columnsFrom": [
-            "albumId"
+            "entityId"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -327,8 +351,8 @@
     "artistsStats": {
       "name": "artistsStats",
       "columns": {
-        "artistId": {
-          "name": "artistId",
+        "entityId": {
+          "name": "entityId",
           "type": "text",
           "primaryKey": true,
           "notNull": true,
@@ -349,21 +373,45 @@
           "notNull": false,
           "autoincrement": false,
           "default": 0
+        },
+        "rating": {
+          "name": "rating",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "ratingSum": {
+          "name": "ratingSum",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "ratingCount": {
+          "name": "ratingCount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "artistsStats_artistId_artists_id_fk": {
-          "name": "artistsStats_artistId_artists_id_fk",
+        "artistsStats_entityId_artists_id_fk": {
+          "name": "artistsStats_entityId_artists_id_fk",
           "tableFrom": "artistsStats",
           "tableTo": "artists",
           "columnsFrom": [
-            "artistId"
+            "entityId"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -440,10 +488,10 @@
         }
       },
       "foreignKeys": {
-        "authenticator_userId_user_id_fk": {
-          "name": "authenticator_userId_user_id_fk",
+        "authenticator_userId_users_id_fk": {
+          "name": "authenticator_userId_users_id_fk",
           "tableFrom": "authenticator",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "userId"
           ],
@@ -485,10 +533,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "follows_followerId_user_id_fk": {
-          "name": "follows_followerId_user_id_fk",
+        "follows_followerId_users_id_fk": {
+          "name": "follows_followerId_users_id_fk",
           "tableFrom": "follows",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "followerId"
           ],
@@ -498,10 +546,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "follows_followingId_user_id_fk": {
-          "name": "follows_followingId_user_id_fk",
+        "follows_followingId_users_id_fk": {
+          "name": "follows_followingId_users_id_fk",
           "tableFrom": "follows",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "followingId"
           ],
@@ -604,6 +652,64 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "notificationRecipients": {
+      "name": "notificationRecipients",
+      "columns": {
+        "notificationId": {
+          "name": "notificationId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ownerId": {
+          "name": "ownerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "isRead": {
+          "name": "isRead",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "notificationRecipients_notificationId_userNotifications_id_fk": {
+          "name": "notificationRecipients_notificationId_userNotifications_id_fk",
+          "tableFrom": "notificationRecipients",
+          "tableTo": "userNotifications",
+          "columnsFrom": [
+            "notificationId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "notificationRecipients_ownerId_users_id_fk": {
+          "name": "notificationRecipients_ownerId_users_id_fk",
+          "tableFrom": "notificationRecipients",
+          "tableTo": "users",
+          "columnsFrom": [
+            "ownerId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "passwordResetTokens": {
       "name": "passwordResetTokens",
       "columns": {
@@ -641,6 +747,66 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "playlistItems": {
+      "name": "playlistItems",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "playlistId": {
+          "name": "playlistId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "itemType": {
+          "name": "itemType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "itemId": {
+          "name": "itemId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "unique_playlist_item_index": {
+          "name": "unique_playlist_item_index",
+          "columns": [
+            "playlistId",
+            "itemId"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "playlistItems_playlistId_playlists_id_fk": {
+          "name": "playlistItems_playlistId_playlists_id_fk",
+          "tableFrom": "playlistItems",
+          "tableTo": "playlists",
+          "columnsFrom": [
+            "playlistId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "playlists": {
       "name": "playlists",
       "columns": {
@@ -657,14 +823,21 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "playlists_userId_user_id_fk": {
-          "name": "playlists_userId_user_id_fk",
+        "playlists_userId_users_id_fk": {
+          "name": "playlists_userId_users_id_fk",
           "tableFrom": "playlists",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "userId"
           ],
@@ -695,8 +868,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "albumId": {
-          "name": "albumId",
+        "entityId": {
+          "name": "entityId",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -715,14 +888,30 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'\"2024-07-29T18:25:23.290Z\"'"
+        },
+        "entityType": {
+          "name": "entityType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'album'"
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "reviewsAlbums_userId_user_id_fk": {
-          "name": "reviewsAlbums_userId_user_id_fk",
+        "reviewsAlbums_userId_users_id_fk": {
+          "name": "reviewsAlbums_userId_users_id_fk",
           "tableFrom": "reviewsAlbums",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "userId"
           ],
@@ -732,12 +921,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "reviewsAlbums_albumId_albums_id_fk": {
-          "name": "reviewsAlbums_albumId_albums_id_fk",
+        "reviewsAlbums_entityId_albums_id_fk": {
+          "name": "reviewsAlbums_entityId_albums_id_fk",
           "tableFrom": "reviewsAlbums",
           "tableTo": "albums",
           "columnsFrom": [
-            "albumId"
+            "entityId"
           ],
           "columnsTo": [
             "id"
@@ -766,8 +955,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "artistId": {
-          "name": "artistId",
+        "entityId": {
+          "name": "entityId",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -786,14 +975,30 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'\"2024-07-29T18:25:23.290Z\"'"
+        },
+        "entityType": {
+          "name": "entityType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'artist'"
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "reviewsArtists_userId_user_id_fk": {
-          "name": "reviewsArtists_userId_user_id_fk",
+        "reviewsArtists_userId_users_id_fk": {
+          "name": "reviewsArtists_userId_users_id_fk",
           "tableFrom": "reviewsArtists",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "userId"
           ],
@@ -803,12 +1008,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "reviewsArtists_artistId_artists_id_fk": {
-          "name": "reviewsArtists_artistId_artists_id_fk",
+        "reviewsArtists_entityId_artists_id_fk": {
+          "name": "reviewsArtists_entityId_artists_id_fk",
           "tableFrom": "reviewsArtists",
           "tableTo": "artists",
           "columnsFrom": [
-            "artistId"
+            "entityId"
           ],
           "columnsTo": [
             "id"
@@ -837,8 +1042,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "trackId": {
-          "name": "trackId",
+        "entityId": {
+          "name": "entityId",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -857,14 +1062,30 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'\"2024-07-29T18:25:23.291Z\"'"
+        },
+        "entityType": {
+          "name": "entityType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'track'"
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "reviewsTracks_userId_user_id_fk": {
-          "name": "reviewsTracks_userId_user_id_fk",
+        "reviewsTracks_userId_users_id_fk": {
+          "name": "reviewsTracks_userId_users_id_fk",
           "tableFrom": "reviewsTracks",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "userId"
           ],
@@ -874,12 +1095,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "reviewsTracks_trackId_tracks_id_fk": {
-          "name": "reviewsTracks_trackId_tracks_id_fk",
+        "reviewsTracks_entityId_tracks_id_fk": {
+          "name": "reviewsTracks_entityId_tracks_id_fk",
           "tableFrom": "reviewsTracks",
           "tableTo": "tracks",
           "columnsFrom": [
-            "trackId"
+            "entityId"
           ],
           "columnsTo": [
             "id"
@@ -918,10 +1139,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "session_userId_user_id_fk": {
-          "name": "session_userId_user_id_fk",
+        "session_userId_users_id_fk": {
+          "name": "session_userId_users_id_fk",
           "tableFrom": "session",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "userId"
           ],
@@ -1025,8 +1246,8 @@
     "tracksStats": {
       "name": "tracksStats",
       "columns": {
-        "trackId": {
-          "name": "trackId",
+        "entityId": {
+          "name": "entityId",
           "type": "text",
           "primaryKey": true,
           "notNull": true,
@@ -1047,21 +1268,111 @@
           "notNull": false,
           "autoincrement": false,
           "default": 0
+        },
+        "rating": {
+          "name": "rating",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "ratingSum": {
+          "name": "ratingSum",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "ratingCount": {
+          "name": "ratingCount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "tracksStats_trackId_tracks_id_fk": {
-          "name": "tracksStats_trackId_tracks_id_fk",
+        "tracksStats_entityId_tracks_id_fk": {
+          "name": "tracksStats_entityId_tracks_id_fk",
           "tableFrom": "tracksStats",
           "tableTo": "tracks",
           "columnsFrom": [
-            "trackId"
+            "entityId"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "userNotifications": {
+      "name": "userNotifications",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "senderId": {
+          "name": "senderId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "resourceId": {
+          "name": "resourceId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'\"2024-07-29T18:25:23.291Z\"'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userNotifications_senderId_users_id_fk": {
+          "name": "userNotifications_senderId_users_id_fk",
+          "tableFrom": "userNotifications",
+          "tableTo": "users",
+          "columnsFrom": [
+            "senderId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -1102,10 +1413,10 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "userProfiles_userId_user_id_fk": {
-          "name": "userProfiles_userId_user_id_fk",
+        "userProfiles_userId_users_id_fk": {
+          "name": "userProfiles_userId_users_id_fk",
           "tableFrom": "userProfiles",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "userId"
           ],
@@ -1158,8 +1469,8 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "user": {
-      "name": "user",
+    "users": {
+      "name": "users",
       "columns": {
         "id": {
           "name": "id",

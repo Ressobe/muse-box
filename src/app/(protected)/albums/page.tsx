@@ -47,9 +47,12 @@ export default async function AlbumsPage() {
 
 type TAlbum = {
   id: string;
-  artistId: string | null;
-  title: string;
   image: string | null;
+  artistId: string;
+  typeId: number;
+  title: string;
+  length: number | null;
+  releaseDate: Date | null;
 };
 
 type AlbumCardProps = {
@@ -65,7 +68,9 @@ function AlbumCard({ album }: AlbumCardProps) {
       <div>
         <Image src={album.image ?? ""} width={200} height={200} alt="dkdk" />
         <div className="pt-4">{album.title}</div>
-        <div className="text-muted-foreground">2016</div>
+        <div className="text-muted-foreground">
+          {album.releaseDate && new Date(album.releaseDate).getFullYear()}
+        </div>
       </div>
     </Link>
   );

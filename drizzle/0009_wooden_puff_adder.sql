@@ -6,4 +6,6 @@
 
  Due to that we don't generate migration automatically and it has to be done manually
 */--> statement-breakpoint
-CREATE UNIQUE INDEX `unique_playlist_item_index` ON `playlistItems` (`playlistId`,`itemId`);
+ALTER TABLE `reviewsAlbums` ADD `entityType` text DEFAULT 'album' NOT NULL;--> statement-breakpoint
+ALTER TABLE `reviewsArtists` ADD `entityType` text DEFAULT 'artist' NOT NULL;--> statement-breakpoint
+ALTER TABLE `reviewsTracks` ADD `entityType` text DEFAULT 'track' NOT NULL;

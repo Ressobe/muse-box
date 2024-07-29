@@ -1,18 +1,31 @@
 import { getAlbum, getAlbumById } from "@/data-access/album";
 import { getArtist, getArtistById } from "@/data-access/artist";
+import { getFollow } from "@/data-access/follow";
 import { getPlaylistByUserIdAndNameWithItems } from "@/data-access/playlist";
 import { createProfile } from "@/data-access/profile";
 import { getTrack, getTrackById } from "@/data-access/track";
 import {
   createUser,
+  getUserAlbumReview,
   getUserArtistReview,
+  getUserArtistReview2,
   getUserById,
   getUserFavourite,
+  getUserNotifications,
   getUserPlaylists,
+  getUserTrackReview,
   removeFavourite,
   updateFavourite,
 } from "@/data-access/user";
 import { Entity, entityToPlaylists } from "@/types";
+import {
+  AlbumReviewNotification,
+  ArtistReviewNotification,
+  FollowNotification,
+  NotificationT,
+  notificationTypes,
+  TrackReviewNotification,
+} from "@/types/notification";
 
 export async function createUserUseCase(
   email: string,
@@ -156,4 +169,81 @@ export async function removeFavouriteUseCase(type: Entity, userId: string) {
   }
 
   return await removeFavourite(userId, type);
+}
+
+export async function isUserFollowingProfileUseCase(
+  userId: string,
+  profileId: string,
+) {
+  const follow = await getFollow(userId, profileId);
+  return !!follow;
+}
+
+export async function getUserNotificationsUseCase(
+  userId: string,
+): Promise<NotificationT[]> {
+  const notifications = await getUserNotifications(userId);
+
+  let notificationsWithResource = await Promise.all(
+    notifications.map(async (item) => {
+      switch (item.type) {
+        case notificationTypes.FOLLOW: {
+          const sender = await getUserById(item.senderId);
+
+          if (!sender) {
+            throw new Error("Sender doesn't exist!");
+          }
+
+          return {
+            ...item,
+            sender,
+          } as FollowNotification;
+        }
+        case notificationTypes.ARTIST_REVIEW: {
+          const artistReview = await getUserArtistReview2(
+            item.senderId,
+            item.resourceId,
+          );
+          if (!artistReview) {
+            throw new Error("Artist doesn't exist!");
+          }
+          return {
+            ...item,
+            artistReview,
+          } as ArtistReviewNotification;
+        }
+        case notificationTypes.ALBUM_REVIEW: {
+          const albumReview = await getUserAlbumReview(
+            item.senderId,
+            item.resourceId,
+          );
+          if (!albumReview) {
+            throw new Error("Album doesn't exist!");
+          }
+          return {
+            ...item,
+            albumReview,
+          } as AlbumReviewNotification;
+        }
+        case notificationTypes.TRACK_REVIEW: {
+          const trackReview = await getUserTrackReview(
+            item.senderId,
+            item.resourceId,
+          );
+          if (!trackReview) {
+            throw new Error("Track doesn't exist!");
+          }
+          return {
+            ...item,
+            trackReview,
+          } as TrackReviewNotification;
+        }
+        default: {
+          throw new Error("Something went wrong!");
+        }
+      }
+    }),
+  );
+
+  return notificationsWithResource;
 }

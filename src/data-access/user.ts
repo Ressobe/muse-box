@@ -2,6 +2,7 @@ import { db } from "@/database/db";
 import * as z from "zod";
 import { SettingsSchema } from "@/schemas/auth";
 import {
+  notificationRecipients,
   playlists,
   reviewsAlbums,
   reviewsArtists,
@@ -11,6 +12,8 @@ import {
 } from "@/database/schema";
 import { and, eq } from "drizzle-orm";
 import { Entity } from "@/types";
+
+const LIMIT = 5;
 
 export async function getUserByEmail(email: string) {
   return await db.query.users.findFirst({
@@ -82,6 +85,15 @@ export async function getUserArtistReview(userId: string, artistId: string) {
     with: {
       user: true,
     },
+  });
+}
+
+export async function getUserArtistReview2(userId: string, artistId: string) {
+  return await db.query.reviewsArtists.findFirst({
+    where: and(
+      eq(reviewsArtists.userId, userId),
+      eq(reviewsArtists.entityId, artistId),
+    ),
   });
 }
 
@@ -178,4 +190,51 @@ export async function removeFavourite(userId: string, type: Entity) {
     default:
       throw new Error(`Unknown item type: ${type}`);
   }
+}
+
+export async function getUserNotifications(userId: string) {
+  const notifications = await db.query.notificationRecipients.findMany({
+    where: eq(notificationRecipients.ownerId, userId),
+    with: {
+      notification: true,
+    },
+  });
+  return notifications.map((item) => item.notification);
+}
+
+export async function getUserLatestReviews(userId: string) {
+  const artistReviews = await db.query.reviewsArtists.findMany({
+    where: eq(reviewsArtists.userId, userId),
+    with: {
+      artist: true,
+    },
+    limit: LIMIT,
+  });
+
+  const albumsReviews = await db.query.reviewsAlbums.findMany({
+    where: eq(reviewsAlbums.userId, userId),
+    with: {
+      album: true,
+    },
+    limit: LIMIT,
+  });
+
+  const trackReviews = await db.query.reviewsTracks.findMany({
+    where: eq(reviewsTracks.userId, userId),
+    with: {
+      track: true,
+    },
+    limit: LIMIT,
+  });
+
+  const allReviews = [...artistReviews, ...albumsReviews, ...trackReviews];
+
+  return allReviews
+    .sort((a, b) => {
+      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+
+      return dateB - dateA;
+    })
+    .slice(0, 5);
 }

@@ -1,11 +1,11 @@
-CREATE TABLE `playlistItems` (
-	`id` text PRIMARY KEY NOT NULL,
-	`playlistId` text NOT NULL,
-	`itemType` text NOT NULL,
-	`itemId` text NOT NULL,
-	FOREIGN KEY (`playlistId`) REFERENCES `playlists`(`id`) ON UPDATE no action ON DELETE cascade
+CREATE TABLE `notificationRecipients` (
+	`notificationId` text NOT NULL,
+	`userId` text NOT NULL,
+	FOREIGN KEY (`notificationId`) REFERENCES `userNotifications`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
+DROP TABLE `userActivities`;--> statement-breakpoint
 /*
  SQLite does not support "Set default to column" out of the box, we do not generate automatic migration for that, so it has to be done manually
  Please refer to: https://www.techonthenet.com/sqlite/tables/alter_table.php
@@ -13,5 +13,4 @@ CREATE TABLE `playlistItems` (
                   https://stackoverflow.com/questions/2083543/modify-a-columns-type-in-sqlite3
 
  Due to that we don't generate migration automatically and it has to be done manually
-*/--> statement-breakpoint
-ALTER TABLE `playlists` ADD `name` text NOT NULL;
+*/

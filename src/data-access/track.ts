@@ -5,7 +5,11 @@ import { desc, eq } from "drizzle-orm";
 import { createTrackStat } from "./stat";
 
 export async function getTracks() {
-  return await db.query.tracks.findMany();
+  return await db.query.tracks.findMany({
+    with: {
+      album: true,
+    },
+  });
 }
 
 export async function getTrackById(trackId: string) {

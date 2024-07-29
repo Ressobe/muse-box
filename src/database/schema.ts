@@ -1,3 +1,4 @@
+import { NotificationType } from "@/types/notification";
 import { relations } from "drizzle-orm";
 import {
   integer,
@@ -18,7 +19,7 @@ export const PlaylistItemType = {
 type PlaylistItemType =
   (typeof PlaylistItemType)[keyof typeof PlaylistItemType];
 
-export const users = sqliteTable("user", {
+export const users = sqliteTable("users", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
@@ -304,6 +305,7 @@ export const reviewsArtists = sqliteTable("reviewsArtists", {
   rating: integer("rating").notNull(),
   comment: text("comment"),
   createdAt: integer("createdAt", { mode: "timestamp" }).default(new Date()),
+  entityType: text("entityType").notNull().default("artist"),
 });
 
 export const reviewsArtistsRelations = relations(reviewsArtists, ({ one }) => ({
@@ -330,10 +332,11 @@ export const reviewsAlbums = sqliteTable("reviewsAlbums", {
   rating: integer("rating").notNull(),
   comment: text("comment"),
   createdAt: integer("createdAt", { mode: "timestamp" }).default(new Date()),
+  entityType: text("entityType").notNull().default("album"),
 });
 
 export const reviewsAlbumsRelations = relations(reviewsAlbums, ({ one }) => ({
-  artist: one(albums, {
+  album: one(albums, {
     fields: [reviewsAlbums.entityId],
     references: [albums.id],
   }),
@@ -356,10 +359,11 @@ export const reviewsTracks = sqliteTable("reviewsTracks", {
   rating: integer("rating").notNull(),
   comment: text("comment"),
   createdAt: integer("createdAt", { mode: "timestamp" }).default(new Date()),
+  entityType: text("entityType").notNull().default("track"),
 });
 
 export const reviewsTracksRelations = relations(reviewsTracks, ({ one }) => ({
-  artist: one(tracks, {
+  track: one(tracks, {
     fields: [reviewsTracks.entityId],
     references: [tracks.id],
   }),
@@ -415,66 +419,48 @@ export const playlistsRelations = relations(playlists, ({ one, many }) => ({
   items: many(playlistItems),
 }));
 
-export const activityTypes = {
-  ARTIST_RATING: "artist_rating",
-  ALBUM_RATING: "album_rating",
-  TRACK_RATING: "track_rating",
-  LIKE_TRACK: "like_track",
-};
-
-type ActivityType = (typeof activityTypes)[keyof typeof activityTypes];
-
-export const userActivities = sqliteTable("userActivities", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  userId: text("userId")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  activityType: text("activityType").$type<ActivityType>().notNull(),
-  entityId: text("entityId").notNull(), // ID powiązanego obiektu, np. artysty, albumu, utworu
-  rating: integer("rating"), // Opcjonalnie, używane dla ocen
-  comment: text("comment"), // Opcjonalnie, używane dla komentarzy
-  createdAt: integer("createdAt", { mode: "timestamp" }).default(new Date()), // Data aktywności
-});
-
-export const userActivitiesRelations = relations(userActivities, ({ one }) => ({
-  user: one(users, {
-    fields: [userActivities.userId],
-    references: [users.id],
-  }),
-}));
-
-// Typy powiadomień (dostosuj do swoich potrzeb)
-export const notificationTypes = {
-  COMMENT: "comment", // Powiadomienie o nowym komentarzu
-  LIKE: "like", // Powiadomienie o nowym polubieniu
-  FOLLOW: "follow", // Powiadomienie o nowym obserwującym
-  // Dodaj inne typy powiadomień, które są potrzebne
-};
-
-type NotificationType =
-  (typeof notificationTypes)[keyof typeof notificationTypes];
-
 export const userNotifications = sqliteTable("userNotifications", {
   id: text("id")
     .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()), // Unikalny identyfikator powiadomienia
-  userId: text("userId")
+    .$defaultFn(() => crypto.randomUUID()),
+  senderId: text("senderId")
     .notNull()
-    .references(() => users.id, { onDelete: "cascade" }), // Identyfikator użytkownika
-  type: text("type").$type<NotificationType>().notNull(), // Typ powiadomienia
-  message: text("message").notNull(), // Treść powiadomienia
-  resourceId: text("resourceId"), // Identyfikator zasobu (opcjonalny)
-  isRead: integer("isRead", { mode: "boolean" }).default(false),
-  createdAt: integer("createdAt", { mode: "timestamp" }).default(new Date()), // Data i czas utworzenia powiadomienia
+    .references(() => users.id, { onDelete: "cascade" }),
+  type: text("type").$type<NotificationType>().notNull(),
+  resourceId: text("resourceId").notNull(),
+  message: text("message").notNull(),
+  createdAt: integer("createdAt", { mode: "timestamp" }).default(new Date()),
 });
 
 export const userNotificationsRelations = relations(
   userNotifications,
   ({ one }) => ({
-    user: one(users, {
-      fields: [userNotifications.userId],
+    sender: one(users, {
+      fields: [userNotifications.senderId],
+      references: [users.id],
+    }),
+  }),
+);
+
+export const notificationRecipients = sqliteTable("notificationRecipients", {
+  notificationId: text("notificationId")
+    .notNull()
+    .references(() => userNotifications.id, { onDelete: "cascade" }),
+  ownerId: text("ownerId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  isRead: integer("isRead", { mode: "boolean" }).default(false),
+});
+
+export const notificationRecipientsRelations = relations(
+  notificationRecipients,
+  ({ one }) => ({
+    notification: one(userNotifications, {
+      fields: [notificationRecipients.notificationId],
+      references: [userNotifications.id],
+    }),
+    owner: one(users, {
+      fields: [notificationRecipients.ownerId],
       references: [users.id],
     }),
   }),

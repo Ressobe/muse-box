@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { UserAvatar } from "@/components/user-avatar";
 import Link from "next/link";
 import { currentUser } from "@/lib/auth";
-import { Notifications } from "@/components/notifications";
+import { Notifications } from "@/components/notification/notifications";
 
 export async function Topbar() {
   const user = await currentUser();

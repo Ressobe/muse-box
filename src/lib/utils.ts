@@ -56,3 +56,44 @@ export function getFullAlbumTime(
   }
   return fullTime;
 }
+
+function pluralize(value: number, singular: string, plural?: string): string {
+  return value === 1 ? singular : plural || singular + "s";
+}
+
+export function formatTimeDiff(createdAt: Date): string {
+  const currentTime = new Date();
+  const timeDiff = Math.abs(currentTime.getTime() - createdAt.getTime());
+  const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+  const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+
+  switch (true) {
+    case hours === 0 && minutes === 0:
+      return "Just now";
+
+    case hours === 0:
+      return `${minutes} ${pluralize(minutes, "minute")} ago`;
+
+    case hours === 1:
+      return `1 ${pluralize(hours, "hour")} ago`;
+
+    case hours < 24:
+      return `${hours} ${pluralize(hours, "hour")} ago`;
+
+    case hours < 24 * 7:
+      const days = Math.floor(hours / 24);
+      return `${days} ${pluralize(days, "day")} ago`;
+
+    case hours < 24 * 30:
+      const weeks = Math.floor(hours / (24 * 7));
+      return `${weeks} ${pluralize(weeks, "week")} ago`;
+
+    case hours < 24 * 365:
+      const months = Math.floor(hours / (24 * 30));
+      return `${months} ${pluralize(months, "month")} ago`;
+
+    default:
+      const years = Math.floor(hours / (24 * 365));
+      return `${years} ${pluralize(years, "year")} ago`;
+  }
+}

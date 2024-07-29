@@ -8,6 +8,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { getUserNotificationsUseCase } from "@/use-cases/user";
 import { notificationTypes } from "@/types/notification";
+import { FollowNotification } from "./follow-notification";
+import { ArtistReviewNotification } from "./artist-review-notification";
 
 export async function Notifications() {
   const user = await currentUser();
@@ -22,12 +24,12 @@ export async function Notifications() {
 
   const renderContent = () => {
     return (
-      <ul className="flex flex-col">
+      <ul className="flex flex-col gap-2">
         {notifications.map((item) => {
           switch (item.type) {
             case notificationTypes.ARTIST_REVIEW:
               return (
-                <li key={item.id}>Artist Review: {item.artistReview.rating}</li>
+                <ArtistReviewNotification key={item.id} notification={item} />
               );
             case notificationTypes.ALBUM_REVIEW:
               return (
@@ -38,7 +40,7 @@ export async function Notifications() {
                 <li key={item.id}>Track Review: {item.trackReview.rating}</li>
               );
             case notificationTypes.FOLLOW:
-              return <li key={item.id}>New follower! {item.resourceId}</li>;
+              return <FollowNotification key={item.id} notification={item} />;
           }
         })}
       </ul>
@@ -52,7 +54,9 @@ export async function Notifications() {
           <Bell className="w-8 h-8" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-40">{renderContent()}</PopoverContent>
+      <PopoverContent className="w-fit mt-1 mr-2">
+        {renderContent()}
+      </PopoverContent>
     </Popover>
   );
 }

@@ -2,15 +2,15 @@ import { db } from "@/database/db";
 import * as z from "zod";
 import { SettingsSchema } from "@/schemas/auth";
 import {
+  notificationRecipients,
   playlists,
   reviewsAlbums,
   reviewsArtists,
   reviewsTracks,
-  userNotifications,
   userProfiles,
   users,
 } from "@/database/schema";
-import { and, desc, eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { Entity } from "@/types";
 
 export async function getUserByEmail(email: string) {
@@ -191,8 +191,11 @@ export async function removeFavourite(userId: string, type: Entity) {
 }
 
 export async function getUserNotifications(userId: string) {
-  return await db.query.userNotifications.findMany({
-    where: eq(userNotifications.ownerId, userId),
-    orderBy: desc(userNotifications.createdAt),
+  const notifications = await db.query.notificationRecipients.findMany({
+    where: eq(notificationRecipients.ownerId, userId),
+    with: {
+      notification: true,
+    },
   });
+  return notifications.map((item) => item.notification);
 }

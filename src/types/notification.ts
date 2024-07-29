@@ -9,19 +9,28 @@ export const notificationTypes = {
 export type NotificationType =
   (typeof notificationTypes)[keyof typeof notificationTypes];
 
-interface NotificationBase {
+export interface NotificationBase {
   id: string;
   type: NotificationType;
   createdAt: Date | null;
-  ownerId: string;
   senderId: string;
   resourceId: string;
   message: string;
   isRead: boolean | null;
 }
 
+interface Sender {
+  id: string;
+  name: string | null;
+  image: string | null;
+  email: string;
+  password: string | null;
+  emailVerified: Date | null;
+}
+
 export interface FollowNotification extends NotificationBase {
   type: typeof notificationTypes.FOLLOW;
+  sender: Sender;
 }
 
 interface ArtistReview {

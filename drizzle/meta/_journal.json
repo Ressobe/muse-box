@@ -22,6 +22,48 @@
       "when": 1722191799845,
       "tag": "0002_small_centennial",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1722234427409,
+      "tag": "0003_far_psylocke",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1722236845655,
+      "tag": "0004_chilly_quentin_quire",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1722236862714,
+      "tag": "0005_bored_firestar",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1722238721147,
+      "tag": "0006_chubby_wolverine",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1722239606335,
+      "tag": "0007_striped_frog_thor",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1722239743542,
+      "tag": "0008_daffy_reptil",
+      "breakpoints": true
     }
   ]
 }

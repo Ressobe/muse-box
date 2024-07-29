@@ -416,50 +416,16 @@ export const playlistsRelations = relations(playlists, ({ one, many }) => ({
   items: many(playlistItems),
 }));
 
-export const activityTypes = {
-  ARTIST_RATING: "artist_rating",
-  ALBUM_RATING: "album_rating",
-  TRACK_RATING: "track_rating",
-  LIKE_TRACK: "like_track",
-};
-
-type ActivityType = (typeof activityTypes)[keyof typeof activityTypes];
-
-export const userActivities = sqliteTable("userActivities", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-  userId: text("userId")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
-  activityType: text("activityType").$type<ActivityType>().notNull(),
-  entityId: text("entityId").notNull(),
-  rating: integer("rating"),
-  comment: text("comment"),
-  createdAt: integer("createdAt", { mode: "timestamp" }).default(new Date()),
-});
-
-export const userActivitiesRelations = relations(userActivities, ({ one }) => ({
-  user: one(users, {
-    fields: [userActivities.userId],
-    references: [users.id],
-  }),
-}));
-
 export const userNotifications = sqliteTable("userNotifications", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  ownerId: text("ownerId")
-    .notNull()
-    .references(() => users.id, { onDelete: "cascade" }),
   senderId: text("senderId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   type: text("type").$type<NotificationType>().notNull(),
   resourceId: text("resourceId").notNull(),
   message: text("message").notNull(),
-  isRead: integer("isRead", { mode: "boolean" }).default(false),
   createdAt: integer("createdAt", { mode: "timestamp" }).default(new Date()),
 });
 
@@ -468,6 +434,30 @@ export const userNotificationsRelations = relations(
   ({ one }) => ({
     sender: one(users, {
       fields: [userNotifications.senderId],
+      references: [users.id],
+    }),
+  }),
+);
+
+export const notificationRecipients = sqliteTable("notificationRecipients", {
+  notificationId: text("notificationId")
+    .notNull()
+    .references(() => userNotifications.id, { onDelete: "cascade" }),
+  ownerId: text("ownerId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  isRead: integer("isRead", { mode: "boolean" }).default(false),
+});
+
+export const notificationRecipientsRelations = relations(
+  notificationRecipients,
+  ({ one }) => ({
+    notification: one(userNotifications, {
+      fields: [notificationRecipients.notificationId],
+      references: [userNotifications.id],
+    }),
+    owner: one(users, {
+      fields: [notificationRecipients.ownerId],
       references: [users.id],
     }),
   }),

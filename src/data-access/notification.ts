@@ -1,24 +1,28 @@
 import { db } from "@/database/db";
-import { userNotifications } from "@/database/schema";
+import {
+  follows,
+  notificationRecipients,
+  userNotifications,
+} from "@/database/schema";
 import { NotificationType } from "@/types/notification";
 import { and, eq } from "drizzle-orm";
 
 export async function createNotification(
   creatorId: string,
-  reciverId: string,
+  resourceId: string,
   type: NotificationType,
   message: string,
 ) {
-  return await db
+  const [notification] = await db
     .insert(userNotifications)
     .values({
-      ownerId: reciverId,
-      resourceId: creatorId,
+      resourceId: resourceId,
       senderId: creatorId,
       message: message,
       type: type,
     })
     .returning();
+  return notification;
 }
 
 export async function getNotification(
@@ -26,11 +30,55 @@ export async function getNotification(
   reciverId: string,
   type: NotificationType,
 ) {
-  return db.query.userNotifications.findFirst({
-    where: and(
-      eq(userNotifications.ownerId, reciverId),
-      eq(userNotifications.resourceId, creatorId),
-      eq(userNotifications.type, type),
-    ),
+  const notification = await db
+    .select({
+      notificationId: userNotifications.id,
+      senderId: userNotifications.senderId,
+      type: userNotifications.type,
+      resourceId: userNotifications.resourceId,
+      message: userNotifications.message,
+      createdAt: userNotifications.createdAt,
+      isRead: notificationRecipients.isRead,
+    })
+    .from(userNotifications)
+    .innerJoin(
+      notificationRecipients,
+      eq(userNotifications.id, notificationRecipients.notificationId),
+    )
+    .where(
+      and(
+        eq(userNotifications.senderId, creatorId),
+        eq(userNotifications.type, type),
+        eq(notificationRecipients.ownerId, reciverId),
+      ),
+    )
+    .limit(1);
+
+  return notification.length > 0 ? notification[0] : null;
+}
+
+export async function sendNotificationToUser(
+  notificationId: string,
+  reciverId: string,
+) {
+  await db.insert(notificationRecipients).values({
+    notificationId,
+    ownerId: reciverId,
   });
+}
+
+export async function sendNotificationToFollowers(
+  notificationId: string,
+  senderId: string,
+) {
+  const followers = await db.query.follows.findMany({
+    where: eq(follows.followingId, senderId),
+  });
+
+  for (const item of followers) {
+    await db.insert(notificationRecipients).values({
+      notificationId,
+      ownerId: item.followerId,
+    });
+  }
 }

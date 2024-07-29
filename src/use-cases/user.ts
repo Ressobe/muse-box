@@ -23,7 +23,6 @@ import {
   ArtistReviewNotification,
   FollowNotification,
   NotificationT,
-  NotificationType,
   notificationTypes,
   TrackReviewNotification,
 } from "@/types/notification";
@@ -189,8 +188,15 @@ export async function getUserNotificationsUseCase(
     notifications.map(async (item) => {
       switch (item.type) {
         case notificationTypes.FOLLOW: {
+          const sender = await getUserById(item.senderId);
+
+          if (!sender) {
+            throw new Error("Sender doesn't exist!");
+          }
+
           return {
             ...item,
+            sender,
           } as FollowNotification;
         }
         case notificationTypes.ARTIST_REVIEW: {
@@ -199,7 +205,7 @@ export async function getUserNotificationsUseCase(
             item.resourceId,
           );
           if (!artistReview) {
-            throw Error("Artist doesn't exist!");
+            throw new Error("Artist doesn't exist!");
           }
           return {
             ...item,
@@ -212,7 +218,7 @@ export async function getUserNotificationsUseCase(
             item.resourceId,
           );
           if (!albumReview) {
-            throw Error("Album doesn't exist!");
+            throw new Error("Album doesn't exist!");
           }
           return {
             ...item,
@@ -225,7 +231,7 @@ export async function getUserNotificationsUseCase(
             item.resourceId,
           );
           if (!trackReview) {
-            throw Error("Track doesn't exist!");
+            throw new Error("Track doesn't exist!");
           }
           return {
             ...item,
@@ -233,7 +239,7 @@ export async function getUserNotificationsUseCase(
           } as TrackReviewNotification;
         }
         default: {
-          throw Error("Something went wrong!");
+          throw new Error("Something went wrong!");
         }
       }
     }),

@@ -1,5 +1,10 @@
+import {
+  createNotification,
+  sendNotificationToFollowers,
+} from "@/data-access/notification";
 import { deleteReview, insertReview, updateReview } from "@/data-access/review";
 import { Entity } from "@/types";
+import { notificationTypes } from "@/types/notification";
 
 export async function createReviewUseCase(
   entityId: string,
@@ -8,11 +13,41 @@ export async function createReviewUseCase(
   rating: number,
   type: Entity,
 ) {
+  console.log(type);
   // parse with drizzle zod
   const review = await insertReview(entityId, userId, comment, rating, type);
   if (!review) {
     return null;
   }
+
+  let notiType = null;
+
+  switch (type) {
+    case "artist": {
+      notiType = notificationTypes.ARTIST_REVIEW;
+      break;
+    }
+    case "album": {
+      notiType = notificationTypes.ALBUM_REVIEW;
+      break;
+    }
+    case "track": {
+      notiType = notificationTypes.TRACK_REVIEW;
+      break;
+    }
+  }
+
+  if (notiType) {
+    console.log("notiType jmsd", notiType);
+    const notification = await createNotification(
+      userId,
+      entityId,
+      notiType,
+      "New review",
+    );
+    sendNotificationToFollowers(notification.id, userId);
+  }
+
   return review;
 }
 

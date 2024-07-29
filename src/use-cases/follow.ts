@@ -2,6 +2,7 @@ import { createFollow, deleteFollow } from "@/data-access/follow";
 import {
   createNotification,
   getNotification,
+  sendNotificationToUser,
 } from "@/data-access/notification";
 import { notificationTypes } from "@/types/notification";
 
@@ -18,12 +19,12 @@ export async function followUseCase(followerId: string, followingId: string) {
   );
 
   if (!notification) {
-    await createNotification(
+    const notification = await createNotification(
       followerId,
-      followingId,
       notificationTypes.FOLLOW,
       "New follower",
     );
+    await sendNotificationToUser(notification.id, followingId);
   }
 
   return follow;

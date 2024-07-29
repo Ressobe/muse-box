@@ -64,6 +64,13 @@
       "when": 1722239743542,
       "tag": "0008_daffy_reptil",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1722277523315,
+      "tag": "0009_wooden_puff_adder",
+      "breakpoints": true
     }
   ]
 }

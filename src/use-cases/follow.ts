@@ -21,6 +21,7 @@ export async function followUseCase(followerId: string, followingId: string) {
   if (!notification) {
     const notification = await createNotification(
       followerId,
+      followerId,
       notificationTypes.FOLLOW,
       "New follower",
     );

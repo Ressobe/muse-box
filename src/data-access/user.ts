@@ -13,6 +13,8 @@ import {
 import { and, eq } from "drizzle-orm";
 import { Entity } from "@/types";
 
+const LIMIT = 5;
+
 export async function getUserByEmail(email: string) {
   return await db.query.users.findFirst({
     where: eq(users.email, email),
@@ -198,4 +200,41 @@ export async function getUserNotifications(userId: string) {
     },
   });
   return notifications.map((item) => item.notification);
+}
+
+export async function getUserLatestReviews(userId: string) {
+  const artistReviews = await db.query.reviewsArtists.findMany({
+    where: eq(reviewsArtists.userId, userId),
+    with: {
+      artist: true,
+    },
+    limit: LIMIT,
+  });
+
+  const albumsReviews = await db.query.reviewsAlbums.findMany({
+    where: eq(reviewsAlbums.userId, userId),
+    with: {
+      album: true,
+    },
+    limit: LIMIT,
+  });
+
+  const trackReviews = await db.query.reviewsTracks.findMany({
+    where: eq(reviewsTracks.userId, userId),
+    with: {
+      track: true,
+    },
+    limit: LIMIT,
+  });
+
+  const allReviews = [...artistReviews, ...albumsReviews, ...trackReviews];
+
+  return allReviews
+    .sort((a, b) => {
+      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+
+      return dateB - dateA;
+    })
+    .slice(0, 5);
 }

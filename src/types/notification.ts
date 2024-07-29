@@ -16,7 +16,6 @@ export interface NotificationBase {
   senderId: string;
   resourceId: string;
   message: string;
-  isRead: boolean | null;
 }
 
 interface Sender {

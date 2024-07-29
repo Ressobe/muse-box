@@ -305,6 +305,7 @@ export const reviewsArtists = sqliteTable("reviewsArtists", {
   rating: integer("rating").notNull(),
   comment: text("comment"),
   createdAt: integer("createdAt", { mode: "timestamp" }).default(new Date()),
+  entityType: text("entityType").notNull().default("artist"),
 });
 
 export const reviewsArtistsRelations = relations(reviewsArtists, ({ one }) => ({
@@ -331,10 +332,11 @@ export const reviewsAlbums = sqliteTable("reviewsAlbums", {
   rating: integer("rating").notNull(),
   comment: text("comment"),
   createdAt: integer("createdAt", { mode: "timestamp" }).default(new Date()),
+  entityType: text("entityType").notNull().default("album"),
 });
 
 export const reviewsAlbumsRelations = relations(reviewsAlbums, ({ one }) => ({
-  artist: one(albums, {
+  album: one(albums, {
     fields: [reviewsAlbums.entityId],
     references: [albums.id],
   }),
@@ -357,10 +359,11 @@ export const reviewsTracks = sqliteTable("reviewsTracks", {
   rating: integer("rating").notNull(),
   comment: text("comment"),
   createdAt: integer("createdAt", { mode: "timestamp" }).default(new Date()),
+  entityType: text("entityType").notNull().default("track"),
 });
 
 export const reviewsTracksRelations = relations(reviewsTracks, ({ one }) => ({
-  artist: one(tracks, {
+  track: one(tracks, {
     fields: [reviewsTracks.entityId],
     references: [tracks.id],
   }),

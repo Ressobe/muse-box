@@ -71,6 +71,20 @@
       "when": 1722277523315,
       "tag": "0009_wooden_puff_adder",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1722367448507,
+      "tag": "0010_slippery_roughhouse",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1722367754024,
+      "tag": "0011_modern_ultimates",
+      "breakpoints": true
     }
   ]
 }

@@ -14,6 +14,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
+import { RecentActivity } from "./recent-activity";
 
 export default async function ProfilePage({
   params,
@@ -177,6 +178,7 @@ export default async function ProfilePage({
           )}
         </li>
       </ul>
+      <RecentActivity profileId={user.id} />
     </section>
   );
 }

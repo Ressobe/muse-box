@@ -178,7 +178,7 @@ export default async function ProfilePage({
           )}
         </li>
       </ul>
-      <RecentActivity profileId={user.id} />
+      <RecentActivity profileId={profileId} />
     </section>
   );
 }

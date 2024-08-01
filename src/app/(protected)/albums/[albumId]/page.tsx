@@ -65,8 +65,8 @@ export default async function AlbumPage({
             <div>{album.albumType.name}</div>
             <h1 className="font-bold text-5xl">{album.title}</h1>
           </div>
-          <div className="flex items-center gap-x-4  text-2xl">
-            <span className="text-yellow-500">★</span>
+          <div className="flex items-center gap-x-4 text-3xl">
+            <span className="text-yellow-500 ">★</span>
             {album.stats.ratingCount === 0 ? (
               <span className="text-md">Not rated yet!</span>
             ) : (

@@ -97,3 +97,25 @@ export function formatTimeDiff(createdAt: Date): string {
       return `${years} ${pluralize(years, "year")} ago`;
   }
 }
+
+export function formatDateToShortMonthDayYear(date: Date) {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+
+  return [`${day < 10 ? "0" + day : day}`, `${month}`, `${year}`];
+}

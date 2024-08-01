@@ -403,7 +403,6 @@ export const playlistItems = sqliteTable(
   }),
 );
 
-// Relations for playlist items
 export const playlistItemsRelations = relations(playlistItems, ({ one }) => ({
   playlist: one(playlists, {
     fields: [playlistItems.playlistId],

@@ -12,6 +12,7 @@ import {
 } from "@/database/schema";
 import { and, eq } from "drizzle-orm";
 import { Entity } from "@/types";
+import { TAlbumReview, TArtistReview, TTrackReview } from "@/types/review";
 
 const LIMIT = 5;
 
@@ -202,7 +203,9 @@ export async function getUserNotifications(userId: string) {
   return notifications.map((item) => item.notification);
 }
 
-export async function getUserLatestReviews(userId: string) {
+export async function getUserLatestReviews(
+  userId: string,
+): Promise<(TArtistReview | TAlbumReview | TTrackReview)[]> {
   const artistReviews = await db.query.reviewsArtists.findMany({
     where: eq(reviewsArtists.userId, userId),
     with: {

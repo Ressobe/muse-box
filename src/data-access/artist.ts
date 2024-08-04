@@ -8,7 +8,7 @@ import {
   tracks,
 } from "@/database/schema";
 import { Artist } from "@/schemas/artist";
-import { and, desc, eq, not, or } from "drizzle-orm";
+import { and, count, desc, eq, not, or } from "drizzle-orm";
 import { createArtistStat } from "./stat";
 import { createAlbum, createAlbumTypes } from "./album";
 import { createTrack } from "./track";
@@ -46,24 +46,6 @@ export async function getArtistSinglesEps(artistId: string, limit?: number) {
       or(eq(albums.typeId, 2), eq(albums.typeId, 3)),
     ),
     limit,
-  });
-}
-
-export async function getArtistReviews(
-  artistId: string,
-  userId: string,
-  limit?: number,
-) {
-  return db.query.reviewsArtists.findMany({
-    where: and(
-      eq(reviewsArtists.entityId, artistId),
-      not(eq(reviewsArtists.userId, userId)),
-    ),
-    with: {
-      user: true,
-    },
-    limit,
-    orderBy: desc(reviewsArtists.createdAt),
   });
 }
 
@@ -119,6 +101,30 @@ export async function createArtist(newArtist: Artist) {
 export async function getArtistImage(artistId: string): Promise<string | null> {
   const artist = await getArtistById(artistId);
   return artist?.image || null;
+}
+
+export async function getArtistReviews(
+  artistId: string,
+  limit?: number,
+  offset = 0,
+) {
+  return await db.query.reviewsArtists.findMany({
+    where: eq(reviewsArtists.entityId, artistId),
+    with: {
+      user: true,
+    },
+    orderBy: desc(reviewsArtists.createdAt),
+    limit,
+    offset,
+  });
+}
+
+export async function getArtistReviewsCount(artistId: string) {
+  const [c] = await db
+    .select({ count: count() })
+    .from(reviewsArtists)
+    .where(eq(reviewsArtists.entityId, artistId));
+  return c;
 }
 
 export async function insertTacoHemingway() {

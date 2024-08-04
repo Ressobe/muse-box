@@ -1,19 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { getUserArtistReview } from "@/data-access/user";
-import { currentUser } from "@/lib/auth";
-
-export async function shouldShowAddReview(artistId: string): Promise<boolean> {
-  const user = await currentUser();
-  if (!user) {
-    return false;
-  }
-
-  const review = await getUserArtistReview(user.id, artistId);
-  // Two times negation because I want to change type to boolean
-  // And last because i show review when user don't have review already
-  return !!!review;
-}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

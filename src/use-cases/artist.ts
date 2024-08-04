@@ -3,13 +3,14 @@ import {
   getArtistById,
   getArtistDiscography,
   getArtistGenres,
-  getArtistReviews,
   getArtistSinglesEps,
   getArtistStats,
-  getArtistTracks,
 } from "@/data-access/artist";
 import { getTopTracks } from "@/data-access/track";
-import { getUserArtistReview } from "@/data-access/user";
+import {
+  getArtistReviewsWhereUserIsNotOwner,
+  getUserArtistReview,
+} from "@/data-access/user";
 
 const LIMIT = 5;
 
@@ -38,7 +39,11 @@ export async function getArtistReviewsUseCase(
   artistId: string,
   userId: string,
 ) {
-  const reviews = await getArtistReviews(artistId, userId, LIMIT);
+  const reviews = await getArtistReviewsWhereUserIsNotOwner(
+    artistId,
+    userId,
+    LIMIT,
+  );
   const userReview = await getUserArtistReview(userId, artistId);
   if (!reviews) {
     return [];

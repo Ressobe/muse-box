@@ -48,19 +48,25 @@ export async function RecentActivity({ profileId }: RecentActivityProps) {
   };
 
   return (
-    <>
-      <h1 className="font-bold text-4xl">Latest reviews</h1>
-      <Table className="w-full">
-        <TableHeader>
-          <TableRow className="h-fit">
-            <TableHead className="w-fit"></TableHead>
-            <TableHead></TableHead>
-            <TableHead></TableHead>
-            <TableHead></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody className="h-full">{renderContent()}</TableBody>
-      </Table>
-    </>
+    <section>
+      <h1 className="font-bold text-4xl pb-4">Latest reviews</h1>
+      {latestActivity.length > 0 ? (
+        <Table className="w-full">
+          <TableHeader>
+            <TableRow>
+              <TableHead className="h-0"></TableHead>
+              <TableHead className="h-0"></TableHead>
+              <TableHead className="h-0"></TableHead>
+              <TableHead className="h-0"></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody className="h-full">{renderContent()}</TableBody>
+        </Table>
+      ) : (
+        <div className="text-xl text-muted-foreground">
+          Nothing to see here ...
+        </div>
+      )}
+    </section>
   );
 }

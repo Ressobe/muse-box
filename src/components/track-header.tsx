@@ -1,47 +1,32 @@
-import { auth } from "@/auth";
-import { LikeButton } from "@/components/like-button";
-import { Reviews } from "@/components/reviews";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { getUserTrackReview } from "@/data-access/user";
 import { currentUser } from "@/lib/auth";
-import { getTime, getYear } from "@/lib/utils";
 import { isUserLikedItUseCase } from "@/use-cases/playlist";
-import { getTrackReviewsUseCase, getTrackUseCase } from "@/use-cases/track";
+import { getTrackUseCase } from "@/use-cases/track";
 import Image from "next/image";
-import Link from "next/link";
-import { notFound } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FaUser } from "react-icons/fa";
+import Link from "next/link";
+import { getTime, getYear } from "@/lib/utils";
+import { LikeButton } from "./like-button";
 
-export default async function TrackPage({
-  params,
-}: {
-  params: {
-    trackId: string;
-  };
-}) {
-  const { trackId } = params;
+type TrackHeaderProps = {
+  trackId: string;
+};
+
+export async function TrackHeader({ trackId }: TrackHeaderProps) {
   const track = await getTrackUseCase(trackId);
-
   if (!track) {
-    return notFound();
+    return null;
   }
+
   const user = await currentUser();
   if (!user) {
     return null;
   }
 
-  const reviews = await getTrackReviewsUseCase(track.id);
   const isTrackLiked = await isUserLikedItUseCase(user.id, track.id, "track");
 
-  let showAddReview = true;
-  const session = await auth();
-  if (session && session.user.id) {
-    const review = await getUserTrackReview(session.user.id, track.id);
-    showAddReview = !review;
-  }
-
   return (
-    <section className="space-y-12">
+    <section>
       <div className="flex items-center gap-x-16">
         <Image src={track.image ?? ""} width={200} height={200} alt="dkdk" />
         <div className="space-y-8">
@@ -87,13 +72,6 @@ export default async function TrackPage({
           </div>
         </div>
       </div>
-      <Reviews
-        reviews={reviews}
-        showAddReview={showAddReview}
-        type="track"
-        entityId={trackId}
-        entityName={track.title}
-      />
     </section>
   );
 }

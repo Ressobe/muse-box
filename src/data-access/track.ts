@@ -1,7 +1,7 @@
 import { db } from "@/database/db";
 import { albums, reviewsTracks, tracks, tracksStats } from "@/database/schema";
 import { Track } from "@/schemas/track";
-import { desc, eq } from "drizzle-orm";
+import { count, desc, eq } from "drizzle-orm";
 import { createTrackStat } from "./stat";
 
 export async function getTracks() {
@@ -39,14 +39,28 @@ export async function createTrack(newTrack: Track) {
   return track;
 }
 
-export async function getTrackReviews(trackId: string) {
+export async function getTrackReviews(
+  trackId: string,
+  limit?: number,
+  offset = 0,
+) {
   return await db.query.reviewsTracks.findMany({
     where: eq(reviewsTracks.entityId, trackId),
     with: {
       user: true,
     },
     orderBy: desc(reviewsTracks.createdAt),
+    limit,
+    offset,
   });
+}
+
+export async function getTrackReviewsCount(trackId: string) {
+  const [c] = await db
+    .select({ count: count() })
+    .from(reviewsTracks)
+    .where(eq(reviewsTracks.entityId, trackId));
+  return c;
 }
 
 export async function getTrackImage(trackId: string): Promise<string | null> {

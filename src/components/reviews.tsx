@@ -10,16 +10,20 @@ import { OptimisticAction, Review } from "@/types/review";
 
 type ReviewsProps = {
   entityId: string;
+  entityName?: string;
   type: Entity;
   reviews: Review[];
   showAddReview: boolean;
+  showButtonAllReviews?: boolean;
 };
 
 export function Reviews({
   entityId,
+  entityName,
   type,
   reviews,
   showAddReview,
+  showButtonAllReviews = true,
 }: ReviewsProps) {
   const [optimisticReviews, setOptimisticReviews] = useOptimistic<
     Review[],
@@ -56,7 +60,9 @@ export function Reviews({
 
   return (
     <div className="pt-20 w-full">
-      <h2 className="font-bold text-2xl pb-4">User Reviews</h2>
+      <h2 className="font-bold text-2xl pb-4">
+        User Reviews {entityName && `for ${entityName}`}
+      </h2>
       {addReview ? (
         <AddComment
           entityId={entityId}
@@ -80,11 +86,12 @@ export function Reviews({
       </div>
 
       <div className="pt-10 flex justify-center">
-        {reviews.length > 0 ? (
-          <Link href={`/reviews/artists/${entityId}`}>
+        {showButtonAllReviews && reviews.length > 0 && (
+          <Link href={`/reviews?type=${type}&id=${entityId}`}>
             <Button variant="secondary">See all reviews</Button>
           </Link>
-        ) : (
+        )}
+        {showButtonAllReviews && reviews.length === 0 && (
           <h3 className="font-bold text-2xl">No reviews yet</h3>
         )}
       </div>

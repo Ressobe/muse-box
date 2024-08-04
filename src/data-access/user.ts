@@ -10,7 +10,7 @@ import {
   userProfiles,
   users,
 } from "@/database/schema";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq, not } from "drizzle-orm";
 import { Entity } from "@/types";
 import { TAlbumReview, TArtistReview, TTrackReview } from "@/types/review";
 
@@ -240,4 +240,22 @@ export async function getUserLatestReviews(
       return dateB - dateA;
     })
     .slice(0, 5);
+}
+
+export async function getArtistReviewsWhereUserIsNotOwner(
+  artistId: string,
+  userId: string,
+  limit?: number,
+) {
+  return db.query.reviewsArtists.findMany({
+    where: and(
+      eq(reviewsArtists.entityId, artistId),
+      not(eq(reviewsArtists.userId, userId)),
+    ),
+    with: {
+      user: true,
+    },
+    limit,
+    orderBy: desc(reviewsArtists.createdAt),
+  });
 }

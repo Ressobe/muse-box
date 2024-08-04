@@ -1,7 +1,7 @@
 import { db } from "@/database/db";
 import { albums, albumsTypes, reviewsAlbums } from "@/database/schema";
 import { Album } from "@/schemas/album";
-import { desc, eq } from "drizzle-orm";
+import { count, desc, eq } from "drizzle-orm";
 import { createAlbumStat } from "./stat";
 
 export async function getAlbums() {
@@ -46,7 +46,11 @@ export async function createAlbum(newAlbum: Album) {
   return album;
 }
 
-export async function getAlbumReviews(albumId: string, limit?: number) {
+export async function getAlbumReviews(
+  albumId: string,
+  limit?: number,
+  offset = 0,
+) {
   return await db.query.reviewsAlbums.findMany({
     where: eq(reviewsAlbums.entityId, albumId),
     with: {
@@ -54,7 +58,16 @@ export async function getAlbumReviews(albumId: string, limit?: number) {
     },
     orderBy: desc(reviewsAlbums.createdAt),
     limit,
+    offset,
   });
+}
+
+export async function getAlbumReviewsCount(albumId: string) {
+  const [c] = await db
+    .select({ count: count() })
+    .from(reviewsAlbums)
+    .where(eq(reviewsAlbums.entityId, albumId));
+  return c;
 }
 
 export async function getAlbumImage(albumId: string): Promise<string | null> {

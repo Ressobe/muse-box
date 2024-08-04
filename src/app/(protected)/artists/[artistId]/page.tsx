@@ -5,10 +5,8 @@ import { Albums } from "@/components/albums";
 import { SingleEps } from "@/components/single-eps";
 import { Reviews } from "@/components/reviews";
 import { ArtistHeader } from "@/components/artist-header";
-import { getUserArtistReview } from "@/data-access/user";
-import { auth } from "@/auth";
 import { currentUser } from "@/lib/auth";
-import { shouldShowAddReview } from "@/lib/utils";
+import { shouldShowAddReviewUseCase } from "@/use-cases/review";
 
 export default async function Artist({
   params,
@@ -19,7 +17,7 @@ export default async function Artist({
 
   const artist = await getArtistUseCase(artistId);
   if (!artist) {
-    notFound();
+    return notFound();
   }
 
   const user = await currentUser();
@@ -27,7 +25,7 @@ export default async function Artist({
     return null;
   }
   const reviews = await getArtistReviewsUseCase(artist.id, user.id);
-  const showAddReview = await shouldShowAddReview(artist.id);
+  const showAddReview = await shouldShowAddReviewUseCase(artist.id, "artist");
 
   return (
     <section className="space-y-12">
@@ -40,6 +38,7 @@ export default async function Artist({
         showAddReview={showAddReview}
         type="artist"
         entityId={artistId}
+        entityName={artist.name}
       />
     </section>
   );

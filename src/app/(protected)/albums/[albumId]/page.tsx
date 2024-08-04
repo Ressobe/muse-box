@@ -14,11 +14,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FaUser } from "react-icons/fa";
 import { getTime, getYear, getFullAlbumTime } from "@/lib/utils";
 import { Reviews } from "@/components/reviews";
-import { auth } from "@/auth";
-import { getUserAlbumReview } from "@/data-access/user";
 import { currentUser } from "@/lib/auth";
 import { isUserLikedItUseCase } from "@/use-cases/playlist";
 import { LikeButton } from "@/components/like-button";
+import { shouldShowAddReviewUseCase } from "@/use-cases/review";
 
 export default async function AlbumPage({
   params,
@@ -36,7 +35,7 @@ export default async function AlbumPage({
 
   const album = await getAlbumUseCase(albumId);
   if (!album) {
-    notFound();
+    return notFound();
   }
 
   const tracksWithLikes = await Promise.all(
@@ -48,18 +47,17 @@ export default async function AlbumPage({
 
   const isAlbumLiked = await isUserLikedItUseCase(user.id, album.id, "album");
   const reviews = await getAlbumReviewsUseCase(album.id);
-
-  let showAddReview = true;
-  const session = await auth();
-  if (session && session.user.id) {
-    const review = await getUserAlbumReview(session.user.id, album.id);
-    showAddReview = !review;
-  }
+  const showAddReview = await shouldShowAddReviewUseCase(album.id, "album");
 
   return (
     <section className="space-y-12">
       <div className="flex items-center gap-x-16">
-        <Image src={album.image ?? ""} width={200} height={200} alt="dkdk" />
+        <Image
+          src={album.image ?? ""}
+          width={200}
+          height={200}
+          alt={`${album.title} cover image`}
+        />
         <div className="space-y-8">
           <div>
             <div>{album.albumType.name}</div>
@@ -155,6 +153,7 @@ export default async function AlbumPage({
         showAddReview={showAddReview}
         type="album"
         entityId={albumId}
+        entityName={album.title}
       />
     </section>
   );

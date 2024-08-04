@@ -113,7 +113,10 @@ function ShowComment({
                 <span>Posted on </span>
                 {review.createdAt?.toLocaleDateString("en-US", options)}
               </span>
-              <span>Rate: {review.rating}</span>
+              <span>
+                Rate: {review.rating}
+                <span className="text-yellow-500 text-lg"> ★</span>
+              </span>
             </p>
           </div>
           <ActionMenu

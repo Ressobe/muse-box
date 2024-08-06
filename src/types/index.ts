@@ -114,7 +114,7 @@ type LAlbum = {
   artist: LArtist;
 };
 
-type LTrack = {
+export type LTrack = {
   id: string;
   image: string | null;
   artistId: string;

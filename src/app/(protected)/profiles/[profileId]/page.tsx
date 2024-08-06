@@ -77,12 +77,20 @@ export default async function ProfilePage({
                 className="flex flex-col items-center gap-y-4 p-10 border rounded-lg transition-colors"
               >
                 <div className="w-[150px] h-[150px] relative overflow-hidden">
-                  <Image
-                    src={fav.artist.image ?? ""}
-                    layout="fill"
-                    objectFit="cover"
-                    alt={`${fav.artist.name} image`}
-                  />
+                  {fav.artist.image ? (
+                    <Image
+                      src={fav.artist.image ?? ""}
+                      layout="fill"
+                      objectFit="cover"
+                      alt={`${fav.artist.name} image`}
+                    />
+                  ) : (
+                    <Avatar className="h-36 w-36">
+                      <AvatarFallback>
+                        <FaUser className="w-16 h-16" />
+                      </AvatarFallback>
+                    </Avatar>
+                  )}
                 </div>
                 <span className="text-lg">{fav?.artist.name}</span>
               </Link>

@@ -8,7 +8,7 @@ import {
   tracks,
 } from "@/database/schema";
 import { Artist } from "@/schemas/artist";
-import { and, count, desc, eq, not, or } from "drizzle-orm";
+import { and, count, desc, eq, or, sql } from "drizzle-orm";
 import { createArtistStat } from "./stat";
 import { createAlbum, createAlbumTypes } from "./album";
 import { createTrack } from "./track";
@@ -125,6 +125,44 @@ export async function getArtistReviewsCount(artistId: string) {
     .from(reviewsArtists)
     .where(eq(reviewsArtists.entityId, artistId));
   return c;
+}
+
+export async function getFilteredArtists(query: string) {
+  const filteredArtists = await db
+    .select()
+    .from(artists)
+    .where(sql`${artists.name} LIKE ${`%${query}%`} COLLATE NOCASE`);
+
+  return filteredArtists;
+}
+
+export async function emptyArtists() {
+  const artists = [
+    {
+      name: "Quebonafide",
+      bio: "One of the most popular Polish rappers, known for his diverse style.",
+      country: "Poland",
+    },
+    {
+      name: "Sokół",
+      bio: "Veteran of the Polish hip-hop scene, known for his deep lyrics.",
+      country: "Poland",
+    },
+    {
+      name: "O.S.T.R.",
+      bio: "Renowned Polish rapper and producer, known for his lyrical depth.",
+      country: "Poland",
+    },
+    {
+      name: "KęKę",
+      bio: "Popular Polish rapper known for his authentic style and storytelling.",
+      country: "Poland",
+    },
+  ];
+
+  artists.forEach(async (artist) => {
+    await createArtist(artist);
+  });
 }
 
 export async function insertTacoHemingway() {

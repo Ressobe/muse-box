@@ -1,7 +1,7 @@
 import { db } from "@/database/db";
 import { albums, reviewsTracks, tracks, tracksStats } from "@/database/schema";
 import { Track } from "@/schemas/track";
-import { count, desc, eq } from "drizzle-orm";
+import { count, desc, eq, sql } from "drizzle-orm";
 import { createTrackStat } from "./stat";
 
 export async function getTracks() {
@@ -108,4 +108,31 @@ export async function getTopTracks(artistId: string, limit: number = 5) {
       ratingAvg: row.stats.ratingAvg,
     },
   }));
+}
+
+export async function getFilteredTracks(query: string) {
+  const filteredTracks = await db
+    .select({
+      id: tracks.id,
+      artistId: tracks.artistId,
+      position: tracks.position,
+      title: tracks.title,
+      image: tracks.image,
+      length: tracks.length,
+      albumId: tracks.albumId,
+      album: {
+        id: albums.id,
+        image: albums.image,
+        artistId: albums.artistId,
+        typeId: albums.typeId,
+        title: albums.title,
+        length: albums.length,
+        releaseDate: albums.releaseDate,
+      },
+    })
+    .from(tracks)
+    .where(sql`${tracks.title} LIKE ${`%${query}%`} COLLATE NOCASE`)
+    .innerJoin(albums, eq(tracks.albumId, albums.id));
+
+  return filteredTracks;
 }

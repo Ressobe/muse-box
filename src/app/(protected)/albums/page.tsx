@@ -1,10 +1,9 @@
+import { AlbumCard } from "@/components/album-card";
 import {
   getNewAlbumsUseCase,
   getPopularAlbumsUseCase,
   getTopAlbumsUseCase,
 } from "@/use-cases/album";
-import Image from "next/image";
-import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -42,36 +41,5 @@ export default async function AlbumsPage() {
         </div>
       </section>
     </section>
-  );
-}
-
-type TAlbum = {
-  id: string;
-  image: string | null;
-  artistId: string;
-  typeId: number;
-  title: string;
-  length: number | null;
-  releaseDate: Date | null;
-};
-
-type AlbumCardProps = {
-  album: TAlbum;
-};
-
-function AlbumCard({ album }: AlbumCardProps) {
-  return (
-    <Link
-      href={`/albums/${album.id}`}
-      className="transition-all p-4 hover:bg-secondary/40 rounded"
-    >
-      <div>
-        <Image src={album.image ?? ""} width={200} height={200} alt="dkdk" />
-        <div className="pt-4">{album.title}</div>
-        <div className="text-muted-foreground">
-          {album.releaseDate && new Date(album.releaseDate).getFullYear()}
-        </div>
-      </div>
-    </Link>
   );
 }

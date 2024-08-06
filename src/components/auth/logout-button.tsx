@@ -3,6 +3,7 @@
 import { logoutAction } from "@/actions/logout";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type LogoutButtonProps = {
   children?: React.ReactNode;
@@ -10,9 +11,23 @@ type LogoutButtonProps = {
 };
 
 export function LogoutButton({ children, className }: LogoutButtonProps) {
-  const handleClick = () => {
-    logoutAction();
+  const router = useRouter();
+  const pathName = usePathname();
+  const searchParams = useSearchParams();
+
+  const handleClick = async () => {
+    await logoutAction();
+
+    let fullUrl = pathName;
+    const params = searchParams.toString();
+    if (params) {
+      fullUrl += `?${params}`;
+    }
+
+    const callbackUrl = encodeURIComponent(fullUrl);
+    router.push(`/auth/login?callbackUrl=${callbackUrl}`);
   };
+
   return (
     <Button
       onClick={handleClick}

@@ -5,6 +5,7 @@ import {
   getArtistGenres,
   getArtistSinglesEps,
   getArtistStats,
+  getFilteredArtists,
 } from "@/data-access/artist";
 import { getTopTracks } from "@/data-access/track";
 import {
@@ -84,4 +85,14 @@ export async function getArtistStatsUseCase(artistId: string) {
     throw "Stats not found";
   }
   return stats;
+}
+
+export async function getFilteredArtistsUseCase(query: string) {
+  const lowerCaseQuery = query.toLowerCase();
+
+  if (lowerCaseQuery === "") {
+    return [];
+  }
+
+  return getFilteredArtists(lowerCaseQuery);
 }

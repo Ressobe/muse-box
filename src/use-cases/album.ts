@@ -1,4 +1,9 @@
-import { getAlbumById, getAlbumReviews, getAlbums } from "@/data-access/album";
+import {
+  getAlbumById,
+  getAlbumReviews,
+  getAlbums,
+  getFilteredAlbums,
+} from "@/data-access/album";
 
 const LIMIT = 10;
 
@@ -25,4 +30,13 @@ export async function getAlbumUseCase(albumId: string) {
 export async function getAlbumReviewsUseCase(albumId: string) {
   const reviews = await getAlbumReviews(albumId, LIMIT);
   return reviews;
+}
+
+export async function getFilteredAlbumsUseCase(query: string) {
+  const lowerCaseQuery = query.toLowerCase();
+  if (lowerCaseQuery === "") {
+    return [];
+  }
+
+  return getFilteredAlbums(lowerCaseQuery);
 }

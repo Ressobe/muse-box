@@ -60,35 +60,37 @@ export async function FollowersFollowingDialog({
       <span className="text-3xl font-bold">
         {formatNumberWithPrefix(amount)}
       </span>
-      <DialogContent>
-        <ScrollArea className="h-96">
-          <ul className="p-4 space-y-2 flex flex-col">
-            {usersWithFollowState?.map((user) => {
-              return (
-                <li key={user.id}>
-                  <Link
-                    href={`/profiles/${user.id}`}
-                    className="w-full flex items-center hover:bg-muted-foreground/10 justify-between gap-8 rounded-lg transition-all p-4"
-                  >
-                    <div className="flex items-center gap-6">
-                      <UserAvatar avatarUrl={user.image} size="large" />
-                      <span className="text-xl">{user.name}</span>
-                    </div>
-                    {authUser.id !== user.id && (
-                      <FollowButton
-                        followerId={authUser.id}
-                        followingId={user.id}
-                        defaultFollowState={user.isFollowed}
-                      />
-                    )}
-                  </Link>
-                  <Separator />
-                </li>
-              );
-            })}
-          </ul>
-        </ScrollArea>
-      </DialogContent>
+      {amount > 0 ? (
+        <DialogContent>
+          <ScrollArea className="h-96">
+            <ul className="p-4 space-y-2 flex flex-col">
+              {usersWithFollowState?.map((user) => {
+                return (
+                  <li key={user.id}>
+                    <Link
+                      href={`/profiles/${user.id}`}
+                      className="w-full flex items-center hover:bg-muted-foreground/10 justify-between gap-8 rounded-lg transition-all p-4"
+                    >
+                      <div className="flex items-center gap-6">
+                        <UserAvatar avatarUrl={user.image} size="large" />
+                        <span className="text-xl">{user.name}</span>
+                      </div>
+                      {authUser.id !== user.id && (
+                        <FollowButton
+                          followerId={authUser.id}
+                          followingId={user.id}
+                          defaultFollowState={user.isFollowed}
+                        />
+                      )}
+                    </Link>
+                    <Separator />
+                  </li>
+                );
+              })}
+            </ul>
+          </ScrollArea>
+        </DialogContent>
+      ) : null}
     </Dialog>
   );
 }

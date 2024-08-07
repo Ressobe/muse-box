@@ -1,8 +1,8 @@
 "use client";
 
-import { logoutAction } from "@/actions/logout";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { signOut } from "next-auth/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type LogoutButtonProps = {
@@ -16,7 +16,7 @@ export function LogoutButton({ children, className }: LogoutButtonProps) {
   const searchParams = useSearchParams();
 
   const handleClick = async () => {
-    await logoutAction();
+    await signOut();
 
     let fullUrl = pathName;
     const params = searchParams.toString();

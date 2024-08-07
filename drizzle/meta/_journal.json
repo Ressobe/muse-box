@@ -92,6 +92,20 @@
       "when": 1723026505484,
       "tag": "0012_stormy_shotgun",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1723036507049,
+      "tag": "0013_right_exiles",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1723037078500,
+      "tag": "0014_deep_zemo",
+      "breakpoints": true
     }
   ]
 }

@@ -1,6 +1,6 @@
 import { db } from "@/database/db";
 import { follows, userProfiles, users } from "@/database/schema";
-import { count, eq } from "drizzle-orm";
+import { count, countDistinct, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/sqlite-core";
 
 export async function createProfile(userId: string) {
@@ -23,10 +23,10 @@ export async function getProfileByUserId(userId: string) {
       favouriteAlbumId: userProfiles.favoriteAlbumId,
       favouriteTrackId: userProfiles.favoriteTrackId,
       user: users,
-      amountOfFollowers: count(followersTable.followerId).as(
+      amountOfFollowers: countDistinct(followersTable.followerId).as(
         "amountOfFollowers",
       ),
-      amountOfFollowing: count(followingTable.followingId).as(
+      amountOfFollowing: countDistinct(followingTable.followingId).as(
         "amountOfFollowing",
       ),
     })

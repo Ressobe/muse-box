@@ -105,3 +105,20 @@ export function formatDateToShortMonthDayYear(date: Date) {
 
   return [`${day < 10 ? "0" + day : day}`, `${month}`, `${year}`];
 }
+
+export function formatNumberWithPrefix(num: number): string {
+  const prefixes = ["", "K", "M", "B"];
+  let prefixIndex = 0;
+
+  while (num >= 1000 && prefixIndex < prefixes.length - 1) {
+    num /= 1000;
+    prefixIndex++;
+  }
+
+  let formattedNumber = num.toFixed(1);
+  if (formattedNumber.endsWith(".0")) {
+    formattedNumber = formattedNumber.slice(0, -2); // Usuwa końcowe ".0"
+  }
+
+  return formattedNumber + prefixes[prefixIndex];
+}

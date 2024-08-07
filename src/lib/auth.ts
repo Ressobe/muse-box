@@ -16,7 +16,6 @@ export const currentUser = async (): Promise<AuthenticatedSession | null> => {
   }
 
   if (session?.user?.id) {
-    // Jeśli sesja jest poprawna i zawiera id, zwracamy obiekt AuthenticatedSession
     return { id: session.user.id, ...session };
   }
 

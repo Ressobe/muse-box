@@ -1,16 +1,18 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import clsx from "clsx";
 import { FaUser } from "react-icons/fa";
 
 type UserAvatarProps = {
   avatarUrl?: string | null;
+  size?: "small" | "large";
 };
 
-export function UserAvatar({ avatarUrl }: UserAvatarProps) {
+export function UserAvatar({ avatarUrl, size = "small" }: UserAvatarProps) {
   return (
-    <Avatar className="h-12  w-12">
+    <Avatar className={clsx(size === "small" ? "h-12  w-12" : "h-24 w-24")}>
       <AvatarImage src={avatarUrl || ""} />
       <AvatarFallback>
-        <FaUser className="w-8 h-8" />
+        <FaUser className={clsx(size === "small" ? "h-8  w-8" : "h-12 w-12")} />
       </AvatarFallback>
     </Avatar>
   );

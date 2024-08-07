@@ -21,7 +21,10 @@ export function FollowButton({
   const { toast } = useToast();
   const [follow, setFollow] = useState(defaultFollowState);
 
-  const handleClick = async () => {
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     if (!follow) {
       setFollow(true);
       toast({

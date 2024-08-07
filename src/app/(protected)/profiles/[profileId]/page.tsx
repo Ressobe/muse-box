@@ -15,6 +15,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
 import { RecentActivity } from "./recent-activity";
+import { formatNumberWithPrefix } from "@/lib/utils";
+import { FollowersFollowingDialog } from "./followers-following-dialog";
 
 export default async function ProfilePage({
   params,
@@ -65,6 +67,22 @@ export default async function ProfilePage({
               followingId={profile.userId}
             />
           )}
+        </div>
+        <div className="pl-20 flex gap-10">
+          <span className="flex flex-col items-center">
+            <FollowersFollowingDialog
+              profileId={profileId}
+              type="followers"
+              amount={profile.amountOfFollowers}
+            />
+          </span>
+          <span className="flex flex-col items-center">
+            <FollowersFollowingDialog
+              profileId={profileId}
+              type="following"
+              amount={profile.amountOfFollowing}
+            />
+          </span>
         </div>
       </div>
       <ul className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:grid-cols-3">

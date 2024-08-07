@@ -85,6 +85,13 @@
       "when": 1722367754024,
       "tag": "0011_modern_ultimates",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1723026505484,
+      "tag": "0012_stormy_shotgun",
+      "breakpoints": true
     }
   ]
 }

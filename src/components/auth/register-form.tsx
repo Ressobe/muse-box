@@ -42,6 +42,9 @@ export function RegisterForm() {
 
     startTransition(async () => {
       const response = await registerAction(values);
+      if (response.sucess) {
+        form.reset();
+      }
       setError(response.error);
       setSucess(response.sucess);
     });

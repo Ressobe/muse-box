@@ -101,3 +101,12 @@ export async function sendNotificationToFollowers(
     });
   }
 }
+
+export async function markNotificationAsReaded(notificationId: string) {
+  await db
+    .update(notificationRecipients)
+    .set({
+      isRead: true,
+    })
+    .where(eq(notificationRecipients.notificationId, notificationId));
+}

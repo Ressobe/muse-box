@@ -1,9 +1,10 @@
 import {
   deleteNotification,
   isUserOwnsNotification,
+  markNotificationAsReaded,
 } from "@/data-access/notification";
 
-export async function removeNotficationUseCase(
+export async function removeNotificationUseCase(
   ownerId: string,
   notificationId: string,
 ) {
@@ -13,4 +14,8 @@ export async function removeNotficationUseCase(
   }
 
   await deleteNotification(notificationId);
+}
+
+export async function markNotificationAsReadedUseCase(notificationId: string) {
+  await markNotificationAsReaded(notificationId);
 }

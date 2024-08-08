@@ -1,11 +1,13 @@
 "use server";
 
 import { currentUser } from "@/lib/auth";
-import { removeNotficationUseCase } from "@/use-cases/notification";
+import { removeNotificationUseCase } from "@/use-cases/notification";
+import { revalidatePath } from "next/cache";
 
 export async function removeNotificationAction(
   ownerId: string,
   notificationId: string,
+  path: string,
 ) {
   const authUser = await currentUser();
   if (!authUser) {
@@ -16,5 +18,7 @@ export async function removeNotificationAction(
     return { error: "Access not authorized!" };
   }
 
-  await removeNotficationUseCase(ownerId, notificationId);
+  await removeNotificationUseCase(ownerId, notificationId);
+  revalidatePath(path);
+  return { sucess: "Removed notification" };
 }

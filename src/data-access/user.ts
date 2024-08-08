@@ -200,7 +200,12 @@ export async function getUserNotifications(userId: string) {
       notification: true,
     },
   });
-  return notifications.map((item) => item.notification);
+  return notifications.map((item) => {
+    return {
+      ...item.notification,
+      isRead: item.isRead,
+    };
+  });
 }
 
 export async function getUserLatestReviews(

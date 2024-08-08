@@ -21,7 +21,7 @@ export type Review = {
   };
 };
 
-export type OptimisticAction =
+export type OptimisticActionReview =
   | { type: "add"; review: Review }
   | { type: "edit"; review: Review }
   | { type: "delete"; reviewId: string };

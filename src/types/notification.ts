@@ -79,3 +79,7 @@ export type NotificationT =
   | ArtistReviewNotification
   | AlbumReviewNotification
   | TrackReviewNotification;
+
+export type OptimisticActionNotification =
+  | { type: "add"; notification: NotificationT }
+  | { type: "delete"; notificationId: string };

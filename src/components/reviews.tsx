@@ -6,7 +6,7 @@ import { Comment } from "./comment";
 import Link from "next/link";
 import { useOptimistic, useState } from "react";
 import { Entity } from "@/types";
-import { OptimisticAction, Review } from "@/types/review";
+import { OptimisticActionReview, Review } from "@/types/review";
 
 type ReviewsProps = {
   entityId: string;
@@ -27,7 +27,7 @@ export function Reviews({
 }: ReviewsProps) {
   const [optimisticReviews, setOptimisticReviews] = useOptimistic<
     Review[],
-    OptimisticAction
+    OptimisticActionReview
   >(reviews, (state, action) => {
     switch (action.type) {
       case "add":

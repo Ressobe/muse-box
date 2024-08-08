@@ -25,6 +25,25 @@ export async function createNotification(
   return notification;
 }
 
+export async function isUserOwnsNotification(
+  ownerId: string,
+  notificationId: string,
+) {
+  const [notification] = await db
+    .select()
+    .from(userNotifications)
+    .innerJoin(notificationRecipients, eq(userNotifications.id, notificationId))
+    .where(eq(notificationRecipients.ownerId, ownerId));
+
+  return notification;
+}
+
+export async function deleteNotification(notificationId: string) {
+  return await db
+    .delete(userNotifications)
+    .where(eq(userNotifications.id, notificationId));
+}
+
 export async function getNotification(
   creatorId: string,
   reciverId: string,

@@ -1,3 +1,4 @@
+import { NotificationT } from "@/types/notification";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -16,18 +17,15 @@ export function capitalizeFirstLetter(str: string) {
 
 export function getTime(seconds: number | null) {
   if (!seconds) return null;
-  // Calculate minutes and remaining seconds
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
 
-  // Format the minutes and seconds to be two digits if needed
   const formattedMinutes = minutes.toString();
   const formattedSeconds =
     remainingSeconds < 10
       ? "0" + remainingSeconds
       : remainingSeconds.toString();
 
-  // Combine and return the formatted time
   return formattedMinutes + ":" + formattedSeconds;
 }
 
@@ -121,4 +119,11 @@ export function formatNumberWithPrefix(num: number): string {
   }
 
   return formattedNumber + prefixes[prefixIndex];
+}
+
+export function isNewNotification(notifications: NotificationT[]) {
+  for (const item of notifications) {
+    if (!item.isRead) return true;
+  }
+  return false;
 }

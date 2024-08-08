@@ -3,23 +3,29 @@
 import { XIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { removeNotificationAction } from "@/actions/notification";
+import { usePathname } from "next/navigation";
 
 type RemoveNotificationButtonProps = {
   ownerId: string;
   notificationId: string;
-  removeNotificationOptimistic: () => void;
+  removeNotificationOptimistic: (notificationId: string) => void;
+  closePopover: () => void;
 };
 
 export function RemoveNotificationButton({
   ownerId,
   notificationId,
   removeNotificationOptimistic,
+  closePopover,
 }: RemoveNotificationButtonProps) {
+  const pathname = usePathname();
+
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    removeNotificationOptimistic();
-    await removeNotificationAction(ownerId, notificationId);
+    removeNotificationOptimistic(notificationId);
+    closePopover();
+    await removeNotificationAction(ownerId, notificationId, pathname);
   };
 
   return (

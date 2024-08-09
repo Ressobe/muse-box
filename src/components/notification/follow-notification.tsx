@@ -5,7 +5,8 @@ import { UserAvatar } from "@/components/user-avatar";
 import Link from "next/link";
 import { formatTimeDiff } from "@/lib/utils";
 import { RemoveNotificationButton } from "./remove-notification-button";
-import { markNotificationAsReaded } from "@/data-access/notification";
+import { markNotificationAsReadedUseCase } from "@/use-cases/notification";
+import { deleteNotification } from "@/data-access/notification";
 
 type FollowNotificationProps = {
   authUserId: string;
@@ -24,7 +25,10 @@ export function FollowNotification({
 
   const handleClick = async () => {
     closePopover();
-    await markNotificationAsReaded(notification.id);
+    await markNotificationAsReadedUseCase(notification.id);
+    setTimeout(async () => {
+      await deleteNotification(notification.id);
+    }, 50000);
   };
 
   return (

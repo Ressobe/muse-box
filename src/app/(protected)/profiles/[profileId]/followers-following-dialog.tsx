@@ -61,7 +61,7 @@ export async function FollowersFollowingDialog({
         {formatNumberWithPrefix(amount)}
       </span>
       {amount > 0 ? (
-        <DialogContent>
+        <DialogContent className="pt-12">
           <ScrollArea className="h-96">
             <ul className="p-4 space-y-2 flex flex-col">
               {usersWithFollowState?.map((user) => {

@@ -18,7 +18,7 @@ export async function Notifications() {
 
   return (
     <NotificationList
-      notifications={notifications}
+      notifications={notifications.concat(notifications).concat(notifications)}
       newNotification={newNotification}
       authUserId={user.id}
     />

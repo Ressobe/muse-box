@@ -11,6 +11,7 @@ import { useOptimistic, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { Bell, BellDot, BellOff } from "lucide-react";
+import { ScrollArea } from "../ui/scroll-area";
 
 type NotificationListProps = {
   notifications: NotificationT[];
@@ -88,9 +89,11 @@ export function NotificationList({
       </PopoverTrigger>
       <PopoverContent className="w-96 absolute -right-8">
         {notifications.length > 0 ? (
-          <>{renderNotifications()}</>
+          <ScrollArea className="h-96 p-2">
+            <>{renderNotifications()}</>
+          </ScrollArea>
         ) : (
-          <div className="flex flex-col items-center gap-4">
+          <div className="h-full flex flex-col items-center gap-4">
             <BellOff className="w-12 h-12" />
             <span>No notifications</span>
           </div>

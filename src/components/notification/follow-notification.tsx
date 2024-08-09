@@ -28,7 +28,7 @@ export function FollowNotification({
   };
 
   return (
-    <div>
+    <div className="mx-1">
       <Link
         href={`/profiles/${sender.id}`}
         className="relative flex items-center p-4 gap-4 rounded transition-colors hover:bg-secondary/40"

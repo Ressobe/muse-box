@@ -54,7 +54,6 @@ export function FollowNotification({
           removeNotificationOptimistic={() => deleteOptimistic(notification.id)}
           ownerId={authUserId}
           notificationId={notification.id}
-          closePopover={closePopover}
         />
       </Link>
     </div>

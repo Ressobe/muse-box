@@ -45,7 +45,8 @@ function pluralize(value: number, singular: string, plural?: string): string {
   return value === 1 ? singular : plural || singular + "s";
 }
 
-export function formatTimeDiff(createdAt: Date): string {
+export function formatTimeDiff(created: Date | string) {
+  const createdAt = new Date(created);
   const currentTime = new Date();
   const timeDiff = Math.abs(currentTime.getTime() - createdAt.getTime());
   const hours = Math.floor(timeDiff / (1000 * 60 * 60));

@@ -49,6 +49,7 @@ export const SettingsSchema = z
   .object({
     name: z.optional(z.string()),
     email: z.optional(z.string().email()),
+    bio: z.optional(z.string()),
     password: z.optional(
       z.string().min(8, { message: "Passowrd require minimum 8 characters" }),
     ),

@@ -37,6 +37,7 @@ export const userProfiles = sqliteTable("userProfiles", {
   favoriteArtistId: text("favoriteArtistId").references(() => artists.id),
   favoriteAlbumId: text("favoriteAlbumId").references(() => albums.id),
   favoriteTrackId: text("favoriteTrackId").references(() => tracks.id),
+  bio: text("bio"),
 });
 
 export const userProfilesRelations = relations(userProfiles, ({ one }) => ({

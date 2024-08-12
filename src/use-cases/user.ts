@@ -196,7 +196,12 @@ export async function getUserNotificationsUseCase(
 
           return {
             ...item,
-            sender,
+            sender: {
+              id: sender.id,
+              name: sender.name,
+              email: sender.email,
+              image: sender.image,
+            },
           } as FollowNotification;
         }
         case notificationTypes.ARTIST_REVIEW: {

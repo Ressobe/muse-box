@@ -57,7 +57,6 @@ export async function createReviewUseCase(
   }
 
   if (notiType) {
-    console.log("notiType jmsd", notiType);
     const notification = await createNotification(
       userId,
       entityId,

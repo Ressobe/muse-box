@@ -14,6 +14,8 @@ import { Bell, BellDot, BellOff } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArtistReviewNotification } from "@/components/notification/artist-review-notification";
 import { FollowNotification } from "@/components/notification/follow-notification";
+import { AlbumReviewNotification } from "@/components/notification/album-review-notification";
+import { TrackReviewNotification } from "@/components/notification/track-review-notification";
 
 type NotificationListProps = {
   authUserId: string;
@@ -65,15 +67,33 @@ export function Notifications({ authUserId }: NotificationListProps) {
           switch (item.type) {
             case notificationTypes.ARTIST_REVIEW:
               return (
-                <ArtistReviewNotification key={item.id} notification={item} />
+                <ArtistReviewNotification
+                  key={item.id}
+                  notification={item}
+                  authUserId={authUserId}
+                  deleteOptimistic={deleteOptimisticNotification}
+                  closePopover={() => setOpen(false)}
+                />
               );
             case notificationTypes.ALBUM_REVIEW:
               return (
-                <li key={item.id}>Album Review: {item.albumReview.rating} </li>
+                <AlbumReviewNotification
+                  key={item.id}
+                  notification={item}
+                  authUserId={authUserId}
+                  deleteOptimistic={deleteOptimisticNotification}
+                  closePopover={() => setOpen(false)}
+                />
               );
             case notificationTypes.TRACK_REVIEW:
               return (
-                <li key={item.id}>Track Review: {item.trackReview.rating}</li>
+                <TrackReviewNotification
+                  key={item.id}
+                  notification={item}
+                  authUserId={authUserId}
+                  deleteOptimistic={deleteOptimisticNotification}
+                  closePopover={() => setOpen(false)}
+                />
               );
             case notificationTypes.FOLLOW:
               return (
@@ -102,7 +122,7 @@ export function Notifications({ authUserId }: NotificationListProps) {
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-96 absolute -right-8">
+      <PopoverContent className="w-[30rem] absolute -right-8">
         {data.length > 0 ? (
           <ScrollArea className="h-96 p-2">
             <>{renderNotifications()}</>

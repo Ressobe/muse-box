@@ -19,6 +19,6 @@ export async function removeNotificationAction(
   }
 
   await removeNotificationUseCase(ownerId, notificationId);
-  revalidatePath(path);
+  // revalidatePath(path);
   return { sucess: "Removed notification" };
 }

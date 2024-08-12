@@ -22,10 +22,8 @@ export interface NotificationBase {
 interface Sender {
   id: string;
   name: string | null;
-  image: string | null;
   email: string;
-  password: string | null;
-  emailVerified: Date | null;
+  image: string;
 }
 
 export interface FollowNotification extends NotificationBase {

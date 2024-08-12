@@ -9,14 +9,12 @@ type RemoveNotificationButtonProps = {
   ownerId: string;
   notificationId: string;
   removeNotificationOptimistic: (notificationId: string) => void;
-  closePopover: () => void;
 };
 
 export function RemoveNotificationButton({
   ownerId,
   notificationId,
   removeNotificationOptimistic,
-  closePopover,
 }: RemoveNotificationButtonProps) {
   const pathname = usePathname();
 
@@ -24,7 +22,6 @@ export function RemoveNotificationButton({
     e.preventDefault();
     e.stopPropagation();
     removeNotificationOptimistic(notificationId);
-    closePopover();
     await removeNotificationAction(ownerId, notificationId, pathname);
   };
 

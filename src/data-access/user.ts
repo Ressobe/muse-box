@@ -95,6 +95,10 @@ export async function getUserArtistReview2(userId: string, artistId: string) {
       eq(reviewsArtists.userId, userId),
       eq(reviewsArtists.entityId, artistId),
     ),
+    with: {
+      artist: true,
+      user: true,
+    },
   });
 }
 
@@ -104,6 +108,10 @@ export async function getUserAlbumReview(userId: string, albumId: string) {
       eq(reviewsAlbums.userId, userId),
       eq(reviewsAlbums.entityId, albumId),
     ),
+    with: {
+      album: true,
+      user: true,
+    },
   });
 }
 
@@ -113,6 +121,10 @@ export async function getUserTrackReview(userId: string, trackId: string) {
       eq(reviewsTracks.userId, userId),
       eq(reviewsTracks.entityId, trackId),
     ),
+    with: {
+      track: true,
+      user: true,
+    },
   });
 }
 

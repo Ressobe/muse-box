@@ -1,3 +1,7 @@
+import { Album } from "@/schemas/album";
+import { Artist } from "@/schemas/artist";
+import { Track } from "@/schemas/track";
+
 export const notificationTypes = {
   FOLLOW: "follow",
   FAVOURITE: "favourite",
@@ -38,6 +42,8 @@ interface ArtistReview {
   rating: number;
   comment: string | null;
   createdAt: Date | null;
+  user: Sender;
+  artist: Artist;
 }
 
 export interface ArtistReviewNotification extends NotificationBase {
@@ -52,6 +58,8 @@ interface AlbumReview {
   rating: number;
   comment: string | null;
   createdAt: Date | null;
+  album: Album;
+  user: Sender;
 }
 
 export interface AlbumReviewNotification extends NotificationBase {
@@ -66,6 +74,8 @@ interface TrackReview {
   rating: number;
   comment: string | null;
   createdAt: Date | null;
+  user: Sender;
+  track: Track;
 }
 
 export interface TrackReviewNotification extends NotificationBase {

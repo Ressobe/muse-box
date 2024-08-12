@@ -116,13 +116,15 @@ export function formatNumberWithPrefix(num: number): string {
 
   let formattedNumber = num.toFixed(1);
   if (formattedNumber.endsWith(".0")) {
-    formattedNumber = formattedNumber.slice(0, -2); // Usuwa końcowe ".0"
+    formattedNumber = formattedNumber.slice(0, -2);
   }
 
   return formattedNumber + prefixes[prefixIndex];
 }
 
 export function isNewNotification(notifications: NotificationT[]) {
+  if (notifications.length === 0) return false;
+
   for (const item of notifications) {
     if (!item.isRead) return true;
   }

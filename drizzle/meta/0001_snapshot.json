@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "e10fbb3a-29f8-4248-81d7-fb9a1939724f",
-  "prevId": "ba7f985c-bff5-48f9-8aa2-f3d67397f2be",
+  "id": "1dd00a06-87e1-4fdb-846c-5f8e73875a73",
+  "prevId": "e9ea41fd-4362-48bc-a485-0ddfefbd21ad",
   "tables": {
     "account": {
       "name": "account",
@@ -165,7 +165,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-07-28T18:35:57.270Z\"'"
+          "default": "'\"2024-08-13T11:16:32.136Z\"'"
         }
       },
       "indexes": {},
@@ -652,6 +652,64 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "notificationRecipients": {
+      "name": "notificationRecipients",
+      "columns": {
+        "notificationId": {
+          "name": "notificationId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "ownerId": {
+          "name": "ownerId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "isRead": {
+          "name": "isRead",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "notificationRecipients_notificationId_userNotifications_id_fk": {
+          "name": "notificationRecipients_notificationId_userNotifications_id_fk",
+          "tableFrom": "notificationRecipients",
+          "tableTo": "userNotifications",
+          "columnsFrom": [
+            "notificationId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "notificationRecipients_ownerId_users_id_fk": {
+          "name": "notificationRecipients_ownerId_users_id_fk",
+          "tableFrom": "notificationRecipients",
+          "tableTo": "users",
+          "columnsFrom": [
+            "ownerId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "passwordResetTokens": {
       "name": "passwordResetTokens",
       "columns": {
@@ -837,7 +895,15 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-07-28T18:35:57.271Z\"'"
+          "default": "'\"2024-08-13T11:16:32.137Z\"'"
+        },
+        "entityType": {
+          "name": "entityType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'album'"
         }
       },
       "indexes": {},
@@ -916,7 +982,15 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-07-28T18:35:57.271Z\"'"
+          "default": "'\"2024-08-13T11:16:32.137Z\"'"
+        },
+        "entityType": {
+          "name": "entityType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'artist'"
         }
       },
       "indexes": {},
@@ -995,7 +1069,15 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-07-28T18:35:57.271Z\"'"
+          "default": "'\"2024-08-13T11:16:32.137Z\"'"
+        },
+        "entityType": {
+          "name": "entityType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'track'"
         }
       },
       "indexes": {},
@@ -1231,79 +1313,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "userActivities": {
-      "name": "userActivities",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "userId": {
-          "name": "userId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "activityType": {
-          "name": "activityType",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "entityId": {
-          "name": "entityId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "rating": {
-          "name": "rating",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "comment": {
-          "name": "comment",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'\"2024-07-28T18:35:57.271Z\"'"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "userActivities_userId_users_id_fk": {
-          "name": "userActivities_userId_users_id_fk",
-          "tableFrom": "userActivities",
-          "tableTo": "users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "userNotifications": {
       "name": "userNotifications",
       "columns": {
@@ -1311,13 +1320,6 @@
           "name": "id",
           "type": "text",
           "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "ownerId": {
-          "name": "ownerId",
-          "type": "text",
-          "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
@@ -1349,38 +1351,17 @@
           "notNull": true,
           "autoincrement": false
         },
-        "isRead": {
-          "name": "isRead",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": false
-        },
         "createdAt": {
           "name": "createdAt",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-07-28T18:35:57.271Z\"'"
+          "default": "'\"2024-08-13T11:16:32.137Z\"'"
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "userNotifications_ownerId_users_id_fk": {
-          "name": "userNotifications_ownerId_users_id_fk",
-          "tableFrom": "userNotifications",
-          "tableTo": "users",
-          "columnsFrom": [
-            "ownerId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
         "userNotifications_senderId_users_id_fk": {
           "name": "userNotifications_senderId_users_id_fk",
           "tableFrom": "userNotifications",
@@ -1424,6 +1405,13 @@
         },
         "favoriteTrackId": {
           "name": "favoriteTrackId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "bio": {
+          "name": "bio",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -1502,7 +1490,7 @@
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "email": {
@@ -1534,7 +1522,22 @@
           "autoincrement": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "users_name_unique": {
+          "name": "users_name_unique",
+          "columns": [
+            "name"
+          ],
+          "isUnique": true
+        },
+        "users_email_unique": {
+          "name": "users_email_unique",
+          "columns": [
+            "email"
+          ],
+          "isUnique": true
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}

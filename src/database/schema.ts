@@ -23,8 +23,8 @@ export const users = sqliteTable("users", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  name: text("name"),
-  email: text("email").notNull(),
+  name: text("name").notNull().unique(),
+  email: text("email").notNull().unique(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
   password: text("password"),
   image: text("image"),
@@ -37,7 +37,6 @@ export const userProfiles = sqliteTable("userProfiles", {
   favoriteArtistId: text("favoriteArtistId").references(() => artists.id),
   favoriteAlbumId: text("favoriteAlbumId").references(() => albums.id),
   favoriteTrackId: text("favoriteTrackId").references(() => tracks.id),
-  bio: text("bio"),
 });
 
 export const userProfilesRelations = relations(userProfiles, ({ one }) => ({

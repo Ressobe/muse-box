@@ -21,7 +21,7 @@ CREATE TABLE `albums` (
 	`title` text NOT NULL,
 	`image` text DEFAULT '',
 	`length` integer DEFAULT 0,
-	`releaseDate` integer DEFAULT '"2024-07-28T18:10:06.194Z"',
+	`releaseDate` integer DEFAULT '"2024-08-13T11:11:08.966Z"',
 	FOREIGN KEY (`artistId`) REFERENCES `artists`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`typeId`) REFERENCES `albumsTypes`(`id`) ON UPDATE no action ON DELETE no action
 );
@@ -92,6 +92,14 @@ CREATE TABLE `genresToArtists` (
 	FOREIGN KEY (`genreId`) REFERENCES `genres`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
+CREATE TABLE `notificationRecipients` (
+	`notificationId` text NOT NULL,
+	`ownerId` text NOT NULL,
+	`isRead` integer DEFAULT false,
+	FOREIGN KEY (`notificationId`) REFERENCES `userNotifications`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`ownerId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
 CREATE TABLE `passwordResetTokens` (
 	`id` text PRIMARY KEY NOT NULL,
 	`token` text NOT NULL,
@@ -120,7 +128,8 @@ CREATE TABLE `reviewsAlbums` (
 	`entityId` text NOT NULL,
 	`rating` integer NOT NULL,
 	`comment` text,
-	`createdAt` integer DEFAULT '"2024-07-28T18:10:06.195Z"',
+	`createdAt` integer DEFAULT '"2024-08-13T11:11:08.967Z"',
+	`entityType` text DEFAULT 'album' NOT NULL,
 	FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`entityId`) REFERENCES `albums`(`id`) ON UPDATE no action ON DELETE cascade
 );
@@ -131,7 +140,8 @@ CREATE TABLE `reviewsArtists` (
 	`entityId` text NOT NULL,
 	`rating` integer NOT NULL,
 	`comment` text,
-	`createdAt` integer DEFAULT '"2024-07-28T18:10:06.195Z"',
+	`createdAt` integer DEFAULT '"2024-08-13T11:11:08.967Z"',
+	`entityType` text DEFAULT 'artist' NOT NULL,
 	FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`entityId`) REFERENCES `artists`(`id`) ON UPDATE no action ON DELETE cascade
 );
@@ -142,7 +152,8 @@ CREATE TABLE `reviewsTracks` (
 	`entityId` text NOT NULL,
 	`rating` integer NOT NULL,
 	`comment` text,
-	`createdAt` integer DEFAULT '"2024-07-28T18:10:06.195Z"',
+	`createdAt` integer DEFAULT '"2024-08-13T11:11:08.967Z"',
+	`entityType` text DEFAULT 'track' NOT NULL,
 	FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`entityId`) REFERENCES `tracks`(`id`) ON UPDATE no action ON DELETE cascade
 );
@@ -176,27 +187,13 @@ CREATE TABLE `tracksStats` (
 	FOREIGN KEY (`entityId`) REFERENCES `tracks`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
-CREATE TABLE `userActivities` (
-	`id` text PRIMARY KEY NOT NULL,
-	`userId` text NOT NULL,
-	`activityType` text NOT NULL,
-	`entityId` text NOT NULL,
-	`rating` integer,
-	`comment` text,
-	`createdAt` integer DEFAULT '"2024-07-28T18:10:06.195Z"',
-	FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
-);
---> statement-breakpoint
 CREATE TABLE `userNotifications` (
 	`id` text PRIMARY KEY NOT NULL,
-	`ownerId` text NOT NULL,
 	`senderId` text NOT NULL,
 	`type` text NOT NULL,
-	`resourceId` text,
+	`resourceId` text NOT NULL,
 	`message` text NOT NULL,
-	`isRead` integer DEFAULT false,
-	`createdAt` integer DEFAULT '"2024-07-28T18:10:06.195Z"',
-	FOREIGN KEY (`ownerId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
+	`createdAt` integer DEFAULT '"2024-08-13T11:11:08.967Z"',
 	FOREIGN KEY (`senderId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -205,6 +202,7 @@ CREATE TABLE `userProfiles` (
 	`favoriteArtistId` text,
 	`favoriteAlbumId` text,
 	`favoriteTrackId` text,
+	`bio` text,
 	FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`favoriteArtistId`) REFERENCES `artists`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`favoriteAlbumId`) REFERENCES `albums`(`id`) ON UPDATE no action ON DELETE no action,
@@ -213,7 +211,7 @@ CREATE TABLE `userProfiles` (
 --> statement-breakpoint
 CREATE TABLE `users` (
 	`id` text PRIMARY KEY NOT NULL,
-	`name` text,
+	`name` text NOT NULL,
 	`email` text NOT NULL,
 	`emailVerified` integer,
 	`password` text,
@@ -230,4 +228,6 @@ CREATE TABLE `verificationTokens` (
 CREATE UNIQUE INDEX `albumsTypes_name_unique` ON `albumsTypes` (`name`);--> statement-breakpoint
 CREATE UNIQUE INDEX `authenticator_credentialID_unique` ON `authenticator` (`credentialID`);--> statement-breakpoint
 CREATE UNIQUE INDEX `genres_name_unique` ON `genres` (`name`);--> statement-breakpoint
-CREATE UNIQUE INDEX `unique_playlist_item_index` ON `playlistItems` (`playlistId`,`itemId`);
+CREATE UNIQUE INDEX `unique_playlist_item_index` ON `playlistItems` (`playlistId`,`itemId`);--> statement-breakpoint
+CREATE UNIQUE INDEX `users_name_unique` ON `users` (`name`);--> statement-breakpoint
+CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);

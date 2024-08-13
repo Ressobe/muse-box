@@ -5,120 +5,15 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1722190206216,
-      "tag": "0000_tiresome_felicia_hardy",
+      "when": 1723547468992,
+      "tag": "0000_known_triathlon",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "6",
-      "when": 1722191757293,
-      "tag": "0001_tired_caretaker",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1722191799845,
-      "tag": "0002_small_centennial",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1722234427409,
-      "tag": "0003_far_psylocke",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1722236845655,
-      "tag": "0004_chilly_quentin_quire",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1722236862714,
-      "tag": "0005_bored_firestar",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1722238721147,
-      "tag": "0006_chubby_wolverine",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "6",
-      "when": 1722239606335,
-      "tag": "0007_striped_frog_thor",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "6",
-      "when": 1722239743542,
-      "tag": "0008_daffy_reptil",
-      "breakpoints": true
-    },
-    {
-      "idx": 9,
-      "version": "6",
-      "when": 1722277523315,
-      "tag": "0009_wooden_puff_adder",
-      "breakpoints": true
-    },
-    {
-      "idx": 10,
-      "version": "6",
-      "when": 1722367448507,
-      "tag": "0010_slippery_roughhouse",
-      "breakpoints": true
-    },
-    {
-      "idx": 11,
-      "version": "6",
-      "when": 1722367754024,
-      "tag": "0011_modern_ultimates",
-      "breakpoints": true
-    },
-    {
-      "idx": 12,
-      "version": "6",
-      "when": 1723026505484,
-      "tag": "0012_stormy_shotgun",
-      "breakpoints": true
-    },
-    {
-      "idx": 13,
-      "version": "6",
-      "when": 1723036507049,
-      "tag": "0013_right_exiles",
-      "breakpoints": true
-    },
-    {
-      "idx": 14,
-      "version": "6",
-      "when": 1723037078500,
-      "tag": "0014_deep_zemo",
-      "breakpoints": true
-    },
-    {
-      "idx": 15,
-      "version": "6",
-      "when": 1723185744719,
-      "tag": "0015_burly_steve_rogers",
-      "breakpoints": true
-    },
-    {
-      "idx": 16,
-      "version": "6",
-      "when": 1723185972751,
-      "tag": "0016_dusty_darkstar",
+      "when": 1723547792169,
+      "tag": "0001_happy_ogun",
       "breakpoints": true
     }
   ]

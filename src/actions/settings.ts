@@ -4,7 +4,12 @@ import * as z from "zod";
 import bcrypt from "bcryptjs";
 import { SettingsSchema } from "@/schemas/auth";
 import { currentUser } from "@/lib/auth";
-import { getUserByEmail, getUserById, updateUser } from "@/data-access/user";
+import {
+  getUserByEmail,
+  getUserById,
+  getUserByName,
+  updateUser,
+} from "@/data-access/user";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
 
@@ -30,8 +35,8 @@ export async function settingsAction(values: z.infer<typeof SettingsSchema>) {
   }
 
   if (values.email && values.email !== user.email) {
-    const existngUser = await getUserByEmail(values.email);
-    if (existngUser && existngUser.id !== user.id) {
+    const existngUserByEmail = await getUserByEmail(values.email);
+    if (existngUserByEmail && existngUserByEmail.id !== user.id) {
       return { error: "Email already in use!" };
     }
 
@@ -43,6 +48,13 @@ export async function settingsAction(values: z.infer<typeof SettingsSchema>) {
       verificationToken.token,
       verificationToken.email,
     );
+  }
+
+  if (values.name && values.name !== user.name) {
+    const existngUserByName = await getUserByName(values.name);
+    if (existngUserByName && existngUserByName.id !== user.id) {
+      return { error: "Name already in use!" };
+    }
   }
 
   if (values.password && values.newPassword && dbUser.password) {

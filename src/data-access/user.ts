@@ -22,6 +22,12 @@ export async function getUserByEmail(email: string) {
   });
 }
 
+export async function getUserByName(name: string) {
+  return await db.query.users.findFirst({
+    where: eq(users.name, name),
+  });
+}
+
 export async function getUserById(userId: string) {
   return await db.query.users.findFirst({
     where: eq(users.id, userId),

@@ -54,6 +54,7 @@ export default async function ProfilePage({
       <div className="flex items-center gap-x-20">
         <UserProfileAvatar
           canEdit={isUserOwnsThisProfile}
+          authUserId={user.id}
           avatarUrl={profile.user.image}
         />
         <div className="text-left space-y-6">

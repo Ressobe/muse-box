@@ -1,6 +1,7 @@
 import { FaUser } from "react-icons/fa";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
+import { ImageWithBlur } from "./image-with-blur";
 
 type UserCardProps = {
   user: {
@@ -19,7 +20,13 @@ export function UserCard({ user }: UserCardProps) {
     >
       <div className="hover:bg-secondary/40 p-4 rounded transition-all">
         <Avatar className="h-48 w-48 mb-2">
-          <AvatarImage src={user.image ?? ""} />
+          <ImageWithBlur
+            src={user.image ?? ""}
+            alt={`${user.name} avatar picture`}
+            className="aspect-square h-full w-full"
+            width={250}
+            height={250}
+          />
           <AvatarFallback>
             <FaUser className="w-24 h-24" />
           </AvatarFallback>

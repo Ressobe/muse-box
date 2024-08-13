@@ -1,7 +1,12 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { PencilIcon } from "lucide-react";
 import { useState } from "react";
 import { UserNewAvatar } from "./user-new-avatar";
@@ -10,12 +15,14 @@ import { cn } from "@/lib/utils";
 
 type UserProfileAvatarProps = {
   canEdit: boolean;
+  authUserId: string;
   avatarUrl?: string | null;
   className?: string;
 };
 
 export function UserProfileAvatar({
   canEdit,
+  authUserId,
   avatarUrl,
   className,
 }: UserProfileAvatarProps) {
@@ -37,6 +44,7 @@ export function UserProfileAvatar({
   return (
     <div className="relative w-fit mb-10">
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogTitle />
         <Avatar className={cn("h-40  w-40", className)}>
           <AvatarImage src={avatarUrl || ""} />
           <AvatarFallback>
@@ -52,7 +60,10 @@ export function UserProfileAvatar({
           </button>
         </DialogTrigger>
         <DialogContent>
-          <UserNewAvatar closeModal={() => setModalOpen(false)} />
+          <UserNewAvatar
+            authUserId={authUserId}
+            closeModal={() => setModalOpen(false)}
+          />
         </DialogContent>
       </Dialog>
     </div>

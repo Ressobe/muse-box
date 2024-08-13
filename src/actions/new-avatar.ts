@@ -1,14 +1,17 @@
 "use server";
 
 import { getUserById, updateUserImage } from "@/data-access/user";
+import { currentUser } from "@/lib/auth";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
-export async function newAvatarAction(
-  imgSrc: string,
-  userId: string | undefined,
-) {
-  if (!userId) {
+export async function newAvatarAction(imgSrc: string, userId: string) {
+  const authUser = await currentUser();
+  if (!authUser) {
+    return { error: "User not found!" };
+  }
+
+  if (authUser.id !== userId) {
     return { error: "User not found!" };
   }
 
@@ -43,7 +46,7 @@ export async function newAvatarAction(
   };
 }
 
-function uploadNewAvatar(newAvatar: File) {
+async function uploadNewAvatar(newAvatar: File) {
   const cookieStore = cookies();
   const supabase = createServerComponentClient({
     cookies: () => cookieStore,
@@ -51,7 +54,7 @@ function uploadNewAvatar(newAvatar: File) {
   supabase.storage.from("Avatars").upload(newAvatar.name, newAvatar);
 }
 
-function removeUserAvatar(imgSrc: string) {
+async function removeUserAvatar(imgSrc: string) {
   const cookieStore = cookies();
   const supabase = createServerComponentClient({
     cookies: () => cookieStore,

@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,7 +25,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { FormSucess } from "@/components/form-sucess";
 import { FormError } from "@/components/form-error";
 import { TailSpin } from "react-loader-spinner";
-import { Textarea } from "@/components/ui/textarea";
+// import { Textarea } from "@/components/ui/textarea";
 
 export default function SettingsPage() {
   const user = useCurrentUser();
@@ -38,7 +40,7 @@ export default function SettingsPage() {
     defaultValues: {
       name: user?.name || undefined,
       email: user?.email || undefined,
-      bio: undefined,
+      // bio: undefined,
       password: undefined,
       newPassword: undefined,
     },
@@ -92,19 +94,19 @@ export default function SettingsPage() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="bio"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Bio</FormLabel>
-                    <FormControl>
-                      <Textarea {...field} disabled={isPending} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {/* <FormField */}
+              {/*   control={form.control} */}
+              {/*   name="bio" */}
+              {/*   render={({ field }) => ( */}
+              {/*     <FormItem> */}
+              {/*       <FormLabel>Bio</FormLabel> */}
+              {/*       <FormControl> */}
+              {/*         <Textarea {...field} disabled={isPending} /> */}
+              {/*       </FormControl> */}
+              {/*       <FormMessage /> */}
+              {/*     </FormItem> */}
+              {/*   )} */}
+              {/* /> */}
               {user?.isOAuth === false ? (
                 <>
                   <FormField

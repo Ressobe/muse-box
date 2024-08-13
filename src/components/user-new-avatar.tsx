@@ -6,7 +6,7 @@ import ReactCrop, {
   Crop,
   makeAspectCrop,
 } from "react-image-crop";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useRef, useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { FormError } from "@/components/form-error";
 import { Button } from "@/components/ui/button";
@@ -29,24 +29,22 @@ export function isFileExtensionAllowed(fileName: string) {
 }
 
 type UserNewAvatarProps = {
+  authUserId: string;
   closeModal: () => void;
 };
 
-export function UserNewAvatar({ closeModal }: UserNewAvatarProps) {
+export function UserNewAvatar({ authUserId, closeModal }: UserNewAvatarProps) {
   const [error, setError] = useState("");
   const [imgSrc, setImgSrc] = useState("");
   const [fileSelected, setFileSelected] = useState<File | undefined>(undefined);
   const [crop, setCrop] = useState<Crop>();
+  const [isPending, startTransition] = useTransition();
 
   const imgRef = useRef<HTMLImageElement | null>(null);
   const canvasPreviewRef = useRef<HTMLCanvasElement | null>(null);
 
   const { update } = useSession();
   const { toast } = useToast();
-  const user = useCurrentUser();
-  if (!user) {
-    return null;
-  }
 
   const onSelectFile = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -104,43 +102,45 @@ export function UserNewAvatar({ closeModal }: UserNewAvatarProps) {
   };
 
   const handleClick = async () => {
-    if (fileSelected && imgRef.current && canvasPreviewRef.current && crop) {
-      setCanvasPreview(
-        imgRef.current,
-        canvasPreviewRef.current,
-        convertToPixelCrop(crop, imgRef.current.width, imgRef.current.height),
-      );
+    startTransition(async () => {
+      if (fileSelected && imgRef.current && canvasPreviewRef.current && crop) {
+        setCanvasPreview(
+          imgRef.current,
+          canvasPreviewRef.current,
+          convertToPixelCrop(crop, imgRef.current.width, imgRef.current.height),
+        );
 
-      const dataUrl = canvasPreviewRef.current.toDataURL();
-      const fileExtension = fileSelected.name.split(".").pop()?.toLowerCase();
-      if (!fileExtension || !AllowedFileExtensions.includes(fileExtension)) {
-        toast({
-          variant: "destructive",
-          title: "Invalid file format. Please upload a valid image file.",
-        });
-        return;
+        const dataUrl = canvasPreviewRef.current.toDataURL();
+        const fileExtension = fileSelected.name.split(".").pop()?.toLowerCase();
+        if (!fileExtension || !AllowedFileExtensions.includes(fileExtension)) {
+          toast({
+            variant: "destructive",
+            title: "Invalid file format. Please upload a valid image file.",
+          });
+          return;
+        }
+
+        const result = await newAvatarAction(dataUrl, authUserId);
+        if (result.success) {
+          update();
+          toast({
+            variant: "default",
+            title: "Success",
+            description: result.success,
+          });
+        }
+
+        if (result.error) {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: result.error,
+          });
+        }
+
+        closeModal();
       }
-
-      const result = await newAvatarAction(dataUrl, user?.id);
-      if (result.success) {
-        update();
-        toast({
-          variant: "default",
-          title: "Success",
-          description: result.success,
-        });
-      }
-
-      if (result.error) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: result.error,
-        });
-      }
-
-      closeModal();
-    }
+    });
   };
 
   return (
@@ -155,7 +155,6 @@ export function UserNewAvatar({ closeModal }: UserNewAvatarProps) {
         />
       </label>
       <FormError message={error} />
-
       {imgSrc && (
         <div className="flex flex-col items-center gap-8">
           <ReactCrop
@@ -174,7 +173,9 @@ export function UserNewAvatar({ closeModal }: UserNewAvatarProps) {
               onLoad={handleImageLoad}
             />
           </ReactCrop>
-          <Button onClick={handleClick}>Update avatar</Button>
+          <Button disabled={isPending} onClick={handleClick}>
+            Update avatar
+          </Button>
         </div>
       )}
       {crop && (

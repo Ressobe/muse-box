@@ -10,7 +10,7 @@ import {
   userProfiles,
   users,
 } from "@/database/schema";
-import { and, desc, eq, not } from "drizzle-orm";
+import { and, desc, eq, not, sql } from "drizzle-orm";
 import { Entity } from "@/types";
 import { TAlbumReview, TArtistReview, TTrackReview } from "@/types/review";
 
@@ -286,4 +286,18 @@ export async function getArtistReviewsWhereUserIsNotOwner(
     limit,
     orderBy: desc(reviewsArtists.createdAt),
   });
+}
+
+export async function getFilteredUsers(query: string) {
+  const filteredUsers = await db
+    .select({
+      id: users.id,
+      name: users.name,
+      email: users.email,
+      image: users.image,
+    })
+    .from(users)
+    .where(sql`${users.name} LIKE ${`%${query}%`} COLLATE NOCASE`);
+
+  return filteredUsers;
 }

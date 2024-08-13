@@ -6,6 +6,7 @@ import { createProfile } from "@/data-access/profile";
 import { getTrack, getTrackById } from "@/data-access/track";
 import {
   createUser,
+  getFilteredUsers,
   getUserAlbumReview,
   getUserArtistReview,
   getUserArtistReview2,
@@ -251,4 +252,14 @@ export async function getUserNotificationsUseCase(
   );
 
   return notificationsWithResource;
+}
+
+export async function getFilteredUsersUseCase(query: string) {
+  const lowerCaseQuery = query.toLowerCase();
+
+  if (lowerCaseQuery === "") {
+    return [];
+  }
+
+  return getFilteredUsers(lowerCaseQuery);
 }

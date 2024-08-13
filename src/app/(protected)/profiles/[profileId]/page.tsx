@@ -1,7 +1,7 @@
 import { ActionFavouriteMenu } from "@/components/favs/action-favourite-menu";
 import { FavouriteMenu } from "@/components/favs/favourite-menu";
 import { FollowButton } from "@/components/follow-button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { currentUser } from "@/lib/auth";
 import { getProfileUseCase } from "@/use-cases/profile";
 import {
@@ -15,8 +15,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
 import { RecentActivity } from "./recent-activity";
-import { formatNumberWithPrefix } from "@/lib/utils";
 import { FollowersFollowingDialog } from "./followers-following-dialog";
+import { UserProfileAvatar } from "@/components/user-profile-avatar";
 
 export default async function ProfilePage({
   params,
@@ -52,12 +52,10 @@ export default async function ProfilePage({
   return (
     <section className="space-y-12">
       <div className="flex items-center gap-x-20">
-        <Avatar className="h-40 w-40">
-          <AvatarImage src="" />
-          <AvatarFallback>
-            <FaUser className="w-20 h-20" />
-          </AvatarFallback>
-        </Avatar>
+        <UserProfileAvatar
+          canEdit={isUserOwnsThisProfile}
+          avatarUrl={profile.user.image}
+        />
         <div className="text-left space-y-6">
           <h1 className="font-bold text-4xl">{profile.user.name}</h1>
           {!isUserOwnsThisProfile && (

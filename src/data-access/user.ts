@@ -62,7 +62,18 @@ export async function updateUserPassword(userId: string, newPassword: string) {
 }
 
 export async function updateUserImage(userId: string, newImage: string) {
-  await db.update(users).set({ image: newImage }).where(eq(users.id, userId));
+  return await db
+    .update(users)
+    .set({ image: newImage })
+    .where(eq(users.id, userId));
+}
+
+export async function getUserImage(userId: string) {
+  const [img] = await db
+    .select({ image: users.image })
+    .from(users)
+    .where(eq(users.id, userId));
+  return img;
 }
 
 export async function updateUser(

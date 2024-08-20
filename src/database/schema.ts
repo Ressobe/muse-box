@@ -16,6 +16,8 @@ export const PlaylistItemType = {
   TRACK: "track",
 };
 
+type Gender = "MALE" | "FEMALE";
+
 type PlaylistItemType =
   (typeof PlaylistItemType)[keyof typeof PlaylistItemType];
 
@@ -152,9 +154,29 @@ export const artists = sqliteTable("artists", {
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
-  bio: text("bio").default(""),
-  country: text("country").default(""),
   image: text("image").default(""),
+  bio: text("bio").default(""),
+  beginDateYear: integer("beginDateYear"),
+  beginDateMonth: integer("beginDateMonth"),
+  beginDateDay: integer("beginDateDay"),
+  endDateYear: integer("endDateYear"),
+  endDateMonth: integer("endDateMonth"),
+  endDateDay: integer("endDateDay"),
+  type: integer("type")
+    .references(() => artistsTypes.id)
+    .notNull(),
+  country: integer("country").references(() => countries.id),
+  gender: text("gender").$type<Gender>(),
+});
+
+export const artistsTypes = sqliteTable("artistsTypes", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull().unique(),
+});
+
+export const countries = sqliteTable("countries", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull().unique(),
 });
 
 export const artistsRelations = relations(artists, ({ many, one }) => ({
@@ -233,8 +255,8 @@ export const tracks = sqliteTable("tracks", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  artistId: text("artistId")
-    .references(() => artists.id, {
+  artistsCredits: text("artistsCredits")
+    .references(() => artistsCredits.id, {
       onDelete: "cascade",
     })
     .notNull(),
@@ -247,6 +269,20 @@ export const tracks = sqliteTable("tracks", {
   title: text("title").notNull(),
   image: text("image").default(""),
   length: integer("length").default(0),
+});
+
+export const artistsCredits = sqliteTable("artistsCredits", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  position: integer("position").notNull(),
+  artistId: text("artistId")
+    .references(() => artists.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
+  name: text("name").notNull(),
+  joinPhrase: text("joinPhrase"),
 });
 
 export const tracksRelations = relations(tracks, ({ one }) => ({

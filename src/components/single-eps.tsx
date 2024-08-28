@@ -33,7 +33,7 @@ export async function SingleEps({ artistId }: SingleEpsProps) {
                   src={item.image ?? ""}
                   width={200}
                   height={200}
-                  alt="dkdk"
+                  alt={`${item.title} cover image`}
                 />
                 <div className="pt-4">{item.title}</div>
                 <div className="text-muted-foreground">2016</div>

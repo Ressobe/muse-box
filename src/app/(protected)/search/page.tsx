@@ -24,7 +24,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   return (
     <section className="space-y-16">
       <div>
-        <h1 className="font-bold text-4xl">Users</h1>
+        <h1 className="font-bold text-4xl">Artists</h1>
         <ul className="pl-4 pt-8 flex">
           {users.length > 0 ? (
             users.map((item) => {

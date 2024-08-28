@@ -32,6 +32,8 @@ export async function TopTracks({ artistId }: TopTracksProps) {
     })),
   );
 
+  console.log("tracks: ", tracks);
+
   return (
     <div>
       <h2 className="font-bold text-3xl pb-6">Top tracks</h2>
@@ -72,12 +74,12 @@ export async function TopTracks({ artistId }: TopTracksProps) {
                     {item.album.title}
                   </Link>
                 </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-4 ">
-                    <span className="text-yellow-500 text-2xl">★</span>
-                    {item.stats.ratingAvg}
-                  </div>
-                </TableCell>
+                {/* <TableCell> */}
+                {/*   <div className="flex items-center gap-4 "> */}
+                {/*     <span className="text-yellow-500 text-2xl">★</span> */}
+                {/*     {item.stats.ratingAvg} */}
+                {/*   </div> */}
+                {/* </TableCell> */}
                 <TableCell>
                   <LikeButton
                     defaultLikeState={item.isLiked}

@@ -21,7 +21,7 @@ CREATE TABLE `albums` (
 	`title` text NOT NULL,
 	`image` text DEFAULT '',
 	`length` integer DEFAULT 0,
-	`releaseDate` integer DEFAULT '"2024-08-13T11:11:08.966Z"',
+	`releaseDate` integer DEFAULT '"2024-08-26T16:42:03.498Z"',
 	FOREIGN KEY (`artistId`) REFERENCES `artists`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`typeId`) REFERENCES `albumsTypes`(`id`) ON UPDATE no action ON DELETE no action
 );
@@ -44,9 +44,35 @@ CREATE TABLE `albumsTypes` (
 CREATE TABLE `artists` (
 	`id` text PRIMARY KEY NOT NULL,
 	`name` text NOT NULL,
+	`image` text DEFAULT '',
 	`bio` text DEFAULT '',
-	`country` text DEFAULT '',
-	`image` text DEFAULT ''
+	`beginDateYear` integer,
+	`beginDateMonth` integer,
+	`beginDateDay` integer,
+	`endDateYear` integer,
+	`endDateMonth` integer,
+	`endDateDay` integer,
+	`type` integer NOT NULL,
+	`country` text,
+	`gender` integer,
+	FOREIGN KEY (`type`) REFERENCES `artistsTypes`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`country`) REFERENCES `countries`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`gender`) REFERENCES `genders`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `artistsCredits` (
+	`id` text PRIMARY KEY NOT NULL,
+	`name` text
+);
+--> statement-breakpoint
+CREATE TABLE `artistsCreditsName` (
+	`artistCreditId` text NOT NULL,
+	`artistId` text NOT NULL,
+	`position` integer NOT NULL,
+	`name` text NOT NULL,
+	`joinPhrase` text,
+	FOREIGN KEY (`artistCreditId`) REFERENCES `artistsCredits`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`artistId`) REFERENCES `artists`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `artistsStats` (
@@ -57,6 +83,11 @@ CREATE TABLE `artistsStats` (
 	`ratingSum` integer DEFAULT 0,
 	`ratingCount` integer DEFAULT 0,
 	FOREIGN KEY (`entityId`) REFERENCES `artists`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE `artistsTypes` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`name` text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `authenticator` (
@@ -72,12 +103,22 @@ CREATE TABLE `authenticator` (
 	FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
+CREATE TABLE `countries` (
+	`id` text PRIMARY KEY NOT NULL,
+	`name` text NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE `follows` (
 	`followerId` text NOT NULL,
 	`followingId` text NOT NULL,
 	PRIMARY KEY(`followerId`, `followingId`),
 	FOREIGN KEY (`followerId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`followingId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE `genders` (
+	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	`name` text NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `genres` (
@@ -88,8 +129,8 @@ CREATE TABLE `genres` (
 CREATE TABLE `genresToArtists` (
 	`artistId` text NOT NULL,
 	`genreId` integer NOT NULL,
-	FOREIGN KEY (`artistId`) REFERENCES `artists`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`genreId`) REFERENCES `genres`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`artistId`) REFERENCES `artists`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`genreId`) REFERENCES `genres`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `notificationRecipients` (
@@ -128,7 +169,7 @@ CREATE TABLE `reviewsAlbums` (
 	`entityId` text NOT NULL,
 	`rating` integer NOT NULL,
 	`comment` text,
-	`createdAt` integer DEFAULT '"2024-08-13T11:11:08.967Z"',
+	`createdAt` integer DEFAULT '"2024-08-26T16:42:03.499Z"',
 	`entityType` text DEFAULT 'album' NOT NULL,
 	FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`entityId`) REFERENCES `albums`(`id`) ON UPDATE no action ON DELETE cascade
@@ -140,7 +181,7 @@ CREATE TABLE `reviewsArtists` (
 	`entityId` text NOT NULL,
 	`rating` integer NOT NULL,
 	`comment` text,
-	`createdAt` integer DEFAULT '"2024-08-13T11:11:08.967Z"',
+	`createdAt` integer DEFAULT '"2024-08-26T16:42:03.499Z"',
 	`entityType` text DEFAULT 'artist' NOT NULL,
 	FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`entityId`) REFERENCES `artists`(`id`) ON UPDATE no action ON DELETE cascade
@@ -152,7 +193,7 @@ CREATE TABLE `reviewsTracks` (
 	`entityId` text NOT NULL,
 	`rating` integer NOT NULL,
 	`comment` text,
-	`createdAt` integer DEFAULT '"2024-08-13T11:11:08.967Z"',
+	`createdAt` integer DEFAULT '"2024-08-26T16:42:03.499Z"',
 	`entityType` text DEFAULT 'track' NOT NULL,
 	FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`entityId`) REFERENCES `tracks`(`id`) ON UPDATE no action ON DELETE cascade
@@ -167,13 +208,13 @@ CREATE TABLE `session` (
 --> statement-breakpoint
 CREATE TABLE `tracks` (
 	`id` text PRIMARY KEY NOT NULL,
-	`artistId` text NOT NULL,
+	`artistsCredits` text NOT NULL,
 	`albumId` text NOT NULL,
 	`position` integer NOT NULL,
 	`title` text NOT NULL,
 	`image` text DEFAULT '',
 	`length` integer DEFAULT 0,
-	FOREIGN KEY (`artistId`) REFERENCES `artists`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`artistsCredits`) REFERENCES `artistsCredits`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`albumId`) REFERENCES `albums`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -193,7 +234,7 @@ CREATE TABLE `userNotifications` (
 	`type` text NOT NULL,
 	`resourceId` text NOT NULL,
 	`message` text NOT NULL,
-	`createdAt` integer DEFAULT '"2024-08-13T11:11:08.967Z"',
+	`createdAt` integer DEFAULT '"2024-08-26T16:42:03.499Z"',
 	FOREIGN KEY (`senderId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -202,7 +243,6 @@ CREATE TABLE `userProfiles` (
 	`favoriteArtistId` text,
 	`favoriteAlbumId` text,
 	`favoriteTrackId` text,
-	`bio` text,
 	FOREIGN KEY (`userId`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
 	FOREIGN KEY (`favoriteArtistId`) REFERENCES `artists`(`id`) ON UPDATE no action ON DELETE no action,
 	FOREIGN KEY (`favoriteAlbumId`) REFERENCES `albums`(`id`) ON UPDATE no action ON DELETE no action,
@@ -226,7 +266,10 @@ CREATE TABLE `verificationTokens` (
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `albumsTypes_name_unique` ON `albumsTypes` (`name`);--> statement-breakpoint
+CREATE UNIQUE INDEX `artistsTypes_name_unique` ON `artistsTypes` (`name`);--> statement-breakpoint
 CREATE UNIQUE INDEX `authenticator_credentialID_unique` ON `authenticator` (`credentialID`);--> statement-breakpoint
+CREATE UNIQUE INDEX `countries_name_unique` ON `countries` (`name`);--> statement-breakpoint
+CREATE UNIQUE INDEX `genders_name_unique` ON `genders` (`name`);--> statement-breakpoint
 CREATE UNIQUE INDEX `genres_name_unique` ON `genres` (`name`);--> statement-breakpoint
 CREATE UNIQUE INDEX `unique_playlist_item_index` ON `playlistItems` (`playlistId`,`itemId`);--> statement-breakpoint
 CREATE UNIQUE INDEX `users_name_unique` ON `users` (`name`);--> statement-breakpoint

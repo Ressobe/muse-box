@@ -48,28 +48,28 @@ export default async function TrackPage({
           <div>
             <div>Song</div>
             <h1 className="font-bold text-5xl">{track.title}</h1>
-            <div className="flex items-center gap-x-4 pt-3.5  text-2xl">
-              <span className="text-yellow-500">★</span>
-              {track.stats.ratingCount === 0 ? (
-                <span className="text-md">Not rated yet!</span>
-              ) : (
-                track.stats.ratingAvg
-              )}
-            </div>
+            {/* <div className="flex items-center gap-x-4 pt-3.5  text-2xl"> */}
+            {/*   <span className="text-yellow-500">★</span> */}
+            {/*   {track.stats.ratingCount === 0 ? ( */}
+            {/*     <span className="text-md">Not rated yet!</span> */}
+            {/*   ) : ( */}
+            {/*     track.stats.ratingAvg */}
+            {/*   )} */}
+            {/* </div> */}
           </div>
           <div className="flex items-center gap-x-4 text-sm">
-            <Avatar className="h-16 w-16">
-              <AvatarImage src={track.artist.image ?? ""} />
-              <AvatarFallback>
-                <FaUser className="w-8 h-8" />
-              </AvatarFallback>
-            </Avatar>
-            <Link
-              href={`/artists/${track.artist.id}`}
-              className="transition-all underline-offset-2 hover:underline"
-            >
-              {track.artist.name}
-            </Link>
+            {/* <Avatar className="h-16 w-16"> */}
+            {/*   <AvatarImage src={track.artist.image ?? ""} /> */}
+            {/*   <AvatarFallback> */}
+            {/*     <FaUser className="w-8 h-8" /> */}
+            {/*   </AvatarFallback> */}
+            {/* </Avatar> */}
+            {/* <Link */}
+            {/*   href={`/artists/${track.artist.id}`} */}
+            {/*   className="transition-all underline-offset-2 hover:underline" */}
+            {/* > */}
+            {/*   {track.artist.name} */}
+            {/* </Link> */}
             <span>{getYear(track.album.releaseDate)}</span>
             <Link
               href={`/albums/${track.album.id}`}

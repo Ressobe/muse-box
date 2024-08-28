@@ -6,12 +6,11 @@ import {
   genresToArtists,
   reviewsArtists,
   tracks,
+  tracksStats,
 } from "@/database/schema";
 import { Artist } from "@/schemas/artist";
 import { and, count, desc, eq, or, sql } from "drizzle-orm";
 import { createArtistStat } from "./stat";
-import { createAlbum, createAlbumTypes } from "./album";
-import { createTrack } from "./track";
 
 export async function getArtists() {
   return await db.query.artists.findMany();
@@ -50,14 +49,20 @@ export async function getArtistSinglesEps(artistId: string, limit?: number) {
 }
 
 export async function getArtistTracks(artistId: string, limit?: number) {
-  return await db.query.tracks.findMany({
-    where: eq(tracks.artistId, artistId),
-    with: {
-      album: true,
-      stats: true,
-    },
-    limit,
-  });
+  if (limit) {
+    return await db
+      .select()
+      .from(tracks)
+      .leftJoin(tracksStats, eq(tracksStats.entityId, tracks.id))
+      .innerJoin(albums, eq(albums.artistId, artistId))
+      .limit(limit);
+  }
+
+  return await db
+    .select()
+    .from(tracks)
+    .leftJoin(tracksStats, eq(tracksStats.entityId, tracks.id))
+    .innerJoin(albums, eq(albums.artistId, artistId));
 }
 
 export async function getArtistGenres(artistId: string, limit?: number) {
@@ -134,196 +139,4 @@ export async function getFilteredArtists(query: string) {
     .where(sql`${artists.name} LIKE ${`%${query}%`} COLLATE NOCASE`);
 
   return filteredArtists;
-}
-
-export async function emptyArtists() {
-  const artists = [
-    {
-      name: "Quebonafide",
-      bio: "One of the most popular Polish rappers, known for his diverse style.",
-      country: "Poland",
-    },
-    {
-      name: "Sokół",
-      bio: "Veteran of the Polish hip-hop scene, known for his deep lyrics.",
-      country: "Poland",
-    },
-    {
-      name: "O.S.T.R.",
-      bio: "Renowned Polish rapper and producer, known for his lyrical depth.",
-      country: "Poland",
-    },
-    {
-      name: "KęKę",
-      bio: "Popular Polish rapper known for his authentic style and storytelling.",
-      country: "Poland",
-    },
-  ];
-
-  artists.forEach(async (artist) => {
-    await createArtist(artist);
-  });
-}
-
-export async function insertTacoHemingway() {
-  // await createAlbumTypes();
-  const artist = await createArtist({
-    name: "Taco Hemingway",
-    bio: "Polish rapper known for his unique style and storytelling.",
-    country: "Poland",
-    image: "/taco-avatar.jpeg",
-  });
-
-  const album1 = await createAlbum({
-    artistId: artist.id,
-    typeId: 1,
-    title: "Trójkąt Warszawski",
-    image: "/taco4.jpeg",
-    length: 1753,
-    releaseDate: new Date("2014-12-19"),
-  });
-
-  const album2 = await createAlbum({
-    artistId: artist.id,
-    typeId: 1,
-    title: "Umowa o dzieło",
-    image: "/taco3.jpeg",
-    length: 1753,
-    releaseDate: new Date("2015-06-27"),
-  });
-
-  await createTrack({
-    title: "Szlugi i Kalafiory",
-    image: "/taco4.jpeg",
-    albumId: album1.id,
-    artistId: artist.id,
-    position: 1,
-    length: 186,
-  });
-
-  await createTrack({
-    title: "Marsz, Marsz",
-    image: "/taco4.jpeg",
-    albumId: album1.id,
-    artistId: artist.id,
-    position: 2,
-    length: 230,
-  });
-
-  await createTrack({
-    title: "Wszystko Jedno",
-    image: "/taco4.jpeg",
-    albumId: album1.id,
-    artistId: artist.id,
-    position: 3,
-    length: 310,
-  });
-
-  await createTrack({
-    title: "Trójkąt",
-    image: "/taco4.jpeg",
-    albumId: album1.id,
-    artistId: artist.id,
-    position: 4,
-    length: 326,
-  });
-
-  await createTrack({
-    title: "(Przerywnik)",
-    image: "/taco4.jpeg",
-    albumId: album1.id,
-    artistId: artist.id,
-    position: 5,
-    length: 132,
-  });
-
-  await createTrack({
-    title: "Mięso",
-    image: "/taco4.jpeg",
-    albumId: album1.id,
-    artistId: artist.id,
-    position: 6,
-    length: 257,
-  });
-
-  await createTrack({
-    title: "900729",
-    image: "/taco4.jpeg",
-    albumId: album1.id,
-    artistId: artist.id,
-    position: 7,
-    length: 303,
-  });
-
-  await createTrack({
-    title: "Od zera",
-    image: "/taco3.jpeg",
-    albumId: album2.id,
-    artistId: artist.id,
-    position: 1,
-    length: 116,
-  });
-
-  await createTrack({
-    title: "A mówiłem Ci",
-    image: "/taco3.jpeg",
-    albumId: album2.id,
-    artistId: artist.id,
-    position: 2,
-    length: 339,
-  });
-
-  await createTrack({
-    title: "Następna stacja",
-    image: "/taco3.jpeg",
-    albumId: album2.id,
-    artistId: artist.id,
-    position: 3,
-    length: 251,
-  });
-
-  await createTrack({
-    title: "6 zer",
-    image: "/taco3.jpeg",
-    albumId: album2.id,
-    artistId: artist.id,
-    position: 4,
-    length: 237,
-  });
-
-  await createTrack({
-    title: "+4822",
-    image: "/taco3.jpeg",
-    albumId: album2.id,
-    artistId: artist.id,
-    position: 5,
-    length: 236,
-  });
-
-  await createTrack({
-    title: "Awizo",
-    image: "/taco3.jpeg",
-    albumId: album2.id,
-    artistId: artist.id,
-    position: 6,
-    length: 259,
-  });
-
-  await createTrack({
-    title: "Białkoholicy",
-    image: "/taco3.jpeg",
-    albumId: album2.id,
-    artistId: artist.id,
-    position: 7,
-    length: 282,
-  });
-
-  await createTrack({
-    title: "100 kmh",
-    image: "/taco3.jpeg",
-    albumId: album2.id,
-    artistId: artist.id,
-    position: 8,
-    length: 119,
-  });
 }

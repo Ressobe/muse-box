@@ -45,6 +45,8 @@ export default async function AlbumPage({
     })),
   );
 
+  console.log(album.tracks);
+
   const isAlbumLiked = await isUserLikedItUseCase(user.id, album.id, "album");
   const reviews = await getAlbumReviewsUseCase(album.id);
   const showAddReview = await shouldShowAddReviewUseCase(album.id, "album");
@@ -63,14 +65,14 @@ export default async function AlbumPage({
             <div>{album.albumType.name}</div>
             <h1 className="font-bold text-5xl">{album.title}</h1>
           </div>
-          <div className="flex items-center gap-x-4 text-3xl">
-            <span className="text-yellow-500 ">★</span>
-            {album.stats.ratingCount === 0 ? (
-              <span className="text-md">Not rated yet!</span>
-            ) : (
-              album.stats.ratingAvg
-            )}
-          </div>
+          {/* <div className="flex items-center gap-x-4 text-3xl"> */}
+          {/*   <span className="text-yellow-500 ">★</span> */}
+          {/*   {album.stats.ratingCount === 0 ? ( */}
+          {/*     <span className="text-md">Not rated yet!</span> */}
+          {/*   ) : ( */}
+          {/*     album.stats.ratingAvg */}
+          {/*   )} */}
+          {/* </div> */}
           <div className="flex items-center gap-x-4 text-sm">
             <Avatar className="h-16 w-16">
               <AvatarImage src={album.artist.image ?? ""} />
@@ -119,7 +121,7 @@ export default async function AlbumPage({
                     src={album.image ?? ""}
                     width={70}
                     height={70}
-                    alt="dkdk"
+                    alt={`${track.title} cover image`}
                   />
                   <Link
                     href={`/tracks/${track.id}`}
@@ -128,12 +130,12 @@ export default async function AlbumPage({
                     {track.title}
                   </Link>
                 </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-4 ">
-                    <span className="text-yellow-500 text-2xl">★</span>
-                    {track.stats.ratingAvg}
-                  </div>
-                </TableCell>
+                {/* <TableCell> */}
+                {/*   <div className="flex items-center gap-4 "> */}
+                {/*     <span className="text-yellow-500 text-2xl">★</span> */}
+                {/*     {track.stats.ratingAvg} */}
+                {/*   </div> */}
+                {/* </TableCell> */}
                 <TableCell>
                   <LikeButton
                     defaultLikeState={track.isLiked}

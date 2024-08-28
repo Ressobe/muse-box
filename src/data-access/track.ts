@@ -3,6 +3,7 @@ import { albums, reviewsTracks, tracks, tracksStats } from "@/database/schema";
 import { Track } from "@/schemas/track";
 import { count, desc, eq, sql } from "drizzle-orm";
 import { createTrackStat } from "./stat";
+import { getAlbumImage } from "./album";
 
 export async function getTracks() {
   return await db.query.tracks.findMany({
@@ -16,9 +17,12 @@ export async function getTrackById(trackId: string) {
   return await db.query.tracks.findFirst({
     where: eq(tracks.id, trackId),
     with: {
-      album: true,
+      album: {
+        with: {
+          artist: true,
+        },
+      },
       stats: true,
-      artist: true,
     },
   });
 }
@@ -27,8 +31,11 @@ export async function getTrack(trackId: string) {
   return await db.query.tracks.findFirst({
     where: eq(tracks.id, trackId),
     with: {
-      album: true,
-      artist: true,
+      album: {
+        with: {
+          artist: true,
+        },
+      },
     },
   });
 }
@@ -65,7 +72,9 @@ export async function getTrackReviewsCount(trackId: string) {
 
 export async function getTrackImage(trackId: string): Promise<string | null> {
   const track = await getTrackById(trackId);
-  return track?.album?.image || null;
+  if (!track) return null;
+
+  return getAlbumImage(track.album.id);
 }
 
 export async function getTopTracks(artistId: string, limit: number = 5) {
@@ -86,9 +95,9 @@ export async function getTopTracks(artistId: string, limit: number = 5) {
       },
     })
     .from(tracks)
-    .innerJoin(tracksStats, eq(tracks.id, tracksStats.entityId))
+    .leftJoin(tracksStats, eq(tracks.id, tracksStats.entityId))
     .innerJoin(albums, eq(tracks.albumId, albums.id))
-    .where(eq(tracks.artistId, artistId))
+    .where(eq(albums.artistId, artistId))
     .orderBy(desc(tracksStats.ratingAvg))
     .limit(limit)
     .execute();
@@ -105,7 +114,7 @@ export async function getTopTracks(artistId: string, limit: number = 5) {
       title: row.album.title,
     },
     stats: {
-      ratingAvg: row.stats.ratingAvg,
+      ratingAvg: row.stats?.ratingAvg,
     },
   }));
 }
@@ -114,7 +123,6 @@ export async function getFilteredTracks(query: string) {
   const filteredTracks = await db
     .select({
       id: tracks.id,
-      artistId: tracks.artistId,
       position: tracks.position,
       title: tracks.title,
       image: tracks.image,

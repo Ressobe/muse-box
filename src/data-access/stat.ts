@@ -49,6 +49,23 @@ export async function updateStatsNewRating(
     .from(table)
     .where(eq(table.entityId, entityId));
 
+  if (!existingStat) {
+    switch (type) {
+      case "artist": {
+        await createArtistStat(entityId);
+        break;
+      }
+      case "album": {
+        await createAlbumStat(entityId);
+        break;
+      }
+      case "track": {
+        await createTrackStat(entityId);
+        break;
+      }
+    }
+  }
+
   existingStat.ratingSum = existingStat.ratingSum ?? 0;
   existingStat.ratingCount = existingStat.ratingCount ?? 0;
 

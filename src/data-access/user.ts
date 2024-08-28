@@ -273,7 +273,7 @@ export async function getUserLatestReviews(
 
       return dateB - dateA;
     })
-    .slice(0, 5);
+    .slice(0, LIMIT);
 }
 
 export async function getArtistReviewsWhereUserIsNotOwner(

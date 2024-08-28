@@ -1,5 +1,5 @@
 import { db } from "@/database/db";
-import { albums, albumsTypes, reviewsAlbums } from "@/database/schema";
+import { albums, reviewsAlbums } from "@/database/schema";
 import { Album } from "@/schemas/album";
 import { count, desc, eq, sql } from "drizzle-orm";
 import { createAlbumStat } from "./stat";
@@ -73,20 +73,6 @@ export async function getAlbumReviewsCount(albumId: string) {
 export async function getAlbumImage(albumId: string): Promise<string | null> {
   const album = await getAlbumById(albumId);
   return album?.image || null;
-}
-
-export async function createAlbumTypes() {
-  await db.insert(albumsTypes).values([
-    {
-      name: "Album",
-    },
-    {
-      name: "Single",
-    },
-    {
-      name: "EP",
-    },
-  ]);
 }
 
 export async function getFilteredAlbums(query: string) {

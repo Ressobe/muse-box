@@ -123,12 +123,12 @@ export default async function DiscographyPage({
                           {track.title}
                         </Link>
                       </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-4 ">
-                          <span className="text-yellow-500 text-2xl">★</span>
-                          {track.stats.ratingAvg}
-                        </div>
-                      </TableCell>
+                      {/* <TableCell> */}
+                      {/*   <div className="flex items-center gap-4 "> */}
+                      {/*     <span className="text-yellow-500 text-2xl">★</span> */}
+                      {/*     {track.stats.ratingAvg} */}
+                      {/*   </div> */}
+                      {/* </TableCell> */}
                       <TableCell>
                         <LikeButton
                           defaultLikeState={isLikedTrack}

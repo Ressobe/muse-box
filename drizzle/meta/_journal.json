@@ -5,15 +5,15 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1723547468992,
-      "tag": "0000_known_triathlon",
+      "when": 1724690523523,
+      "tag": "0000_pretty_mandrill",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "6",
-      "when": 1723547792169,
-      "tag": "0001_happy_ogun",
+      "when": 1724690552411,
+      "tag": "0001_serious_earthquake",
       "breakpoints": true
     }
   ]

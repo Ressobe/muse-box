@@ -33,7 +33,7 @@ export async function Albums({ artistId }: AlbumsProps) {
                   src={alb.image ?? ""}
                   width={200}
                   height={200}
-                  alt="dkdk"
+                  alt={`${alb.title} cover image`}
                 />
                 <div className="pt-4">{alb.title}</div>
                 <div className="text-muted-foreground">2016</div>

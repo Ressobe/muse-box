@@ -5,7 +5,6 @@ type TrackCardProps = {
   track: {
     id: string;
     image: string | null;
-    artistId: string;
     title: string;
     length: number | null;
     albumId: string;

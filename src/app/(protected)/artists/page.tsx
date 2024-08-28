@@ -1,6 +1,5 @@
 import { ArtistCard } from "@/components/artist-card";
 import { getArtists } from "@/data-access/artist";
-import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 

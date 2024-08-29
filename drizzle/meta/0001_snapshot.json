@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "f867e688-6811-4627-a94d-f6283d4983a0",
-  "prevId": "15211b31-29a2-445a-8a08-a356e042280b",
+  "id": "b7f376df-5c08-4883-a5c8-24d481a0fbca",
+  "prevId": "17eadeb8-ddd0-4278-825c-fbf9582df9ac",
   "tables": {
     "account": {
       "name": "account",
@@ -165,7 +165,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-08-26T16:42:32.343Z\"'"
+          "default": "'\"2024-08-29T09:59:27.932Z\"'"
         }
       },
       "indexes": {},
@@ -1177,7 +1177,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-08-26T16:42:32.343Z\"'"
+          "default": "'\"2024-08-29T09:59:27.933Z\"'"
         },
         "entityType": {
           "name": "entityType",
@@ -1264,7 +1264,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-08-26T16:42:32.343Z\"'"
+          "default": "'\"2024-08-29T09:59:27.933Z\"'"
         },
         "entityType": {
           "name": "entityType",
@@ -1351,7 +1351,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-08-26T16:42:32.344Z\"'"
+          "default": "'\"2024-08-29T09:59:27.933Z\"'"
         },
         "entityType": {
           "name": "entityType",
@@ -1639,7 +1639,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-08-26T16:42:32.344Z\"'"
+          "default": "'\"2024-08-29T09:59:27.933Z\"'"
         }
       },
       "indexes": {},

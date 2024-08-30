@@ -10,9 +10,8 @@ import { ChangeEvent, useRef, useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { FormError } from "@/components/form-error";
 import { Button } from "@/components/ui/button";
-import { useToast } from "./ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
 import { setCanvasPreview } from "@/lib/utils";
-import { useCurrentUser } from "@/hooks/use-current-user";
 import { newAvatarAction } from "@/actions/new-avatar";
 import { useSession } from "next-auth/react";
 

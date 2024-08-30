@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LikeButton } from "@/components/like-button";
 import { currentUser } from "@/lib/auth";
-import { RatingStats } from "../rating-stats";
+import { RatingStats } from "@/components/review/rating-stats";
 
 type TrackPlaylistItemProps = {
   trackId: string;

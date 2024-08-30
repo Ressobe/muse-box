@@ -4,7 +4,7 @@ import { FaUser } from "react-icons/fa";
 import Link from "next/link";
 import { getArtistUseCase } from "@/use-cases/artist";
 import { currentUser } from "@/lib/auth";
-import { RatingStats } from "../rating-stats";
+import { RatingStats } from "@/components/review/rating-stats";
 
 type ArtistPlaylistItemProps = {
   artistId: string;

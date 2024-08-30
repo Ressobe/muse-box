@@ -2,11 +2,12 @@ import { currentUser } from "@/lib/auth";
 import { isUserLikedItUseCase } from "@/use-cases/playlist";
 import { getTrackUseCase } from "@/use-cases/track";
 import Image from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { FaUser } from "react-icons/fa";
 import Link from "next/link";
 import { getTime, getYear } from "@/lib/utils";
-import { LikeButton } from "./like-button";
+import { LikeButton } from "@/components/like-button";
+import { getArtistByAlbumId } from "@/data-access/artist";
+import { RatingStats } from "@/components/review/rating-stats";
+import { ArtistSmallHeader } from "@/components/artist/artist-small-header";
 
 type TrackHeaderProps = {
   trackId: string;
@@ -15,6 +16,11 @@ type TrackHeaderProps = {
 export async function TrackHeader({ trackId }: TrackHeaderProps) {
   const track = await getTrackUseCase(trackId);
   if (!track) {
+    return null;
+  }
+
+  const artist = await getArtistByAlbumId(track.albumId);
+  if (!artist) {
     return null;
   }
 
@@ -33,28 +39,10 @@ export async function TrackHeader({ trackId }: TrackHeaderProps) {
           <div>
             <div>Song</div>
             <h1 className="font-bold text-5xl">{track.title}</h1>
-            <div className="flex items-center gap-x-4 pt-3.5  text-2xl">
-              <span className="text-yellow-500">★</span>
-              {track.stats.ratingCount === 0 ? (
-                <span className="text-md">Not rated yet!</span>
-              ) : (
-                track.stats.ratingAvg
-              )}
-            </div>
+            <RatingStats stats={track?.stats} />
           </div>
           <div className="flex items-center gap-x-4 text-sm">
-            <Avatar className="h-16 w-16">
-              <AvatarImage src={track.artist.image ?? ""} />
-              <AvatarFallback>
-                <FaUser className="w-8 h-8" />
-              </AvatarFallback>
-            </Avatar>
-            <Link
-              href={`/artists/${track.artist.id}`}
-              className="transition-all underline-offset-2 hover:underline"
-            >
-              {track.artist.name}
-            </Link>
+            <ArtistSmallHeader artist={artist} />
             <span>{getYear(track.album.releaseDate)}</span>
             <Link
               href={`/albums/${track.album.id}`}

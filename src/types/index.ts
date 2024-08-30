@@ -68,27 +68,12 @@ export type Track =
   | {
       id: string;
       image: string | null;
-      artistId: string;
       title: string;
       length: number | null;
+      artistsCredits: string;
       albumId: string;
       position: number;
-      artist: {
-        id: string;
-        name: string;
-        image: string | null;
-        bio: string | null;
-        country: string | null;
-      };
-      album: {
-        id: string;
-        image: string | null;
-        artistId: string;
-        typeId: number;
-        title: string;
-        length: number | null;
-        releaseDate: Date | null;
-      };
+      album: Album;
     }
   | undefined;
 
@@ -117,12 +102,10 @@ type LAlbum = {
 export type LTrack = {
   id: string;
   image: string | null;
-  artistId: string;
   title: string;
   length: number | null;
   albumId: string;
   position: number;
-  artist: LArtist;
   album: Omit<LAlbum, "artist">;
 };
 

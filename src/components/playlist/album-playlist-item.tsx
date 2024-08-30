@@ -6,7 +6,7 @@ import { getTime, getYear, getFullAlbumTime } from "@/lib/utils";
 import { currentUser } from "@/lib/auth";
 import { LikeButton } from "@/components/like-button";
 import { getAlbumUseCase } from "@/use-cases/album";
-import { RatingStats } from "../rating-stats";
+import { RatingStats } from "@/components/review/rating-stats";
 
 type AlbumPlaylistItemProps = {
   albumId: string;

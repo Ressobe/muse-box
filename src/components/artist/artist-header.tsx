@@ -5,7 +5,7 @@ import { FaUser } from "react-icons/fa";
 import { LikeButton } from "@/components/like-button";
 import { isUserLikedItUseCase } from "@/use-cases/playlist";
 import { currentUser } from "@/lib/auth";
-import { RatingStats } from "./rating-stats";
+import { RatingStats } from "@/components/review/rating-stats";
 
 type ArtistHeaderProps = {
   artistId: string;

@@ -9,10 +9,10 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { getArtistTopTracksUseCase } from "@/use-cases/artist";
-import { LikeButton } from "./like-button";
+import { LikeButton } from "@/components/like-button";
 import { isUserLikedItUseCase } from "@/use-cases/playlist";
 import { currentUser } from "@/lib/auth";
-import { RatingStats } from "./rating-stats";
+import { RatingStats } from "@/components/review/rating-stats";
 
 type TopTracksProps = {
   artistId: string;

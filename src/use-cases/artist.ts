@@ -1,11 +1,13 @@
 import {
   getArtistAlbums,
+  getArtistByAlbumId,
   getArtistById,
   getArtistDiscography,
   getArtistGenres,
   getArtistSinglesEps,
   getArtistStats,
   getFilteredArtists,
+  getTopArtists,
 } from "@/data-access/artist";
 import { getTopTracks } from "@/data-access/track";
 import {
@@ -72,7 +74,7 @@ export async function getArtistGenresUseCase(artistId: string) {
 }
 
 export async function getArtistDiscographyUseCase(artistId: string) {
-  const discography = await getArtistDiscography(artistId, LIMIT);
+  const discography = await getArtistDiscography(artistId);
   if (!discography) {
     throw "Discography not found";
   }
@@ -95,4 +97,14 @@ export async function getFilteredArtistsUseCase(query: string) {
   }
 
   return getFilteredArtists(lowerCaseQuery);
+}
+
+export async function getTopArtistsUseCase() {
+  const topArtists = getTopArtists();
+  return topArtists;
+}
+
+export async function getArtistByAlbumIdUseCase(albumId: string) {
+  const artist = await getArtistByAlbumId(albumId);
+  return artist;
 }

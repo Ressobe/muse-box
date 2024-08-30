@@ -79,7 +79,7 @@ export async function getUserImage(userId: string) {
     .select({ image: users.image })
     .from(users)
     .where(eq(users.id, userId));
-  return img;
+  return img ?? "";
 }
 
 export async function updateUser(

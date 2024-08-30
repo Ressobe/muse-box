@@ -1,7 +1,6 @@
 import { LikeButton } from "@/components/like-button";
-import { RatingStats } from "@/components/rating-stats";
+import { RatingStats } from "@/components/review/rating-stats";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,

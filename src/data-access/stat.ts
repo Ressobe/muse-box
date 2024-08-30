@@ -10,21 +10,34 @@ const statsTables = {
 };
 
 export async function createArtistStat(artistId: string) {
-  return await db.insert(artistsStats).values({
-    entityId: artistId,
-  });
+  const [stat] = await db
+    .insert(artistsStats)
+    .values({
+      entityId: artistId,
+    })
+    .returning();
+  return stat;
 }
 
 export async function createAlbumStat(albumId: string) {
-  return await db.insert(albumsStats).values({
-    entityId: albumId,
-  });
+  const [stat] = await db
+    .insert(albumsStats)
+    .values({
+      entityId: albumId,
+    })
+    .returning();
+  return stat;
 }
 
 export async function createTrackStat(trackId: string) {
-  return await db.insert(tracksStats).values({
-    entityId: trackId,
-  });
+  const [stat] = await db
+    .insert(tracksStats)
+    .values({
+      entityId: trackId,
+    })
+    .returning();
+
+  return stat;
 }
 
 export async function getArtistStat(artistId: string) {
@@ -44,7 +57,7 @@ export async function updateStatsNewRating(
     throw new Error(`Unsupported entity type: ${type}`);
   }
 
-  const [existingStat] = await db
+  let [existingStat] = await db
     .select()
     .from(table)
     .where(eq(table.entityId, entityId));
@@ -52,15 +65,15 @@ export async function updateStatsNewRating(
   if (!existingStat) {
     switch (type) {
       case "artist": {
-        await createArtistStat(entityId);
+        existingStat = await createArtistStat(entityId);
         break;
       }
       case "album": {
-        await createAlbumStat(entityId);
+        existingStat = await createAlbumStat(entityId);
         break;
       }
       case "track": {
-        await createTrackStat(entityId);
+        existingStat = await createTrackStat(entityId);
         break;
       }
     }

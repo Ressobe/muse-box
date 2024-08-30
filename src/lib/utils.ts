@@ -15,10 +15,12 @@ export function capitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function getTime(seconds: number | null) {
-  if (!seconds) return null;
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
+export function getTime(milliseconds: number | null) {
+  if (milliseconds === null) return null;
+
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const remainingSeconds = totalSeconds % 60;
 
   const formattedMinutes = minutes.toString();
   const formattedSeconds =
@@ -26,7 +28,7 @@ export function getTime(seconds: number | null) {
       ? "0" + remainingSeconds
       : remainingSeconds.toString();
 
-  return formattedMinutes + ":" + formattedSeconds;
+  return `${formattedMinutes} min  ${formattedSeconds} sec`;
 }
 
 export function getFullAlbumTime(
@@ -38,6 +40,8 @@ export function getFullAlbumTime(
   for (const t of tracks) {
     fullTime += t.length ?? 0;
   }
+
+  console.log(fullTime);
   return fullTime;
 }
 
@@ -123,7 +127,9 @@ export function formatNumberWithPrefix(num: number): string {
 }
 
 export function isNewNotification(notifications: NotificationT[]) {
-  if (notifications.length === 0) return false;
+  if (!Array.isArray(notifications) || notifications.length === 0) {
+    return false;
+  }
 
   for (const item of notifications) {
     if (!item.isRead) return true;

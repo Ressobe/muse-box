@@ -25,13 +25,16 @@ export function TrackCard({ track }: TrackCardProps) {
   return (
     <Link href={`/tracks/${track.id}`}>
       <div className="transition-all p-4 hover:bg-secondary/40 rounded">
-        <Image
-          src={track.image ?? ""}
-          width={200}
-          height={200}
-          alt={`${track.title} cover image`}
-        />
-        <div className="pt-4">{track.title}</div>
+        <div className="w-[200px] h-[200px]">
+          <Image
+            src={track.image ?? ""}
+            width={200}
+            height={200}
+            alt={`${track.title} cover image`}
+            className="object-cover"
+          />
+        </div>
+        <div className="pt-4 max-w-[200px]">{track.title}</div>
         <div className="text-muted-foreground">
           {track.album.releaseDate &&
             new Date(track.album.releaseDate).getFullYear()}

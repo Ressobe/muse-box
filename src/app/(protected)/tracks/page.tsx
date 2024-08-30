@@ -13,7 +13,7 @@ export default async function TracksPage() {
   const newTracks = await getNewTracksUseCase();
 
   return (
-    <section className="w-full space-y-10">
+    <section className="w-full space-y-20">
       <section>
         <h1 className="font-bold text-3xl">Top songs</h1>
         <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">

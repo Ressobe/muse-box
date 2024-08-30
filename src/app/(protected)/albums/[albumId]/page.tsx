@@ -10,8 +10,6 @@ import {
 } from "@/components/ui/table";
 import { getAlbumReviewsUseCase, getAlbumUseCase } from "@/use-cases/album";
 import { notFound } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { FaUser } from "react-icons/fa";
 import { getTime, getYear, getFullAlbumTime } from "@/lib/utils";
 import { Reviews } from "@/components/review/reviews";
 import { currentUser } from "@/lib/auth";
@@ -19,6 +17,7 @@ import { isUserLikedItUseCase } from "@/use-cases/playlist";
 import { LikeButton } from "@/components/like-button";
 import { shouldShowAddReviewUseCase } from "@/use-cases/review";
 import { RatingStats } from "@/components/review/rating-stats";
+import { ArtistSmallHeader } from "@/components/artist/artist-small-header";
 
 export default async function AlbumPage({
   params,
@@ -66,24 +65,18 @@ export default async function AlbumPage({
           </div>
           <RatingStats stats={album?.stats} />
           <div className="flex items-center gap-x-4 text-sm">
-            <Avatar className="h-16 w-16">
-              <AvatarImage src={album.artist.image ?? ""} />
-              <AvatarFallback>
-                <FaUser className="w-8 h-8" />
-              </AvatarFallback>
-            </Avatar>
-            <Link
-              href={`/artists/${album.artistId}`}
-              className="underline-offset-2 hover:underline"
-            >
-              <span>{album.artist?.name}</span>
-            </Link>
+            <ArtistSmallHeader artist={album.artist} />
+
+            <span className="w-2 h-2 bg-foreground rounded-full"></span>
+
             <span>{getYear(album.releaseDate)}</span>
+
+            <span className="w-2 h-2 bg-foreground rounded-full"></span>
             <span>
               {album.tracks.length > 1
                 ? `${album.tracks.length} songs`
-                : `${album.tracks.length} song`}
-              , {getTime(getFullAlbumTime(album.tracks))}
+                : `${album.tracks.length} song`}{" "}
+              / {getTime(getFullAlbumTime(album.tracks))}
             </span>
             <LikeButton
               defaultLikeState={isAlbumLiked}

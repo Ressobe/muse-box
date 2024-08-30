@@ -28,7 +28,7 @@ export default async function Artist({
   const showAddReview = await shouldShowAddReviewUseCase(artist.id, "artist");
 
   return (
-    <section className="space-y-12">
+    <section className="space-y-20">
       <ArtistHeader artistId={artistId} />
       <TopTracks artistId={artistId} />
       <Albums artistId={artistId} />

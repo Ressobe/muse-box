@@ -1,7 +1,7 @@
 "use client";
 
 import type { FollowNotification } from "@/types/notification";
-import { UserAvatar } from "@/components/user-avatar";
+import { UserAvatar } from "@/components/user/user-avatar";
 import Link from "next/link";
 import { formatTimeDiff } from "@/lib/utils";
 import { RemoveNotificationButton } from "./remove-notification-button";

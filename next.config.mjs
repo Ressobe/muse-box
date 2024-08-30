@@ -12,6 +12,10 @@ const nextConfig = {
         protocol: "http",
         hostname: "coverartarchive.org",
       },
+      {
+        protocol: "http",
+        hostname: "**.us.archive.org",
+      },
     ],
   },
 };

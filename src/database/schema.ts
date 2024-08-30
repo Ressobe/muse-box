@@ -282,6 +282,13 @@ export const artistsCredits = sqliteTable("artistsCredits", {
   name: text("name"),
 });
 
+export const artistsCreditsRelations = relations(
+  artistsCredits,
+  ({ many }) => ({
+    artistsCreditsNames: many(artistsCreditsNames),
+  }),
+);
+
 export const artistsCreditsNames = sqliteTable("artistsCreditsName", {
   artistCreditId: text("artistCreditId")
     .references(() => artistsCredits.id)
@@ -296,18 +303,32 @@ export const artistsCreditsNames = sqliteTable("artistsCreditsName", {
   joinPhrase: text("joinPhrase"),
 });
 
+export const artistsCreditsNamesRelations = relations(
+  artistsCreditsNames,
+  ({ one }) => ({
+    artistCredit: one(artistsCredits, {
+      fields: [artistsCreditsNames.artistCreditId],
+      references: [artistsCredits.id],
+    }),
+    artist: one(artists, {
+      fields: [artistsCreditsNames.artistId],
+      references: [artists.id],
+    }),
+  }),
+);
+
 export const tracksRelations = relations(tracks, ({ one }) => ({
   album: one(albums, {
     fields: [tracks.albumId],
     references: [albums.id],
   }),
-  // artist: one(artists, {
-  //   fields: [tracks.artistsCredits],
-  //   references: [artists.id],
-  // }),
   stats: one(tracksStats, {
     fields: [tracks.id],
     references: [tracksStats.entityId],
+  }),
+  artistCredit: one(artistsCredits, {
+    fields: [tracks.artistsCredits],
+    references: [artistsCredits.id],
   }),
 }));
 

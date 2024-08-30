@@ -50,7 +50,7 @@ export default async function ProfilePage({
   }
 
   return (
-    <section className="space-y-12">
+    <section className="space-y-20">
       <div className="flex items-center gap-x-20">
         <UserProfileAvatar
           canEdit={isUserOwnsThisProfile}

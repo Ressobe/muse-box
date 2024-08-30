@@ -34,6 +34,7 @@ export async function getArtist(artistId: string) {
 export async function getArtistAlbums(artistId: string, limit?: number) {
   return db.query.albums.findMany({
     where: and(eq(albums.artistId, artistId), eq(albums.typeId, 1)),
+    orderBy: desc(albums.releaseDate),
     limit,
   });
 }
@@ -44,6 +45,7 @@ export async function getArtistSinglesEps(artistId: string, limit?: number) {
       eq(albums.artistId, artistId),
       or(eq(albums.typeId, 2), eq(albums.typeId, 3)),
     ),
+    orderBy: desc(albums.releaseDate),
     limit,
   });
 }
@@ -75,7 +77,7 @@ export async function getArtistGenres(artistId: string, limit?: number) {
   });
 }
 
-export async function getArtistDiscography(artistId: string, limit?: number) {
+export async function getArtistDiscography(artistId: string) {
   return await db.query.albums.findMany({
     where: eq(albums.artistId, artistId),
     with: {
@@ -87,7 +89,7 @@ export async function getArtistDiscography(artistId: string, limit?: number) {
       },
       albumType: true,
     },
-    limit,
+    orderBy: desc(albums.releaseDate),
   });
 }
 
@@ -139,4 +141,29 @@ export async function getFilteredArtists(query: string) {
     .where(sql`${artists.name} LIKE ${`%${query}%`} COLLATE NOCASE`);
 
   return filteredArtists;
+}
+
+export async function getTopArtists() {
+  return await db
+    .select({
+      id: artists.id,
+      name: artists.name,
+      image: artists.image,
+      bio: artists.bio,
+      country: artists.country,
+    })
+    .from(artists)
+    .innerJoin(artistsStats, eq(artistsStats.entityId, artists.id))
+    .orderBy(desc(artistsStats.ratingAvg));
+}
+
+export async function getArtistByAlbumId(albumId: string) {
+  const alb = await db.query.albums.findFirst({
+    where: eq(albums.id, albumId),
+    with: {
+      artist: true,
+    },
+  });
+
+  return alb?.artist;
 }

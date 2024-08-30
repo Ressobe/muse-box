@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import Rating from "@/components/rating";
+import Rating from "@/components/review/rating";
 import { useToast } from "@/components/ui/use-toast";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { SubmitButton } from "@/components/submit-button";
@@ -45,7 +45,7 @@ export function EditComment({
     }
   }, [comment]);
 
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async () => {
     if (!user) {
       toast({
         variant: "destructive",
@@ -69,7 +69,6 @@ export function EditComment({
       return;
     }
 
-    const comment = formData.get("comment") as string;
     const rating = Number(localStorage.getItem("starRating"));
 
     const reviewOptimistic = {

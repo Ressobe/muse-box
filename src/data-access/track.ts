@@ -5,11 +5,12 @@ import { count, desc, eq, sql } from "drizzle-orm";
 import { createTrackStat } from "./stat";
 import { getAlbumImage } from "./album";
 
-export async function getTracks() {
+export async function getTracks(limit?: number) {
   return await db.query.tracks.findMany({
     with: {
       album: true,
     },
+    limit,
   });
 }
 
@@ -23,6 +24,15 @@ export async function getTrackById(trackId: string) {
         },
       },
       stats: true,
+      artistCredit: {
+        with: {
+          artistsCreditsNames: {
+            with: {
+              artist: true,
+            },
+          },
+        },
+      },
     },
   });
 }
@@ -95,7 +105,7 @@ export async function getTopTracks(artistId: string, limit: number = 5) {
       },
     })
     .from(tracks)
-    .leftJoin(tracksStats, eq(tracks.id, tracksStats.entityId))
+    .innerJoin(tracksStats, eq(tracks.id, tracksStats.entityId))
     .innerJoin(albums, eq(tracks.albumId, albums.id))
     .where(eq(albums.artistId, artistId))
     .orderBy(desc(tracksStats.ratingAvg))

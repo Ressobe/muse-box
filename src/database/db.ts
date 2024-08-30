@@ -1,12 +1,26 @@
-import { drizzle } from "drizzle-orm/libsql";
+import { drizzle, LibSQLDatabase } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
 import * as schema from "./schema";
 
 const client = createClient({
-  url: "libsql://muse-box-2-ressobe.turso.io",
-  authToken: "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MjQzMTUxNjIsInAiOnsicnciOnsibnMiOlsiMmM4NzlkZmMtOTkyOC00YzJmLTg1ODMtYWMzNGZiYTVmYmY0Il19fX0.T_-HIIa52AvjCkj4H0ulRfHa7fumkxJJiqhxMMz3UiyiVt0PGzQP1_Uv_Xc-gBzkdke0r5n52oxRvJeu2NEtCA",
+  url: process.env.TURSO_DATABASE_URL!,
+  authToken: process.env.TURSO_AUTH_TOKEN!,
 });
 
-const db = drizzle(client, { schema });
+declare global {
+  var db: LibSQLDatabase<typeof schema> | undefined;
+}
+
+let db: LibSQLDatabase<typeof schema>;
+
+if (process.env.NODE_ENV === "production") {
+    db = drizzle(client, { schema });
+
+} else {
+  if (!global.db) {
+    global.db = drizzle(client, { schema });
+  }
+  db = global.db;
+}
 
 export { db };

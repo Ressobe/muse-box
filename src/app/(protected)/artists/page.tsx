@@ -8,7 +8,7 @@ export default async function Artists() {
   const artists = await getArtists();
 
   return (
-    <section className="w-full space-y-10">
+    <section className="w-full space-y-20">
       <section>
         <h1 className="font-bold text-3xl">Top artists</h1>
         <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">

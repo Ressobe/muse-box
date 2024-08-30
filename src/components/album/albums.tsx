@@ -20,7 +20,7 @@ export async function Albums({ artistId }: AlbumsProps) {
           See discography
         </Link>
       </div>
-      <ul className="flex gap-x-10">
+      <ul className="flex flex-wrap gap-x-10">
         {albums.map((alb) => {
           return (
             <Link

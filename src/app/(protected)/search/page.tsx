@@ -22,7 +22,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const tracks = await getFilteredTracksUseCase(query);
 
   return (
-    <section className="space-y-16">
+    <section className="space-y-20">
       <div>
         <h1 className="font-bold text-4xl">Artists</h1>
         <ul className="pl-4 pt-8 flex">

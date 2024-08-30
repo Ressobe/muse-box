@@ -1,4 +1,4 @@
-import { TrackCard } from "@/components/track-card";
+import { TrackCard } from "@/components/track/track-card";
 import {
   getNewTracksUseCase,
   getPopularTracksUseCase,

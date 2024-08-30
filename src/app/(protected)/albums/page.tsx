@@ -1,4 +1,4 @@
-import { AlbumCard } from "@/components/album-card";
+import { AlbumCard } from "@/components/album/album-card";
 import {
   getNewAlbumsUseCase,
   getPopularAlbumsUseCase,

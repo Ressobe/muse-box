@@ -13,11 +13,12 @@ import { notFound } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FaUser } from "react-icons/fa";
 import { getTime, getYear, getFullAlbumTime } from "@/lib/utils";
-import { Reviews } from "@/components/reviews";
+import { Reviews } from "@/components/review/reviews";
 import { currentUser } from "@/lib/auth";
 import { isUserLikedItUseCase } from "@/use-cases/playlist";
 import { LikeButton } from "@/components/like-button";
 import { shouldShowAddReviewUseCase } from "@/use-cases/review";
+import { RatingStats } from "@/components/review/rating-stats";
 
 export default async function AlbumPage({
   params,
@@ -45,8 +46,6 @@ export default async function AlbumPage({
     })),
   );
 
-  console.log(album.tracks);
-
   const isAlbumLiked = await isUserLikedItUseCase(user.id, album.id, "album");
   const reviews = await getAlbumReviewsUseCase(album.id);
   const showAddReview = await shouldShowAddReviewUseCase(album.id, "album");
@@ -65,14 +64,7 @@ export default async function AlbumPage({
             <div>{album.albumType.name}</div>
             <h1 className="font-bold text-5xl">{album.title}</h1>
           </div>
-          {/* <div className="flex items-center gap-x-4 text-3xl"> */}
-          {/*   <span className="text-yellow-500 ">★</span> */}
-          {/*   {album.stats.ratingCount === 0 ? ( */}
-          {/*     <span className="text-md">Not rated yet!</span> */}
-          {/*   ) : ( */}
-          {/*     album.stats.ratingAvg */}
-          {/*   )} */}
-          {/* </div> */}
+          <RatingStats stats={album?.stats} />
           <div className="flex items-center gap-x-4 text-sm">
             <Avatar className="h-16 w-16">
               <AvatarImage src={album.artist.image ?? ""} />
@@ -109,10 +101,12 @@ export default async function AlbumPage({
             <TableHead>Title</TableHead>
             <TableHead></TableHead>
             <TableHead></TableHead>
+            <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {tracksWithLikes.map((track) => {
+            const artistsCreditsNames = track.artistCredit.artistsCreditsNames;
             return (
               <TableRow key={track.id} className="p-0">
                 <TableCell className="font-medium">{track.position}</TableCell>
@@ -130,12 +124,28 @@ export default async function AlbumPage({
                     {track.title}
                   </Link>
                 </TableCell>
-                {/* <TableCell> */}
-                {/*   <div className="flex items-center gap-4 "> */}
-                {/*     <span className="text-yellow-500 text-2xl">★</span> */}
-                {/*     {track.stats.ratingAvg} */}
-                {/*   </div> */}
-                {/* </TableCell> */}
+                <TableCell>
+                  {artistsCreditsNames.length > 0 ? (
+                    <div>
+                      {artistsCreditsNames.map((item, idx) => {
+                        return (
+                          <span key={item.artistId}>
+                            <Link
+                              href={`/artists/${item.artistId}`}
+                              className="hover:underline underline-offset-1"
+                            >
+                              {item.name}
+                            </Link>
+                            {item.joinPhrase}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  ) : null}
+                </TableCell>
+                <TableCell>
+                  <RatingStats stats={track?.stats} size="sm" />
+                </TableCell>
                 <TableCell>
                   <LikeButton
                     defaultLikeState={track.isLiked}

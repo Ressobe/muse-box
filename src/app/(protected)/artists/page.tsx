@@ -1,9 +1,10 @@
-import { ArtistCard } from "@/components/artist-card";
-import { getArtists } from "@/data-access/artist";
+import { ArtistCard } from "@/components/artist/artist-card";
+import { getArtists, getTopArtists } from "@/data-access/artist";
 
 export const dynamic = "force-dynamic";
 
 export default async function Artists() {
+  const topArtists = await getTopArtists();
   const artists = await getArtists();
 
   return (
@@ -11,7 +12,7 @@ export default async function Artists() {
       <section>
         <h1 className="font-bold text-3xl">Top artists</h1>
         <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
-          {artists.map((artist) => {
+          {topArtists.map((artist) => {
             return <ArtistCard key={artist.id} artist={artist} />;
           })}
         </div>

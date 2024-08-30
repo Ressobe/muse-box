@@ -6,6 +6,7 @@ import { getTime, getYear, getFullAlbumTime } from "@/lib/utils";
 import { currentUser } from "@/lib/auth";
 import { LikeButton } from "@/components/like-button";
 import { getAlbumUseCase } from "@/use-cases/album";
+import { RatingStats } from "../rating-stats";
 
 type AlbumPlaylistItemProps = {
   albumId: string;
@@ -40,14 +41,7 @@ export async function AlbumPlaylistItem({ albumId }: AlbumPlaylistItemProps) {
               </h1>
             </Link>
           </div>
-          <div className="flex items-center gap-x-4  text-2xl">
-            <span className="text-yellow-500">★</span>
-            {album.stats.ratingCount === 0 ? (
-              <span className="text-md">Not rated yet!</span>
-            ) : (
-              album.stats.ratingAvg
-            )}
-          </div>
+          <RatingStats stats={album?.stats} />
           <div className="flex items-center gap-x-4 text-sm">
             <Avatar className="h-12 w-12">
               <AvatarImage src={album.artist.image ?? ""} />

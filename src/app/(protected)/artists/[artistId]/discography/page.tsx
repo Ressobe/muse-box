@@ -1,4 +1,5 @@
 import { LikeButton } from "@/components/like-button";
+import { RatingStats } from "@/components/rating-stats";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -123,12 +124,9 @@ export default async function DiscographyPage({
                           {track.title}
                         </Link>
                       </TableCell>
-                      {/* <TableCell> */}
-                      {/*   <div className="flex items-center gap-4 "> */}
-                      {/*     <span className="text-yellow-500 text-2xl">★</span> */}
-                      {/*     {track.stats.ratingAvg} */}
-                      {/*   </div> */}
-                      {/* </TableCell> */}
+                      <TableCell>
+                        <RatingStats stats={track?.stats} size="sm" />
+                      </TableCell>
                       <TableCell>
                         <LikeButton
                           defaultLikeState={isLikedTrack}

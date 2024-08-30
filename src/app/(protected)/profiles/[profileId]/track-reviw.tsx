@@ -2,7 +2,7 @@ import { TTrackReview } from "@/types/review";
 import { TableCell, TableRow } from "@/components/ui/table";
 import Image from "next/image";
 import { formatDateToShortMonthDayYear } from "@/lib/utils";
-import { Stars } from "@/components/stars";
+import { Stars } from "@/components/review/stars";
 import { getAlbum } from "@/data-access/album";
 import Link from "next/link";
 

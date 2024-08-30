@@ -5,6 +5,7 @@ import { FaUser } from "react-icons/fa";
 import { LikeButton } from "@/components/like-button";
 import { isUserLikedItUseCase } from "@/use-cases/playlist";
 import { currentUser } from "@/lib/auth";
+import { RatingStats } from "./rating-stats";
 
 type ArtistHeaderProps = {
   artistId: string;
@@ -24,6 +25,8 @@ export async function ArtistHeader({ artistId }: ArtistHeaderProps) {
   const genres = await getArtistGenresUseCase(artistId);
   const isLiked = await isUserLikedItUseCase(user.id, artistId, "artist");
 
+  artist.stats;
+
   return (
     <div className="flex items-center gap-x-20">
       <Avatar className="h-40 w-40">
@@ -38,14 +41,7 @@ export async function ArtistHeader({ artistId }: ArtistHeaderProps) {
           <Link href={`/artists/${artistId}`}>
             <h1 className="font-bold text-4xl">{artist?.name}</h1>
           </Link>
-          {/* <div className="flex items-center gap-x-4 pt-3 text-4xl"> */}
-          {/*   <span className="text-yellow-500">★</span> */}
-          {/*   {artist?.stats.ratingCount === 0 ? ( */}
-          {/*     <span className="text-xl">Not rated yet!</span> */}
-          {/*   ) : ( */}
-          {/*     artist?.stats.ratingAvg */}
-          {/*   )} */}
-          {/* </div> */}
+          <RatingStats stats={artist?.stats} />
         </div>
         <ul className="flex py-4 gap-x-6">
           {genres.map((item) => {

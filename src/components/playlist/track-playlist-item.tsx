@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { LikeButton } from "@/components/like-button";
 import { currentUser } from "@/lib/auth";
+import { RatingStats } from "../rating-stats";
 
 type TrackPlaylistItemProps = {
   trackId: string;
@@ -50,10 +51,7 @@ export async function TrackPlaylistItem({
         </Link>
       </TableCell>
       <TableCell>
-        <div className="flex items-center gap-4 ">
-          <span className="text-yellow-500 text-2xl">★</span>
-          {track.stats.ratingAvg}
-        </div>
+        <RatingStats stats={track?.stats} />
       </TableCell>
       <TableCell>
         <LikeButton

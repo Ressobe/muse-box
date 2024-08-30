@@ -1,10 +1,12 @@
 import { auth } from "@/auth";
 import { LikeButton } from "@/components/like-button";
-import { Reviews } from "@/components/reviews";
+import { RatingStats } from "@/components/review/rating-stats";
+import { Reviews } from "@/components/review/reviews";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getUserTrackReview } from "@/data-access/user";
 import { currentUser } from "@/lib/auth";
 import { getTime, getYear } from "@/lib/utils";
+import { getArtistByAlbumIdUseCase } from "@/use-cases/artist";
 import { isUserLikedItUseCase } from "@/use-cases/playlist";
 import { getTrackReviewsUseCase, getTrackUseCase } from "@/use-cases/track";
 import Image from "next/image";
@@ -30,6 +32,7 @@ export default async function TrackPage({
     return null;
   }
 
+  const artist = await getArtistByAlbumIdUseCase(track.albumId);
   const reviews = await getTrackReviewsUseCase(track.id);
   const isTrackLiked = await isUserLikedItUseCase(user.id, track.id, "track");
 
@@ -43,33 +46,31 @@ export default async function TrackPage({
   return (
     <section className="space-y-12">
       <div className="flex items-center gap-x-16">
-        <Image src={track.image ?? ""} width={200} height={200} alt="dkdk" />
+        <Image
+          src={track.image ?? ""}
+          width={200}
+          height={200}
+          alt={`${track.title} cover image`}
+        />
         <div className="space-y-8">
           <div>
             <div>Song</div>
-            <h1 className="font-bold text-5xl">{track.title}</h1>
-            {/* <div className="flex items-center gap-x-4 pt-3.5  text-2xl"> */}
-            {/*   <span className="text-yellow-500">★</span> */}
-            {/*   {track.stats.ratingCount === 0 ? ( */}
-            {/*     <span className="text-md">Not rated yet!</span> */}
-            {/*   ) : ( */}
-            {/*     track.stats.ratingAvg */}
-            {/*   )} */}
-            {/* </div> */}
+            <h1 className="font-bold text-5xl mb-2">{track.title}</h1>
+            <RatingStats stats={track?.stats} />
           </div>
           <div className="flex items-center gap-x-4 text-sm">
-            {/* <Avatar className="h-16 w-16"> */}
-            {/*   <AvatarImage src={track.artist.image ?? ""} /> */}
-            {/*   <AvatarFallback> */}
-            {/*     <FaUser className="w-8 h-8" /> */}
-            {/*   </AvatarFallback> */}
-            {/* </Avatar> */}
-            {/* <Link */}
-            {/*   href={`/artists/${track.artist.id}`} */}
-            {/*   className="transition-all underline-offset-2 hover:underline" */}
-            {/* > */}
-            {/*   {track.artist.name} */}
-            {/* </Link> */}
+            <Avatar className="h-16 w-16">
+              <AvatarImage src={artist?.image ?? ""} />
+              <AvatarFallback>
+                <FaUser className="w-8 h-8" />
+              </AvatarFallback>
+            </Avatar>
+            <Link
+              href={`/artists/${artist?.id}`}
+              className="transition-all underline-offset-2 hover:underline"
+            >
+              {artist?.name}
+            </Link>
             <span>{getYear(track.album.releaseDate)}</span>
             <Link
               href={`/albums/${track.album.id}`}

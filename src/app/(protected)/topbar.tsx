@@ -1,4 +1,4 @@
-import { UserAvatar } from "@/components/user-avatar";
+import { UserAvatar } from "@/components/user/user-avatar";
 import Link from "next/link";
 import { currentUser } from "@/lib/auth";
 import { SearchBar } from "@/components/search-bar";

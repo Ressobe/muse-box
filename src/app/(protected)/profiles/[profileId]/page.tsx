@@ -16,7 +16,7 @@ import Link from "next/link";
 import { FaUser } from "react-icons/fa";
 import { RecentActivity } from "./recent-activity";
 import { FollowersFollowingDialog } from "./followers-following-dialog";
-import { UserProfileAvatar } from "@/components/user-profile-avatar";
+import { UserProfileAvatar } from "@/components/user/user-profile-avatar";
 
 export default async function ProfilePage({
   params,
@@ -50,7 +50,7 @@ export default async function ProfilePage({
   }
 
   return (
-    <section className="space-y-12">
+    <section className="space-y-20">
       <div className="flex items-center gap-x-20">
         <UserProfileAvatar
           canEdit={isUserOwnsThisProfile}

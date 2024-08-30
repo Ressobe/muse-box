@@ -1,6 +1,6 @@
 import { db } from "@/database/db";
 import { follows, userProfiles, users } from "@/database/schema";
-import { count, countDistinct, eq } from "drizzle-orm";
+import { countDistinct, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/sqlite-core";
 
 export async function createProfile(userId: string) {

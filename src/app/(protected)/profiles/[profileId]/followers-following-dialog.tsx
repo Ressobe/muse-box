@@ -7,7 +7,7 @@ import {
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { currentUser } from "@/lib/auth";
-import { UserAvatar } from "@/components/user-avatar";
+import { UserAvatar } from "@/components/user/user-avatar";
 import { FollowButton } from "@/components/follow-button";
 import { isUserFollowingProfileUseCase } from "@/use-cases/user";
 import Link from "next/link";

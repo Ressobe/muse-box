@@ -4,7 +4,7 @@ import { markNotificationAsReadedUseCase } from "@/use-cases/notification";
 import { RemoveNotificationButton } from "@/components/notification/remove-notification-button";
 import Link from "next/link";
 import { formatTimeDiff } from "@/lib/utils";
-import { UserAvatar } from "@/components/user-avatar";
+import { UserAvatar } from "@/components/user/user-avatar";
 
 type TrackReviewNotificationProps = {
   authUserId: string;

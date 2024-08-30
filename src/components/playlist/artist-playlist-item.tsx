@@ -4,6 +4,7 @@ import { FaUser } from "react-icons/fa";
 import Link from "next/link";
 import { getArtistUseCase } from "@/use-cases/artist";
 import { currentUser } from "@/lib/auth";
+import { RatingStats } from "../rating-stats";
 
 type ArtistPlaylistItemProps = {
   artistId: string;
@@ -37,14 +38,7 @@ export async function ArtistPlaylistItem({
             <Link href={`/artists/${artistId}`}>
               <h1 className="font-bold text-4xl">{artist?.name}</h1>
             </Link>
-            <div className="flex items-center gap-x-4 pt-3 text-4xl">
-              <span className="text-yellow-500">★</span>
-              {artist?.stats.ratingCount === 0 ? (
-                <span className="text-xl">Not rated yet!</span>
-              ) : (
-                artist?.stats.ratingAvg
-              )}
-            </div>
+            <RatingStats stats={artist?.stats} />
           </div>
         </div>
         <div className="flex gap-x-4">

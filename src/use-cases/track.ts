@@ -5,18 +5,20 @@ import {
   getTracks,
 } from "@/data-access/track";
 
+const LIMIT = 10;
+
 export async function getTopTracksUseCase() {
-  const tracks = await getTracks();
+  const tracks = await getTracks(LIMIT);
   return tracks;
 }
 
 export async function getPopularTracksUseCase() {
-  const tracks = await getTracks();
+  const tracks = await getTracks(LIMIT);
   return tracks;
 }
 
 export async function getNewTracksUseCase() {
-  const tracks = await getTracks();
+  const tracks = await getTracks(LIMIT);
   return tracks;
 }
 

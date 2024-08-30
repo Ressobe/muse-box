@@ -1,7 +1,7 @@
-import { AlbumCard } from "@/components/album-card";
-import { ArtistCard } from "@/components/artist-card";
-import { TrackCard } from "@/components/track-card";
-import { UserCard } from "@/components/user-card";
+import { AlbumCard } from "@/components/album/album-card";
+import { ArtistCard } from "@/components/artist/artist-card";
+import { TrackCard } from "@/components/track/track-card";
+import { UserCard } from "@/components/user/user-card";
 import { getFilteredAlbumsUseCase } from "@/use-cases/album";
 import { getFilteredArtistsUseCase } from "@/use-cases/artist";
 import { getFilteredTracksUseCase } from "@/use-cases/track";
@@ -22,9 +22,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const tracks = await getFilteredTracksUseCase(query);
 
   return (
-    <section className="space-y-16">
+    <section className="space-y-20">
       <div>
-        <h1 className="font-bold text-4xl">Users</h1>
+        <h1 className="font-bold text-4xl">Artists</h1>
         <ul className="pl-4 pt-8 flex">
           {users.length > 0 ? (
             users.map((item) => {

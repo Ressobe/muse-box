@@ -43,18 +43,20 @@ export function Reviews({
     }
   });
 
-  const [addReview, setAddReview] = useState(showAddReview);
+  const [shouldShowAddReview, setShouldShowAddReview] = useState(showAddReview);
 
   const addOptimisticReview = (review: Review) => {
-    setAddReview(false);
+    setShouldShowAddReview(false);
     setOptimisticReviews({ type: "add", review });
   };
 
-  const editOptimisticReview = (review: Review) =>
+  const editOptimisticReview = (review: Review) => {
+    setShouldShowAddReview(false);
     setOptimisticReviews({ type: "edit", review });
+  };
 
   const deleteOptimisticReview = (reviewId: string) => {
-    setAddReview(true);
+    setShouldShowAddReview(true);
     setOptimisticReviews({ type: "delete", reviewId });
   };
 
@@ -63,7 +65,7 @@ export function Reviews({
       <h2 className="font-bold text-2xl pb-4">
         User Reviews {entityName && `for ${entityName}`}
       </h2>
-      {addReview ? (
+      {shouldShowAddReview ? (
         <AddComment
           entityId={entityId}
           type={type}

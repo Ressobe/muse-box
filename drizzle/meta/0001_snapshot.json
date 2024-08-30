@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "1dd00a06-87e1-4fdb-846c-5f8e73875a73",
-  "prevId": "e9ea41fd-4362-48bc-a485-0ddfefbd21ad",
+  "id": "b7f376df-5c08-4883-a5c8-24d481a0fbca",
+  "prevId": "17eadeb8-ddd0-4278-825c-fbf9582df9ac",
   "tables": {
     "account": {
       "name": "account",
@@ -165,7 +165,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-08-13T11:16:32.136Z\"'"
+          "default": "'\"2024-08-29T09:59:27.932Z\"'"
         }
       },
       "indexes": {},
@@ -318,6 +318,14 @@
           "notNull": true,
           "autoincrement": false
         },
+        "image": {
+          "name": "image",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
+        },
         "bio": {
           "name": "bio",
           "type": "text",
@@ -326,25 +334,206 @@
           "autoincrement": false,
           "default": "''"
         },
+        "beginDateYear": {
+          "name": "beginDateYear",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "beginDateMonth": {
+          "name": "beginDateMonth",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "beginDateDay": {
+          "name": "beginDateDay",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "endDateYear": {
+          "name": "endDateYear",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "endDateMonth": {
+          "name": "endDateMonth",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "endDateDay": {
+          "name": "endDateDay",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "country": {
           "name": "country",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "''"
+          "autoincrement": false
         },
-        "image": {
-          "name": "image",
+        "gender": {
+          "name": "gender",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "artists_type_artistsTypes_id_fk": {
+          "name": "artists_type_artistsTypes_id_fk",
+          "tableFrom": "artists",
+          "tableTo": "artistsTypes",
+          "columnsFrom": [
+            "type"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "artists_country_countries_id_fk": {
+          "name": "artists_country_countries_id_fk",
+          "tableFrom": "artists",
+          "tableTo": "countries",
+          "columnsFrom": [
+            "country"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "artists_gender_genders_id_fk": {
+          "name": "artists_gender_genders_id_fk",
+          "tableFrom": "artists",
+          "tableTo": "genders",
+          "columnsFrom": [
+            "gender"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "artistsCredits": {
+      "name": "artistsCredits",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false,
-          "default": "''"
+          "autoincrement": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "artistsCreditsName": {
+      "name": "artistsCreditsName",
+      "columns": {
+        "artistCreditId": {
+          "name": "artistCreditId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "artistId": {
+          "name": "artistId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "joinPhrase": {
+          "name": "joinPhrase",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "artistsCreditsName_artistCreditId_artistsCredits_id_fk": {
+          "name": "artistsCreditsName_artistCreditId_artistsCredits_id_fk",
+          "tableFrom": "artistsCreditsName",
+          "tableTo": "artistsCredits",
+          "columnsFrom": [
+            "artistCreditId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "artistsCreditsName_artistId_artists_id_fk": {
+          "name": "artistsCreditsName_artistId_artists_id_fk",
+          "tableFrom": "artistsCreditsName",
+          "tableTo": "artists",
+          "columnsFrom": [
+            "artistId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -415,6 +604,37 @@
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "artistsTypes": {
+      "name": "artistsTypes",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "artistsTypes_name_unique": {
+          "name": "artistsTypes_name_unique",
+          "columns": [
+            "name"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -513,6 +733,37 @@
       },
       "uniqueConstraints": {}
     },
+    "countries": {
+      "name": "countries",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "countries_name_unique": {
+          "name": "countries_name_unique",
+          "columns": [
+            "name"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "follows": {
       "name": "follows",
       "columns": {
@@ -569,6 +820,37 @@
           "name": "follows_followerId_followingId_pk"
         }
       },
+      "uniqueConstraints": {}
+    },
+    "genders": {
+      "name": "genders",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "genders_name_unique": {
+          "name": "genders_name_unique",
+          "columns": [
+            "name"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "genres": {
@@ -632,7 +914,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "genresToArtists_genreId_genres_id_fk": {
@@ -645,7 +927,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -895,7 +1177,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-08-13T11:16:32.137Z\"'"
+          "default": "'\"2024-08-29T09:59:27.933Z\"'"
         },
         "entityType": {
           "name": "entityType",
@@ -982,7 +1264,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-08-13T11:16:32.137Z\"'"
+          "default": "'\"2024-08-29T09:59:27.933Z\"'"
         },
         "entityType": {
           "name": "entityType",
@@ -1069,7 +1351,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-08-13T11:16:32.137Z\"'"
+          "default": "'\"2024-08-29T09:59:27.933Z\"'"
         },
         "entityType": {
           "name": "entityType",
@@ -1166,8 +1448,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "artistId": {
-          "name": "artistId",
+        "artistsCredits": {
+          "name": "artistsCredits",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -1213,12 +1495,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "tracks_artistId_artists_id_fk": {
-          "name": "tracks_artistId_artists_id_fk",
+        "tracks_artistsCredits_artistsCredits_id_fk": {
+          "name": "tracks_artistsCredits_artistsCredits_id_fk",
           "tableFrom": "tracks",
-          "tableTo": "artists",
+          "tableTo": "artistsCredits",
           "columnsFrom": [
-            "artistId"
+            "artistsCredits"
           ],
           "columnsTo": [
             "id"
@@ -1357,7 +1639,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-08-13T11:16:32.137Z\"'"
+          "default": "'\"2024-08-29T09:59:27.933Z\"'"
         }
       },
       "indexes": {},
@@ -1405,13 +1687,6 @@
         },
         "favoriteTrackId": {
           "name": "favoriteTrackId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "bio": {
-          "name": "bio",
           "type": "text",
           "primaryKey": false,
           "notNull": false,

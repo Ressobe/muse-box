@@ -8,6 +8,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "bvmowdvlgnmvvywedhub.supabase.co",
       },
+      {
+        protocol: "http",
+        hostname: "coverartarchive.org",
+      },
+      {
+        protocol: "http",
+        hostname: "**.us.archive.org",
+      },
     ],
   },
 };

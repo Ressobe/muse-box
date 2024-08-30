@@ -20,7 +20,7 @@ export async function Albums({ artistId }: AlbumsProps) {
           See discography
         </Link>
       </div>
-      <ul className="flex gap-x-10">
+      <ul className="flex flex-wrap gap-x-10">
         {albums.map((alb) => {
           return (
             <Link
@@ -28,15 +28,20 @@ export async function Albums({ artistId }: AlbumsProps) {
               href={`/albums/${alb.id}`}
               className="transition-all p-4 hover:bg-secondary/40 rounded"
             >
-              <li>
-                <Image
-                  src={alb.image ?? ""}
-                  width={200}
-                  height={200}
-                  alt="dkdk"
-                />
+              <li className="max-w-[150px]">
+                <div className="w-[150px] h-[150px]">
+                  <Image
+                    src={alb.image ?? ""}
+                    width={200}
+                    height={200}
+                    alt={`${alb.title} cover image`}
+                    className="object-cover"
+                  />
+                </div>
                 <div className="pt-4">{alb.title}</div>
-                <div className="text-muted-foreground">2016</div>
+                <div className="text-muted-foreground">
+                  {alb.releaseDate && new Date(alb.releaseDate).getFullYear()}
+                </div>
               </li>
             </Link>
           );

@@ -1,4 +1,4 @@
-import { Stars } from "@/components/stars";
+import { Stars } from "@/components/review/stars";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { TableCell, TableRow } from "@/components/ui/table";
 import { formatDateToShortMonthDayYear } from "@/lib/utils";

@@ -1,4 +1,4 @@
-import { AlbumCard } from "@/components/album-card";
+import { AlbumCard } from "@/components/album/album-card";
 import {
   getNewAlbumsUseCase,
   getPopularAlbumsUseCase,
@@ -13,7 +13,7 @@ export default async function AlbumsPage() {
   const newAlbums = await getNewAlbumsUseCase();
 
   return (
-    <section className="w-full space-y-10">
+    <section className="w-full space-y-20">
       <section>
         <h1 className="font-bold text-3xl">Top albums</h1>
         <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">

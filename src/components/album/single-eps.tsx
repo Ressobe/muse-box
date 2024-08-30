@@ -20,7 +20,7 @@ export async function SingleEps({ artistId }: SingleEpsProps) {
           See discography
         </Link>
       </div>
-      <ul className="flex gap-x-10">
+      <ul className="flex flex-wrap gap-x-10">
         {singleEps.map((item) => {
           return (
             <Link
@@ -28,15 +28,20 @@ export async function SingleEps({ artistId }: SingleEpsProps) {
               href={`/albums/${item.id}`}
               className="transition-all p-4 hover:bg-secondary/40 rounded"
             >
-              <li>
-                <Image
-                  src={item.image ?? ""}
-                  width={200}
-                  height={200}
-                  alt="dkdk"
-                />
+              <li className="max-w-[150px]">
+                <div className="w-[150px] h-[150px]">
+                  <Image
+                    src={item.image ?? ""}
+                    width={200}
+                    height={200}
+                    alt={`${item.title} cover image`}
+                    className="object-cover"
+                  />
+                </div>
                 <div className="pt-4">{item.title}</div>
-                <div className="text-muted-foreground">2016</div>
+                <div className="text-muted-foreground">
+                  {item.releaseDate && new Date(item.releaseDate).getFullYear()}
+                </div>
               </li>
             </Link>
           );

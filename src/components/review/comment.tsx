@@ -2,7 +2,7 @@
 
 import { Entity, options } from "@/types";
 import Link from "next/link";
-import { UserAvatar } from "@/components/user-avatar";
+import { UserAvatar } from "@/components/user/user-avatar";
 import {
   CircleCheck,
   EllipsisVertical,
@@ -232,7 +232,7 @@ function ActionMenu({
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                       This action cannot be undone. This will permanently delete
-                      your account and remove your data from our servers.
+                      your review.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>

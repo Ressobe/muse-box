@@ -8,7 +8,6 @@ import {
   real,
   uniqueIndex,
 } from "drizzle-orm/sqlite-core";
-import type { AdapterAccountType } from "next-auth/adapters";
 
 export const PlaylistItemType = {
   ARTIST: "artist",
@@ -80,7 +79,7 @@ export const accounts = sqliteTable(
     userId: text("userId")
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
-    type: text("type").$type<AdapterAccountType>().notNull(),
+    type: text("type").notNull(),
     provider: text("provider").notNull(),
     providerAccountId: text("providerAccountId").notNull(),
     refresh_token: text("refresh_token"),
@@ -152,9 +151,36 @@ export const artists = sqliteTable("artists", {
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
-  bio: text("bio").default(""),
-  country: text("country").default(""),
   image: text("image").default(""),
+  bio: text("bio").default(""),
+  beginDateYear: integer("beginDateYear"),
+  beginDateMonth: integer("beginDateMonth"),
+  beginDateDay: integer("beginDateDay"),
+  endDateYear: integer("endDateYear"),
+  endDateMonth: integer("endDateMonth"),
+  endDateDay: integer("endDateDay"),
+  type: integer("type")
+    .references(() => artistsTypes.id)
+    .notNull(),
+  country: text("country").references(() => countries.id),
+  gender: integer("gender").references(() => genders.id),
+});
+
+export const genders = sqliteTable("genders", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull().unique(),
+});
+
+export const artistsTypes = sqliteTable("artistsTypes", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull().unique(),
+});
+
+export const countries = sqliteTable("countries", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull().unique(),
 });
 
 export const artistsRelations = relations(artists, ({ many, one }) => ({
@@ -233,8 +259,8 @@ export const tracks = sqliteTable("tracks", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  artistId: text("artistId")
-    .references(() => artists.id, {
+  artistsCredits: text("artistsCredits")
+    .references(() => artistsCredits.id, {
       onDelete: "cascade",
     })
     .notNull(),
@@ -249,18 +275,60 @@ export const tracks = sqliteTable("tracks", {
   length: integer("length").default(0),
 });
 
+export const artistsCredits = sqliteTable("artistsCredits", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name"),
+});
+
+export const artistsCreditsRelations = relations(
+  artistsCredits,
+  ({ many }) => ({
+    artistsCreditsNames: many(artistsCreditsNames),
+  }),
+);
+
+export const artistsCreditsNames = sqliteTable("artistsCreditsName", {
+  artistCreditId: text("artistCreditId")
+    .references(() => artistsCredits.id)
+    .notNull(),
+  artistId: text("artistId")
+    .references(() => artists.id, {
+      onDelete: "cascade",
+    })
+    .notNull(),
+  position: integer("position").notNull(),
+  name: text("name").notNull(),
+  joinPhrase: text("joinPhrase"),
+});
+
+export const artistsCreditsNamesRelations = relations(
+  artistsCreditsNames,
+  ({ one }) => ({
+    artistCredit: one(artistsCredits, {
+      fields: [artistsCreditsNames.artistCreditId],
+      references: [artistsCredits.id],
+    }),
+    artist: one(artists, {
+      fields: [artistsCreditsNames.artistId],
+      references: [artists.id],
+    }),
+  }),
+);
+
 export const tracksRelations = relations(tracks, ({ one }) => ({
   album: one(albums, {
     fields: [tracks.albumId],
     references: [albums.id],
   }),
-  artist: one(artists, {
-    fields: [tracks.artistId],
-    references: [artists.id],
-  }),
   stats: one(tracksStats, {
     fields: [tracks.id],
     references: [tracksStats.entityId],
+  }),
+  artistCredit: one(artistsCredits, {
+    fields: [tracks.artistsCredits],
+    references: [artistsCredits.id],
   }),
 }));
 
@@ -283,10 +351,10 @@ export const genres = sqliteTable("genres", {
 export const genresToArtists = sqliteTable("genresToArtists", {
   artistId: text("artistId")
     .notNull()
-    .references(() => artists.id),
+    .references(() => artists.id, { onDelete: "cascade" }),
   genreId: integer("genreId")
     .notNull()
-    .references(() => genres.id),
+    .references(() => genres.id, { onDelete: "cascade" }),
 });
 
 export const genresToArtistsRelations = relations(

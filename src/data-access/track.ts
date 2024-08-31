@@ -129,8 +129,8 @@ export async function getTopTracks(artistId: string, limit: number = 5) {
   }));
 }
 
-export async function getFilteredTracks(query: string) {
-  const filteredTracks = await db
+export async function getFilteredTracks(query: string, limit?: number) {
+  const filteredTracksQuery = db
     .select({
       id: tracks.id,
       position: tracks.position,
@@ -151,6 +151,12 @@ export async function getFilteredTracks(query: string) {
     .from(tracks)
     .where(sql`${tracks.title} LIKE ${`%${query}%`} COLLATE NOCASE`)
     .innerJoin(albums, eq(tracks.albumId, albums.id));
+
+  if (typeof limit === "number") {
+    filteredTracksQuery.limit(limit);
+  }
+
+  const filteredTracks = await filteredTracksQuery;
 
   return filteredTracks;
 }

@@ -37,5 +37,5 @@ export async function getFilteredTracksUseCase(query: string) {
   if (lowerCaseQuery === "") {
     return [];
   }
-  return await getFilteredTracks(lowerCaseQuery);
+  return await getFilteredTracks(lowerCaseQuery, LIMIT);
 }

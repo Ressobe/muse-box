@@ -96,7 +96,7 @@ export async function getFilteredArtistsUseCase(query: string) {
     return [];
   }
 
-  return getFilteredArtists(lowerCaseQuery);
+  return getFilteredArtists(lowerCaseQuery, LIMIT);
 }
 
 export async function getTopArtistsUseCase() {

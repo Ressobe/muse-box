@@ -134,11 +134,17 @@ export async function getArtistReviewsCount(artistId: string) {
   return c;
 }
 
-export async function getFilteredArtists(query: string) {
-  const filteredArtists = await db
+export async function getFilteredArtists(query: string, limit?: number) {
+  const filteredArtistsQuery = db
     .select()
     .from(artists)
     .where(sql`${artists.name} LIKE ${`%${query}%`} COLLATE NOCASE`);
+
+  if (typeof limit === "number") {
+    filteredArtistsQuery.limit(limit);
+  }
+
+  const filteredArtists = await filteredArtistsQuery;
 
   return filteredArtists;
 }

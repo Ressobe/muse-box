@@ -82,11 +82,17 @@ export async function getAlbumImage(albumId: string): Promise<string | null> {
   return album?.image || null;
 }
 
-export async function getFilteredAlbums(query: string) {
-  const filteredAlbums = await db
+export async function getFilteredAlbums(query: string, limit?: number) {
+  const filteredAlbumsQuery = db
     .select()
     .from(albums)
     .where(sql`${albums.title} LIKE ${`%${query}%`} COLLATE NOCASE`);
+
+  if (typeof limit === "number") {
+    filteredAlbumsQuery.limit(limit);
+  }
+
+  const filteredAlbums = await filteredAlbumsQuery;
 
   return filteredAlbums;
 }

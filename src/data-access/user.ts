@@ -294,8 +294,8 @@ export async function getArtistReviewsWhereUserIsNotOwner(
   });
 }
 
-export async function getFilteredUsers(query: string) {
-  const filteredUsers = await db
+export async function getFilteredUsers(query: string, limit?: number) {
+  const filteredUsersQuery = db
     .select({
       id: users.id,
       name: users.name,
@@ -304,6 +304,12 @@ export async function getFilteredUsers(query: string) {
     })
     .from(users)
     .where(sql`${users.name} LIKE ${`%${query}%`} COLLATE NOCASE`);
+
+  if (typeof limit === "number") {
+    filteredUsersQuery.limit(limit);
+  }
+
+  const filteredUsers = await filteredUsersQuery;
 
   return filteredUsers;
 }

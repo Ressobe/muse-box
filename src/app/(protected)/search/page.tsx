@@ -25,7 +25,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     <section className="space-y-20">
       <div>
         <h1 className="font-bold text-4xl">Artists</h1>
-        <ul className="pl-4 pt-8 flex">
+        <ul className="pl-4 pt-8 flex flex-wrap">
           {users.length > 0 ? (
             users.map((item) => {
               return <UserCard key={item.id} user={item} />;
@@ -38,7 +38,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
       <div>
         <h1 className="font-bold text-4xl">Artists</h1>
-        <ul className="pl-4 pt-8 flex">
+        <ul className="pl-4 pt-8 flex flex-wrap">
           {artists.length > 0 ? (
             artists.map((item) => {
               return <ArtistCard key={item.id} artist={item} />;
@@ -51,7 +51,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
       <div>
         <h1 className="font-bold text-4xl">Albums</h1>
-        <ul className="pl-4 pt-8 flex">
+        <ul className="pl-4 pt-8 flex flex-wrap">
           {albums.length > 0 ? (
             albums.map((item) => {
               return <AlbumCard key={item.id} album={item} />;
@@ -64,7 +64,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
       <div>
         <h1 className="font-bold text-4xl">Tracks</h1>
-        <ul className="pl-4 pt-8 flex">
+        <ul className="pl-4 pt-8 flex flex-wrap">
           {tracks.length > 0 ? (
             tracks.map((item) => {
               return <TrackCard key={item.id} track={item} />;

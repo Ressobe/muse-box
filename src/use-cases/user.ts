@@ -28,6 +28,8 @@ import {
   TrackReviewNotification,
 } from "@/types/notification";
 
+const LIMIT = 10;
+
 export async function createUserUseCase(
   email: string,
   name: string,
@@ -261,5 +263,5 @@ export async function getFilteredUsersUseCase(query: string) {
     return [];
   }
 
-  return getFilteredUsers(lowerCaseQuery);
+  return getFilteredUsers(lowerCaseQuery, LIMIT);
 }

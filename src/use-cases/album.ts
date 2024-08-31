@@ -38,5 +38,5 @@ export async function getFilteredAlbumsUseCase(query: string) {
     return [];
   }
 
-  return getFilteredAlbums(lowerCaseQuery);
+  return getFilteredAlbums(lowerCaseQuery, LIMIT);
 }

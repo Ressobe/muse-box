@@ -6,6 +6,7 @@ import { APP_NAME, APP_SHORT_DESCRIPTION, LOGO } from "@/config";
 import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
 import { Poppins } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const poppins = Poppins({ display: "swap", subsets: ["latin"], weight: "400" });
 
@@ -28,6 +29,7 @@ export default async function RootLayout({
         <NextTopLoader color="#6d28d9" showSpinner={false} />
         <SessionProvider session={session}>{children}</SessionProvider>
         <Toaster />
+        <SpeedInsights />
       </body>
     </html>
   );

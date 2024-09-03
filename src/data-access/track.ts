@@ -160,3 +160,37 @@ export async function getFilteredTracks(query: string, limit?: number) {
 
   return filteredTracks;
 }
+
+export async function getTopTracksCards(limit?: number) {
+  const topTracksQuery = db
+    .select({
+      id: tracks.id,
+      title: tracks.title,
+      length: tracks.length,
+      image: tracks.image,
+      position: tracks.position,
+      albumId: tracks.albumId,
+      artistsCredits: tracks.artistsCredits,
+      ratingAvg: tracksStats.ratingAvg,
+      album: {
+        id: albums.id,
+        image: albums.image,
+        artistId: albums.artistId,
+        typeId: albums.typeId,
+        title: albums.title,
+        length: albums.length,
+        releaseDate: albums.releaseDate,
+      },
+    })
+    .from(tracks)
+    .innerJoin(albums, eq(albums.id, tracks.albumId))
+    .innerJoin(tracksStats, eq(tracksStats.entityId, tracks.id))
+    .orderBy(desc(tracksStats.ratingAvg));
+
+  if (typeof limit === "number") {
+    topTracksQuery.limit(limit);
+  }
+
+  const topTracksResults = await topTracksQuery;
+  return topTracksResults;
+}

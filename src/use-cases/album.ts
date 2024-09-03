@@ -3,12 +3,13 @@ import {
   getAlbumReviews,
   getAlbums,
   getFilteredAlbums,
+  getTopAlbums,
 } from "@/data-access/album";
 
 const LIMIT = 10;
 
 export async function getTopAlbumsUseCase() {
-  const albums = await getAlbums(LIMIT);
+  const albums = await getTopAlbums(LIMIT);
   return albums;
 }
 

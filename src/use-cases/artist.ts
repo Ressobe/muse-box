@@ -7,6 +7,8 @@ import {
   getArtistSinglesEps,
   getArtistStats,
   getFilteredArtists,
+  getNewArtists,
+  getPopularArtists,
   getTopArtists,
 } from "@/data-access/artist";
 import { getTopTracks } from "@/data-access/track";
@@ -100,11 +102,21 @@ export async function getFilteredArtistsUseCase(query: string) {
 }
 
 export async function getTopArtistsUseCase() {
-  const topArtists = getTopArtists();
+  const topArtists = getTopArtists(LIMIT);
   return topArtists;
 }
 
 export async function getArtistByAlbumIdUseCase(albumId: string) {
   const artist = await getArtistByAlbumId(albumId);
   return artist;
+}
+
+export async function getPopularArtistsUseCase() {
+  const artists = await getPopularArtists(LIMIT);
+  return artists;
+}
+
+export async function getNewArtistsUseCase() {
+  const artists = await getNewArtists(LIMIT);
+  return artists;
 }

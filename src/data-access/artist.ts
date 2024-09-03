@@ -149,8 +149,8 @@ export async function getFilteredArtists(query: string, limit?: number) {
   return filteredArtists;
 }
 
-export async function getTopArtists() {
-  return await db
+export async function getTopArtists(limit?: number) {
+  const topArtistsQuery = db
     .select({
       id: artists.id,
       name: artists.name,
@@ -162,6 +162,13 @@ export async function getTopArtists() {
     .from(artists)
     .innerJoin(artistsStats, eq(artistsStats.entityId, artists.id))
     .orderBy(desc(artistsStats.ratingAvg));
+
+  if (typeof limit === "number") {
+    topArtistsQuery.limit(limit);
+  }
+
+  const topArtistsResults = await topArtistsQuery;
+  return topArtistsResults;
 }
 
 export async function getArtistByAlbumId(albumId: string) {
@@ -173,4 +180,46 @@ export async function getArtistByAlbumId(albumId: string) {
   });
 
   return alb?.artist;
+}
+
+export async function getPopularArtists(limit?: number) {
+  const popularArtistsQuery = db
+    .select({
+      id: artists.id,
+      name: artists.name,
+      image: artists.image,
+      bio: artists.bio,
+      country: artists.country,
+    })
+    .from(artists)
+    .innerJoin(artistsStats, eq(artistsStats.entityId, artists.id))
+    .orderBy(desc(artistsStats.ratingCount));
+
+  if (typeof limit === "number") {
+    popularArtistsQuery.limit(limit);
+  }
+
+  const popularArtistsResults = await popularArtistsQuery;
+  return popularArtistsResults;
+}
+
+export async function getNewArtists(limit?: number) {
+  const newArtistsQuery = db
+    .select({
+      id: artists.id,
+      name: artists.name,
+      image: artists.image,
+      bio: artists.bio,
+      country: artists.country,
+      beginDateYear: artists.beginDateYear,
+    })
+    .from(artists)
+    .orderBy(desc(artists.beginDateYear));
+
+  if (typeof limit === "number") {
+    newArtistsQuery.limit(limit);
+  }
+
+  const newArtistsResults = await newArtistsQuery;
+  return newArtistsResults;
 }

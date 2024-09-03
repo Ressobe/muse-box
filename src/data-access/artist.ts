@@ -157,6 +157,7 @@ export async function getTopArtists() {
       image: artists.image,
       bio: artists.bio,
       country: artists.country,
+      ratingAvg: artistsStats.ratingAvg,
     })
     .from(artists)
     .innerJoin(artistsStats, eq(artistsStats.entityId, artists.id))

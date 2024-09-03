@@ -1,5 +1,6 @@
 import {
   getFilteredTracks,
+  getTopTracksCards,
   getTrackById,
   getTrackReviews,
   getTracks,
@@ -8,7 +9,7 @@ import {
 const LIMIT = 10;
 
 export async function getTopTracksUseCase() {
-  const tracks = await getTracks(LIMIT);
+  const tracks = await getTopTracksCards(LIMIT);
   return tracks;
 }
 

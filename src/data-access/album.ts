@@ -1,5 +1,5 @@
 import { db } from "@/database/db";
-import { albums, reviewsAlbums } from "@/database/schema";
+import { albums, albumsStats, reviewsAlbums } from "@/database/schema";
 import { Album } from "@/schemas/album";
 import { count, desc, eq, sql } from "drizzle-orm";
 import { createAlbumStat } from "./stat";
@@ -95,4 +95,28 @@ export async function getFilteredAlbums(query: string, limit?: number) {
   const filteredAlbums = await filteredAlbumsQuery;
 
   return filteredAlbums;
+}
+
+export async function getTopAlbums(limit?: number) {
+  const topAlbumsQuery = db
+    .select({
+      id: albums.id,
+      title: albums.title,
+      length: albums.length,
+      image: albums.image,
+      artistId: albums.artistId,
+      typeId: albums.typeId,
+      releaseDate: albums.releaseDate,
+      ratingAvg: albumsStats.ratingAvg,
+    })
+    .from(albums)
+    .innerJoin(albumsStats, eq(albumsStats.entityId, albums.id))
+    .orderBy(desc(albumsStats.ratingAvg));
+
+  if (typeof limit === "number") {
+    topAlbumsQuery.limit(limit);
+  }
+
+  const topAlbumsResults = await topAlbumsQuery;
+  return topAlbumsResults;
 }

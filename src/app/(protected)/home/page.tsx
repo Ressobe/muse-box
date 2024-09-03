@@ -54,9 +54,9 @@ function TopArtistsTable({ artists }: TopArtistsTableProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Place</TableHead>
-          <TableHead>Artist</TableHead>
-          <TableHead>Rating</TableHead>
+          <TableHead className="w-1/5">Place</TableHead>
+          <TableHead className="w-3/5">Artist</TableHead>
+          <TableHead className="w-1/5">Rating</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -112,9 +112,9 @@ function TopAlbumsTable({ albums }: TopAlbumsTableProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Place</TableHead>
-          <TableHead>Album</TableHead>
-          <TableHead>Rating</TableHead>
+          <TableHead className="w-1/5">Place</TableHead>
+          <TableHead className="w-3/5">Album</TableHead>
+          <TableHead className="w-1/5">Rating</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -182,9 +182,9 @@ function TopTracksTable({ tracks }: TopTracksTableProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Place</TableHead>
-          <TableHead>Song</TableHead>
-          <TableHead>Rating</TableHead>
+          <TableHead className="w-1/5">Place</TableHead>
+          <TableHead className="w-3/5">Song</TableHead>
+          <TableHead className="w-1/5">Rating</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

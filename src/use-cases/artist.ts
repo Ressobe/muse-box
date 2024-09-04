@@ -4,7 +4,9 @@ import {
   getArtistById,
   getArtistDiscography,
   getArtistGenres,
+  getArtistsCount,
   getArtistSinglesEps,
+  getArtistsSearch,
   getArtistStats,
   getFilteredArtists,
   getNewArtists,
@@ -119,4 +121,22 @@ export async function getPopularArtistsUseCase() {
 export async function getNewArtistsUseCase() {
   const artists = await getNewArtists(LIMIT);
   return artists;
+}
+
+export async function getArtistsSearchUseCase(
+  currentPage: number,
+  totalItemsOnPage: number,
+) {
+  const offset = (currentPage - 1) * totalItemsOnPage;
+  const limit = totalItemsOnPage;
+
+  const artists = await getArtistsSearch(limit, offset);
+  const { count: totalCount } = await getArtistsCount();
+
+  const totalPages = Math.ceil(totalCount / limit);
+
+  return {
+    artists,
+    totalPages,
+  };
 }

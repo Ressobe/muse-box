@@ -1,7 +1,7 @@
 import { db } from "@/database/db";
 import { albums, albumsStats, reviewsAlbums } from "@/database/schema";
 import { Album } from "@/schemas/album";
-import { count, desc, eq, sql } from "drizzle-orm";
+import { asc, count, desc, eq, sql } from "drizzle-orm";
 import { createAlbumStat } from "./stat";
 
 export async function getAlbums(limit?: number) {
@@ -119,4 +119,125 @@ export async function getTopAlbums(limit?: number) {
 
   const topAlbumsResults = await topAlbumsQuery;
   return topAlbumsResults;
+}
+
+export async function getAlbumsSearch(limit?: number, offset = 0) {
+  return await db.query.albums.findMany({
+    with: {
+      stats: true,
+    },
+    limit,
+    offset,
+    orderBy: asc(albums.title),
+  });
+}
+
+export async function getAlbumsSortedByHighestRating(
+  limit?: number,
+  offset = 0,
+) {
+  const query = db
+    .select({
+      id: albums.id,
+      title: albums.title,
+      length: albums.length,
+      image: albums.image,
+      artistId: albums.artistId,
+      typeId: albums.typeId,
+      releaseDate: albums.releaseDate,
+      stats: {
+        ratingAvg: albumsStats.ratingAvg,
+        ratingSum: albumsStats.ratingSum,
+        ratingCount: albumsStats.ratingCount,
+      },
+    })
+    .from(albums)
+    .leftJoin(albumsStats, eq(albumsStats.entityId, albums.id))
+    .orderBy(desc(albumsStats.ratingAvg))
+    .offset(offset);
+
+  if (typeof limit === "number") {
+    query.limit(limit);
+  }
+
+  return await query;
+}
+
+export async function getAlbumsSortedByLowestRating(
+  limit?: number,
+  offset = 0,
+) {
+  const query = db
+    .select({
+      id: albums.id,
+      title: albums.title,
+      length: albums.length,
+      image: albums.image,
+      artistId: albums.artistId,
+      typeId: albums.typeId,
+      releaseDate: albums.releaseDate,
+      stats: {
+        ratingAvg: albumsStats.ratingAvg,
+        ratingSum: albumsStats.ratingSum,
+        ratingCount: albumsStats.ratingCount,
+      },
+    })
+    .from(albums)
+    .leftJoin(albumsStats, eq(albumsStats.entityId, albums.id))
+    .orderBy(asc(albumsStats.ratingAvg))
+    .offset(offset);
+
+  if (typeof limit === "number") {
+    query.limit(limit);
+  }
+
+  return await query;
+}
+
+export async function getAlbumsCount() {
+  const [c] = await db.select({ count: count() }).from(albums);
+  return c;
+}
+
+export async function getPopularAlbums(limit?: number) {
+  const popularAlbumsQuery = db
+    .select({
+      id: albums.id,
+      title: albums.title,
+      length: albums.length,
+      typeId: albums.typeId,
+      artistId: albums.artistId,
+      releaseDate: albums.releaseDate,
+      image: albums.image,
+    })
+    .from(albums)
+    .innerJoin(albumsStats, eq(albumsStats.entityId, albums.id))
+    .orderBy(desc(albumsStats.ratingCount));
+
+  if (typeof limit === "number") {
+    popularAlbumsQuery.limit(limit);
+  }
+
+  return await popularAlbumsQuery;
+}
+
+export async function getNewAlbums(limit?: number) {
+  const newAlbumsQuery = db
+    .select({
+      id: albums.id,
+      title: albums.title,
+      length: albums.length,
+      typeId: albums.typeId,
+      artistId: albums.artistId,
+      releaseDate: albums.releaseDate,
+      image: albums.image,
+    })
+    .from(albums)
+    .orderBy(desc(albums.releaseDate));
+
+  if (typeof limit === "number") {
+    newAlbumsQuery.limit(limit);
+  }
+
+  return await newAlbumsQuery;
 }

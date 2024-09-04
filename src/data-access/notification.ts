@@ -94,6 +94,8 @@ export async function sendNotificationToFollowers(
     where: eq(follows.followingId, senderId),
   });
 
+  if (followers.length === 0) return;
+
   for (const item of followers) {
     await db.insert(notificationRecipients).values({
       notificationId,

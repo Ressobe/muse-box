@@ -32,7 +32,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { Review } from "@/types/review";
 import { useState } from "react";
-import { EditComment } from "./edit-comment";
+import { EditComment } from "@/components/review/edit-comment";
 
 type CommentProps = {
   review: Review;

@@ -24,6 +24,7 @@ const DEFAULT_PER_PAGE = 10;
 
 const sortTypes = [
   "alphabetical",
+  "alphabeticalReverse",
   "highestRating",
   "lowestRating",
   "default",

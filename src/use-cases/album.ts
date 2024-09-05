@@ -4,8 +4,10 @@ import {
   getAlbumReviews,
   getAlbumsCount,
   getAlbumsSearch,
+  getAlbumsSortedAlphabetically,
   getAlbumsSortedByHighestRating,
   getAlbumsSortedByLowestRating,
+  getAlbumsSortedInReverseAlphabetical,
   getFilteredAlbums,
   getNewAlbums,
   getPopularAlbums,
@@ -62,7 +64,14 @@ export async function getAlbumsSearchUseCase(
   }
   if (sort === "lowestRating") {
     albums = await getAlbumsSortedByLowestRating(limit, offset);
-  } else {
+  }
+  if (sort === "alphabetical") {
+    albums = await getAlbumsSortedAlphabetically(limit, offset);
+  }
+  if (sort === "alphabeticalReverse") {
+    albums = await getAlbumsSortedInReverseAlphabetical(limit, offset);
+  }
+  if (sort === "default") {
     albums = await getAlbumsSearch(limit, offset);
   }
 

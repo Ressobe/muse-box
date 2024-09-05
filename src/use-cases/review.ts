@@ -187,3 +187,11 @@ export async function shouldShowAddReviewUseCase(
   // And last because i show review when user don't have review already
   return !!!review;
 }
+
+export async function changeReviewRateUseCase(
+  commentId: string,
+  entityId: string,
+  userId: string,
+  rating: number,
+  type: Entity,
+) {}

@@ -1,24 +1,30 @@
+import { LikeButton } from "@/components/like-button";
+import { DialogComment } from "@/components/review/dialog-comment";
 import { RatingStats } from "@/components/review/rating-stats";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { currentUser } from "@/lib/auth";
 import { getTopAlbumsUseCase } from "@/use-cases/album";
 import { getTopArtistsUseCase } from "@/use-cases/artist";
+import { isUserLikedItUseCase } from "@/use-cases/playlist";
 import { getTopTracksUseCase } from "@/use-cases/track";
+import { getUserArtistReviewUseCase } from "@/use-cases/user";
 import { ArrowDownNarrowWide } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
 
 export default async function HomePage() {
+  const user = await currentUser();
+  if (!user) return null;
+
   const topArtists = await getTopArtistsUseCase();
   const topAlbums = await getTopAlbumsUseCase();
   const topTracks = await getTopTracksUseCase();
@@ -27,15 +33,15 @@ export default async function HomePage() {
     <section className="w-full space-y-20">
       <section>
         <h1 className="font-bold text-3xl mb-8">Top artists</h1>
-        <TopArtistsTable artists={topArtists} />
+        <TopArtistsTable artists={topArtists} userId={user.id} />
       </section>
       <section>
         <h1 className="font-bold text-3xl mb-8">Top albums</h1>
-        <TopAlbumsTable albums={topAlbums} />
+        <TopAlbumsTable albums={topAlbums} userId={user.id} />
       </section>
       <section>
         <h1 className="font-bold text-3xl mb-8">Top tracks</h1>
-        <TopTracksTable tracks={topTracks} />
+        <TopTracksTable tracks={topTracks} userId={user.id} />
       </section>
     </section>
   );
@@ -50,17 +56,35 @@ type TopArtistsTableProps = {
     country: string | null;
     ratingAvg: number | null;
   }[];
+  userId: string;
 };
 
-function TopArtistsTable({ artists }: TopArtistsTableProps) {
+async function TopArtistsTable({
+  artists: artistsInitial,
+  userId,
+}: TopArtistsTableProps) {
+  const artists = await Promise.all(
+    artistsInitial.map(async (artist) => {
+      const review = await getUserArtistReviewUseCase(userId, artist.id);
+      const defaultRate = review?.rating ?? 0;
+
+      return {
+        ...artist,
+        defaultRate: defaultRate,
+        isLiked: await isUserLikedItUseCase(userId, artist.id, "artist"),
+      };
+    }),
+  );
+
   return (
     <>
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="w-1/5">Place</TableHead>
-            <TableHead className="w-3/5">Artist</TableHead>
+            <TableHead className="w-2/5">Artist</TableHead>
             <TableHead className="w-1/5">Rating</TableHead>
+            <TableHead className="w-1/5"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -89,6 +113,21 @@ function TopArtistsTable({ artists }: TopArtistsTableProps) {
                 </TableCell>
                 <TableCell>
                   <RatingStats stats={stats} size="lg" />
+                </TableCell>
+                <TableCell>
+                  <LikeButton
+                    defaultLikeState={item.isLiked}
+                    entityId={item.id}
+                    userId={userId}
+                    type="artist"
+                  />
+                  <DialogComment
+                    type="artist"
+                    entityId={item.id}
+                    userId={userId}
+                    entityName={item.name}
+                    defaultRate={item.defaultRate}
+                  />
                 </TableCell>
               </TableRow>
             );
@@ -119,17 +158,29 @@ type TopAlbumsTableProps = {
     releaseDate: Date | null;
     ratingAvg: number | null;
   }[];
+  userId: string;
 };
 
-function TopAlbumsTable({ albums }: TopAlbumsTableProps) {
+async function TopAlbumsTable({
+  albums: albumsInitial,
+  userId,
+}: TopAlbumsTableProps) {
+  const albums = await Promise.all(
+    albumsInitial.map(async (album) => ({
+      ...album,
+      isLiked: await isUserLikedItUseCase(userId, album.id, "album"),
+    })),
+  );
+
   return (
     <>
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="w-1/5">Place</TableHead>
-            <TableHead className="w-3/5">Album</TableHead>
+            <TableHead className="w-2/5">Album</TableHead>
             <TableHead className="w-1/5">Rating</TableHead>
+            <TableHead className="w-1/5"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -161,6 +212,14 @@ function TopAlbumsTable({ albums }: TopAlbumsTableProps) {
 
                 <TableCell>
                   <RatingStats stats={stats} size="lg" />
+                </TableCell>
+                <TableCell>
+                  <LikeButton
+                    defaultLikeState={item.isLiked}
+                    entityId={item.id}
+                    userId={userId}
+                    type="album"
+                  />
                 </TableCell>
               </TableRow>
             );
@@ -200,17 +259,28 @@ type TopTracksTableProps = {
       releaseDate: Date | null;
     };
   }[];
+  userId: string;
 };
 
-function TopTracksTable({ tracks }: TopTracksTableProps) {
+async function TopTracksTable({
+  tracks: tracksInitial,
+  userId,
+}: TopTracksTableProps) {
+  const tracks = await Promise.all(
+    tracksInitial.map(async (track) => ({
+      ...track,
+      isLiked: await isUserLikedItUseCase(userId, track.id, "track"),
+    })),
+  );
   return (
     <>
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="w-1/5">Place</TableHead>
-            <TableHead className="w-3/5">Song</TableHead>
+            <TableHead className="w-2/5">Song</TableHead>
             <TableHead className="w-1/5">Rating</TableHead>
+            <TableHead className="w-1/5"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -241,6 +311,14 @@ function TopTracksTable({ tracks }: TopTracksTableProps) {
                 </TableCell>
                 <TableCell>
                   <RatingStats stats={stats} size="lg" />
+                </TableCell>
+                <TableCell>
+                  <LikeButton
+                    defaultLikeState={item.isLiked}
+                    entityId={item.id}
+                    userId={userId}
+                    type="track"
+                  />
                 </TableCell>
               </TableRow>
             );

@@ -184,7 +184,10 @@ export async function getAlbumsSortedByLowestRating(
     })
     .from(albums)
     .leftJoin(albumsStats, eq(albumsStats.entityId, albums.id))
-    .orderBy(asc(albumsStats.ratingAvg))
+    .orderBy(
+      sql`CASE WHEN ${albumsStats.ratingAvg} IS NULL THEN 1 ELSE 0 END`,
+      asc(sql`COALESCE(${albumsStats.ratingAvg}, 0)`),
+    )
     .offset(offset);
 
   if (typeof limit === "number") {
@@ -192,6 +195,33 @@ export async function getAlbumsSortedByLowestRating(
   }
 
   return await query;
+}
+
+export async function getAlbumsSortedAlphabetically(
+  limit?: number,
+  offset = 0,
+) {
+  return await db.query.albums.findMany({
+    with: {
+      stats: true,
+    },
+    limit,
+    offset,
+    orderBy: asc(albums.title),
+  });
+}
+export async function getAlbumsSortedInReverseAlphabetical(
+  limit?: number,
+  offset = 0,
+) {
+  return await db.query.albums.findMany({
+    with: {
+      stats: true,
+    },
+    limit,
+    offset,
+    orderBy: desc(albums.title),
+  });
 }
 
 export async function getAlbumsCount() {

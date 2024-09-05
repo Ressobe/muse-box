@@ -123,8 +123,10 @@ export async function findReview(
     throw new Error(`Unsupported entity type: ${type}`);
   }
 
-  return await db
+  const [review] = await db
     .select()
     .from(table)
     .where(and(eq(table.userId, userId), eq(table.entityId, entityId)));
+
+  return review;
 }

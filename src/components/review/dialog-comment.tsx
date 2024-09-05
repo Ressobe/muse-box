@@ -14,6 +14,8 @@ import Rating from "./rating";
 import { useState, useTransition } from "react";
 import clsx from "clsx";
 import { useToast } from "@/components/ui/use-toast";
+import { changeReviewRateAction } from "@/actions/reviews";
+import { usePathname } from "next/navigation";
 
 type DialogCommentProps = {
   userId: string;
@@ -30,6 +32,7 @@ export function DialogComment({
   type,
   defaultRate,
 }: DialogCommentProps) {
+  const pathname = usePathname();
   const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -43,20 +46,21 @@ export function DialogComment({
 
       const rating = Number(localStorage.getItem("starRating"));
 
-      const response = await addReviewAction(
+      const response = await changeReviewRateAction(
+        pathname,
         entityId,
         userId,
-        // comment,
         rating,
         type,
       );
+
       if (response.sucess) {
         toast({
           variant: "sucessful",
           description: (
             <div className="flex items-center">
               <CircleCheck className="mr-2 text-green-500" />
-              Your review was added sucessful!
+              Your rating was updated sucessful!
             </div>
           ),
           className: "bg-secondary opacity-90",

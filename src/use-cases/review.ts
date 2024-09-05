@@ -12,7 +12,12 @@ import {
   createNotification,
   sendNotificationToFollowers,
 } from "@/data-access/notification";
-import { deleteReview, insertReview, updateReview } from "@/data-access/review";
+import {
+  deleteReview,
+  findReview,
+  insertReview,
+  updateReview,
+} from "@/data-access/review";
 import {
   getTrackById,
   getTrackReviews,
@@ -189,9 +194,22 @@ export async function shouldShowAddReviewUseCase(
 }
 
 export async function changeReviewRateUseCase(
-  commentId: string,
   entityId: string,
   userId: string,
   rating: number,
   type: Entity,
-) {}
+) {
+  let existingReview = await findReview(userId, entityId, type);
+  if (!existingReview) {
+    return await insertReview(entityId, userId, "", rating, type);
+  }
+
+  return await updateReview(
+    existingReview.id,
+    existingReview.entityId,
+    existingReview.userId,
+    existingReview.comment ?? "",
+    rating,
+    type,
+  );
+}

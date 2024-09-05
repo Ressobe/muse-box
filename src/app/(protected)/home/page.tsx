@@ -10,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getUserAlbumReview, getUserTrackReview } from "@/data-access/user";
 import { currentUser } from "@/lib/auth";
 import { getTopAlbumsUseCase } from "@/use-cases/album";
 import { getTopArtistsUseCase } from "@/use-cases/artist";
@@ -166,10 +167,16 @@ async function TopAlbumsTable({
   userId,
 }: TopAlbumsTableProps) {
   const albums = await Promise.all(
-    albumsInitial.map(async (album) => ({
-      ...album,
-      isLiked: await isUserLikedItUseCase(userId, album.id, "album"),
-    })),
+    albumsInitial.map(async (album) => {
+      const review = await getUserAlbumReview(userId, album.id);
+      const defaultRate = review?.rating ?? 0;
+
+      return {
+        ...album,
+        defaultRate: defaultRate,
+        isLiked: await isUserLikedItUseCase(userId, album.id, "album"),
+      };
+    }),
   );
 
   return (
@@ -220,6 +227,13 @@ async function TopAlbumsTable({
                     userId={userId}
                     type="album"
                   />
+                  <DialogComment
+                    type="album"
+                    entityId={item.id}
+                    userId={userId}
+                    entityName={item.title}
+                    defaultRate={item.defaultRate}
+                  />
                 </TableCell>
               </TableRow>
             );
@@ -267,11 +281,18 @@ async function TopTracksTable({
   userId,
 }: TopTracksTableProps) {
   const tracks = await Promise.all(
-    tracksInitial.map(async (track) => ({
-      ...track,
-      isLiked: await isUserLikedItUseCase(userId, track.id, "track"),
-    })),
+    tracksInitial.map(async (track) => {
+      const review = await getUserTrackReview(userId, track.id);
+      const defaultRate = review?.rating ?? 0;
+
+      return {
+        ...track,
+        defaultRate: defaultRate,
+        isLiked: await isUserLikedItUseCase(userId, track.id, "track"),
+      };
+    }),
   );
+
   return (
     <>
       <Table>
@@ -318,6 +339,13 @@ async function TopTracksTable({
                     entityId={item.id}
                     userId={userId}
                     type="track"
+                  />
+                  <DialogComment
+                    type="track"
+                    entityId={item.id}
+                    userId={userId}
+                    entityName={item.title}
+                    defaultRate={item.defaultRate}
                   />
                 </TableCell>
               </TableRow>

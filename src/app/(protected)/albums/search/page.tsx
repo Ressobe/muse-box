@@ -68,7 +68,7 @@ export default async function AlbumsSearchPage({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {albums.map((item, idx) => {
+            {albums?.map((item, idx) => {
               const globalIndex = (page - 1) * perPage + idx + 1;
 
               return (

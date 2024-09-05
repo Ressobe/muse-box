@@ -9,7 +9,7 @@ import {
   tracksStats,
 } from "@/database/schema";
 import { Artist } from "@/schemas/artist";
-import { and, count, desc, eq, or, sql } from "drizzle-orm";
+import { and, asc, count, desc, eq, or, sql } from "drizzle-orm";
 import { createArtistStat } from "./stat";
 
 export async function getArtists() {
@@ -124,6 +124,19 @@ export async function getArtistReviews(
     limit,
     offset,
   });
+}
+
+export async function getArtistsSearch(limit?: number, offset = 0) {
+  return await db.query.artists.findMany({
+    limit,
+    offset,
+    orderBy: asc(artists.name),
+  });
+}
+
+export async function getArtistsCount() {
+  const [c] = await db.select({ count: count() }).from(artists);
+  return c;
 }
 
 export async function getArtistReviewsCount(artistId: string) {

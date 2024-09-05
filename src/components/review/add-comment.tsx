@@ -121,7 +121,7 @@ export function AddComment({
   };
 
   return (
-    <form action={handleSubmit} className="w-1/3 flex flex-col gap-x-6">
+    <form className="w-1/3 flex flex-col gap-x-6">
       <div>
         <Rating size={30} defaultRate={1} />
         <textarea

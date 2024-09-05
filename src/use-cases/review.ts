@@ -12,7 +12,12 @@ import {
   createNotification,
   sendNotificationToFollowers,
 } from "@/data-access/notification";
-import { deleteReview, insertReview, updateReview } from "@/data-access/review";
+import {
+  deleteReview,
+  findReview,
+  insertReview,
+  updateReview,
+} from "@/data-access/review";
 import {
   getTrackById,
   getTrackReviews,
@@ -186,4 +191,25 @@ export async function shouldShowAddReviewUseCase(
   // Two times negation because I want to change type to boolean
   // And last because i show review when user don't have review already
   return !!!review;
+}
+
+export async function changeReviewRateUseCase(
+  entityId: string,
+  userId: string,
+  rating: number,
+  type: Entity,
+) {
+  let existingReview = await findReview(userId, entityId, type);
+  if (!existingReview) {
+    return await insertReview(entityId, userId, "", rating, type);
+  }
+
+  return await updateReview(
+    existingReview.id,
+    existingReview.entityId,
+    existingReview.userId,
+    existingReview.comment ?? "",
+    rating,
+    type,
+  );
 }

@@ -111,3 +111,22 @@ export async function updateReview(
 
   return review;
 }
+
+export async function findReview(
+  userId: string,
+  entityId: string,
+  type: Entity,
+) {
+  const table = reviewTables[type];
+
+  if (!table) {
+    throw new Error(`Unsupported entity type: ${type}`);
+  }
+
+  const [review] = await db
+    .select()
+    .from(table)
+    .where(and(eq(table.userId, userId), eq(table.entityId, entityId)));
+
+  return review;
+}

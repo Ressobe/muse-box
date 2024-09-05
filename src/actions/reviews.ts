@@ -4,6 +4,7 @@ import { getUserArtistReview } from "@/data-access/user";
 import { currentUser } from "@/lib/auth";
 import { Entity } from "@/types";
 import {
+  changeReviewRateUseCase,
   createReviewUseCase,
   editReviewUseCase,
   removeReviewUseCase,
@@ -73,7 +74,7 @@ export async function editReviewAction(
   type: Entity,
 ) {
   const user = await currentUser();
-  if (!user) {
+  if (!user || user.id !== userId) {
     return { error: "Not authorized access!" };
   }
 
@@ -87,6 +88,29 @@ export async function editReviewAction(
   );
 
   revalidatePath(`/${type}s/${entityId}`);
+
+  if (review) {
+    return { sucess: "review updated!" };
+  }
+
+  return { error: "review not updated!" };
+}
+
+export async function changeReviewRateAction(
+  pathname: string,
+  entityId: string,
+  userId: string,
+  rating: number,
+  type: Entity,
+) {
+  const user = await currentUser();
+  if (!user || user.id !== userId) {
+    return { error: "Not authorized access!" };
+  }
+
+  const review = await changeReviewRateUseCase(entityId, userId, rating, type);
+
+  revalidatePath(pathname);
 
   if (review) {
     return { sucess: "review updated!" };

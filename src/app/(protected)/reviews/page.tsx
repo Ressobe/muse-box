@@ -6,7 +6,7 @@ import {
   shouldShowAddReviewUseCase,
 } from "@/use-cases/review";
 import { notFound } from "next/navigation";
-import { PaginationControls } from "./pagination-controls";
+import { PaginationControls } from "@/components/pagination-controls";
 import { ArtistHeader } from "@/components/artist/artist-header";
 import { AlbumHeader } from "@/components/album/album-header";
 import { TrackHeader } from "@/components/track/track-header";

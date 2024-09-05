@@ -15,6 +15,7 @@ export async function newVerificationAction(token: string) {
 
   const hasExpired = new Date(existingToken.expires) < new Date();
   if (hasExpired) {
+    await removeVerificationTokenById(existingToken.id);
     return { error: "Token has expired!" };
   }
 

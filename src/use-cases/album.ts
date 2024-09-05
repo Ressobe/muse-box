@@ -1,25 +1,33 @@
+import { SortType } from "@/app/(protected)/albums/search/page";
 import {
   getAlbumById,
   getAlbumReviews,
-  getAlbums,
+  getAlbumsCount,
+  getAlbumsSearch,
+  getAlbumsSortedAlphabetically,
+  getAlbumsSortedByHighestRating,
+  getAlbumsSortedByLowestRating,
+  getAlbumsSortedInReverseAlphabetical,
   getFilteredAlbums,
+  getNewAlbums,
+  getPopularAlbums,
   getTopAlbums,
 } from "@/data-access/album";
 
 const LIMIT = 10;
 
 export async function getTopAlbumsUseCase() {
-  const albums = await getTopAlbums(LIMIT);
+  const albums = await getTopAlbums(5);
   return albums;
 }
 
 export async function getPopularAlbumsUseCase() {
-  const albums = await getAlbums(LIMIT);
+  const albums = await getPopularAlbums(LIMIT);
   return albums;
 }
 
 export async function getNewAlbumsUseCase() {
-  const albums = await getAlbums(LIMIT);
+  const albums = await getNewAlbums(LIMIT);
   return albums;
 }
 
@@ -40,4 +48,39 @@ export async function getFilteredAlbumsUseCase(query: string) {
   }
 
   return getFilteredAlbums(lowerCaseQuery, LIMIT);
+}
+
+export async function getAlbumsSearchUseCase(
+  currentPage: number,
+  totalItemsOnPage: number,
+  sort: SortType,
+) {
+  const offset = (currentPage - 1) * totalItemsOnPage;
+  const limit = totalItemsOnPage;
+
+  let albums;
+  if (sort === "highestRating") {
+    albums = await getAlbumsSortedByHighestRating(limit, offset);
+  }
+  if (sort === "lowestRating") {
+    albums = await getAlbumsSortedByLowestRating(limit, offset);
+  }
+  if (sort === "alphabetical") {
+    albums = await getAlbumsSortedAlphabetically(limit, offset);
+  }
+  if (sort === "alphabeticalReverse") {
+    albums = await getAlbumsSortedInReverseAlphabetical(limit, offset);
+  }
+  if (sort === "default") {
+    albums = await getAlbumsSearch(limit, offset);
+  }
+
+  const { count: totalCount } = await getAlbumsCount();
+
+  const totalPages = Math.ceil(totalCount / limit);
+
+  return {
+    albums,
+    totalPages,
+  };
 }

@@ -1,7 +1,7 @@
 import { db } from "@/database/db";
 import { albums, reviewsTracks, tracks, tracksStats } from "@/database/schema";
 import { Track } from "@/schemas/track";
-import { count, desc, eq, sql } from "drizzle-orm";
+import { asc, count, desc, eq, sql } from "drizzle-orm";
 import { createTrackStat } from "./stat";
 import { getAlbumImage } from "./album";
 
@@ -193,4 +193,80 @@ export async function getTopTracksCards(limit?: number) {
 
   const topTracksResults = await topTracksQuery;
   return topTracksResults;
+}
+
+export async function getTracksSearch(limit?: number, offset = 0) {
+  return await db.query.tracks.findMany({
+    limit,
+    offset,
+    orderBy: asc(tracks.title),
+  });
+}
+
+export async function getTracksCount() {
+  const [c] = await db.select({ count: count() }).from(tracks);
+  return c;
+}
+
+export async function getPopularTracks(limit?: number) {
+  const popularTracksQuery = db
+    .select({
+      id: tracks.id,
+      title: tracks.title,
+      length: tracks.length,
+      image: albums.image,
+      position: tracks.position,
+      albumId: tracks.albumId,
+      artistsCredits: tracks.artistsCredits,
+      album: {
+        id: albums.id,
+        image: albums.image,
+        artistId: albums.artistId,
+        typeId: albums.typeId,
+        title: albums.title,
+        length: albums.length,
+        releaseDate: albums.releaseDate,
+      },
+    })
+    .from(tracks)
+    .innerJoin(albums, eq(albums.id, tracks.albumId))
+    .innerJoin(tracksStats, eq(tracksStats.entityId, tracks.id))
+    .orderBy(desc(tracksStats.ratingCount));
+
+  if (typeof limit === "number") {
+    popularTracksQuery.limit(limit);
+  }
+
+  return await popularTracksQuery;
+}
+
+export async function getNewTracks(limit?: number) {
+  const newTracksQuery = db
+    .select({
+      id: tracks.id,
+      title: tracks.title,
+      length: tracks.length,
+      image: albums.image,
+      position: tracks.position,
+      albumId: tracks.albumId,
+      artistsCredits: tracks.artistsCredits,
+      album: {
+        id: albums.id,
+        image: albums.image,
+        artistId: albums.artistId,
+        typeId: albums.typeId,
+        title: albums.title,
+        length: albums.length,
+        releaseDate: albums.releaseDate,
+      },
+    })
+    .from(tracks)
+    .innerJoin(albums, eq(albums.id, tracks.albumId))
+    .orderBy(desc(albums.releaseDate));
+
+  if (typeof limit === "number") {
+    newTracksQuery.limit(limit);
+  }
+
+  return await newTracksQuery;
 }

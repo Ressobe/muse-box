@@ -1,7 +1,7 @@
 import { IAccountsRepository } from "@/src/application/repositories/accounts.repository.interface";
 import { Account } from "@/src/entities/models/account";
-import { db } from "@/database/db";
-import { accounts } from "@/database/schema";
+import { db } from "@/drizzle/database/db";
+import { accounts } from "@/drizzle/database/schema";
 import { eq } from "drizzle-orm";
 
 export class AccountsRepository implements IAccountsRepository {

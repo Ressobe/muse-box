@@ -1,6 +1,6 @@
 import { IFollowersRepository } from "@/src/application/repositories/followers.repository.interface";
-import { db } from "@/database/db";
-import { follows } from "@/database/schema";
+import { db } from "@/drizzle/database/db";
+import { follows } from "@/drizzle/database/schema";
 import { and, eq } from "drizzle-orm";
 
 export class FollowersRepository implements IFollowersRepository {

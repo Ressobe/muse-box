@@ -1,4 +1,4 @@
-import { db } from "@/database/db";
+import { db } from "@/drizzle/database/db";
 import * as z from "zod";
 import { SettingsSchema } from "@/schemas/auth";
 import {
@@ -9,7 +9,7 @@ import {
   reviewsTracks,
   userProfiles,
   users,
-} from "@/database/schema";
+} from "@/drizzle/database/schema";
 import { and, desc, eq, not, sql } from "drizzle-orm";
 import { Entity } from "@/types";
 import { TAlbumReview, TArtistReview, TTrackReview } from "@/types/review";
@@ -79,7 +79,7 @@ export async function getUserImage(userId: string) {
     .select({ image: users.image })
     .from(users)
     .where(eq(users.id, userId));
-  return img ?? "";
+  return img.image ?? "";
 }
 
 export async function updateUser(

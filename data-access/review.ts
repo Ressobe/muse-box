@@ -1,4 +1,4 @@
-import { db } from "@/database/db";
+import { db } from "@/drizzle/database/db";
 import { Entity } from "@/types";
 import { reviewTables } from "@/types/review";
 import { and, eq } from "drizzle-orm";

@@ -1,5 +1,5 @@
-import { db } from "@/database/db";
-import { passwordResetTokens } from "@/database/schema";
+import { db } from "@/drizzle/database/db";
+import { passwordResetTokens } from "@/drizzle/database/schema";
 import { eq } from "drizzle-orm";
 
 export async function getPasswordResetTokenByToken(token: string) {

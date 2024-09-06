@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { tracks } from "@/database/schema";
+import { tracks } from "@/drizzle/database/schema";
 import { createInsertSchema } from "drizzle-zod";
 
 export const insertTrackSchema = createInsertSchema(tracks);

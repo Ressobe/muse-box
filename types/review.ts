@@ -2,7 +2,7 @@ import {
   reviewsAlbums,
   reviewsArtists,
   reviewsTracks,
-} from "@/database/schema";
+} from "@/drizzle/database/schema";
 
 export type Review = {
   id: string;

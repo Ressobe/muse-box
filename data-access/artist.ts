@@ -1,4 +1,4 @@
-import { db } from "@/database/db";
+import { db } from "@/drizzle/database/db";
 import {
   albums,
   artists,
@@ -7,7 +7,7 @@ import {
   reviewsArtists,
   tracks,
   tracksStats,
-} from "@/database/schema";
+} from "@/drizzle/database/schema";
 import { Artist } from "@/schemas/artist";
 import { and, asc, count, desc, eq, or, sql } from "drizzle-orm";
 import { createArtistStat } from "./stat";

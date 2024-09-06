@@ -1,5 +1,10 @@
-import { db } from "@/database/db";
-import { albums, reviewsTracks, tracks, tracksStats } from "@/database/schema";
+import { db } from "@/drizzle/database/db";
+import {
+  albums,
+  reviewsTracks,
+  tracks,
+  tracksStats,
+} from "@/drizzle/database/schema";
 import { Track } from "@/schemas/track";
 import { asc, count, desc, eq, sql } from "drizzle-orm";
 import { createTrackStat } from "./stat";

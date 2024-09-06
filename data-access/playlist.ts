@@ -1,8 +1,8 @@
-import { db } from "@/database/db";
-import { playlistItems, playlists } from "@/database/schema";
+import { db } from "@/drizzle/database/db";
+import { playlistItems, playlists } from "@/drizzle/database/schema";
 import { Entity } from "@/types";
 import { and, eq } from "drizzle-orm";
-import { PlaylistItemType } from "@/database/schema";
+import { PlaylistItemType } from "@/drizzle/database/schema";
 
 export async function createPlaylist(userId: string, name: string) {
   const [playlist] = await db

@@ -1,9 +1,9 @@
-import { db } from "@/database/db";
+import { db } from "@/drizzle/database/db";
 import {
   follows,
   notificationRecipients,
   userNotifications,
-} from "@/database/schema";
+} from "@/drizzle/database/schema";
 import { NotificationType } from "@/types/notification";
 import { and, eq } from "drizzle-orm";
 

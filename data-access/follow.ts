@@ -1,5 +1,5 @@
-import { db } from "@/database/db";
-import { follows } from "@/database/schema";
+import { db } from "@/drizzle/database/db";
+import { follows } from "@/drizzle/database/schema";
 import { and, eq } from "drizzle-orm";
 
 export async function createFollow(followerId: string, followingId: string) {

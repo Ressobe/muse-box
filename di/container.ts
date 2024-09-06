@@ -1,5 +1,7 @@
 import { IAccountsRepository } from "@/src/application/repositories/accounts.repository.interface";
+import { IFollowersRepository } from "@/src/application/repositories/followers.repository.interface";
 import { AccountsRepository } from "@/src/infrastructure/repositories/accounts.repository";
+import { FollowersRepository } from "@/src/infrastructure/repositories/followers.repository";
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -16,6 +18,11 @@ class Container {
     this.register<IAccountsRepository>(
       "IAccountsRepository",
       AccountsRepository,
+    );
+
+    this.register<IFollowersRepository>(
+      "IFollowersRepository",
+      FollowersRepository,
     );
   }
 

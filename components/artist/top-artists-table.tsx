@@ -14,6 +14,7 @@ import { FaUser } from "react-icons/fa";
 import { RatingStats } from "@/components/review/rating-stats";
 import { LikeButton } from "@/components/like-button";
 import { DialogComment } from "@/components/review/dialog-comment";
+import { ArrowDownNarrowWide } from "lucide-react";
 
 type TopArtistsTableProps = {
   artists: {

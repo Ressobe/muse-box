@@ -1,7 +1,8 @@
 "use server";
 
 import { currentUser } from "@/lib/auth";
-import { followUseCase, unfollowUseCase } from "@/use-cases/follow";
+import { followController } from "@/src/interface-adapters/controllers/follow.controller";
+import { unfollowUseCase } from "@/use-cases/follow";
 
 export async function followAction(followerId: string, followingId: string) {
   const user = await currentUser();
@@ -12,7 +13,7 @@ export async function followAction(followerId: string, followingId: string) {
     return { error: "Not authorized access!" };
   }
 
-  await followUseCase(followerId, followingId);
+  await followController(followerId, followingId);
 }
 
 export async function unfollowAction(followerId: string, followingId: string) {

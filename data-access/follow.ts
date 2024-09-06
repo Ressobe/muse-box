@@ -3,17 +3,18 @@ import { follows } from "@/database/schema";
 import { and, eq } from "drizzle-orm";
 
 export async function createFollow(followerId: string, followingId: string) {
-  return await db
+  const [follow] = await db
     .insert(follows)
     .values({
       followerId,
       followingId,
     })
     .returning();
+  return follow;
 }
 
 export async function deleteFollow(followerId: string, followingId: string) {
-  return await db
+  const [follow] = await db
     .delete(follows)
     .where(
       and(
@@ -22,6 +23,7 @@ export async function deleteFollow(followerId: string, followingId: string) {
       ),
     )
     .returning();
+  return follow;
 }
 
 export async function getFollow(followerId: string, followingId: string) {

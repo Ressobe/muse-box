@@ -39,7 +39,7 @@ export async function isUserOwnsNotification(
 }
 
 export async function deleteNotification(notificationId: string) {
-  return await db
+  await db
     .delete(userNotifications)
     .where(eq(userNotifications.id, notificationId));
 }

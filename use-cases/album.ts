@@ -75,7 +75,7 @@ export async function getAlbumsSearchUseCase(
     albums = await getAlbumsSearch(limit, offset);
   }
 
-  const { count: totalCount } = await getAlbumsCount();
+  const totalCount = await getAlbumsCount();
 
   const totalPages = Math.ceil(totalCount / limit);
 

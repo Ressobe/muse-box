@@ -1,5 +1,6 @@
 import { Album } from "@/src/entities/models/album";
 
+// TODO: return types
 export interface IAlbumsRepository {
   getAlbum(albumId: string): Promise<Album>;
   insertAlbum(newAlbum: Album): Promise<Album>;
@@ -27,4 +28,6 @@ export interface IAlbumsRepository {
   ): Promise<Album>;
 
   getAlbumsCount(): Promise<number>;
+  getAlbumsByArtistId(artistId: string, limit?: number): Promise<Album[]>;
+  getSinglesEpsByArtistId(artistId: string, limit?: number): Promise<Album[]>;
 }

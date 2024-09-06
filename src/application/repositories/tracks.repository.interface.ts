@@ -1,5 +1,7 @@
 import { Track } from "@/src/entities/models/track";
 
+// TODO: Return types
+//
 export interface ITracksInterface {
   getTracks(limit?: number): Promise<Track[]>;
   getTrack(trackId: string): Promise<Track>;
@@ -11,4 +13,5 @@ export interface ITracksInterface {
   getTracksCount(): Promise<number>;
   getPopularTracks(limit?: number): Promise<number>;
   getNewTracks(limit?: number): Promise<number>;
+  getTracksByArtistId(artistId: string, limit?: number): Promise<Track[]>;
 }

@@ -226,7 +226,7 @@ export async function getAlbumsSortedInReverseAlphabetical(
 
 export async function getAlbumsCount() {
   const [c] = await db.select({ count: count() }).from(albums);
-  return c;
+  return c.count;
 }
 
 export async function getPopularAlbums(limit?: number) {

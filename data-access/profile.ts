@@ -4,12 +4,13 @@ import { countDistinct, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/sqlite-core";
 
 export async function createProfile(userId: string) {
-  return await db
+  const [profile] = await db
     .insert(userProfiles)
     .values({
       userId,
     })
     .returning();
+  return profile;
 }
 
 export async function getProfileByUserId(userId: string) {

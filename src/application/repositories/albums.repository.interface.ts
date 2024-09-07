@@ -1,33 +1,39 @@
-import { Album } from "@/src/entities/models/album";
+import {
+  Album,
+  AlbumWithRatingAvg,
+  AlbumWithStats,
+} from "@/src/entities/models/album";
 
-// TODO: return types
 export interface IAlbumsRepository {
-  getAlbum(albumId: string): Promise<Album>;
+  getAlbum(albumId: string): Promise<Album | undefined>;
   insertAlbum(newAlbum: Album): Promise<Album>;
-  getAlbumsByArtistId(artistId: string, limit?: number): Promise<Album[]>;
   getAlbumsSearch(offset: number, limit?: number): Promise<Album[]>;
 
   getAlbumsSortedByHighestRating(
     offset: number,
     limit?: number,
-  ): Promise<Album[]>;
+  ): Promise<AlbumWithStats[]>;
 
   getAlbumsSortedByLowestRating(
     offset: number,
     limit?: number,
-  ): Promise<Album[]>;
+  ): Promise<AlbumWithStats[]>;
 
   getAlbumsSortedAlphabetically(
     offset: number,
     limit?: number,
-  ): Promise<Album[]>;
+  ): Promise<AlbumWithStats[]>;
 
   getAlbumsSortedInReverseAlphabetical(
     offset: number,
     limit?: number,
-  ): Promise<Album>;
+  ): Promise<AlbumWithStats[]>;
 
   getAlbumsCount(): Promise<number>;
-  getAlbumsByArtistId(artistId: string, limit?: number): Promise<Album[]>;
-  getSinglesEpsByArtistId(artistId: string, limit?: number): Promise<Album[]>;
+  getAlbumsForArtist(artistId: string, limit?: number): Promise<Album[]>;
+  getSinglesEpsForArtist(artistId: string, limit?: number): Promise<Album[]>;
+
+  getPopularAlbums(limit?: number): Promise<Album[]>;
+  getNewAlbums(limit?: number): Promise<Album[]>;
+  getTopAlbums(limit?: number): Promise<AlbumWithRatingAvg[]>;
 }

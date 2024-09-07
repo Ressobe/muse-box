@@ -1,8 +1,8 @@
-import { UserAvatar } from "@/components/user/user-avatar";
+import { UserAvatar } from "@/app/_components/user/user-avatar";
 import Link from "next/link";
 import { currentUser } from "@/lib/auth";
-import { SearchBar } from "@/components/search-bar";
-import { Notifications } from "@/components/notification/notifications";
+import { SearchBar } from "@/app/_components/search-bar";
+import { Notifications } from "@/app/_components/notification/notifications";
 import { getUserImage } from "@/data-access/user";
 
 export async function Topbar() {

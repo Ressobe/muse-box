@@ -1,10 +1,10 @@
 import { getArtistReviewsUseCase, getArtistUseCase } from "@/use-cases/artist";
 import { notFound } from "next/navigation";
-import { TopTracks } from "@/components/track/top-tracks";
-import { Albums } from "@/components/album/albums";
-import { SingleEps } from "@/components/album/single-eps";
-import { Reviews } from "@/components/review/reviews";
-import { ArtistHeader } from "@/components/artist/artist-header";
+import { TopTracks } from "@/app/_components/track/top-tracks";
+import { Albums } from "@/app/_components/album/albums";
+import { SingleEps } from "@/app/_components/album/single-eps";
+import { Reviews } from "@/app/_components/review/reviews";
+import { ArtistHeader } from "@/app/_components/artist/artist-header";
 import { currentUser } from "@/lib/auth";
 import { shouldShowAddReviewUseCase } from "@/use-cases/review";
 

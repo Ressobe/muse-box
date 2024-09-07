@@ -1,5 +1,5 @@
-import { BasicPlan } from "@/components/pricing/basic-plan";
-import { ProPlan } from "@/components/pricing/pro-plan";
+import { BasicPlan } from "@/app/_components/pricing/basic-plan";
+import { ProPlan } from "@/app/_components/pricing/pro-plan";
 
 export function Pricing() {
   const benefits = [

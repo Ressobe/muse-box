@@ -53,6 +53,9 @@ export async function createAlbum(newAlbum: Album) {
   return album;
 }
 
+// To należy do reviw repozytorium
+// getReviewsForAlbum
+// W taki sposób powinno być
 export async function getAlbumReviews(
   albumId: string,
   limit?: number,

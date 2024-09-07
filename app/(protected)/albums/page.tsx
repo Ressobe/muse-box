@@ -1,16 +1,14 @@
-import { AlbumCard } from "@/components/album/album-card";
-import {
-  getNewAlbumsUseCase,
-  getPopularAlbumsUseCase,
-  getTopAlbumsUseCase,
-} from "@/use-cases/album";
+import { AlbumCard } from "@/app/_components/album/album-card";
+import { getNewAlbumsController } from "@/src/interface-adapters/controllers/album/get-new-albums.controller";
+import { getPopularAlbumsController } from "@/src/interface-adapters/controllers/album/get-popular-albums.controller";
+import { getTopAlbumsController } from "@/src/interface-adapters/controllers/album/get-top-albums.controller";
 
 export const dynamic = "force-dynamic";
 
 export default async function AlbumsPage() {
-  const topAlbums = await getTopAlbumsUseCase();
-  const popularAlbums = await getPopularAlbumsUseCase();
-  const newAlbums = await getNewAlbumsUseCase();
+  const topAlbums = await getTopAlbumsController();
+  const popularAlbums = await getPopularAlbumsController();
+  const newAlbums = await getNewAlbumsController();
 
   return (
     <section className="w-full space-y-20">

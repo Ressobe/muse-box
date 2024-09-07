@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/app/_components/ui/toaster";
 import NextTopLoader from "nextjs-toploader";
 import { APP_NAME, APP_SHORT_DESCRIPTION, LOGO } from "@/config";
 import { auth } from "@/auth";

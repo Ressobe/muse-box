@@ -1,6 +1,6 @@
-import { TopAlbumsTable } from "@/components/album/top-albums-table";
-import { TopArtistsTable } from "@/components/artist/top-artists-table";
-import { TopTracksTable } from "@/components/track/top-tracks-table";
+import { TopAlbumsTable } from "@/app/_components/album/top-albums-table";
+import { TopArtistsTable } from "@/app/_components/artist/top-artists-table";
+import { TopTracksTable } from "@/app/_components/track/top-tracks-table";
 import { currentUser } from "@/lib/auth";
 import { getTopAlbumsUseCase } from "@/use-cases/album";
 import { getTopArtistsUseCase } from "@/use-cases/artist";

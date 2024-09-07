@@ -17,8 +17,8 @@ import { Input } from "@/app/_components/ui/input";
 import { Button } from "@/app/_components/ui/button";
 import { CardWrapper } from "./card-wrapper";
 import { FormError } from "@/app/_components/form-error";
-import { FormSucess } from "../form-sucess";
-import { registerAction } from "@/actions/register";
+import { FormSucess } from "@/app/_components/form-sucess";
+import { registerAction } from "@/app/_actions/register";
 import { TailSpin } from "react-loader-spinner";
 
 export function RegisterForm() {

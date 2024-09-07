@@ -19,7 +19,15 @@ export const albumWithStatsSchema = albumSchema.extend({
 
 export type AlbumWithStats = z.infer<typeof albumWithStatsSchema>;
 
-export const albumWithRatingAvg = albumSchema.extend({
+export const albumSelectSchema = albumSchema.extend({
+  typeId: z.number().nullish(),
+  length: z.number().nullish(),
+  releaseDate: z.number().nullish(),
+});
+
+export type AlbumSelect = z.infer<typeof albumSelectSchema>;
+
+export const albumWithRatingAvg = albumSelectSchema.extend({
   ratingAvg: z.number().nullable(),
 });
 

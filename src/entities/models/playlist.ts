@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { contentSchema } from "@/src/entities/models/content";
 
 export const playlistSchema = z.object({
   id: z.string(),
@@ -10,9 +9,15 @@ export const playlistSchema = z.object({
 export const playlistItemSchema = z.object({
   id: z.string(),
   playlistId: z.string(),
-  itemType: contentSchema,
+  itemType: z.string(),
   itemId: z.string(),
 });
 
 export type Playlist = z.infer<typeof playlistSchema>;
 export type PlaylistItem = z.infer<typeof playlistItemSchema>;
+
+export const playlistWithItemsSchema = playlistSchema.extend({
+  items: playlistItemSchema.array(),
+});
+
+export type PlaylistWithItems = z.infer<typeof playlistWithItemsSchema>;

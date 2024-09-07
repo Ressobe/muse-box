@@ -2,10 +2,12 @@ import { IAccountsRepository } from "@/src/application/repositories/accounts.rep
 import { IAlbumsRepository } from "@/src/application/repositories/albums.repository.interface";
 import { IArtistsRepository } from "@/src/application/repositories/artists.repository.interface";
 import { IFollowersRepository } from "@/src/application/repositories/followers.repository.interface";
+import { ITracksRepository } from "@/src/application/repositories/tracks.repository.interface";
 import { AccountsRepository } from "@/src/infrastructure/repositories/accounts.repository";
 import { AlbumsRepository } from "@/src/infrastructure/repositories/albums.repository";
 import { ArtistsRepository } from "@/src/infrastructure/repositories/artists.repository";
 import { FollowersRepository } from "@/src/infrastructure/repositories/followers.repository";
+import { TracksRepository } from "@/src/infrastructure/repositories/tracks.repository";
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -31,6 +33,7 @@ class Container {
 
     this.register<IArtistsRepository>("IArtistsRepository", ArtistsRepository);
     this.register<IAlbumsRepository>("IAlbumsRepository", AlbumsRepository);
+    this.register<ITracksRepository>("ITracksRepository", TracksRepository);
   }
 
   register<T>(key: string, implementation: Constructor<T>): void {

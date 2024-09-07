@@ -1,17 +1,25 @@
-import { Track } from "@/src/entities/models/track";
+import {
+  Track,
+  TrackWithAlbum,
+  TrackWithAlbumAndRatingAvg,
+} from "@/src/entities/models/track";
 
-// TODO: Return types
-//
-export interface ITracksInterface {
+export interface ITracksRepository {
   getTracks(limit?: number): Promise<Track[]>;
-  getTrack(trackId: string): Promise<Track>;
+  getTrack(trackId: string): Promise<Track | undefined>;
   insertTrack(newTrack: Track): Promise<Track>;
-  getTrackImage(trackId: string): Promise<string | null>;
-  getTopTracksForArtist(artistId: string, limit: number): Promise<Track[]>;
-  getFilteredTracks(query: string, limit?: number): Promise<Track[]>;
+
+  getTopTracksForArtist(
+    artistId: string,
+    limit: number,
+  ): Promise<TrackWithAlbumAndRatingAvg[]>;
+
+  getFilteredTracks(query: string, limit?: number): Promise<TrackWithAlbum[]>;
   getTracksSearch(offset: number, limit?: number): Promise<Track[]>;
   getTracksCount(): Promise<number>;
-  getPopularTracks(limit?: number): Promise<number>;
-  getNewTracks(limit?: number): Promise<number>;
-  getTracksByArtistId(artistId: string, limit?: number): Promise<Track[]>;
+  getPopularTracks(limit?: number): Promise<TrackWithAlbum[]>;
+  getNewTracks(limit?: number): Promise<TrackWithAlbum[]>;
+  getTopTracks(limit?: number): Promise<TrackWithAlbum[]>;
+
+  getTracksForArtist(artistId: string, limit?: number): Promise<Track[]>;
 }

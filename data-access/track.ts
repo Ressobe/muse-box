@@ -93,20 +93,18 @@ export async function getTrackImage(trackId: string): Promise<string | null> {
 }
 
 export async function getTopTracks(artistId: string, limit: number = 5) {
-  const result = await db
+  return await db
     .select({
       id: tracks.id,
       title: tracks.title,
       albumId: tracks.albumId,
       position: tracks.position,
+      ratingAvg: tracksStats.ratingAvg,
       album: {
         id: albums.id,
         image: albums.image,
         artistId: albums.artistId,
         title: albums.title,
-      },
-      stats: {
-        ratingAvg: tracksStats.ratingAvg,
       },
     })
     .from(tracks)
@@ -114,24 +112,7 @@ export async function getTopTracks(artistId: string, limit: number = 5) {
     .innerJoin(albums, eq(tracks.albumId, albums.id))
     .where(eq(albums.artistId, artistId))
     .orderBy(desc(tracksStats.ratingAvg))
-    .limit(limit)
-    .execute();
-
-  return result.map((row) => ({
-    id: row.id,
-    title: row.title,
-    albumId: row.albumId,
-    position: row.position,
-    album: {
-      id: row.album.id,
-      image: row.album.image,
-      artistId: row.album.artistId,
-      title: row.album.title,
-    },
-    stats: {
-      ratingAvg: row.stats?.ratingAvg,
-    },
-  }));
+    .limit(limit);
 }
 
 export async function getFilteredTracks(query: string, limit?: number) {
@@ -161,9 +142,7 @@ export async function getFilteredTracks(query: string, limit?: number) {
     filteredTracksQuery.limit(limit);
   }
 
-  const filteredTracks = await filteredTracksQuery;
-
-  return filteredTracks;
+  return await filteredTracksQuery;
 }
 
 export async function getTopTracksCards(limit?: number) {

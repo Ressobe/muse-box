@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export const statSchema = z.object({
   entityId: z.string(),
-  likes: z.number().default(0),
-  popularity: z.number().default(0),
+  likes: z.number().default(0).nullable(),
+  popularity: z.number().default(0).nullable(),
   ratingAvg: z.number().default(0).nullable(),
   ratingSum: z.number().default(0).nullable(),
   ratingCount: z.number().default(0).nullable(),

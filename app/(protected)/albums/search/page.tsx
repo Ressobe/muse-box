@@ -1,5 +1,5 @@
-import { PaginationControls } from "@/components/pagination-controls";
-import { RatingStats } from "@/components/review/rating-stats";
+import { PaginationControls } from "@/app/_components/pagination-controls";
+import { RatingStats } from "@/app/_components/review/rating-stats";
 import {
   Table,
   TableBody,
@@ -8,7 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/app/_components/ui/table";
 import { getAlbumsSearchUseCase } from "@/use-cases/album";
 import Image from "next/image";
 import Link from "next/link";

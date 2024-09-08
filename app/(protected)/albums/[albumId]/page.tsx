@@ -7,17 +7,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/app/_components/ui/table";
 import { getAlbumReviewsUseCase, getAlbumUseCase } from "@/use-cases/album";
 import { notFound } from "next/navigation";
 import { getTime, getYear, getFullAlbumTime } from "@/lib/utils";
-import { Reviews } from "@/components/review/reviews";
+import { Reviews } from "@/app/_components/review/reviews";
 import { currentUser } from "@/lib/auth";
 import { isUserLikedItUseCase } from "@/use-cases/playlist";
-import { LikeButton } from "@/components/like-button";
+import { LikeButton } from "@/app/_components/like-button";
 import { shouldShowAddReviewUseCase } from "@/use-cases/review";
-import { RatingStats } from "@/components/review/rating-stats";
-import { ArtistSmallHeader } from "@/components/artist/artist-small-header";
+import { RatingStats } from "@/app/_components/review/rating-stats";
+import { ArtistSmallHeader } from "@/app/_components/artist/artist-small-header";
 
 export default async function AlbumPage({
   params,

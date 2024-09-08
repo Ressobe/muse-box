@@ -1,9 +1,9 @@
 import { auth } from "@/auth";
-import { ArtistCard } from "@/components/artist/artist-card";
-import { ArtistSmallHeader } from "@/components/artist/artist-small-header";
-import { LikeButton } from "@/components/like-button";
-import { RatingStats } from "@/components/review/rating-stats";
-import { Reviews } from "@/components/review/reviews";
+import { ArtistCard } from "@/app/_components/artist/artist-card";
+import { ArtistSmallHeader } from "@/app/_components/artist/artist-small-header";
+import { LikeButton } from "@/app/_components/like-button";
+import { RatingStats } from "@/app/_components/review/rating-stats";
+import { Reviews } from "@/app/_components/review/reviews";
 import { getUserTrackReview } from "@/data-access/user";
 import { currentUser } from "@/lib/auth";
 import { getTime, getYear } from "@/lib/utils";

@@ -1,53 +1,50 @@
-import { IAccountsRepository } from "@/src/application/repositories/accounts.repository.interface";
-import { IAlbumsRepository } from "@/src/application/repositories/albums.repository.interface";
-import { IArtistsRepository } from "@/src/application/repositories/artists.repository.interface";
-import { IFollowersRepository } from "@/src/application/repositories/followers.repository.interface";
-import { ITracksRepository } from "@/src/application/repositories/tracks.repository.interface";
-import { AccountsRepository } from "@/src/infrastructure/repositories/accounts.repository";
-import { AlbumsRepository } from "@/src/infrastructure/repositories/albums.repository";
-import { ArtistsRepository } from "@/src/infrastructure/repositories/artists.repository";
-import { FollowersRepository } from "@/src/infrastructure/repositories/followers.repository";
-import { TracksRepository } from "@/src/infrastructure/repositories/tracks.repository";
+import { repositoriesRegistry } from "./repositoriesRegistry";
+import { servicesRegistry } from "./servicesRegistry";
 
 type Constructor<T> = new (...args: any[]) => T;
 
 class Container {
-  private services = new Map<string, Constructor<any>>();
+  private implementations = new Map<string, Constructor<any>>();
+  private instances = new Map<string, any>();
 
-  constructor() {
+  constructor(
+    private repositoryRegistry: Record<string, Constructor<any>>,
+    private serviceRegistry: Record<string, Constructor<any>>,
+  ) {
     this.registerImplementations();
   }
 
   private registerImplementations(): void {
-    // const isTestEnvironment = process.env.NODE_ENV === "test";
-
-    this.register<IAccountsRepository>(
-      "IAccountsRepository",
-      AccountsRepository,
-    );
-
-    this.register<IFollowersRepository>(
-      "IFollowersRepository",
-      FollowersRepository,
-    );
-
-    this.register<IArtistsRepository>("IArtistsRepository", ArtistsRepository);
-    this.register<IAlbumsRepository>("IAlbumsRepository", AlbumsRepository);
-    this.register<ITracksRepository>("ITracksRepository", TracksRepository);
+    for (const [key, implementation] of Object.entries(
+      this.repositoryRegistry,
+    )) {
+      this.register(key, implementation);
+    }
+    for (const [key, implementation] of Object.entries(this.serviceRegistry)) {
+      this.register(key, implementation);
+    }
   }
 
   register<T>(key: string, implementation: Constructor<T>): void {
-    this.services.set(key, implementation);
+    this.implementations.set(key, implementation);
   }
 
   get<T>(key: string): T {
-    const Implementation = this.services.get(key);
+    if (this.instances.has(key)) {
+      return this.instances.get(key) as T;
+    }
+
+    const Implementation = this.implementations.get(key);
     if (!Implementation) {
       throw new Error(`Service ${key} not registered`);
     }
-    return new Implementation() as T;
+
+    const instance = new Implementation();
+    this.instances.set(key, instance);
+    return instance as T;
   }
 }
 
-const container = new Container();
+const container = new Container(repositoriesRegistry, servicesRegistry);
+
 export { container };

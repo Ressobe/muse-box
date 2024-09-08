@@ -12,7 +12,7 @@ import { FormError } from "@/app/_components/form-error";
 import { Button } from "@/app/_components/ui/button";
 import { useToast } from "@/app/_components/ui/use-toast";
 import { setCanvasPreview } from "@/lib/utils";
-import { newAvatarAction } from "@/actions/new-avatar";
+import { newAvatarAction } from "@/app/_actions/new-avatar";
 import { useSession } from "next-auth/react";
 
 const AllowedFileExtensions = ["jpg", "jpeg", "png", "webp"];

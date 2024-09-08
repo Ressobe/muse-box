@@ -8,7 +8,7 @@ import { LikedAlbums } from "@/types";
 import { Search } from "lucide-react";
 import { Input } from "@/app/_components/ui/input";
 import { useMemo, useState } from "react";
-import { useDebounce } from "@/hooks/use-debounce";
+import { useDebounce } from "@/app/_hooks/use-debounce";
 
 type AlbumsFavouriteDialogProps = {
   likedAlbums: LikedAlbums;

@@ -1,4 +1,4 @@
-import { Reviews } from "@/components/review/reviews";
+import { Reviews } from "@/app/_components/review/reviews";
 import { Entity } from "@/types";
 import {
   getReviewsUseCase,
@@ -6,10 +6,10 @@ import {
   shouldShowAddReviewUseCase,
 } from "@/use-cases/review";
 import { notFound } from "next/navigation";
-import { PaginationControls } from "@/components/pagination-controls";
-import { ArtistHeader } from "@/components/artist/artist-header";
-import { AlbumHeader } from "@/components/album/album-header";
-import { TrackHeader } from "@/components/track/track-header";
+import { PaginationControls } from "@/app/_components/pagination-controls";
+import { ArtistHeader } from "@/app/_components/artist/artist-header";
+import { AlbumHeader } from "@/app/_components/album/album-header";
+import { TrackHeader } from "@/app/_components/track/track-header";
 
 type ReviewsPageProps = {
   searchParams: {

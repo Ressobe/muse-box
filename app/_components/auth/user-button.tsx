@@ -15,7 +15,7 @@ import {
   AvatarImage,
   AvatarFallback,
 } from "@/app/_components/ui/avatar";
-import { useCurrentUser } from "@/hooks/use-current-user";
+import { useCurrentUser } from "@/app/_hooks/use-current-user";
 import { LogoutButton } from "./logout-button";
 
 export function UserButton() {

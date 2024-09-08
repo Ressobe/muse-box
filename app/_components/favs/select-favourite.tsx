@@ -1,6 +1,6 @@
 "use client";
 
-import { selectFavouriteAction } from "@/actions/favourites";
+import { selectFavouriteAction } from "@/app/_actions/favourites";
 import { Entity } from "@/types";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";

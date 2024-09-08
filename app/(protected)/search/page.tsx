@@ -1,7 +1,7 @@
-import { AlbumCard } from "@/components/album/album-card";
-import { ArtistCard } from "@/components/artist/artist-card";
-import { TrackCard } from "@/components/track/track-card";
-import { UserCard } from "@/components/user/user-card";
+import { AlbumCard } from "@/app/_components/album/album-card";
+import { ArtistCard } from "@/app/_components/artist/artist-card";
+import { TrackCard } from "@/app/_components/track/track-card";
+import { UserCard } from "@/app/_components/user/user-card";
 import { getFilteredAlbumsUseCase } from "@/use-cases/album";
 import { getFilteredArtistsUseCase } from "@/use-cases/artist";
 import { getFilteredTracksUseCase } from "@/use-cases/track";

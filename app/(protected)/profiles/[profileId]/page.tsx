@@ -1,7 +1,7 @@
-import { ActionFavouriteMenu } from "@/components/favs/action-favourite-menu";
-import { FavouriteMenu } from "@/components/favs/favourite-menu";
-import { FollowButton } from "@/components/follow-button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { ActionFavouriteMenu } from "@/app/_components/favs/action-favourite-menu";
+import { FavouriteMenu } from "@/app/_components/favs/favourite-menu";
+import { FollowButton } from "@/app/_components/follow-button";
+import { Avatar, AvatarFallback } from "@/app/_components/ui/avatar";
 import { currentUser } from "@/lib/auth";
 import { getProfileUseCase } from "@/use-cases/profile";
 import {

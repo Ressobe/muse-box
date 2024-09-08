@@ -10,7 +10,7 @@ import { CircleCheck, EllipsisVertical, Pencil, Trash } from "lucide-react";
 import { useState } from "react";
 import { Entity, LikedItems } from "@/types";
 import { FavouriteMenu } from "./favourite-menu";
-import { removeFavouriteAction } from "@/actions/favourites";
+import { removeFavouriteAction } from "@/app/_actions/favourites";
 import { useToast } from "../ui/use-toast";
 import { capitalizeFirstLetter } from "@/lib/utils";
 

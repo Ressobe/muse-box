@@ -4,14 +4,18 @@ import {
   getProfileFollowingUseCase,
 } from "@/use-cases/profile";
 
-import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+} from "@/app/_components/ui/dialog";
+import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { currentUser } from "@/lib/auth";
-import { UserAvatar } from "@/components/user/user-avatar";
-import { FollowButton } from "@/components/follow-button";
+import { UserAvatar } from "@/app/_components/user/user-avatar";
+import { FollowButton } from "@/app/_components/follow-button";
 import { isUserFollowingProfileUseCase } from "@/use-cases/user";
 import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/app/_components/ui/separator";
 
 type FollowersFollowingDialogProps = {
   type: "followers" | "following";

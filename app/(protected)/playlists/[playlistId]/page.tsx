@@ -1,13 +1,13 @@
-import { AlbumPlaylistItem } from "@/components/playlist/album-playlist-item";
-import { ArtistPlaylistItem } from "@/components/playlist/artist-playlist-item";
-import { TrackPlaylistItem } from "@/components/playlist/track-playlist-item";
+import { AlbumPlaylistItem } from "@/app/_components/playlist/album-playlist-item";
+import { ArtistPlaylistItem } from "@/app/_components/playlist/artist-playlist-item";
+import { TrackPlaylistItem } from "@/app/_components/playlist/track-playlist-item";
 import {
   Table,
   TableBody,
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/app/_components/ui/table";
 import {
   getPlaylistTypeUseCase,
   getPlaylistUseCase,

@@ -1,6 +1,10 @@
-import { LikeButton } from "@/components/like-button";
-import { RatingStats } from "@/components/review/rating-stats";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { LikeButton } from "@/app/_components/like-button";
+import { RatingStats } from "@/app/_components/review/rating-stats";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/app/_components/ui/avatar";
 import {
   Table,
   TableBody,
@@ -8,7 +12,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/app/_components/ui/table";
 import { currentUser } from "@/lib/auth";
 import { getFullAlbumTime, getTime, getYear } from "@/lib/utils";
 import { getArtistDiscographyUseCase } from "@/use-cases/artist";

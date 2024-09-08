@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableHead,
   TableRow,
-} from "@/components/ui/table";
+} from "@/app/_components/ui/table";
 
 type RecentActivityProps = {
   profileId: string;

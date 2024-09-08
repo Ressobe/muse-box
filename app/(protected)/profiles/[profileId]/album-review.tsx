@@ -1,7 +1,7 @@
 import { TAlbumReview } from "@/types/review";
-import { TableCell, TableRow } from "@/components/ui/table";
+import { TableCell, TableRow } from "@/app/_components/ui/table";
 import { formatDateToShortMonthDayYear } from "@/lib/utils";
-import { Stars } from "@/components/review/stars";
+import { Stars } from "@/app/_components/review/stars";
 import { getArtist } from "@/data-access/artist";
 import Image from "next/image";
 import Link from "next/link";

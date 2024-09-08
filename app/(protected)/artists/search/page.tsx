@@ -1,4 +1,4 @@
-import { PaginationControls } from "@/components/pagination-controls";
+import { PaginationControls } from "@/app/_components/pagination-controls";
 import { getArtistsSearchUseCase } from "@/use-cases/artist";
 
 type SearchPageProps = {

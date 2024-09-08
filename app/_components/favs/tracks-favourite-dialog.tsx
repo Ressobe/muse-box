@@ -7,7 +7,7 @@ import { Separator } from "@/app/_components/ui/separator";
 import { LikedTracks } from "@/types";
 import { Search } from "lucide-react";
 import { Input } from "@/app/_components/ui/input";
-import { useDebounce } from "@/hooks/use-debounce";
+import { useDebounce } from "@/app/_hooks/use-debounce";
 import { useMemo, useState } from "react";
 
 type TracksFavouriteDialog = {

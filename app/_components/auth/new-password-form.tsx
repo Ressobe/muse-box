@@ -19,8 +19,8 @@ import { Button } from "@/app/_components/ui/button";
 import { CardWrapper } from "@/app/_components/auth/card-wrapper";
 import { FormError } from "@/app/_components/form-error";
 import { FormSucess } from "@/app/_components/form-sucess";
-import { resetPasswordAction } from "@/actions/reset";
-import { newPasswordAction } from "@/actions/new-password";
+import { resetPasswordAction } from "@/app/_actions/reset";
+import { newPasswordAction } from "@/app/_actions/new-password";
 
 export function NewPasswordForm() {
   const searchParams = useSearchParams();

@@ -27,7 +27,7 @@ export const albumSelectSchema = albumSchema.extend({
 
 export type AlbumSelect = z.infer<typeof albumSelectSchema>;
 
-export const albumWithRatingAvg = albumSelectSchema.extend({
+export const albumWithRatingAvg = albumSchema.extend({
   ratingAvg: z.number().nullable(),
 });
 

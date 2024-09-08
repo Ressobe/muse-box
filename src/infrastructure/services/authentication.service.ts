@@ -1,4 +1,4 @@
-import { IAuthenticationService } from "@/src/application/services/authentication.serivce.interface";
+import { IAuthenticationService } from "@/src/application/services/authentication.service.interface";
 
 export class AuthenticationService implements IAuthenticationService {
   validateSession(): Promise<string> {

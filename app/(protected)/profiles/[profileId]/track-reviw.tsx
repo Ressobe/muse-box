@@ -1,8 +1,8 @@
 import { TTrackReview } from "@/types/review";
-import { TableCell, TableRow } from "@/components/ui/table";
+import { TableCell, TableRow } from "@/app/_components/ui/table";
 import Image from "next/image";
 import { formatDateToShortMonthDayYear } from "@/lib/utils";
-import { Stars } from "@/components/review/stars";
+import { Stars } from "@/app/_components/review/stars";
 import { getAlbum } from "@/data-access/album";
 import Link from "next/link";
 

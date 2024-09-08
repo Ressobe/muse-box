@@ -50,6 +50,9 @@ export async function TopTracks({ artistId }: TopTracksProps) {
           </TableHeader>
           <TableBody>
             {tracksWithLikes.map((item, idx) => {
+              const stats = {
+                ratingAvg: item.ratingAvg,
+              };
               return (
                 <TableRow key={item.id} className="p-0">
                   <TableCell className="font-medium">{idx + 1}</TableCell>
@@ -76,7 +79,7 @@ export async function TopTracks({ artistId }: TopTracksProps) {
                     </Link>
                   </TableCell>
                   <TableCell>
-                    <RatingStats stats={item.stats} size="sm" />
+                    <RatingStats stats={stats} size="sm" />
                   </TableCell>
                   <TableCell>
                     <LikeButton

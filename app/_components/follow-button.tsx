@@ -4,7 +4,7 @@ import { CircleCheck } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { useToast } from "./ui/use-toast";
-import { followAction, unfollowAction } from "@/actions/follow";
+import { followAction, unfollowAction } from "@/app/_actions/follow";
 
 type FollowButtonProps = {
   defaultFollowState: boolean;

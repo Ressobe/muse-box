@@ -3,6 +3,7 @@ import { follows, userProfiles, users } from "@/drizzle/database/schema";
 import { countDistinct, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/sqlite-core";
 
+// inserProfile
 export async function createProfile(userId: string) {
   const [profile] = await db
     .insert(userProfiles)
@@ -12,6 +13,10 @@ export async function createProfile(userId: string) {
     .returning();
   return profile;
 }
+
+// Muszę tych dwóch użyć w usecase
+// getProfile
+// getAmountOfFollowersAndFollowingForUser(userId: string)
 
 export async function getProfileByUserId(userId: string) {
   const followersTable = alias(follows, "followers");
@@ -47,6 +52,7 @@ export async function getProfileByUserId(userId: string) {
   return profile;
 }
 
+// getFollowersForProfile
 export async function getProfileFollowers(profileId: string) {
   return await db.query.follows.findMany({
     columns: {
@@ -60,6 +66,7 @@ export async function getProfileFollowers(profileId: string) {
   });
 }
 
+// getFollowingForProfile
 export async function getProfileFollowing(profileId: string) {
   return await db.query.follows.findMany({
     columns: {

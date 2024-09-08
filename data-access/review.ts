@@ -8,6 +8,7 @@ import {
   updateStatsUpdateRating,
 } from "@/data-access/stat";
 
+// getReview
 export async function getReviewById(reviewId: string, type: Entity) {
   const table = reviewTables[type];
 
@@ -20,6 +21,7 @@ export async function getReviewById(reviewId: string, type: Entity) {
   return review;
 }
 
+// insertReview
 export async function insertReview(
   entityId: string,
   userId: string,
@@ -43,13 +45,15 @@ export async function insertReview(
       createdAt: new Date(),
     })
     .returning();
-
+  // update stats musi być w use case
+  // tam gdzie będę wywoływał też insertReview
   if (review) {
     await updateStatsNewRating(entityId, type, rating);
   }
   return review;
 }
 
+// deleteReview
 export async function deleteReview(
   entityId: string,
   type: Entity,
@@ -66,6 +70,8 @@ export async function deleteReview(
     .where(and(eq(table.entityId, entityId), eq(table.id, reviewId)))
     .returning();
 
+  // update stats musi być w use case
+  // tam gdzie będę wywoływał też deleteReview
   if (review) {
     await updateStatsDeleteRating(entityId, type, review.rating);
   }
@@ -104,6 +110,9 @@ export async function updateReview(
       ),
     )
     .returning();
+
+  // update stats musi być w use case
+  // tam gdzie będę wywoływał też updateReview
 
   if (review) {
     await updateStatsUpdateRating(entityId, type, oldRating, rating);

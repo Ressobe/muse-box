@@ -1,11 +1,18 @@
 import { Content } from "@/src/entities/models/content";
-import { Review } from "@/src/entities/models/review";
-
-// TODO: Return types
+import {
+  Review,
+  ReviewWithAlbum,
+  ReviewWithArtist,
+  ReviewWithTrack,
+} from "@/src/entities/models/review";
 
 export interface IReviewsRepository {
-  getReview(reviewId: string): Promise<Review>;
-  findReview(reviewId: string, type: Content): Promise<Review>;
+  getReview(reviewId: string, type: Content): Promise<Review | undefined>;
+  findReviewForUser(
+    userId: string,
+    reviewId: string,
+    type: Content,
+  ): Promise<Review | undefined>;
 
   insertReview(
     entityId: string,
@@ -30,5 +37,7 @@ export interface IReviewsRepository {
     type: Content,
   ): Promise<Review>;
 
-  getLatestReviewsForUser(userId: string): Promise<void>;
+  getLatestReviewsForUser(
+    userId: string,
+  ): Promise<(ReviewWithArtist | ReviewWithAlbum | ReviewWithTrack)[]>;
 }

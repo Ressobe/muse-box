@@ -31,4 +31,29 @@ export const albumWithRatingAvg = albumSchema.extend({
   ratingAvg: z.number().nullable(),
 });
 
+export const albumWithTracksSchema = albumWithStatsSchema.extend({
+  tracks: z
+    .object({
+      id: z.string(),
+      artistsCredits: z.string(),
+      albumId: z.string(),
+      position: z.number(),
+      title: z.string(),
+      image: z.string().default("").nullable(),
+      length: z.number().default(0).nullable(),
+      stats: z.object({
+        ratingAvg: z.number().nullable(),
+        ratingSum: z.number().nullable(),
+        ratingCount: z.number().nullable(),
+      }),
+    })
+    .array(),
+  albumType: z.object({
+    id: z.number(),
+    name: z.string(),
+  }),
+});
+
 export type AlbumWithRatingAvg = z.infer<typeof albumWithRatingAvg>;
+
+export type AlbumWithTracks = z.infer<typeof albumWithTracksSchema>;

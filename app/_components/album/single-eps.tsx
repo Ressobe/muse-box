@@ -1,14 +1,13 @@
-import { getArtistSingleEpsUseCase } from "@/use-cases/artist";
+import { Album } from "@/src/entities/models/album";
 import Image from "next/image";
 import Link from "next/link";
 
-type SingleEpsProps = {
+type SinglesEpsProps = {
   artistId: string;
+  singlesEps: Album[];
 };
 
-export async function SingleEps({ artistId }: SingleEpsProps) {
-  const singleEps = await getArtistSingleEpsUseCase(artistId);
-
+export async function SinglesEps({ artistId, singlesEps }: SinglesEpsProps) {
   return (
     <div>
       <div className="flex justify-between">
@@ -21,7 +20,7 @@ export async function SingleEps({ artistId }: SingleEpsProps) {
         </Link>
       </div>
       <ul className="flex flex-wrap gap-x-10">
-        {singleEps.map((item) => {
+        {singlesEps.map((item) => {
           return (
             <Link
               key={item.id}
@@ -48,7 +47,7 @@ export async function SingleEps({ artistId }: SingleEpsProps) {
         })}
       </ul>
       <div className="flex justify-center w-full">
-        {singleEps.length === 0 ? (
+        {singlesEps.length === 0 ? (
           <h3 className="font-bold text-lg">Not Single and Eps yet</h3>
         ) : null}
       </div>

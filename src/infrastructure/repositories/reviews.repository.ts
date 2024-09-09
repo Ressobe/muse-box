@@ -8,11 +8,14 @@ import { Content } from "@/src/entities/models/content";
 import {
   Review,
   ReviewWithAlbum,
+  ReviewWithAlbumAndUser,
   ReviewWithArtist,
   ReviewWithTrack,
+  ReviewWithTrackAndUser,
+  ReviewWithUser,
 } from "@/src/entities/models/review";
 import { db } from "@/drizzle/database/db";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq, not } from "drizzle-orm";
 
 const reviewTables = {
   artist: reviewsArtists,
@@ -175,5 +178,78 @@ export class ReviewsRepository implements IReviewsRepository {
         return dateB - dateA;
       })
       .slice(0, LIMIT);
+  }
+
+  async getReviewForArtistOwnedByUser(
+    artistId: string,
+    userId: string,
+  ): Promise<ReviewWithUser | undefined> {
+    return await db.query.reviewsArtists.findFirst({
+      where: and(
+        eq(reviewsArtists.userId, userId),
+        eq(reviewsArtists.entityId, artistId),
+      ),
+      with: {
+        user: {
+          columns: {
+            password: false,
+          },
+        },
+      },
+    });
+  }
+
+  async getReviewsForArtistNotOwnedByUser(
+    artistId: string,
+    userId: string,
+    limit?: number,
+  ): Promise<ReviewWithUser[]> {
+    return db.query.reviewsArtists.findMany({
+      where: and(
+        eq(reviewsArtists.entityId, artistId),
+        not(eq(reviewsArtists.userId, userId)),
+      ),
+      with: {
+        user: {
+          columns: {
+            password: false,
+          },
+        },
+      },
+      limit,
+      orderBy: desc(reviewsArtists.createdAt),
+    });
+  }
+
+  async getReviewForAlbumOwnedByUser(
+    albumId: string,
+    userId: string,
+  ): Promise<ReviewWithAlbumAndUser | undefined> {
+    return await db.query.reviewsAlbums.findFirst({
+      where: and(
+        eq(reviewsAlbums.userId, userId),
+        eq(reviewsAlbums.entityId, albumId),
+      ),
+      with: {
+        album: true,
+        user: true,
+      },
+    });
+  }
+
+  async getReviewForTrackOwnedByUser(
+    trackId: string,
+    userId: string,
+  ): Promise<ReviewWithTrackAndUser | undefined> {
+    return await db.query.reviewsTracks.findFirst({
+      where: and(
+        eq(reviewsTracks.userId, userId),
+        eq(reviewsTracks.entityId, trackId),
+      ),
+      with: {
+        track: true,
+        user: true,
+      },
+    });
   }
 }

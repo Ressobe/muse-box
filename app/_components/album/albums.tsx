@@ -1,4 +1,4 @@
-import { getArtistAlbumsUseCase } from "@/use-cases/artist";
+import { getArtistAlbumsController } from "@/src/interface-adapters/controllers/artist/get-artist-albums.controller";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,7 +7,7 @@ type AlbumsProps = {
 };
 
 export async function Albums({ artistId }: AlbumsProps) {
-  const albums = await getArtistAlbumsUseCase(artistId);
+  const albums = await getArtistAlbumsController(artistId);
 
   return (
     <div>

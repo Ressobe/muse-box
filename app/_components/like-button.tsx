@@ -11,7 +11,7 @@ import { capitalizeFirstLetter } from "@/lib/utils";
 
 type LikeButtonProps = {
   defaultLikeState: boolean;
-  userId: string;
+  userId?: string;
   entityId: string;
   type: Entity;
   size?: "lg" | "md";
@@ -26,6 +26,8 @@ export function LikeButton({
 }: LikeButtonProps) {
   const { toast } = useToast();
   const [like, setLike] = useState(defaultLikeState);
+
+  if (!userId) return null;
 
   const handleClick = async () => {
     if (!like) {

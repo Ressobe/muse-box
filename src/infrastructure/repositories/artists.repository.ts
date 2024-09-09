@@ -3,6 +3,7 @@ import {
   Artist,
   ArtistSelect,
   ArtistWithRatingAvg,
+  ArtistWithStats,
 } from "@/src/entities/models/artist";
 import { db } from "@/drizzle/database/db";
 import { asc, count, desc, eq, sql } from "drizzle-orm";
@@ -13,9 +14,12 @@ export class ArtistsRepository implements IArtistsRepository {
     return await db.query.artists.findMany();
   }
 
-  async getArtistById(artistId: string): Promise<ArtistSelect | undefined> {
+  async getArtist(artistId: string): Promise<ArtistWithStats | undefined> {
     return await db.query.artists.findFirst({
       where: eq(artists.id, artistId),
+      with: {
+        stats: true,
+      },
     });
   }
 
@@ -25,7 +29,7 @@ export class ArtistsRepository implements IArtistsRepository {
   }
 
   async getArtistImage(artistId: string): Promise<string | null> {
-    const artist = await this.getArtistById(artistId);
+    const artist = await this.getArtist(artistId);
     return artist?.image || null;
   }
 

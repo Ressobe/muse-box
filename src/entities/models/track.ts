@@ -19,6 +19,14 @@ export const trackSelectSchema = trackSchema.extend({
   image: z.string().nullish(),
 });
 
+export const trackWithStatsSchema = trackSchema.extend({});
+
+export const trackWithAlbumSchema = trackSchema.extend({
+  album: albumSchema,
+});
+
+export type TrackWithAlbum = z.infer<typeof trackWithAlbumSchema>;
+
 export const trackWithRatingAvg = trackSelectSchema.extend({
   ratingAvg: z.number().nullable(),
 });
@@ -26,12 +34,6 @@ export const trackWithRatingAvg = trackSelectSchema.extend({
 export const trackWithAlbumAndRatingAvgSchema = trackWithRatingAvg.extend({
   album: albumSelectSchema,
 });
-
-export const trackWithAlbumSchema = trackSchema.extend({
-  album: albumSchema,
-});
-
-export type TrackWithAlbum = z.infer<typeof trackWithAlbumSchema>;
 
 export type TrackWithAlbumAndRatingAvg = z.infer<
   typeof trackWithAlbumAndRatingAvgSchema

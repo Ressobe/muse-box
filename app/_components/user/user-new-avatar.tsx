@@ -8,7 +8,7 @@ import ReactCrop, {
 } from "react-image-crop";
 import { ChangeEvent, useRef, useState, useTransition } from "react";
 import { Input } from "@/app/_components/ui/input";
-import { FormError } from "@/app/_components/form-error";
+import { FormError } from "@/app/_components/ui/form-error";
 import { Button } from "@/app/_components/ui/button";
 import { useToast } from "@/app/_components/ui/use-toast";
 import { setCanvasPreview } from "@/lib/utils";

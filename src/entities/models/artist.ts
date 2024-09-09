@@ -33,4 +33,14 @@ const artistWithRatingAvgSchema = artistSelectSchema.extend({
   ratingAvg: z.number().nullable(),
 });
 
+const artistWithStats = artistSelectSchema.extend({
+  stats: z.object({
+    ratingAvg: z.number().nullable(),
+    ratingSum: z.number().nullable(),
+    ratingCount: z.number().nullable(),
+  }),
+});
+
 export type ArtistWithRatingAvg = z.infer<typeof artistWithRatingAvgSchema>;
+
+export type ArtistWithStats = z.infer<typeof artistWithStats>;

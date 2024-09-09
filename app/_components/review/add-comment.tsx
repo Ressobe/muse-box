@@ -7,13 +7,13 @@ import { useEffect, useRef, useState } from "react";
 import { useCurrentUser } from "@/app/_hooks/use-current-user";
 import { addReviewAction } from "@/app/_actions/reviews";
 import { Entity } from "@/types";
-import { Review } from "@/types/review";
 import { CircleCheck, XIcon } from "lucide-react";
+import { ReviewWithUser } from "@/src/entities/models/review";
 
 type CommentProps = {
   entityId: string;
   type: Entity;
-  addOptimisticReview: (action: Review) => void;
+  addOptimisticReview: (action: ReviewWithUser) => void;
 };
 
 export function AddComment({

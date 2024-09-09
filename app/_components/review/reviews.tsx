@@ -6,13 +6,14 @@ import { Comment } from "./comment";
 import Link from "next/link";
 import { useOptimistic, useState } from "react";
 import { Entity } from "@/types";
-import { OptimisticActionReview, Review } from "@/types/review";
+import { OptimisticActionReview } from "@/types/review";
+import { ReviewWithUser } from "@/src/entities/models/review";
 
 type ReviewsProps = {
   entityId: string;
   entityName?: string;
   type: Entity;
-  reviews: Review[];
+  reviews: ReviewWithUser[];
   showAddReview: boolean;
   showButtonAllReviews?: boolean;
 };
@@ -26,7 +27,7 @@ export function Reviews({
   showButtonAllReviews = true,
 }: ReviewsProps) {
   const [optimisticReviews, setOptimisticReviews] = useOptimistic<
-    Review[],
+    ReviewWithUser[],
     OptimisticActionReview
   >(reviews, (state, action) => {
     switch (action.type) {
@@ -45,12 +46,12 @@ export function Reviews({
 
   const [shouldShowAddReview, setShouldShowAddReview] = useState(showAddReview);
 
-  const addOptimisticReview = (review: Review) => {
+  const addOptimisticReview = (review: ReviewWithUser) => {
     setShouldShowAddReview(false);
     setOptimisticReviews({ type: "add", review });
   };
 
-  const editOptimisticReview = (review: Review) => {
+  const editOptimisticReview = (review: ReviewWithUser) => {
     setShouldShowAddReview(false);
     setOptimisticReviews({ type: "edit", review });
   };

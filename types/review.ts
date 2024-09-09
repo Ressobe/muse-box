@@ -3,6 +3,7 @@ import {
   reviewsArtists,
   reviewsTracks,
 } from "@/drizzle/database/schema";
+import { ReviewWithUser } from "@/src/entities/models/review";
 
 export type Review = {
   id: string;
@@ -22,8 +23,8 @@ export type Review = {
 };
 
 export type OptimisticActionReview =
-  | { type: "add"; review: Review }
-  | { type: "edit"; review: Review }
+  | { type: "add"; review: ReviewWithUser }
+  | { type: "edit"; review: ReviewWithUser }
   | { type: "delete"; reviewId: string };
 
 export const reviewTables = {

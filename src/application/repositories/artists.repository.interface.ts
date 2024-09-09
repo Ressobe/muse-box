@@ -2,11 +2,12 @@ import {
   Artist,
   ArtistSelect,
   ArtistWithRatingAvg,
+  ArtistWithStats,
 } from "@/src/entities/models/artist";
 
 export interface IArtistsRepository {
   getArtists(): Promise<ArtistSelect[]>;
-  getArtistById(artistId: string): Promise<ArtistSelect | undefined>;
+  getArtist(artistId: string): Promise<ArtistWithStats | undefined>;
   insertArtist(newArtist: Artist): Promise<ArtistSelect>;
   getArtistImage(artistId: string): Promise<string | null>;
   getArtistsSearch(offset: number, limit?: number): Promise<ArtistSelect[]>;

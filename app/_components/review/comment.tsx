@@ -30,15 +30,15 @@ import {
   AlertDialogTrigger,
 } from "@/app/_components/ui/alert-dialog";
 import { useToast } from "@/app/_components/ui/use-toast";
-import { Review } from "@/types/review";
 import { useState } from "react";
 import { EditComment } from "@/app/_components/review/edit-comment";
+import { ReviewWithUser } from "@/src/entities/models/review";
 
 type CommentProps = {
-  review: Review;
+  review: ReviewWithUser;
   type: Entity;
   entityId: string;
-  editOptimisticReview: (review: Review) => void;
+  editOptimisticReview: (review: ReviewWithUser) => void;
   deleteOptimisticReview: (reviewId: string) => void;
 };
 
@@ -80,7 +80,7 @@ export function Comment({
 }
 
 type ShowCommentProps = {
-  review: Review;
+  review: ReviewWithUser;
   type: Entity;
   editComment: () => void;
   deleteOptimisticReview: (reviewId: string) => void;
@@ -124,7 +124,7 @@ function ShowComment({
             editComment={editComment}
             commentId={review.id}
             ownerId={reviewUser.id}
-            entityId={review.entityId}
+            entityId={review.entityId ?? ""}
             type={type}
             deleteOptimisticReview={deleteOptimisticReview}
           />

@@ -8,14 +8,14 @@ import { SubmitButton } from "@/app/_components/submit-button";
 import { useCurrentUser } from "@/app/_hooks/use-current-user";
 import { editReviewAction } from "@/app/_actions/reviews";
 import { Entity } from "@/types";
-import { Review } from "@/types/review";
 import { CircleCheck, XIcon } from "lucide-react";
+import { ReviewWithUser } from "@/src/entities/models/review";
 
 type CommentProps = {
   reviewId: string;
   entityId: string;
   type: Entity;
-  editOptimisticReview: (action: Review) => void;
+  editOptimisticReview: (action: ReviewWithUser) => void;
   defaultRate: number;
   defaultComment: string;
   setEditing: Dispatch<SetStateAction<boolean>>;

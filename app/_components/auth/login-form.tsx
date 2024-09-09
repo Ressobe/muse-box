@@ -17,8 +17,8 @@ import {
 import { Input } from "@/app/_components/ui/input";
 import { Button } from "@/app/_components/ui/button";
 import { CardWrapper } from "@/app/_components/auth/card-wrapper";
-import { FormError } from "@/app/_components/form-error";
-import { FormSucess } from "@/app/_components/form-sucess";
+import { FormError } from "@/app/_components/ui/form-error";
+import { FormSucess } from "@/app/_components/ui/form-sucess";
 import { loginAction } from "@/app/_actions/login";
 import Link from "next/link";
 import { TailSpin } from "react-loader-spinner";

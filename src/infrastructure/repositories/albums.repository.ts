@@ -4,6 +4,7 @@ import {
   Album,
   AlbumWithRatingAvg,
   AlbumWithStats,
+  AlbumWithTracks,
 } from "@/src/entities/models/album";
 import { and, asc, count, desc, eq, or, sql } from "drizzle-orm";
 import { albums, albumsStats } from "@/drizzle/database/schema";
@@ -137,7 +138,27 @@ export class AlbumsRepository implements IAlbumsRepository {
 
   async getAlbumsForArtist(artistId: string, limit?: number): Promise<Album[]> {
     return await db.query.albums.findMany({
-      where: eq(albums.artistId, artistId),
+      where: and(eq(albums.artistId, artistId), eq(albums.typeId, 1)),
+      orderBy: desc(albums.releaseDate),
+      limit,
+    });
+  }
+
+  async getAlbumsWithTracksForArtist(
+    artistId: string,
+    limit?: number,
+  ): Promise<AlbumWithTracks[]> {
+    return await db.query.albums.findMany({
+      where: and(eq(albums.artistId, artistId), eq(albums.typeId, 1)),
+      with: {
+        tracks: {
+          with: {
+            stats: true,
+          },
+        },
+        albumType: true,
+        stats: true,
+      },
       orderBy: desc(albums.releaseDate),
       limit,
     });
@@ -152,6 +173,30 @@ export class AlbumsRepository implements IAlbumsRepository {
         eq(albums.artistId, artistId),
         or(eq(albums.typeId, 2), eq(albums.typeId, 3)),
       ),
+      orderBy: desc(albums.releaseDate),
+      limit,
+    });
+  }
+
+  async getSinglesEpsWithTracksForArtist(
+    artistId: string,
+    limit?: number,
+  ): Promise<AlbumWithTracks[]> {
+    return db.query.albums.findMany({
+      where: and(
+        eq(albums.artistId, artistId),
+        or(eq(albums.typeId, 2), eq(albums.typeId, 3)),
+      ),
+      with: {
+        tracks: {
+          with: {
+            stats: true,
+          },
+        },
+        albumType: true,
+        stats: true,
+      },
+
       orderBy: desc(albums.releaseDate),
       limit,
     });

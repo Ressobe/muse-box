@@ -8,36 +8,31 @@ import {
 } from "@/app/_components/ui/table";
 import Image from "next/image";
 import Link from "next/link";
-import { getArtistTopTracksUseCase } from "@/use-cases/artist";
 import { LikeButton } from "@/app/_components/like-button";
-import { isUserLikedItUseCase } from "@/use-cases/playlist";
 import { currentUser } from "@/lib/auth";
 import { RatingStats } from "@/app/_components/review/rating-stats";
 
 type TopTracksProps = {
-  artistId: string;
+  topTracks: {
+    id: string;
+    title: string;
+    ratingAvg: number | null;
+    album: {
+      id: string;
+      image: string | null;
+      title: string;
+    };
+    isLiked: boolean | undefined;
+    defaultRate: number | undefined;
+  }[];
 };
 
-export async function TopTracks({ artistId }: TopTracksProps) {
-  const tracks = await getArtistTopTracksUseCase(artistId);
-
+export async function TopTracks({ topTracks }: TopTracksProps) {
   const user = await currentUser();
-  if (!user) {
-    return null;
-  }
-
-  const tracksWithLikes = await Promise.all(
-    tracks.map(async (track) => ({
-      ...track,
-      isLiked: await isUserLikedItUseCase(user.id, track.id, "track"),
-    })),
-  );
 
   return (
-    <div>
-      <h2 className="font-bold text-3xl pb-6">Top tracks</h2>
-
-      {tracks.length > 0 ? (
+    <>
+      {topTracks.length > 0 ? (
         <Table>
           <TableHeader>
             <TableRow>
@@ -49,10 +44,7 @@ export async function TopTracks({ artistId }: TopTracksProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {tracksWithLikes.map((item, idx) => {
-              const stats = {
-                ratingAvg: item.ratingAvg,
-              };
+            {topTracks.map((item, idx) => {
               return (
                 <TableRow key={item.id} className="p-0">
                   <TableCell className="font-medium">{idx + 1}</TableCell>
@@ -72,22 +64,25 @@ export async function TopTracks({ artistId }: TopTracksProps) {
                   </TableCell>
                   <TableCell>
                     <Link
-                      href={`/albums/${item.albumId}`}
+                      href={`/albums/${item.album.id}`}
                       className="transition-all underline-offset-2 hover:underline"
                     >
                       {item.album.title}
                     </Link>
                   </TableCell>
                   <TableCell>
-                    <RatingStats stats={stats} size="sm" />
+                    <RatingStats ratingAvg={item.ratingAvg} size="sm" />
                   </TableCell>
+
                   <TableCell>
-                    <LikeButton
-                      defaultLikeState={item.isLiked}
-                      entityId={item.id}
-                      type="track"
-                      userId={user.id}
-                    />
+                    {item.isLiked !== undefined ? (
+                      <LikeButton
+                        defaultLikeState={item.isLiked}
+                        entityId={item.id}
+                        type="track"
+                        userId={user?.id}
+                      />
+                    ) : null}
                   </TableCell>
                 </TableRow>
               );
@@ -97,6 +92,6 @@ export async function TopTracks({ artistId }: TopTracksProps) {
       ) : (
         <span>Not rated tracks yet!</span>
       )}
-    </div>
+    </>
   );
 }

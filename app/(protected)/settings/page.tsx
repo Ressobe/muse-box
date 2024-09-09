@@ -22,8 +22,8 @@ import {
 } from "@/app/_components/ui/form";
 import { Input } from "@/app/_components/ui/input";
 import { useCurrentUser } from "@/app/_hooks/use-current-user";
-import { FormSucess } from "@/app/_components/form-sucess";
-import { FormError } from "@/app/_components/form-error";
+import { FormSucess } from "@/app/_components/ui/form-sucess";
+import { FormError } from "@/app/_components/ui/form-error";
 import { TailSpin } from "react-loader-spinner";
 
 export default function SettingsPage() {

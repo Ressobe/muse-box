@@ -119,6 +119,7 @@ export async function getUserArtistReview2(userId: string, artistId: string) {
   });
 }
 
+// getReviewForAlbumOwnedByUser
 export async function getUserAlbumReview(userId: string, albumId: string) {
   return await db.query.reviewsAlbums.findFirst({
     where: and(
@@ -132,6 +133,7 @@ export async function getUserAlbumReview(userId: string, albumId: string) {
   });
 }
 
+// getReviewForTrackOwnedByUser
 export async function getUserTrackReview(userId: string, trackId: string) {
   return await db.query.reviewsTracks.findFirst({
     where: and(

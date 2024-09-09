@@ -1,5 +1,6 @@
 import { PaginationControls } from "@/app/_components/pagination-controls";
-import { getArtistsSearchUseCase } from "@/use-cases/artist";
+import { getArtistsSearchController } from "@/src/interface-adapters/controllers/artist/get-artists-search.controller";
+import { Suspense } from "react";
 
 type SearchPageProps = {
   searchParams: {
@@ -16,7 +17,7 @@ export default async function ArtistsSearchPage({
   const page = Number(searchParams["page"] ?? DEFAULT_PAGE);
   const perPage = Number(searchParams["per_page"] ?? DEFAULT_PER_PAGE);
 
-  const { artists, totalPages } = await getArtistsSearchUseCase(
+  const { artists, totalPages } = await getArtistsSearchController(
     page < 1 ? DEFAULT_PAGE : page,
     perPage < 1 ? DEFAULT_PER_PAGE : perPage,
   );
@@ -26,9 +27,11 @@ export default async function ArtistsSearchPage({
       <h1 className="font-bold text-4xl">Artists</h1>
 
       <ul>
-        {artists.map((item) => {
-          return <li key={item.id}>{item.name}</li>;
-        })}
+        <Suspense>
+          {artists.map((item) => {
+            return <li key={item.id}>{item.name}</li>;
+          })}
+        </Suspense>
       </ul>
 
       {totalPages > 1 && (

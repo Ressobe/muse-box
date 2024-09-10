@@ -18,7 +18,32 @@ export interface ITracksRepository {
   getTracksForArtist(artistId: string, limit?: number): Promise<Track[]>;
 
   getFilteredTracks(query: string, limit?: number): Promise<TrackWithAlbum[]>;
-  getTracksSearch(offset: number, limit?: number): Promise<Track[]>;
+
+  getTracksSearch(
+    offset: number,
+    limit?: number,
+  ): Promise<TrackWithAlbumAndStats[]>;
+
+  getTracksSortedByHighestRating(
+    offset: number,
+    limit?: number,
+  ): Promise<TrackWithAlbumAndStats[]>;
+
+  getTracksSortedByLowestRating(
+    offset: number,
+    limit?: number,
+  ): Promise<TrackWithAlbumAndStats[]>;
+
+  getTracksSortedAlphabetically(
+    offset: number,
+    limit?: number,
+  ): Promise<TrackWithAlbumAndStats[]>;
+
+  getTracksSortedInReverseAlphabetical(
+    offset: number,
+    limit?: number,
+  ): Promise<TrackWithAlbumAndStats[]>;
+
   getTracksCount(): Promise<number>;
   getPopularTracks(limit?: number): Promise<TrackWithAlbum[]>;
   getNewTracks(limit?: number): Promise<TrackWithAlbum[]>;

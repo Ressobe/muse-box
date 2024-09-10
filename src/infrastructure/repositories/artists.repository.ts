@@ -35,8 +35,11 @@ export class ArtistsRepository implements IArtistsRepository {
   async getArtistsSearch(
     offset: number,
     limit?: number,
-  ): Promise<ArtistSelect[]> {
+  ): Promise<ArtistWithStats[]> {
     return await db.query.artists.findMany({
+      with: {
+        stats: true,
+      },
       limit,
       offset,
       orderBy: asc(artists.name),
@@ -138,5 +141,100 @@ export class ArtistsRepository implements IArtistsRepository {
 
     const newArtistsResults = await newArtistsQuery;
     return newArtistsResults;
+  }
+
+  async getArtistsSortedByHighestRating(
+    offset = 0,
+    limit?: number,
+  ): Promise<ArtistWithStats[]> {
+    const query = db
+      .select({
+        id: artists.id,
+        name: artists.name,
+        image: artists.image,
+        bio: artists.bio,
+        country: artists.country,
+        beginDateYear: artists.beginDateYear,
+        gender: artists.gender,
+        type: artists.type,
+        stats: {
+          ratingAvg: artistsStats.ratingAvg,
+          ratingSum: artistsStats.ratingSum,
+          ratingCount: artistsStats.ratingCount,
+        },
+      })
+      .from(artists)
+      .leftJoin(artistsStats, eq(artistsStats.entityId, artists.id))
+      .orderBy(desc(artistsStats.ratingAvg))
+      .offset(offset);
+
+    if (typeof limit === "number") {
+      query.limit(limit);
+    }
+
+    return await query;
+  }
+
+  async getArtistsSortedByLowestRating(
+    offset = 0,
+    limit?: number,
+  ): Promise<ArtistWithStats[]> {
+    const query = db
+      .select({
+        id: artists.id,
+        name: artists.name,
+        image: artists.image,
+        bio: artists.bio,
+        country: artists.country,
+        beginDateYear: artists.beginDateYear,
+        gender: artists.gender,
+        type: artists.type,
+        stats: {
+          ratingAvg: artistsStats.ratingAvg,
+          ratingSum: artistsStats.ratingSum,
+          ratingCount: artistsStats.ratingCount,
+        },
+      })
+      .from(artists)
+      .leftJoin(artistsStats, eq(artistsStats.entityId, artists.id))
+      .orderBy(
+        sql`CASE WHEN ${artistsStats.ratingAvg} IS NULL THEN 1 ELSE 0 END`,
+        asc(sql`COALESCE(${artistsStats.ratingAvg}, 0)`),
+      )
+      .offset(offset);
+
+    if (typeof limit === "number") {
+      query.limit(limit);
+    }
+
+    return await query;
+  }
+
+  async getArtistsSortedAlphabetically(
+    offset = 0,
+    limit?: number,
+  ): Promise<ArtistWithStats[]> {
+    return await db.query.artists.findMany({
+      with: {
+        stats: true,
+      },
+      limit,
+      offset,
+      orderBy: asc(artists.name),
+    });
+  }
+
+  async getArtistsSortedInReverseAlphabetical(
+    offset = 0,
+    limit?: number,
+  ): Promise<ArtistWithStats[]> {
+    return await db.query.artists.findMany({
+      with: {
+        stats: true,
+      },
+      limit,
+      offset,
+      orderBy: desc(artists.name),
+    });
   }
 }

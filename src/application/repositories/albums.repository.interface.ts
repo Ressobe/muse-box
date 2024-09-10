@@ -1,6 +1,5 @@
 import {
   Album,
-  AlbumWithRatingAvg,
   AlbumWithStats,
   AlbumWithTracks,
 } from "@/src/entities/models/album";

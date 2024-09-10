@@ -2,7 +2,6 @@ import { IAlbumsRepository } from "@/src/application/repositories/albums.reposit
 import { db } from "@/drizzle/database/db";
 import {
   Album,
-  AlbumWithRatingAvg,
   AlbumWithStats,
   AlbumWithTracks,
 } from "@/src/entities/models/album";
@@ -281,6 +280,7 @@ export class AlbumsRepository implements IAlbumsRepository {
         stats: {
           ratingAvg: albumsStats.ratingAvg,
           ratingCount: albumsStats.ratingCount,
+          ratingSum: albumsStats.ratingSum,
         },
       })
       .from(albums)

@@ -6,5 +6,5 @@ export async function getAlbumsSearchController(
   perPage: number,
   sort?: SortType,
 ) {
-  return await getAlbumsSearchUseCase(page, perPage, (sort = "default"));
+  return await getAlbumsSearchUseCase(page, perPage, sort ?? "default");
 }

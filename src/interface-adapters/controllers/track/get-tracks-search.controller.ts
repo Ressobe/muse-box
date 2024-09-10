@@ -6,5 +6,5 @@ export async function getTracksSearchController(
   perPage: number,
   sort?: SortType,
 ) {
-  return await getTracksSearchUseCase(page, perPage, (sort = "default"));
+  return await getTracksSearchUseCase(page, perPage, sort ?? "default");
 }

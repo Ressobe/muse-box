@@ -6,10 +6,15 @@ function presenter(artists: ArtistWithStats[]) {
     id: item.id,
     name: item.name,
     bio: item.bio,
+    gender: item.gender,
+    type: item.type,
     country: item.country,
     image: item.image ?? "",
-    ratingAvg: item.stats.ratingAvg,
-    ratingCount: item.stats.ratingCount,
+    stats: {
+      ratingAvg: item.stats.ratingAvg,
+      ratingCount: item.stats.ratingCount,
+      ratingSum: item.stats.ratingSum,
+    },
   }));
 }
 

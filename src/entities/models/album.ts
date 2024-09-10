@@ -16,6 +16,8 @@ export type Album = z.infer<typeof albumSchema>;
 
 export const albumWithStatsSchema = albumSchema.extend({
   stats: ratingSchema.nullable(),
+  defaultRate: z.number().nullish(),
+  isLiked: z.boolean().nullish(),
 });
 
 export type AlbumWithStats = z.infer<typeof albumWithStatsSchema>;

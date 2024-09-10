@@ -213,11 +213,139 @@ export class TracksRepository implements ITracksRepository {
     return await query;
   }
 
-  async getTracksSearch(offset: number, limit?: number): Promise<Track[]> {
+  async getTracksSearch(
+    offset: number,
+    limit?: number,
+  ): Promise<TrackWithAlbumAndStats[]> {
     return await db.query.tracks.findMany({
+      with: {
+        album: true,
+        stats: true,
+      },
       limit,
       offset,
       orderBy: asc(tracks.title),
+    });
+  }
+
+  async getTracksSortedByHighestRating(
+    offset = 0,
+    limit?: number,
+  ): Promise<TrackWithAlbumAndStats[]> {
+    const query = db
+      .select({
+        id: tracks.id,
+        title: tracks.title,
+        length: tracks.length,
+        image: tracks.image,
+        albumId: tracks.albumId,
+        position: tracks.position,
+        artistsCredits: tracks.artistsCredits,
+        album: {
+          id: albums.id,
+          title: albums.title,
+          length: albums.length,
+          image: albums.image,
+          artistId: albums.artistId,
+          typeId: albums.typeId,
+          releaseDate: albums.releaseDate,
+        },
+        stats: {
+          ratingAvg: tracksStats.ratingAvg,
+          ratingCount: tracksStats.ratingCount,
+        },
+      })
+      .from(tracks)
+      .innerJoin(albums, eq(albums.id, tracks.albumId))
+      .leftJoin(tracksStats, eq(tracksStats.entityId, tracks.id))
+      .orderBy(desc(tracksStats.ratingAvg))
+      .offset(offset);
+
+    if (typeof limit === "number") {
+      query.limit(limit);
+    }
+
+    return await query;
+  }
+
+  async getTracksSortedByLowestRating(
+    offset = 0,
+    limit?: number,
+  ): Promise<TrackWithAlbumAndStats[]> {
+    const query = db
+      .select({
+        id: tracks.id,
+        title: tracks.title,
+        length: tracks.length,
+        image: tracks.image,
+        albumId: tracks.albumId,
+        position: tracks.position,
+        artistsCredits: tracks.artistsCredits,
+        album: {
+          id: albums.id,
+          title: albums.title,
+          length: albums.length,
+          image: albums.image,
+          artistId: albums.artistId,
+          typeId: albums.typeId,
+          releaseDate: albums.releaseDate,
+        },
+        stats: {
+          ratingAvg: tracksStats.ratingAvg,
+          ratingCount: tracksStats.ratingCount,
+        },
+      })
+      .from(tracks)
+      .innerJoin(albums, eq(albums.id, tracks.albumId))
+      .leftJoin(tracksStats, eq(tracksStats.entityId, tracks.id))
+      .orderBy(
+        sql`CASE WHEN ${tracksStats.ratingAvg} IS NULL THEN 1 ELSE 0 END`,
+        asc(sql`COALESCE(${tracksStats.ratingAvg}, 0)`),
+      )
+      .offset(offset);
+
+    if (typeof limit === "number") {
+      query.limit(limit);
+    }
+
+    return await query;
+  }
+
+  async getTracksSortedAlphabetically(
+    offset = 0,
+    limit?: number,
+  ): Promise<TrackWithAlbumAndStats[]> {
+    return await db.query.tracks.findMany({
+      with: {
+        album: {
+          with: {
+            stats: true,
+          },
+        },
+        stats: true,
+      },
+      limit,
+      offset,
+      orderBy: asc(tracks.title),
+    });
+  }
+
+  async getTracksSortedInReverseAlphabetical(
+    offset = 0,
+    limit?: number,
+  ): Promise<TrackWithAlbumAndStats[]> {
+    return await db.query.tracks.findMany({
+      with: {
+        album: {
+          with: {
+            stats: true,
+          },
+        },
+        stats: true,
+      },
+      limit,
+      offset,
+      orderBy: desc(tracks.title),
     });
   }
 }

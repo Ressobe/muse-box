@@ -53,6 +53,9 @@ export async function createAlbum(newAlbum: Album) {
   return album;
 }
 
+// To należy do reviw repozytorium
+// getReviewsForAlbum
+// W taki sposób powinno być
 export async function getAlbumReviews(
   albumId: string,
   limit?: number,
@@ -226,7 +229,7 @@ export async function getAlbumsSortedInReverseAlphabetical(
 
 export async function getAlbumsCount() {
   const [c] = await db.select({ count: count() }).from(albums);
-  return c;
+  return c.count;
 }
 
 export async function getPopularAlbums(limit?: number) {

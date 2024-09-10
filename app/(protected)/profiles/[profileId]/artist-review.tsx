@@ -1,6 +1,10 @@
-import { Stars } from "@/components/review/stars";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { TableCell, TableRow } from "@/components/ui/table";
+import { Stars } from "@/app/_components/review/stars";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/app/_components/ui/avatar";
+import { TableCell, TableRow } from "@/app/_components/ui/table";
 import { formatDateToShortMonthDayYear } from "@/lib/utils";
 import { TArtistReview } from "@/types/review";
 import Link from "next/link";

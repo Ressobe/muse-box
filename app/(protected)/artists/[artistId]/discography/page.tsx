@@ -1,6 +1,10 @@
-import { LikeButton } from "@/components/like-button";
-import { RatingStats } from "@/components/review/rating-stats";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { LikeButton } from "@/app/_components/like-button";
+import { RatingStats } from "@/app/_components/review/rating-stats";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/app/_components/ui/avatar";
 import {
   Table,
   TableBody,
@@ -8,13 +12,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/app/_components/ui/table";
 import { currentUser } from "@/lib/auth";
 import { getFullAlbumTime, getTime, getYear } from "@/lib/utils";
-import { getArtistDiscographyUseCase } from "@/use-cases/artist";
-import { isUserLikedItUseCase } from "@/use-cases/playlist";
+import { getArtistDiscographyController } from "@/src/interface-adapters/controllers/artist/get-artist-discography.controller";
+import { getArtistInfoController } from "@/src/interface-adapters/controllers/artist/get-artist-info.controller";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { FaUser } from "react-icons/fa";
 
 export default async function DiscographyPage({
@@ -25,21 +30,21 @@ export default async function DiscographyPage({
   };
 }) {
   const { artistId } = params;
-  const discography = await getArtistDiscographyUseCase(artistId);
+
+  const artistInfo = await getArtistInfoController(artistId);
+  if (!artistInfo.artist) {
+    return notFound();
+  }
+
+  const artist = artistInfo.artist;
+
+  const discography = await getArtistDiscographyController(artistId);
 
   const user = await currentUser();
-  if (!user) {
-    return null;
-  }
 
   return (
     <section className="space-y-32">
       {discography.map(async (album) => {
-        const isLikedAlbum = await isUserLikedItUseCase(
-          user.id,
-          album.id,
-          "album",
-        );
         return (
           <div key={album.id} className="space-y-12">
             <div className="flex items-center gap-x-16">
@@ -56,16 +61,16 @@ export default async function DiscographyPage({
                 </div>
                 <div className="flex items-center gap-x-4 text-sm">
                   <Avatar className="h-16 w-16">
-                    <AvatarImage src={album.artist.image ?? ""} />
+                    <AvatarImage src={artist.image ?? ""} />
                     <AvatarFallback>
                       <FaUser className="w-8 h-8" />
                     </AvatarFallback>
                   </Avatar>
                   <Link
-                    href={`/artists/${album.artist.id}`}
+                    href={`/artists/${artist.id}`}
                     className="transition-all underline-offset-2 hover:underline"
                   >
-                    {album.artist.name}
+                    {artist.name}
                   </Link>
                   <span>{getYear(album.releaseDate)}</span>
                   <Link
@@ -80,12 +85,14 @@ export default async function DiscographyPage({
                       : `${album.tracks.length} song`}
                     , {getTime(getFullAlbumTime(album.tracks))}
                   </span>
-                  <LikeButton
-                    defaultLikeState={isLikedAlbum}
-                    entityId={album.id}
-                    type="album"
-                    userId={user.id}
-                  />
+                  {album.isLiked !== undefined ? (
+                    <LikeButton
+                      defaultLikeState={album.isLiked}
+                      entityId={album.id}
+                      type="album"
+                      userId={user?.id}
+                    />
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -100,12 +107,6 @@ export default async function DiscographyPage({
               </TableHeader>
               <TableBody>
                 {album.tracks.map(async (track, idx) => {
-                  const isLikedTrack = await isUserLikedItUseCase(
-                    user.id,
-                    track.id,
-                    "track",
-                  );
-
                   return (
                     <TableRow key={track.id} className="p-0">
                       <TableCell className="font-medium">{idx + 1}</TableCell>
@@ -124,15 +125,20 @@ export default async function DiscographyPage({
                         </Link>
                       </TableCell>
                       <TableCell>
-                        <RatingStats stats={track?.stats} size="sm" />
+                        <RatingStats
+                          ratingAvg={track.stats?.ratingAvg}
+                          size="sm"
+                        />
                       </TableCell>
                       <TableCell>
-                        <LikeButton
-                          defaultLikeState={isLikedTrack}
-                          entityId={track.id}
-                          type="track"
-                          userId={user.id}
-                        />
+                        {track.isLiked !== undefined ? (
+                          <LikeButton
+                            defaultLikeState={track.isLiked}
+                            entityId={track.id}
+                            type="track"
+                            userId={user?.id}
+                          />
+                        ) : null}
                       </TableCell>
                     </TableRow>
                   );

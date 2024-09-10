@@ -1,15 +1,13 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SettingsSchema } from "@/schemas/auth";
 import { useState, useTransition } from "react";
-import { settingsAction } from "@/actions/settings";
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { settingsAction } from "@/app/_actions/settings";
+import { Button } from "@/app/_components/ui/button";
+import { Card, CardHeader, CardContent } from "@/app/_components/ui/card";
 import { useSession } from "next-auth/react";
 
 import {
@@ -19,13 +17,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useCurrentUser } from "@/hooks/use-current-user";
-import { FormSucess } from "@/components/form-sucess";
-import { FormError } from "@/components/form-error";
+} from "@/app/_components/ui/form";
+import { Input } from "@/app/_components/ui/input";
+import { useCurrentUser } from "@/app/_hooks/use-current-user";
+import { FormSucess } from "@/app/_components/ui/form-sucess";
+import { FormError } from "@/app/_components/ui/form-error";
 import { TailSpin } from "react-loader-spinner";
-// import { Textarea } from "@/components/ui/textarea";
 
 export default function SettingsPage() {
   const user = useCurrentUser();

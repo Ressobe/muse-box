@@ -1,5 +1,9 @@
-import { PaginationControls } from "@/components/pagination-controls";
-import { getTracksSearchUseCase } from "@/use-cases/track";
+import { PaginationControls } from "@/app/_components/pagination-controls";
+import { TracksTable } from "@/app/_components/track/tracks-table";
+import { currentUser } from "@/lib/auth";
+import { isValidSortType, SortType } from "@/src/entities/types";
+import { getTracksSearchController } from "@/src/interface-adapters/controllers/track/get-tracks-search.controller";
+import { Suspense } from "react";
 
 type SearchPageProps = {
   searchParams: {
@@ -10,47 +14,35 @@ type SearchPageProps = {
 const DEFAULT_PAGE = 1;
 const DEFAULT_PER_PAGE = 10;
 
-const SORT_TYPE = {
-  DEFAULT: "default",
-  TITLE_ASC: "title_asc",
-  TITLE_DESC: "title_desc",
-  RATING_DESC: "rating_desc",
-  RATING_ASC: "rating_asc",
-} as const;
-
-type ObjectValues<T> = T[keyof T];
-type Sort = ObjectValues<typeof SORT_TYPE>;
-
 export default async function TracksSearchPage({
   searchParams,
 }: SearchPageProps) {
+  const authUser = await currentUser();
   const page = Number(searchParams["page"] ?? DEFAULT_PAGE);
   const perPage = Number(searchParams["per_page"] ?? DEFAULT_PER_PAGE);
-  const sort = searchParams["sort"] ?? "default";
+  let sortType: SortType = "default";
 
-  const { tracks, totalPages } = await getTracksSearchUseCase(
+  if (isValidSortType(searchParams["sort"])) {
+    sortType = searchParams["sort"];
+  }
+
+  const { tracks, totalPages } = await getTracksSearchController(
     page < 1 ? DEFAULT_PAGE : page,
     perPage < 1 ? DEFAULT_PER_PAGE : perPage,
+    sortType,
   );
 
   return (
     <section className="space-y-20">
       <h1 className="font-bold text-4xl">Tracks</h1>
 
-      <ul>
-        {tracks.map((item) => {
-          return <li key={item.id}>{item.title}</li>;
-        })}
-      </ul>
-
-      {totalPages > 1 && (
-        <PaginationControls
-          hasPrevPage={page > 1}
-          hasNextPage={page < totalPages}
-          totalPages={totalPages}
-          currentPage={page}
+      <Suspense>
+        <TracksTable
+          tracks={tracks}
+          pagination={{ page, perPage, totalPages }}
+          userId={authUser?.id}
         />
-      )}
+      </Suspense>
     </section>
   );
 }

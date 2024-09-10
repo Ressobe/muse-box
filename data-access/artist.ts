@@ -171,6 +171,7 @@ export async function getTopArtists(limit?: number) {
       bio: artists.bio,
       country: artists.country,
       ratingAvg: artistsStats.ratingAvg,
+      ratingCount: artistsStats.ratingCount,
     })
     .from(artists)
     .innerJoin(artistsStats, eq(artistsStats.entityId, artists.id))

@@ -1,4 +1,9 @@
-import { Follow } from "@/src/entities/models/follow";
+import {
+  AmountOfFollowersAndFollowing,
+  Follow,
+  FollowerUser,
+  FollowingUser,
+} from "@/src/entities/models/follow";
 
 export interface IFollowersRepository {
   insertFollow(followerId: string, followingId: string): Promise<Follow>;
@@ -7,4 +12,10 @@ export interface IFollowersRepository {
     followerId: string,
     followingId: string,
   ): Promise<Follow | undefined>;
+
+  getFollowersForProfile(profileId: string): Promise<FollowerUser[]>;
+  getFollowingForProfile(profileId: string): Promise<FollowingUser[]>;
+  getAmountOfFollowersAndFollowingForUser(
+    userId: string,
+  ): Promise<AmountOfFollowersAndFollowing>;
 }

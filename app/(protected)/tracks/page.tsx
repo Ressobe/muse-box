@@ -1,16 +1,14 @@
-import { TrackCard } from "@/components/track/track-card";
-import {
-  getNewTracksUseCase,
-  getPopularTracksUseCase,
-  getTopTracksUseCase,
-} from "@/use-cases/track";
+import { TrackCard } from "@/app/_components/track/track-card";
+import { getNewTracksController } from "@/src/interface-adapters/controllers/track/get-new-tracks.controller";
+import { getPopularTracksController } from "@/src/interface-adapters/controllers/track/get-popular-tracks.controller";
+import { getTopTracksController } from "@/src/interface-adapters/controllers/track/get-top-tracks.controller";
 
 export const dynamic = "force-dynamic";
 
 export default async function TracksPage() {
-  const topTracks = await getTopTracksUseCase();
-  const popularTracks = await getPopularTracksUseCase();
-  const newTracks = await getNewTracksUseCase();
+  const topTracks = await getTopTracksController();
+  const popularTracks = await getPopularTracksController();
+  const newTracks = await getNewTracksController();
 
   return (
     <section className="w-full space-y-20">

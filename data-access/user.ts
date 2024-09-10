@@ -119,6 +119,7 @@ export async function getUserArtistReview2(userId: string, artistId: string) {
   });
 }
 
+// getReviewForAlbumOwnedByUser
 export async function getUserAlbumReview(userId: string, albumId: string) {
   return await db.query.reviewsAlbums.findFirst({
     where: and(
@@ -132,6 +133,7 @@ export async function getUserAlbumReview(userId: string, albumId: string) {
   });
 }
 
+// getReviewForTrackOwnedByUser
 export async function getUserTrackReview(userId: string, trackId: string) {
   return await db.query.reviewsTracks.findFirst({
     where: and(
@@ -145,6 +147,7 @@ export async function getUserTrackReview(userId: string, trackId: string) {
   });
 }
 
+// getPlaylistsForUser
 export async function getUserPlaylists(userId: string) {
   return await db.query.playlists.findMany({
     where: eq(playlists.userId, userId),
@@ -154,6 +157,7 @@ export async function getUserPlaylists(userId: string) {
   });
 }
 
+// getFavouriteContentForUser
 export async function getUserFavourite(userId: string) {
   return await db.query.userProfiles.findFirst({
     where: eq(userProfiles.userId, userId),
@@ -222,6 +226,7 @@ export async function removeFavourite(userId: string, type: Entity) {
   }
 }
 
+// getNotificationsForUser
 export async function getUserNotifications(userId: string) {
   const notifications = await db.query.notificationRecipients.findMany({
     where: eq(notificationRecipients.ownerId, userId),
@@ -237,6 +242,7 @@ export async function getUserNotifications(userId: string) {
   });
 }
 
+// getLatestReviewsForUser
 export async function getUserLatestReviews(
   userId: string,
 ): Promise<(TArtistReview | TAlbumReview | TTrackReview)[]> {

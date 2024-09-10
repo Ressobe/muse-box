@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-export const artistCreditName = z.object({
+export const artistCreditNameSchema = z.object({
   artistCreditId: z.string(),
   artistId: z.string(),
   position: z.number(),
   name: z.string(),
-  joinPhrase: z.string().optional(),
+  joinPhrase: z.string().nullable(),
 });
 
-export type ArtistCreditName = z.infer<typeof artistCreditName>;
+export type ArtistCreditName = z.infer<typeof artistCreditNameSchema>;

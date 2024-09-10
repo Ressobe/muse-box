@@ -1,7 +1,7 @@
-import { ActionFavouriteMenu } from "@/components/favs/action-favourite-menu";
-import { FavouriteMenu } from "@/components/favs/favourite-menu";
-import { FollowButton } from "@/components/follow-button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { ActionFavouriteMenu } from "@/app/_components/favs/action-favourite-menu";
+import { FavouriteMenu } from "@/app/_components/favs/favourite-menu";
+import { FollowButton } from "@/app/_components/follow-button";
+import { Avatar, AvatarFallback } from "@/app/_components/ui/avatar";
 import { currentUser } from "@/lib/auth";
 import { getProfileUseCase } from "@/use-cases/profile";
 import {
@@ -16,7 +16,7 @@ import Link from "next/link";
 import { FaUser } from "react-icons/fa";
 import { RecentActivity } from "./recent-activity";
 import { FollowersFollowingDialog } from "./followers-following-dialog";
-import { UserProfileAvatar } from "@/components/user/user-profile-avatar";
+import { UserProfileAvatar } from "@/app/_components/user/user-profile-avatar";
 
 export default async function ProfilePage({
   params,

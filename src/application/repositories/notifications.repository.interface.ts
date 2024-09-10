@@ -1,10 +1,14 @@
+import { Follow } from "@/src/entities/models/follow";
 import {
   Notification,
+  NotificationRecipientsWithNotification,
   NotificationType,
 } from "@/src/entities/models/notification";
 
+// TODO: Return types
+
 export interface INotificationsRepository {
-  deleteNotification(notificationId: string): Promise<Notification>;
+  deleteNotification(notificationId: string): Promise<void>;
   markNotificationAsReaded(notificationId: string): Promise<void>;
 
   insertNotification(
@@ -14,19 +18,19 @@ export interface INotificationsRepository {
     message: string,
   ): Promise<Notification>;
 
-  findNotification(
-    creatorId: string,
-    reciverId: string,
-    type: NotificationType,
-  ): Promise<Notification>;
-
   sendNotificationToUser(
     notificationId: string,
     reciverId: string,
   ): Promise<void>;
 
+  // Muszę w use case dla danego użytkownika zdobyć listę jego
+  // followersow
   sendNotificationToFollowers(
     notificationId: string,
-    senderId: string,
+    followers: Follow[],
   ): Promise<void>;
+
+  getNotificationsForUser(
+    userId: string,
+  ): Promise<NotificationRecipientsWithNotification[]>;
 }

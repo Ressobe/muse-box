@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
-import LoginButton from "@/components/auth/login-button";
-import { Button } from "@/components/ui/button";
+import LoginButton from "@/app/_components/auth/login-button";
+import { Button } from "@/app/_components/ui/button";
 import { APP_NAME } from "@/config";
 import Link from "next/link";
 

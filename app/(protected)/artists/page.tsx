@@ -1,16 +1,14 @@
-import { ArtistCard } from "@/components/artist/artist-card";
-import {
-  getTopArtistsUseCase,
-  getPopularArtistsUseCase,
-  getNewArtistsUseCase,
-} from "@/use-cases/artist";
+import { ArtistCard } from "@/app/_components/artist/artist-card";
+import { getNewArtistsController } from "@/src/interface-adapters/controllers/artist/get-new-artists.controller";
+import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
+import { getTopArtistsController } from "@/src/interface-adapters/controllers/artist/get-top-artists.controller";
 
 export const dynamic = "force-dynamic";
 
 export default async function Artists() {
-  const topArtists = await getTopArtistsUseCase();
-  const popularArtists = await getPopularArtistsUseCase();
-  const newArtists = await getNewArtistsUseCase();
+  const topArtists = await getTopArtistsController();
+  const popularArtists = await getPopularArtistsController();
+  const newArtists = await getNewArtistsController();
 
   return (
     <section className="w-full space-y-20">

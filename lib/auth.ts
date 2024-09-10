@@ -21,11 +21,3 @@ export const currentUser = async (): Promise<AuthenticatedSession | null> => {
 
   return null;
 };
-
-export const authAction = async (callback: any) => {
-  const user = await currentUser();
-  if (!user) {
-    throw new Error("User not logged in!");
-  }
-  callback();
-};

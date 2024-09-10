@@ -19,7 +19,13 @@ export const trackSelectSchema = trackSchema.extend({
   image: z.string().nullish(),
 });
 
-export const trackWithStatsSchema = trackSchema.extend({});
+export const trackWithStatsSchema = trackSchema.extend({
+  stats: z.object({
+    ratingAvg: z.number().nullable(),
+    ratingCount: z.number().nullable(),
+    ratingSum: z.number().nullable(),
+  }),
+});
 
 export const trackWithAlbumSchema = trackSchema.extend({
   album: albumSchema,

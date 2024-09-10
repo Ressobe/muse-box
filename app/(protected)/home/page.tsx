@@ -1,6 +1,5 @@
 import { AlbumsTable } from "@/app/_components/album/albums-table";
 import { ArtistsTable } from "@/app/_components/artist/artists-table";
-import { TopTracksTable } from "@/app/_components/track/top-tracks-table";
 import { TracksTable } from "@/app/_components/track/tracks-table";
 import { currentUser } from "@/lib/auth";
 import { getTopAlbumsController } from "@/src/interface-adapters/controllers/album/get-top-albums.controller";

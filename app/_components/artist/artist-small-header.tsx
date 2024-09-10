@@ -8,7 +8,7 @@ import { FaUser } from "react-icons/fa";
 
 type ArtistSmallHeaderProps = {
   artist: {
-    image: string | null;
+    image?: string | null | undefined;
     id: string;
     name: string;
   };

@@ -1,6 +1,9 @@
 import { z } from "zod";
 import { ratingSchema } from "./stat";
-import { artistSchema } from "./artist";
+import { artistSchema, artistSelectSchema } from "./artist";
+import { artistCreditSchema } from "./artistCredit";
+import { trackWithStatsSchema } from "./track";
+import { artistCreditNameSchema } from "./artistCreditName";
 
 export const albumSchema = z.object({
   id: z.string(),
@@ -55,11 +58,45 @@ export const albumWithTracksSchema = albumWithStatsSchema.extend({
     id: z.number(),
     name: z.string(),
   }),
+  defaultRate: z.number().optional(),
+  isLiked: z.boolean().optional(),
 });
 
 export const albumWithRelationsSchema = albumWithTracksSchema.extend({
-  artist: artistSchema,
+  artist: artistSelectSchema,
+  tracks: z
+    .object({
+      id: z.string(),
+      artistsCredits: z.string(),
+      albumId: z.string(),
+      position: z.number(),
+      title: z.string(),
+      image: z.string().default("").nullable(),
+      length: z.number().default(0).nullable(),
+      stats: z.object({
+        entityId: z.string(),
+        likes: z.number().nullable(),
+        ratingAvg: z.number().nullable(),
+        ratingSum: z.number().nullable(),
+        ratingCount: z.number().nullable(),
+      }),
+      artistCredit: z.object({
+        id: z.string(),
+        name: z.string().nullable(),
+        artistsCreditsNames: artistCreditNameSchema.array(),
+      }),
+    })
+    .array(),
+  stats: z.object({
+    entityId: z.string(),
+    likes: z.number().nullable(),
+    ratingAvg: z.number().nullable(),
+    ratingSum: z.number().nullable(),
+    ratingCount: z.number().nullable(),
+  }),
 });
+
+export type AlbumWithRelations = z.infer<typeof albumWithRelationsSchema>;
 
 export type AlbumWithRatingAvg = z.infer<typeof albumWithRatingAvg>;
 

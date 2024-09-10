@@ -45,7 +45,10 @@ export async function AlbumPlaylistItem({ albumId }: AlbumPlaylistItemProps) {
               </h1>
             </Link>
           </div>
-          <RatingStats stats={album?.stats} />
+          <RatingStats
+            ratingAvg={album.stats?.ratingAvg}
+            ratingCount={album.stats?.ratingCount}
+          />
           <div className="flex items-center gap-x-4 text-sm">
             <Avatar className="h-12 w-12">
               <AvatarImage src={album.artist.image ?? ""} />

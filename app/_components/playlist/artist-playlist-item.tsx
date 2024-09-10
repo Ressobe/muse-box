@@ -42,7 +42,10 @@ export async function ArtistPlaylistItem({
             <Link href={`/artists/${artistId}`}>
               <h1 className="font-bold text-4xl">{artist?.name}</h1>
             </Link>
-            <RatingStats stats={artist?.stats} />
+            <RatingStats
+              ratingAvg={artist.stats?.ratingAvg}
+              ratingCount={artist.stats?.ratingCount}
+            />
           </div>
         </div>
         <div className="flex gap-x-4">

@@ -78,21 +78,21 @@ export default async function ReviewsPage({ searchParams }: ReviewsPageProps) {
     </ul>
   );
 }
-
-type HeaderProps = {
-  type: string;
-  entityId: string;
-};
-
-function Header({ type, entityId }: HeaderProps) {
-  switch (type) {
-    case "artist":
-      return <ArtistHeader artistId={entityId} />;
-
-    case "album":
-      return <AlbumHeader albumId={entityId} />;
-
-    case "track":
-      return <TrackHeader trackId={entityId} />;
-  }
-}
+//
+// type HeaderProps = {
+//   type: string;
+//   entityId: string;
+// };
+//
+// function Header({ type, entityId }: HeaderProps) {
+//   switch (type) {
+//     case "artist":
+//       return <ArtistHeader artistId={entityId} />;
+//
+//     case "album":
+//       return <AlbumHeader albumId={entityId} />;
+//
+//     case "track":
+//       return <TrackHeader trackId={entityId} />;
+//   }
+// }

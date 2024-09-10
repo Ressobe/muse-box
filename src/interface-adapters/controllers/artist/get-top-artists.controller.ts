@@ -11,9 +11,9 @@ function presenter(artists: ArtistWithStats[]) {
     country: item.country,
     image: item.image ?? "",
     stats: {
-      ratingAvg: item.stats.ratingAvg,
-      ratingCount: item.stats.ratingCount,
-      ratingSum: item.stats.ratingSum,
+      ratingAvg: item.stats?.ratingAvg ?? null,
+      ratingCount: item.stats?.ratingCount ?? null,
+      ratingSum: item.stats?.ratingSum ?? null,
     },
   }));
 }

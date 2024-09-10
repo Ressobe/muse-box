@@ -39,7 +39,10 @@ export async function TrackHeader({ trackId }: TrackHeaderProps) {
           <div>
             <div>Song</div>
             <h1 className="font-bold text-5xl">{track.title}</h1>
-            <RatingStats stats={track?.stats} />
+            <RatingStats
+              ratingAvg={track.stats?.ratingAvg}
+              ratingCount={track.stats?.ratingCount}
+            />
           </div>
           <div className="flex items-center gap-x-4 text-sm">
             <ArtistSmallHeader artist={artist} />

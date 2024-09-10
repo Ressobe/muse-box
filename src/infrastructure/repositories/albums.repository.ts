@@ -2,6 +2,7 @@ import { IAlbumsRepository } from "@/src/application/repositories/albums.reposit
 import { db } from "@/drizzle/database/db";
 import {
   Album,
+  AlbumWithRelations,
   AlbumWithStats,
   AlbumWithTracks,
 } from "@/src/entities/models/album";
@@ -23,7 +24,7 @@ export class AlbumsRepository implements IAlbumsRepository {
 
   async getAlbumWithRelations(
     albumId: string,
-  ): Promise<AlbumWithTracks | undefined> {
+  ): Promise<AlbumWithRelations | undefined> {
     return await db.query.albums.findFirst({
       where: eq(albums.id, albumId),
       with: {

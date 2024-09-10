@@ -51,7 +51,10 @@ export async function TrackPlaylistItem({
         </Link>
       </TableCell>
       <TableCell>
-        <RatingStats stats={track?.stats} />
+        <RatingStats
+          ratingAvg={track.stats?.ratingAvg}
+          ratingCount={track.stats?.ratingCount}
+        />
       </TableCell>
       <TableCell>
         <LikeButton

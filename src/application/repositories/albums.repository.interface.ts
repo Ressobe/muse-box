@@ -1,5 +1,6 @@
 import {
   Album,
+  AlbumWithRelations,
   AlbumWithStats,
   AlbumWithTracks,
 } from "@/src/entities/models/album";
@@ -7,7 +8,9 @@ import {
 export interface IAlbumsRepository {
   getAlbum(albumId: string): Promise<Album | undefined>;
 
-  getAlbumWithRelations(albumId: string): Promise<AlbumWithTracks | undefined>;
+  getAlbumWithRelations(
+    albumId: string,
+  ): Promise<AlbumWithRelations | undefined>;
 
   insertAlbum(newAlbum: Album): Promise<Album>;
   getAlbumsSearch(offset: number, limit?: number): Promise<AlbumWithStats[]>;

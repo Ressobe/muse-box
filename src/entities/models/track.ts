@@ -27,6 +27,17 @@ export const trackWithAlbumSchema = trackSchema.extend({
 
 export type TrackWithAlbum = z.infer<typeof trackWithAlbumSchema>;
 
+export const trackWithAlbumAndStatsSchema = trackWithAlbumSchema.extend({
+  stats: z.object({
+    ratingAvg: z.number().nullable(),
+    ratingCount: z.number().nullable(),
+  }),
+});
+
+export type TrackWithAlbumAndStats = z.infer<
+  typeof trackWithAlbumAndStatsSchema
+>;
+
 export const trackWithRatingAvg = trackSelectSchema.extend({
   ratingAvg: z.number().nullable(),
 });

@@ -17,8 +17,6 @@ import { currentUser } from "@/lib/auth";
 import { getFullAlbumTime, getTime, getYear } from "@/lib/utils";
 import { getArtistDiscographyController } from "@/src/interface-adapters/controllers/artist/get-artist-discography.controller";
 import { getArtistInfoController } from "@/src/interface-adapters/controllers/artist/get-artist-info.controller";
-import { getArtistDiscographyUseCase } from "@/use-cases/artist";
-import { isUserLikedItUseCase } from "@/use-cases/playlist";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";

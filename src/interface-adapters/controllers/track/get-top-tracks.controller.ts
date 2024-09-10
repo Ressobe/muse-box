@@ -1,7 +1,7 @@
-import { getTopTracksUseCase } from "@/src/application/use-cases/track/get-top-tracks.use-case";
+import { getTopTracksCardsUseCase } from "@/src/application/use-cases/track/get-top-tracks-cards.use-case";
 
 export async function getTopTracksController() {
-  const tracks = await getTopTracksUseCase();
+  const tracks = await getTopTracksCardsUseCase();
 
   return tracks;
 }

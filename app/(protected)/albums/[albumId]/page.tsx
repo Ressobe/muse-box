@@ -15,9 +15,11 @@ import { Reviews } from "@/app/_components/review/reviews";
 import { currentUser } from "@/lib/auth";
 import { isUserLikedItUseCase } from "@/use-cases/playlist";
 import { LikeButton } from "@/app/_components/like-button";
-import { shouldShowAddReviewUseCase } from "@/use-cases/review";
 import { RatingStats } from "@/app/_components/review/rating-stats";
 import { ArtistSmallHeader } from "@/app/_components/artist/artist-small-header";
+import { shouldShowAddReviewController } from "@/src/interface-adapters/controllers/review/should-show-add-review.controller";
+import { getAlbumReviewsController } from "@/src/interface-adapters/controllers/album/get-album-reviews.controller";
+import { getAlbumInfoController } from "@/src/interface-adapters/controllers/album/get-album-info.controller";
 
 export default async function AlbumPage({
   params,
@@ -33,7 +35,7 @@ export default async function AlbumPage({
     return null;
   }
 
-  const album = await getAlbumUseCase(albumId);
+  const album = await getAlbumInfoController(albumId);
   if (!album) {
     return notFound();
   }
@@ -45,9 +47,10 @@ export default async function AlbumPage({
     })),
   );
 
+  const reviews = await getAlbumReviewsController(albumId);
+  const showAddReview = await shouldShowAddReviewController(albumId, "album");
+
   const isAlbumLiked = await isUserLikedItUseCase(user.id, album.id, "album");
-  const reviews = await getAlbumReviewsUseCase(album.id);
-  const showAddReview = await shouldShowAddReviewUseCase(album.id, "album");
 
   return (
     <section className="space-y-12">
@@ -63,7 +66,7 @@ export default async function AlbumPage({
             <div>{album.albumType.name}</div>
             <h1 className="font-bold text-5xl">{album.title}</h1>
           </div>
-          <RatingStats stats={album?.stats} />
+          <RatingStats ratingAvg={album.stats?.ratingAvg} />
           <div className="flex items-center gap-x-4 text-sm">
             <ArtistSmallHeader artist={album.artist} />
 
@@ -137,7 +140,7 @@ export default async function AlbumPage({
                   ) : null}
                 </TableCell>
                 <TableCell>
-                  <RatingStats stats={track?.stats} size="sm" />
+                  <RatingStats ratingAvg={track.stats?.ratingAvg} size="sm" />
                 </TableCell>
                 <TableCell>
                   <LikeButton

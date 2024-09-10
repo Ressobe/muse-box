@@ -2,17 +2,17 @@ import { TopAlbumsTable } from "@/app/_components/album/top-albums-table";
 import { TopArtistsTable } from "@/app/_components/artist/top-artists-table";
 import { TopTracksTable } from "@/app/_components/track/top-tracks-table";
 import { currentUser } from "@/lib/auth";
-import { getTopAlbumsUseCase } from "@/use-cases/album";
-import { getTopArtistsUseCase } from "@/use-cases/artist";
-import { getTopTracksUseCase } from "@/use-cases/track";
+import { getTopAlbumsController } from "@/src/interface-adapters/controllers/album/get-top-albums.controller";
+import { getTopArtistsController } from "@/src/interface-adapters/controllers/artist/get-top-artists.controller";
+import { getTopTracksController } from "@/src/interface-adapters/controllers/track/get-top-tracks.controller";
 
 export default async function HomePage() {
   const user = await currentUser();
   if (!user) return null;
 
-  const topArtists = await getTopArtistsUseCase();
-  const topAlbums = await getTopAlbumsUseCase();
-  const topTracks = await getTopTracksUseCase();
+  const topArtists = await getTopArtistsController();
+  const topAlbums = await getTopAlbumsController();
+  const topTracks = await getTopTracksController();
 
   return (
     <section className="w-full space-y-20">

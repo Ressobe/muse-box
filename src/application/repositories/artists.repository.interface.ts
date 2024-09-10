@@ -1,7 +1,6 @@
 import {
   Artist,
   ArtistSelect,
-  ArtistWithRatingAvg,
   ArtistWithStats,
 } from "@/src/entities/models/artist";
 
@@ -13,7 +12,7 @@ export interface IArtistsRepository {
   getArtistsSearch(offset: number, limit?: number): Promise<ArtistSelect[]>;
   getArtistsCount(): Promise<number>;
   getFilteredArtists(query: string, limit?: number): Promise<ArtistSelect[]>;
-  getTopArtists(limit?: number): Promise<ArtistWithRatingAvg[]>;
+  getTopArtists(limit?: number): Promise<ArtistWithStats[]>;
   getPopularArtists(limit?: number): Promise<ArtistSelect[]>;
   getNewArtists(limit?: number): Promise<ArtistSelect[]>;
 }

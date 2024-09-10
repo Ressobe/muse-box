@@ -2,6 +2,7 @@ import {
   Track,
   TrackWithAlbum,
   TrackWithAlbumAndRatingAvg,
+  TrackWithAlbumAndStats,
 } from "@/src/entities/models/track";
 
 export interface ITracksRepository {
@@ -14,12 +15,12 @@ export interface ITracksRepository {
     limit: number,
   ): Promise<TrackWithAlbumAndRatingAvg[]>;
 
+  getTracksForArtist(artistId: string, limit?: number): Promise<Track[]>;
+
   getFilteredTracks(query: string, limit?: number): Promise<TrackWithAlbum[]>;
   getTracksSearch(offset: number, limit?: number): Promise<Track[]>;
   getTracksCount(): Promise<number>;
   getPopularTracks(limit?: number): Promise<TrackWithAlbum[]>;
   getNewTracks(limit?: number): Promise<TrackWithAlbum[]>;
-  getTopTracks(limit?: number): Promise<TrackWithAlbum[]>;
-
-  getTracksForArtist(artistId: string, limit?: number): Promise<Track[]>;
+  getTopTracks(limit?: number): Promise<TrackWithAlbumAndStats[]>;
 }

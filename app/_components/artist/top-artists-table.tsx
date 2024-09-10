@@ -28,6 +28,7 @@ type TopArtistsTableProps = {
     bio: string | null;
     country: string | null;
     ratingAvg: number | null;
+    ratingCount: number | null;
   }[];
   userId: string;
 };
@@ -62,10 +63,6 @@ export async function TopArtistsTable({
         </TableHeader>
         <TableBody>
           {artists.map((item, idx) => {
-            const stats = {
-              ratingAvg: item.ratingAvg,
-            };
-
             return (
               <TableRow key={item.id}>
                 <TableCell className="font-bold text-4xl">{idx + 1}</TableCell>
@@ -85,7 +82,11 @@ export async function TopArtistsTable({
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <RatingStats stats={stats} size="lg" />
+                  <RatingStats
+                    ratingAvg={item.ratingAvg}
+                    ratingCount={item.ratingCount}
+                    size="lg"
+                  />
                 </TableCell>
                 <TableCell>
                   <LikeButton

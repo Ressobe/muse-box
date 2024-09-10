@@ -156,6 +156,7 @@ export async function getTopTracksCards(limit?: number) {
       albumId: tracks.albumId,
       artistsCredits: tracks.artistsCredits,
       ratingAvg: tracksStats.ratingAvg,
+      ratingCount: tracksStats.ratingCount,
       album: {
         id: albums.id,
         image: albums.image,

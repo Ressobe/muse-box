@@ -4,6 +4,7 @@ import {
   Track,
   TrackWithAlbum,
   TrackWithAlbumAndRatingAvg,
+  TrackWithAlbumAndStats,
 } from "@/src/entities/models/track";
 import { albums, tracks, tracksStats } from "@/drizzle/database/schema";
 import { count, desc, asc, eq, sql } from "drizzle-orm";
@@ -91,7 +92,7 @@ export class TracksRepository implements ITracksRepository {
     return c.count;
   }
 
-  async getTopTracks(limit?: number): Promise<TrackWithAlbum[]> {
+  async getTopTracks(limit?: number): Promise<TrackWithAlbumAndStats[]> {
     const topTracksQuery = db
       .select({
         id: tracks.id,
@@ -101,7 +102,10 @@ export class TracksRepository implements ITracksRepository {
         position: tracks.position,
         albumId: tracks.albumId,
         artistsCredits: tracks.artistsCredits,
-        ratingAvg: tracksStats.ratingAvg,
+        stats: {
+          ratingAvg: tracksStats.ratingAvg,
+          ratingCount: tracksStats.ratingCount,
+        },
         album: {
           id: albums.id,
           image: albums.image,

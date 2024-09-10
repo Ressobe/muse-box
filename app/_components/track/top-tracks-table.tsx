@@ -24,7 +24,10 @@ type TopTracksTableProps = {
     position: number;
     albumId: string;
     artistsCredits: string;
-    ratingAvg: number | null;
+    stats: {
+      ratingAvg: number | null;
+      ratingCount: number | null;
+    } | null;
     album: {
       id: string;
       image: string | null;
@@ -68,10 +71,6 @@ export async function TopTracksTable({
         </TableHeader>
         <TableBody>
           {tracks.map((item, idx) => {
-            const stats = {
-              ratingAvg: item.ratingAvg,
-            };
-
             return (
               <TableRow key={item.id}>
                 <TableCell className="font-bold text-4xl">{idx + 1}</TableCell>
@@ -93,7 +92,11 @@ export async function TopTracksTable({
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <RatingStats stats={stats} size="lg" />
+                  <RatingStats
+                    ratingAvg={item.stats.ratingAvg}
+                    ratingCount={item.stats.ratingCount}
+                    size="lg"
+                  />
                 </TableCell>
                 <TableCell>
                   <LikeButton

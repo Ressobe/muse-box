@@ -10,7 +10,6 @@ type UserCardProps = {
   user: {
     id: string;
     name: string | null;
-    email: string;
     image: string | null;
   };
 };

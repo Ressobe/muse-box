@@ -2,7 +2,6 @@ import { IArtistsRepository } from "@/src/application/repositories/artists.repos
 import {
   Artist,
   ArtistSelect,
-  ArtistWithRatingAvg,
   ArtistWithStats,
 } from "@/src/entities/models/artist";
 import { db } from "@/drizzle/database/db";
@@ -67,7 +66,7 @@ export class ArtistsRepository implements IArtistsRepository {
     return filteredArtists;
   }
 
-  async getTopArtists(limit?: number): Promise<ArtistWithRatingAvg[]> {
+  async getTopArtists(limit?: number): Promise<ArtistWithStats[]> {
     const topArtistsQuery = db
       .select({
         id: artists.id,
@@ -77,7 +76,11 @@ export class ArtistsRepository implements IArtistsRepository {
         country: artists.country,
         gender: artists.gender,
         type: artists.type,
-        ratingAvg: artistsStats.ratingAvg,
+        stats: {
+          ratingAvg: artistsStats.ratingAvg,
+          ratingCount: artistsStats.ratingCount,
+          ratingSum: artistsStats.ratingSum,
+        },
       })
       .from(artists)
       .innerJoin(artistsStats, eq(artistsStats.entityId, artists.id))

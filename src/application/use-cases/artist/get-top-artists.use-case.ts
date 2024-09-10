@@ -5,7 +5,7 @@ export async function getTopArtistsUseCase() {
   const artistsRepository =
     container.get<IArtistsRepository>("IArtistsRepository");
 
-  const topArtists = artistsRepository.getTopArtists();
+  const topArtists = await artistsRepository.getTopArtists(5);
 
   return topArtists;
 }

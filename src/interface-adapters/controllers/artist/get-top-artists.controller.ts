@@ -1,14 +1,15 @@
 import { getTopArtistsUseCase } from "@/src/application/use-cases/artist/get-top-artists.use-case";
-import { ArtistWithRatingAvg } from "@/src/entities/models/artist";
+import { ArtistWithStats } from "@/src/entities/models/artist";
 
-function presenter(artists: ArtistWithRatingAvg[]) {
+function presenter(artists: ArtistWithStats[]) {
   return artists.map((item) => ({
     id: item.id,
     name: item.name,
     bio: item.bio,
     country: item.country,
     image: item.image ?? "",
-    ratingAvg: item.ratingAvg,
+    ratingAvg: item.stats.ratingAvg,
+    ratingCount: item.stats.ratingCount,
   }));
 }
 

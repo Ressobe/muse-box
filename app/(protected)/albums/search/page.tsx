@@ -9,7 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/app/_components/ui/table";
-import { getAlbumsSearchUseCase } from "@/use-cases/album";
+import { isValidSortType, SortType } from "@/src/entities/types";
+import { getAlbumsSearchController } from "@/src/interface-adapters/controllers/album/get-albums-search.controller";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -22,22 +23,6 @@ type SearchPageProps = {
 const DEFAULT_PAGE = 1;
 const DEFAULT_PER_PAGE = 10;
 
-const sortTypes = [
-  "alphabetical",
-  "alphabeticalReverse",
-  "highestRating",
-  "lowestRating",
-  "default",
-] as const;
-
-console.log(`${typeof sortTypes}`);
-
-export type SortType = (typeof sortTypes)[number];
-
-function isValidSortType(value: string | undefined): value is SortType {
-  return sortTypes.includes(value as SortType);
-}
-
 export default async function AlbumsSearchPage({
   searchParams,
 }: SearchPageProps) {
@@ -49,7 +34,7 @@ export default async function AlbumsSearchPage({
     sortType = searchParams["sort"];
   }
 
-  const { albums, totalPages } = await getAlbumsSearchUseCase(
+  const { albums, totalPages } = await getAlbumsSearchController(
     page < 1 ? DEFAULT_PAGE : page,
     perPage < 1 ? DEFAULT_PER_PAGE : perPage,
     sortType,
@@ -68,7 +53,7 @@ export default async function AlbumsSearchPage({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {albums?.map((item, idx) => {
+            {albums.map((item, idx) => {
               const globalIndex = (page - 1) * perPage + idx + 1;
 
               return (
@@ -95,7 +80,11 @@ export default async function AlbumsSearchPage({
                   </TableCell>
 
                   <TableCell>
-                    <RatingStats stats={item.stats} size="lg" />
+                    <RatingStats
+                      ratingAvg={item.stats?.ratingAvg}
+                      ratingCount={item.stats?.ratingCount}
+                      size="lg"
+                    />
                   </TableCell>
                 </TableRow>
               );

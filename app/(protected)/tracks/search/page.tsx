@@ -1,5 +1,6 @@
 import { PaginationControls } from "@/app/_components/pagination-controls";
-import { getTracksSearchUseCase } from "@/use-cases/track";
+import { isValidSortType, SortType } from "@/src/entities/types";
+import { getTracksSearchController } from "@/src/interface-adapters/controllers/track/get-tracks-search.controller";
 
 type SearchPageProps = {
   searchParams: {
@@ -10,27 +11,21 @@ type SearchPageProps = {
 const DEFAULT_PAGE = 1;
 const DEFAULT_PER_PAGE = 10;
 
-const SORT_TYPE = {
-  DEFAULT: "default",
-  TITLE_ASC: "title_asc",
-  TITLE_DESC: "title_desc",
-  RATING_DESC: "rating_desc",
-  RATING_ASC: "rating_asc",
-} as const;
-
-type ObjectValues<T> = T[keyof T];
-type Sort = ObjectValues<typeof SORT_TYPE>;
-
 export default async function TracksSearchPage({
   searchParams,
 }: SearchPageProps) {
   const page = Number(searchParams["page"] ?? DEFAULT_PAGE);
   const perPage = Number(searchParams["per_page"] ?? DEFAULT_PER_PAGE);
-  const sort = searchParams["sort"] ?? "default";
+  let sortType: SortType = "default";
 
-  const { tracks, totalPages } = await getTracksSearchUseCase(
+  if (isValidSortType(searchParams["sort"])) {
+    sortType = searchParams["sort"];
+  }
+
+  const { tracks, totalPages } = await getTracksSearchController(
     page < 1 ? DEFAULT_PAGE : page,
     perPage < 1 ? DEFAULT_PER_PAGE : perPage,
+    sortType,
   );
 
   return (

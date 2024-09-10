@@ -22,12 +22,35 @@ export class AlbumsRepository implements IAlbumsRepository {
     });
   }
 
+  async getAlbumWithRelations(
+    albumId: string,
+  ): Promise<AlbumWithTracks | undefined> {
+    return await db.query.albums.findFirst({
+      where: eq(albums.id, albumId),
+      with: {
+        artist: true,
+        tracks: {
+          with: {
+            stats: true,
+            artistCredit: {
+              with: {
+                artistsCreditsNames: true,
+              },
+            },
+          },
+        },
+        albumType: true,
+        stats: true,
+      },
+    });
+  }
+
   async insertAlbum(newAlbum: Album): Promise<Album> {
     const [album] = await db.insert(albums).values(newAlbum).returning();
     return album;
   }
 
-  async getAlbumsSearch(offset = 0, limit?: number): Promise<Album[]> {
+  async getAlbumsSearch(offset = 0, limit?: number): Promise<AlbumWithStats[]> {
     return await db.query.albums.findMany({
       with: {
         stats: true,
@@ -245,7 +268,7 @@ export class AlbumsRepository implements IAlbumsRepository {
     return await newAlbumsQuery;
   }
 
-  async getTopAlbums(limit?: number): Promise<AlbumWithRatingAvg[]> {
+  async getTopAlbums(limit?: number): Promise<AlbumWithStats[]> {
     const topAlbumsQuery = db
       .select({
         id: albums.id,
@@ -255,7 +278,10 @@ export class AlbumsRepository implements IAlbumsRepository {
         artistId: albums.artistId,
         typeId: albums.typeId,
         releaseDate: albums.releaseDate,
-        ratingAvg: albumsStats.ratingAvg,
+        stats: {
+          ratingAvg: albumsStats.ratingAvg,
+          ratingCount: albumsStats.ratingCount,
+        },
       })
       .from(albums)
       .innerJoin(albumsStats, eq(albumsStats.entityId, albums.id))
@@ -266,5 +292,20 @@ export class AlbumsRepository implements IAlbumsRepository {
     }
 
     return await topAlbumsQuery;
+  }
+
+  async getFilteredAlbums(query: string, limit?: number): Promise<Album[]> {
+    const filteredAlbumsQuery = db
+      .select()
+      .from(albums)
+      .where(sql`${albums.title} LIKE ${`%${query}%`} COLLATE NOCASE`);
+
+    if (typeof limit === "number") {
+      filteredAlbumsQuery.limit(limit);
+    }
+
+    const filteredAlbums = await filteredAlbumsQuery;
+
+    return filteredAlbums;
   }
 }

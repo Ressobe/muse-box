@@ -7,8 +7,11 @@ import {
 
 export interface IAlbumsRepository {
   getAlbum(albumId: string): Promise<Album | undefined>;
+
+  getAlbumWithRelations(albumId: string): Promise<AlbumWithTracks | undefined>;
+
   insertAlbum(newAlbum: Album): Promise<Album>;
-  getAlbumsSearch(offset: number, limit?: number): Promise<Album[]>;
+  getAlbumsSearch(offset: number, limit?: number): Promise<AlbumWithStats[]>;
 
   getAlbumsSortedByHighestRating(
     offset: number,
@@ -46,5 +49,7 @@ export interface IAlbumsRepository {
 
   getPopularAlbums(limit?: number): Promise<Album[]>;
   getNewAlbums(limit?: number): Promise<Album[]>;
-  getTopAlbums(limit?: number): Promise<AlbumWithRatingAvg[]>;
+  getTopAlbums(limit?: number): Promise<AlbumWithStats[]>;
+
+  getFilteredAlbums(query: string, limit?: number): Promise<Album[]>;
 }

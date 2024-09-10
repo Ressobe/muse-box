@@ -64,4 +64,26 @@ export interface IReviewsRepository {
     trackId: string,
     userId: string,
   ): Promise<ReviewWithTrackAndUser | undefined>;
+
+  getReviewsForArtist(
+    artistId: string,
+    offset: number,
+    limit?: number,
+  ): Promise<ReviewWithUser[]>;
+
+  getReviewsForAlbum(
+    albumId: string,
+    offset: number,
+    limit?: number,
+  ): Promise<ReviewWithUser[]>;
+
+  getReviewsForTrack(
+    trackId: string,
+    offset: number,
+    limit?: number,
+  ): Promise<ReviewWithUser[]>;
+
+  getReviewsCountForArtist(artistId: string): Promise<number>;
+  getReviewsCountForAlbum(albumId: string): Promise<number>;
+  getReviewsCountForTrack(trackId: string): Promise<number>;
 }

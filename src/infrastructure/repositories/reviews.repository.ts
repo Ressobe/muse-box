@@ -15,7 +15,7 @@ import {
   ReviewWithUser,
 } from "@/src/entities/models/review";
 import { db } from "@/drizzle/database/db";
-import { and, desc, eq, not } from "drizzle-orm";
+import { and, count, desc, eq, not } from "drizzle-orm";
 
 const reviewTables = {
   artist: reviewsArtists,
@@ -221,6 +221,30 @@ export class ReviewsRepository implements IReviewsRepository {
     });
   }
 
+  async getReviewsCountForArtist(artistId: string): Promise<number> {
+    const [c] = await db
+      .select({ count: count() })
+      .from(reviewsArtists)
+      .where(eq(reviewsArtists.entityId, artistId));
+    return c.count;
+  }
+
+  async getReviewsCountForAlbum(albumId: string): Promise<number> {
+    const [c] = await db
+      .select({ count: count() })
+      .from(reviewsAlbums)
+      .where(eq(reviewsAlbums.entityId, albumId));
+    return c.count;
+  }
+
+  async getReviewsCountForTrack(trackId: string): Promise<number> {
+    const [c] = await db
+      .select({ count: count() })
+      .from(reviewsTracks)
+      .where(eq(reviewsTracks.entityId, trackId));
+    return c.count;
+  }
+
   async getReviewForAlbumOwnedByUser(
     albumId: string,
     userId: string,
@@ -250,6 +274,54 @@ export class ReviewsRepository implements IReviewsRepository {
         track: true,
         user: true,
       },
+    });
+  }
+
+  async getReviewsForArtist(
+    artistId: string,
+    offset = 0,
+    limit?: number,
+  ): Promise<ReviewWithUser[]> {
+    return await db.query.reviewsArtists.findMany({
+      where: eq(reviewsArtists.entityId, artistId),
+      with: {
+        user: true,
+      },
+      offset,
+      orderBy: desc(reviewsArtists.createdAt),
+      limit,
+    });
+  }
+
+  async getReviewsForAlbum(
+    albumId: string,
+    offset = 0,
+    limit?: number,
+  ): Promise<ReviewWithUser[]> {
+    return await db.query.reviewsAlbums.findMany({
+      where: eq(reviewsAlbums.entityId, albumId),
+      with: {
+        user: true,
+      },
+      orderBy: desc(reviewsAlbums.createdAt),
+      offset,
+      limit,
+    });
+  }
+
+  async getReviewsForTrack(
+    trackId: string,
+    offset = 0,
+    limit?: number,
+  ): Promise<ReviewWithUser[]> {
+    return await db.query.reviewsTracks.findMany({
+      where: eq(reviewsTracks.entityId, trackId),
+      with: {
+        user: true,
+      },
+      offset,
+      orderBy: desc(reviewsTracks.createdAt),
+      limit,
     });
   }
 }

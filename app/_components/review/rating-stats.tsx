@@ -2,10 +2,15 @@ import clsx from "clsx";
 
 type RatingStatsProps = {
   ratingAvg?: number | null | undefined;
+  ratingCount?: number | null | undefined;
   size?: "sm" | "lg" | "xl";
 };
 
-export function RatingStats({ ratingAvg, size = "xl" }: RatingStatsProps) {
+export function RatingStats({
+  ratingAvg,
+  ratingCount,
+  size = "xl",
+}: RatingStatsProps) {
   return (
     <div
       className={clsx(
@@ -27,7 +32,15 @@ export function RatingStats({ ratingAvg, size = "xl" }: RatingStatsProps) {
           Not rated yet!
         </span>
       ) : (
-        ratingAvg
+        <>
+          {ratingAvg}{" "}
+          {ratingCount && (
+            <span className="text-muted-foreground text-sm">
+              {" "}
+              ({ratingCount})
+            </span>
+          )}
+        </>
       )}
     </div>
   );

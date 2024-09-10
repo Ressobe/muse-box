@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { ratingSchema } from "./stat";
+import { artistSchema } from "./artist";
 
 export const albumSchema = z.object({
   id: z.string(),
@@ -52,6 +53,10 @@ export const albumWithTracksSchema = albumWithStatsSchema.extend({
     id: z.number(),
     name: z.string(),
   }),
+});
+
+export const albumWithRelationsSchema = albumWithTracksSchema.extend({
+  artist: artistSchema,
 });
 
 export type AlbumWithRatingAvg = z.infer<typeof albumWithRatingAvg>;

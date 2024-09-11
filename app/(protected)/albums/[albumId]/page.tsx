@@ -8,18 +8,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/app/_components/ui/table";
-import { getAlbumReviewsUseCase, getAlbumUseCase } from "@/use-cases/album";
 import { notFound } from "next/navigation";
 import { getTime, getYear, getFullAlbumTime } from "@/lib/utils";
 import { Reviews } from "@/app/_components/review/reviews";
 import { currentUser } from "@/lib/auth";
-import { isUserLikedItUseCase } from "@/use-cases/playlist";
 import { LikeButton } from "@/app/_components/like-button";
 import { RatingStats } from "@/app/_components/review/rating-stats";
 import { ArtistSmallHeader } from "@/app/_components/artist/artist-small-header";
 import { shouldShowAddReviewController } from "@/src/interface-adapters/controllers/review/should-show-add-review.controller";
 import { getAlbumReviewsController } from "@/src/interface-adapters/controllers/album/get-album-reviews.controller";
 import { getAlbumInfoController } from "@/src/interface-adapters/controllers/album/get-album-info.controller";
+import { ContentInteraction } from "@/app/_components/content-interaction";
+import { getTrackRatingOwnedByUserController } from "@/src/interface-adapters/controllers/track/get-track-rating-owned-by-user-controller";
+import { isItemLikedByUserUseCase } from "@/src/application/use-cases/playlist/is-item-liked-by-user.use-case";
 
 export default async function AlbumPage({
   params,
@@ -43,14 +44,19 @@ export default async function AlbumPage({
   const tracksWithLikes = await Promise.all(
     album.tracks.map(async (track) => ({
       ...track,
-      isLiked: await isUserLikedItUseCase(user.id, track.id, "track"),
+      defaultRate: await getTrackRatingOwnedByUserController(track.id, user.id),
+      isLiked: await isItemLikedByUserUseCase(user.id, track.id, "track"),
     })),
   );
 
   const reviews = await getAlbumReviewsController(albumId);
   const showAddReview = await shouldShowAddReviewController(albumId, "album");
 
-  const isAlbumLiked = await isUserLikedItUseCase(user.id, album.id, "album");
+  const isAlbumLiked = await isItemLikedByUserUseCase(
+    user.id,
+    album.id,
+    "album",
+  );
 
   return (
     <section className="space-y-12">
@@ -123,7 +129,7 @@ export default async function AlbumPage({
                 <TableCell>
                   {artistsCreditsNames.length > 0 ? (
                     <div>
-                      {artistsCreditsNames.map((item, idx) => {
+                      {artistsCreditsNames.map((item) => {
                         return (
                           <span key={item.artistId}>
                             <Link
@@ -143,11 +149,13 @@ export default async function AlbumPage({
                   <RatingStats ratingAvg={track.stats?.ratingAvg} size="sm" />
                 </TableCell>
                 <TableCell>
-                  <LikeButton
-                    defaultLikeState={track.isLiked}
+                  <ContentInteraction
+                    userId={user.id}
+                    entityName={track.title}
                     entityId={track.id}
                     type="track"
-                    userId={user.id}
+                    isLiked={track.isLiked ?? false}
+                    defaultRate={track.defaultRate ?? 0}
                   />
                 </TableCell>
               </TableRow>

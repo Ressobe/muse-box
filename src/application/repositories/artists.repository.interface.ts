@@ -5,8 +5,9 @@ import {
 } from "@/src/entities/models/artist";
 
 export interface IArtistsRepository {
+  getArtist(artistId: string): Promise<ArtistSelect | undefined>;
   getArtists(): Promise<ArtistSelect[]>;
-  getArtist(artistId: string): Promise<ArtistWithStats | undefined>;
+  getArtistWithStats(artistId: string): Promise<ArtistWithStats | undefined>;
   insertArtist(newArtist: Artist): Promise<ArtistSelect>;
   getArtistImage(artistId: string): Promise<string | null>;
   getArtistsCount(): Promise<number>;

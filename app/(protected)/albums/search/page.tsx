@@ -1,3 +1,4 @@
+import { AlbumsTable } from "@/app/_components/album/albums-table";
 import { PaginationControls } from "@/app/_components/pagination-controls";
 import { RatingStats } from "@/app/_components/review/rating-stats";
 import {
@@ -44,63 +45,11 @@ export default async function AlbumsSearchPage({
     <section className=" space-y-20">
       <h1 className="font-bold text-4xl">Albums</h1>
       <section>
-        <Table className="w-full min-w-full">
-          <TableHeader className="min-w-full">
-            <TableRow>
-              <TableHead className="w-1/5">Place</TableHead>
-              <TableHead className="w-3/5">Album</TableHead>
-              <TableHead className="w-1/5">Rating</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {albums.map((item, idx) => {
-              const globalIndex = (page - 1) * perPage + idx + 1;
-
-              return (
-                <TableRow key={item.id}>
-                  <TableCell className="font-bold text-xl">
-                    {globalIndex}
-                  </TableCell>
-                  <TableCell className="flex items-center gap-4">
-                    <div className="w-[100px] h-[100px]">
-                      <Image
-                        src={item.image ?? ""}
-                        width={100}
-                        height={100}
-                        alt={`${item.title} cover image`}
-                        className="object-cover"
-                      />
-                    </div>
-                    <Link
-                      href={`/albums/${item.id}`}
-                      className="hover:underline underline-offset-2"
-                    >
-                      {item.title}
-                    </Link>
-                  </TableCell>
-
-                  <TableCell>
-                    <RatingStats
-                      ratingAvg={item.stats?.ratingAvg}
-                      ratingCount={item.stats?.ratingCount}
-                      size="lg"
-                    />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-          <TableCaption className="mt-4 text-center">
-            {totalPages > 1 ? (
-              <PaginationControls
-                hasPrevPage={page > 1}
-                hasNextPage={page < totalPages}
-                totalPages={totalPages}
-                currentPage={page}
-              />
-            ) : null}
-          </TableCaption>
-        </Table>
+        <AlbumsTable
+          albums={albums}
+          pagination={{ page, perPage, totalPages }}
+          showContentInteraction={false}
+        />
       </section>
     </section>
   );

@@ -2,12 +2,15 @@ import { Reviews } from "@/app/_components/review/reviews";
 import { Entity } from "@/types";
 import { notFound } from "next/navigation";
 import { PaginationControls } from "@/app/_components/pagination-controls";
-import { ArtistHeader } from "@/app/_components/artist/artist-header";
 import { AlbumHeader } from "@/app/_components/album/album-header";
 import { TrackHeader } from "@/app/_components/track/track-header";
 import { getReviewsController } from "@/src/interface-adapters/controllers/review/get-reviews.controller";
-import { Content } from "@/src/entities/models/content";
+import { Content, isValidContentType } from "@/src/entities/models/content";
 import { shouldShowAddReviewController } from "@/src/interface-adapters/controllers/review/should-show-add-review.controller";
+import { ArtistSelect, ArtistWithStats } from "@/src/entities/models/artist";
+import { Album } from "@/src/entities/models/album";
+import { Track } from "@/src/entities/models/track";
+import { ArtistSmallHeader } from "@/app/_components/artist/artist-small-header";
 
 type ReviewsPageProps = {
   searchParams: {
@@ -19,8 +22,11 @@ const DEFAULT_PAGE = 1;
 const DEFAULT_PER_PAGE = 8;
 
 export default async function ReviewsPage({ searchParams }: ReviewsPageProps) {
-  // TODO: add type guard for content type
   const type = searchParams["type"];
+  if (!isValidContentType(type)) {
+    return notFound();
+  }
+
   const entityId = searchParams["id"];
   const page = Number(searchParams["page"] ?? DEFAULT_PAGE);
   const perPage = Number(searchParams["per_page"] ?? DEFAULT_PER_PAGE);
@@ -29,23 +35,12 @@ export default async function ReviewsPage({ searchParams }: ReviewsPageProps) {
     return notFound();
   }
 
-  if (!["artist", "album", "track"].includes(type)) {
-    return notFound();
-  }
-
-  // TODO: do checks in controller and throw error
-  // that i catch in ui and display 404
-  // const entityExist = await isEntityExist(entityId);
-  // if (!entityExist) {
-  //   return notFound();
-  // }
-
-  const { reviews, totalPages } = await getReviewsController(
+  const { entity, reviews, totalPages } = await getReviewsController({
     entityId,
-    type as Content,
-    page < 1 ? DEFAULT_PAGE : page,
-    perPage < 1 ? DEFAULT_PER_PAGE : perPage,
-  );
+    type,
+    page: page < 1 ? DEFAULT_PAGE : page,
+    perPage: perPage < 1 ? DEFAULT_PER_PAGE : perPage,
+  });
 
   if (!reviews) {
     return notFound();
@@ -56,10 +51,10 @@ export default async function ReviewsPage({ searchParams }: ReviewsPageProps) {
     type as Content,
   );
 
-  // TODO: fix artist header
+  // TODO: fix artist header !!!
   return (
     <ul>
-      {/* <Header type={type} entityId={entityId} /> */}
+      <Header type={type} entityId={entityId} entity={entity} />
       <Reviews
         reviews={reviews}
         showAddReview={showAddReview}
@@ -78,21 +73,22 @@ export default async function ReviewsPage({ searchParams }: ReviewsPageProps) {
     </ul>
   );
 }
-//
-// type HeaderProps = {
-//   type: string;
-//   entityId: string;
-// };
-//
-// function Header({ type, entityId }: HeaderProps) {
-//   switch (type) {
-//     case "artist":
-//       return <ArtistHeader artistId={entityId} />;
-//
-//     case "album":
-//       return <AlbumHeader albumId={entityId} />;
-//
-//     case "track":
-//       return <TrackHeader trackId={entityId} />;
-//   }
-// }
+
+type HeaderProps = {
+  type: string;
+  entityId: string;
+  entity: ArtistSelect | Album | Track;
+};
+
+function Header({ type, entityId, entity }: HeaderProps) {
+  switch (type) {
+    case "artist":
+      return <ArtistSmallHeader artist={entity as ArtistWithStats} />;
+
+    case "album":
+      return <AlbumHeader albumId={entityId} />;
+
+    case "track":
+      return <TrackHeader trackId={entityId} />;
+  }
+}

@@ -9,16 +9,17 @@ import {
 } from "@/app/_components/ui/table";
 import Link from "next/link";
 import { RatingStats } from "@/app/_components/review/rating-stats";
-import { LikeButton } from "@/app/_components/like-button";
-import { DialogComment } from "@/app/_components/review/dialog-comment";
 import Image from "next/image";
 import { AlbumWithStats } from "@/src/entities/models/album";
-import { PaginationControls } from "../pagination-controls";
+import { PaginationControls } from "@/app/_components/pagination-controls";
 import { ArrowDownNarrowWide } from "lucide-react";
+import { currentUser } from "@/lib/auth";
+import { ContentInteraction } from "@/app/_components/content-interaction";
 
 type AlbumsTableProps = {
   albums: AlbumWithStats[];
   userId?: string;
+  showContentInteraction: boolean;
   pagination?: {
     page: number;
     perPage: number;
@@ -26,7 +27,14 @@ type AlbumsTableProps = {
   };
 };
 
-export function AlbumsTable({ albums, userId, pagination }: AlbumsTableProps) {
+export async function AlbumsTable({
+  albums,
+  pagination,
+  showContentInteraction,
+}: AlbumsTableProps) {
+  const authUser = await currentUser();
+  const userId = authUser?.id;
+
   const withPaggination = pagination !== undefined;
 
   return (
@@ -75,24 +83,15 @@ export function AlbumsTable({ albums, userId, pagination }: AlbumsTableProps) {
                   />
                 </TableCell>
                 <TableCell>
-                  {userId ? (
-                    <>
-                      <LikeButton
-                        defaultLikeState={item.isLiked ?? false}
-                        entityId={item.id}
-                        userId={userId}
-                        type="artist"
-                      />
-                      {typeof item.defaultRate === "number" ? (
-                        <DialogComment
-                          type="album"
-                          entityId={item.id}
-                          userId={userId}
-                          entityName={item.title}
-                          defaultRate={item.defaultRate}
-                        />
-                      ) : null}
-                    </>
+                  {userId && showContentInteraction ? (
+                    <ContentInteraction
+                      userId={userId}
+                      entityName={item.title}
+                      entityId={item.id}
+                      type="album"
+                      isLiked={item.isLiked ?? false}
+                      defaultRate={item.defaultRate ?? 0}
+                    />
                   ) : null}
                 </TableCell>
               </TableRow>

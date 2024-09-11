@@ -73,7 +73,7 @@ export function Reviews({
           addOptimisticReview={addOptimisticReview}
         />
       ) : null}
-      <div className="pt-10 max-w-lg grid grid-cols-1 gap-12">
+      <div className="pt-24 max-w-lg grid grid-cols-1 gap-12">
         {optimisticReviews.map((item) => {
           return (
             <Comment

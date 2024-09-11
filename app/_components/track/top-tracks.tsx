@@ -11,6 +11,7 @@ import Link from "next/link";
 import { LikeButton } from "@/app/_components/like-button";
 import { currentUser } from "@/lib/auth";
 import { RatingStats } from "@/app/_components/review/rating-stats";
+import { ContentInteraction } from "../content-interaction";
 
 type TopTracksProps = {
   topTracks: {
@@ -28,7 +29,8 @@ type TopTracksProps = {
 };
 
 export async function TopTracks({ topTracks }: TopTracksProps) {
-  const user = await currentUser();
+  const authUser = await currentUser();
+  const userId = authUser?.id;
 
   return (
     <>
@@ -75,12 +77,14 @@ export async function TopTracks({ topTracks }: TopTracksProps) {
                   </TableCell>
 
                   <TableCell>
-                    {item.isLiked !== undefined ? (
-                      <LikeButton
-                        defaultLikeState={item.isLiked}
+                    {userId ? (
+                      <ContentInteraction
+                        userId={userId}
+                        entityName={item.title}
                         entityId={item.id}
                         type="track"
-                        userId={user?.id}
+                        isLiked={item.isLiked ?? false}
+                        defaultRate={item.defaultRate ?? 0}
                       />
                     ) : null}
                   </TableCell>

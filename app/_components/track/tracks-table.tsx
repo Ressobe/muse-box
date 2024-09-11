@@ -10,15 +10,15 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { RatingStats } from "@/app/_components/review/rating-stats";
-import { LikeButton } from "@/app/_components/like-button";
-import { DialogComment } from "@/app/_components/review/dialog-comment";
 import { ArrowDownNarrowWide } from "lucide-react";
 import { PaginationControls } from "@/app/_components/pagination-controls";
 import { TrackWithAlbumAndStats } from "@/src/entities/models/track";
+import { currentUser } from "@/lib/auth";
+import { ContentInteraction } from "@/app/_components/content-interaction";
 
 type TracksTableProps = {
   tracks: TrackWithAlbumAndStats[];
-  userId?: string;
+  showContentInteraction: boolean;
   pagination?: {
     page: number;
     perPage: number;
@@ -26,7 +26,14 @@ type TracksTableProps = {
   };
 };
 
-export function TracksTable({ tracks, userId, pagination }: TracksTableProps) {
+export async function TracksTable({
+  tracks,
+  pagination,
+  showContentInteraction,
+}: TracksTableProps) {
+  const authUser = await currentUser();
+  const userId = authUser?.id;
+
   const withPaggination = pagination !== undefined;
   return (
     <>
@@ -73,24 +80,15 @@ export function TracksTable({ tracks, userId, pagination }: TracksTableProps) {
                   />
                 </TableCell>
                 <TableCell>
-                  {userId ? (
-                    <>
-                      <LikeButton
-                        defaultLikeState={item.isLiked ?? false}
-                        entityId={item.id}
-                        userId={userId}
-                        type="artist"
-                      />
-                      {typeof item.defaultRate === "number" ? (
-                        <DialogComment
-                          type="artist"
-                          entityId={item.id}
-                          userId={userId}
-                          entityName={item.title}
-                          defaultRate={item.defaultRate}
-                        />
-                      ) : null}
-                    </>
+                  {userId && showContentInteraction ? (
+                    <ContentInteraction
+                      userId={userId}
+                      entityName={item.title}
+                      entityId={item.id}
+                      type="track"
+                      isLiked={item.isLiked ?? false}
+                      defaultRate={item.defaultRate ?? 0}
+                    />
                   ) : null}
                 </TableCell>
               </TableRow>

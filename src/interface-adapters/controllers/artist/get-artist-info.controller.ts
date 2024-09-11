@@ -1,6 +1,6 @@
 import { container } from "@/di/container";
 import { IAuthenticationService } from "@/src/application/services/authentication.service.interface";
-import { getArtistInfoUseCase } from "@/src/application/use-cases/artist/get-artist.use-case";
+import { getArtistInfoUseCase } from "@/src/application/use-cases/artist/get-artist-info.use-case";
 import { getGenresForArtistUseCase } from "@/src/application/use-cases/genres/get-genres-for-artist.use-case";
 import { isItemLikedByUserUseCase } from "@/src/application/use-cases/playlist/is-item-liked-by-user.use-case";
 import { ArtistWithStats } from "@/src/entities/models/artist";
@@ -14,7 +14,7 @@ function presenter(
   return {
     artist: artist,
     genres: genres,
-    isLiked: isLiked !== undefined ? isLiked : undefined,
+    isLiked: isLiked ?? undefined,
   };
 }
 

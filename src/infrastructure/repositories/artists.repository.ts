@@ -13,7 +13,15 @@ export class ArtistsRepository implements IArtistsRepository {
     return await db.query.artists.findMany();
   }
 
-  async getArtist(artistId: string): Promise<ArtistWithStats | undefined> {
+  async getArtist(artistId: string): Promise<ArtistSelect | undefined> {
+    return await db.query.artists.findFirst({
+      where: eq(artists.id, artistId),
+    });
+  }
+
+  async getArtistWithStats(
+    artistId: string,
+  ): Promise<ArtistWithStats | undefined> {
     return await db.query.artists.findFirst({
       where: eq(artists.id, artistId),
       with: {

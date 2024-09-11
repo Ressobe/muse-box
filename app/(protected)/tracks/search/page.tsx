@@ -17,7 +17,6 @@ const DEFAULT_PER_PAGE = 10;
 export default async function TracksSearchPage({
   searchParams,
 }: SearchPageProps) {
-  const authUser = await currentUser();
   const page = Number(searchParams["page"] ?? DEFAULT_PAGE);
   const perPage = Number(searchParams["per_page"] ?? DEFAULT_PER_PAGE);
   let sortType: SortType = "default";
@@ -40,7 +39,7 @@ export default async function TracksSearchPage({
         <TracksTable
           tracks={tracks}
           pagination={{ page, perPage, totalPages }}
-          userId={authUser?.id}
+          showContentInteraction={false}
         />
       </Suspense>
     </section>

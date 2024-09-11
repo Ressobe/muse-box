@@ -17,7 +17,7 @@ import { useToast } from "@/app/_components/ui/use-toast";
 import { changeReviewRateAction } from "@/app/_actions/reviews";
 import { usePathname } from "next/navigation";
 
-type DialogCommentProps = {
+type DialogRatingProps = {
   userId: string;
   entityId: string;
   entityName: string;
@@ -25,13 +25,13 @@ type DialogCommentProps = {
   defaultRate: number;
 };
 
-export function DialogComment({
+export function DialogRating({
   userId,
   entityId,
   entityName,
   type,
   defaultRate,
-}: DialogCommentProps) {
+}: DialogRatingProps) {
   const pathname = usePathname();
   const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);

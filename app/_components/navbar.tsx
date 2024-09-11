@@ -13,7 +13,7 @@ export async function Navbar() {
         href="/"
         className="flex items-center justify-center gap-x-6 font-bold"
       >
-        <h1 className="font-bold hidden md:block text-2xl text-gradient bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:brightness-125 transform transition-all active:scale-110">
+        <h1 className="font-bold text-2xl text-gradient bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:brightness-125 transform transition-all active:scale-110">
           {APP_NAME}
         </h1>
       </Link>

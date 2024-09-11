@@ -13,8 +13,8 @@ export default async function AlbumsPage() {
   return (
     <section className="w-full space-y-20">
       <section>
-        <h1 className="font-bold text-3xl">Top albums</h1>
-        <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
+        <h1 className="font-bold text-xl md:text-3xl">Top albums</h1>
+        <div className="flex justify-center sm:justify-start flex-wrap gap-y-6 gap-x-10 pt-4">
           {topAlbums.map((album) => {
             return <AlbumCard key={album.id} album={album} />;
           })}
@@ -22,8 +22,8 @@ export default async function AlbumsPage() {
       </section>
 
       <section>
-        <h1 className="font-bold text-3xl">Popular albums</h1>
-        <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
+        <h1 className="font-bold text-xl md:text-3xl">Popular albums</h1>
+        <div className="flex justify-center sm:justify-start flex-wrap gap-y-6 gap-x-10 pt-4">
           {popularAlbums.map((album) => {
             return <AlbumCard key={album.id} album={album} />;
           })}
@@ -31,8 +31,8 @@ export default async function AlbumsPage() {
       </section>
 
       <section>
-        <h1 className="font-bold text-3xl">New albums</h1>
-        <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
+        <h1 className="font-bold text-xl md:text-3xl">New albums</h1>
+        <div className="flex justify-center sm:justify-start flex-wrap gap-y-6 gap-x-10 pt-4">
           {newAlbums.map((album) => {
             return <AlbumCard key={album.id} album={album} />;
           })}

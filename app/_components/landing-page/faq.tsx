@@ -27,9 +27,11 @@ const FAQ: {
 
 export function Faq() {
   return (
-    <section className="flex w-full justify-between py-20">
-      <h2 className="text-3xl font-bold">Frequently Asked Questions</h2>
-      <Accordion type="multiple" className="w-3/5">
+    <section className="flex w-full flex-col md:flex-row justify-between">
+      <h2 className="text-3xl font-bold text-center pb-4 md:text-left">
+        Frequently Asked Questions
+      </h2>
+      <Accordion type="multiple" className="w-full md:w-3/5">
         {FAQ.map((item, idx) => {
           return (
             <AccordionItem key={item.question} value={`item-${idx + 1}`}>

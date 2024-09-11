@@ -13,8 +13,8 @@ export default async function TracksPage() {
   return (
     <section className="w-full space-y-20">
       <section>
-        <h1 className="font-bold text-3xl">Top songs</h1>
-        <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
+        <h1 className="font-bold text-2xl md:text-3xl">Top songs</h1>
+        <div className="flex justify-center sm:justify-start flex-wrap gap-y-6 gap-x-10 pt-4">
           {topTracks.map((track) => {
             return <TrackCard key={track.id} track={track} />;
           })}
@@ -22,8 +22,8 @@ export default async function TracksPage() {
       </section>
 
       <section>
-        <h1 className="font-bold text-3xl">Popular songs</h1>
-        <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
+        <h1 className="font-bold text-2xl md:text-3xl">Popular songs</h1>
+        <div className="flex justify-center sm:justify-start flex-wrap gap-y-6 gap-x-10 pt-4">
           {popularTracks.map((track) => {
             return <TrackCard key={track.id} track={track} />;
           })}
@@ -31,8 +31,8 @@ export default async function TracksPage() {
       </section>
 
       <section>
-        <h1 className="font-bold text-3xl">New songs</h1>
-        <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
+        <h1 className="font-bold text-2xl md:text-3xl">New songs</h1>
+        <div className="flex justify-center sm:justify-start flex-wrap gap-y-6 gap-x-10 pt-4">
           {newTracks.map((track) => {
             return <TrackCard key={track.id} track={track} />;
           })}

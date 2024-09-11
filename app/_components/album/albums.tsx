@@ -11,7 +11,7 @@ export async function Albums({ artistId }: AlbumsProps) {
 
   return (
     <div>
-      <div className="flex justify-between">
+      <div className="flex flex-col pb-4 sm:pb-0 sm:flex-row  justify-between">
         <h2 className="font-bold text-2xl pb-4">Albums</h2>
         <Link
           href={`/artists/${artistId}/discography`}
@@ -20,7 +20,7 @@ export async function Albums({ artistId }: AlbumsProps) {
           See discography
         </Link>
       </div>
-      <ul className="flex flex-wrap gap-x-10">
+      <ul className="flex justify-center md:justify-start flex-wrap gap-x-10">
         {albums.map((alb) => {
           return (
             <Link
@@ -28,8 +28,8 @@ export async function Albums({ artistId }: AlbumsProps) {
               href={`/albums/${alb.id}`}
               className="transition-all p-4 hover:bg-secondary/40 rounded"
             >
-              <li className="max-w-[150px]">
-                <div className="w-[150px] h-[150px]">
+              <li className="flex flex-col items-center md:items-start w-[120px]  md:max-w-[150px] md:w-fit">
+                <div className="w-[100px] h-[100px] md:w-[150px] md:h-[150px]">
                   <Image
                     src={alb.image ?? ""}
                     width={200}
@@ -38,8 +38,8 @@ export async function Albums({ artistId }: AlbumsProps) {
                     className="object-cover"
                   />
                 </div>
-                <div className="pt-4">{alb.title}</div>
-                <div className="text-muted-foreground">
+                <div className="pt-4 text-center md:text-left">{alb.title}</div>
+                <div className="text-muted-foreground text-center md:text-left">
                   {alb.releaseDate && new Date(alb.releaseDate).getFullYear()}
                 </div>
               </li>

@@ -54,6 +54,7 @@ export async function TrackPlaylistItem({
         <RatingStats
           ratingAvg={track.stats?.ratingAvg}
           ratingCount={track.stats?.ratingCount}
+          size="lg"
         />
       </TableCell>
       <TableCell>

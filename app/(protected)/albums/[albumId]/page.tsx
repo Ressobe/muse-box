@@ -60,39 +60,53 @@ export default async function AlbumPage({
 
   return (
     <section className="space-y-12">
-      <div className="flex items-center gap-x-16">
-        <Image
-          src={album.image ?? ""}
-          width={200}
-          height={200}
-          alt={`${album.title} cover image`}
-        />
-        <div className="space-y-8">
+      <div className="flex flex-col items-center sm:items-start p-8 md:p-0 md:flex-row md:items-center gap-x-16">
+        <div className="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px]">
+          <Image
+            src={album.image ?? ""}
+            width={200}
+            height={200}
+            alt={`${album.title} cover image`}
+            className="object-cover"
+          />
+        </div>
+        <div className="pt-8 space-y-4 md:pt-0  md:space-y-8">
           <div>
             <div>{album.albumType.name}</div>
-            <h1 className="font-bold text-5xl">{album.title}</h1>
+            <h1 className="font-bold text-2xl md:text-5xl">{album.title}</h1>
           </div>
           <RatingStats ratingAvg={album.stats?.ratingAvg} />
           <div className="flex items-center gap-x-4 text-sm">
             <ArtistSmallHeader artist={album.artist} />
+            <div className="block md:hidden">
+              <LikeButton
+                defaultLikeState={isAlbumLiked}
+                entityId={album.id}
+                type="album"
+                userId={user.id}
+              />
+            </div>
 
-            <span className="w-2 h-2 bg-foreground rounded-full"></span>
+            <span className="w-2 h-2 hidden md:block bg-foreground rounded-full"></span>
+            <span className="hidden md:block">
+              {getYear(album.releaseDate)}
+            </span>
 
-            <span>{getYear(album.releaseDate)}</span>
-
-            <span className="w-2 h-2 bg-foreground rounded-full"></span>
-            <span>
+            <span className="w-2 h-2 hidden md:block bg-foreground rounded-full"></span>
+            <span className="hidden md:block">
               {album.tracks.length > 1
                 ? `${album.tracks.length} songs`
                 : `${album.tracks.length} song`}{" "}
               / {getTime(getFullAlbumTime(album.tracks))}
             </span>
-            <LikeButton
-              defaultLikeState={isAlbumLiked}
-              entityId={album.id}
-              type="album"
-              userId={user.id}
-            />
+            <div className="hidden md:block">
+              <LikeButton
+                defaultLikeState={isAlbumLiked}
+                entityId={album.id}
+                type="album"
+                userId={user.id}
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -101,7 +115,7 @@ export default async function AlbumPage({
           <TableRow>
             <TableHead className="w-[100px]">#</TableHead>
             <TableHead>Title</TableHead>
-            <TableHead></TableHead>
+            <TableHead className="hidden md:block"></TableHead>
             <TableHead></TableHead>
             <TableHead></TableHead>
           </TableRow>
@@ -112,7 +126,7 @@ export default async function AlbumPage({
             return (
               <TableRow key={track.id} className="p-0">
                 <TableCell className="font-medium">{track.position}</TableCell>
-                <TableCell className="flex items-center gap-x-4">
+                <TableCell className="flex items-center gap-x-4 min-w-[150px]">
                   <Image
                     src={album.image ?? ""}
                     width={70}
@@ -127,36 +141,40 @@ export default async function AlbumPage({
                   </Link>
                 </TableCell>
                 <TableCell>
-                  {artistsCreditsNames.length > 0 ? (
-                    <div>
-                      {artistsCreditsNames.map((item) => {
-                        return (
-                          <span key={item.artistId}>
-                            <Link
-                              href={`/artists/${item.artistId}`}
-                              className="hover:underline underline-offset-1"
-                            >
-                              {item.name}
-                            </Link>
-                            {item.joinPhrase}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  ) : null}
+                  <div className="hidden md:block">
+                    {artistsCreditsNames.length > 0 ? (
+                      <div>
+                        {artistsCreditsNames.map((item) => {
+                          return (
+                            <span key={item.artistId}>
+                              <Link
+                                href={`/artists/${item.artistId}`}
+                                className="hover:underline underline-offset-1"
+                              >
+                                {item.name}
+                              </Link>
+                              {item.joinPhrase}
+                            </span>
+                          );
+                        })}
+                      </div>
+                    ) : null}
+                  </div>
                 </TableCell>
                 <TableCell>
                   <RatingStats ratingAvg={track.stats?.ratingAvg} size="sm" />
                 </TableCell>
                 <TableCell>
-                  <ContentInteraction
-                    userId={user.id}
-                    entityName={track.title}
-                    entityId={track.id}
-                    type="track"
-                    isLiked={track.isLiked ?? false}
-                    defaultRate={track.defaultRate ?? 0}
-                  />
+                  <div className="flex">
+                    <ContentInteraction
+                      userId={user.id}
+                      entityName={track.title}
+                      entityId={track.id}
+                      type="track"
+                      isLiked={track.isLiked ?? false}
+                      defaultRate={track.defaultRate ?? 0}
+                    />
+                  </div>
                 </TableCell>
               </TableRow>
             );

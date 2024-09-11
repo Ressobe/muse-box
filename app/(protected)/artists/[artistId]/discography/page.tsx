@@ -1,3 +1,4 @@
+import { ArtistSmallHeader } from "@/app/_components/artist/artist-small-header";
 import { LikeButton } from "@/app/_components/like-button";
 import { RatingStats } from "@/app/_components/review/rating-stats";
 import {
@@ -20,7 +21,6 @@ import { getArtistInfoController } from "@/src/interface-adapters/controllers/ar
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { FaUser } from "react-icons/fa";
 
 export default async function DiscographyPage({
   params,
@@ -47,52 +47,59 @@ export default async function DiscographyPage({
       {discography.map(async (album) => {
         return (
           <div key={album.id} className="space-y-12">
-            <div className="flex items-center gap-x-16">
-              <Image
-                src={album.image ?? ""}
-                width={200}
-                height={200}
-                alt="dkdk"
-              />
-              <div className="space-y-8">
+            <div className="flex flex-col items-center sm:items-start p-8 md:p-0 md:flex-row md:items-center gap-x-16">
+              <div className="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px]">
+                <Image
+                  src={album.image ?? ""}
+                  width={200}
+                  height={200}
+                  alt={`${album.title} cover image`}
+                  className="object-cover"
+                />
+              </div>
+              <div className="pt-8 space-y-4 md:pt-0  md:space-y-8">
                 <div>
                   <div>{album.albumType.name}</div>
-                  <h1 className="font-bold text-5xl">{album.title}</h1>
-                </div>
-                <div className="flex items-center gap-x-4 text-sm">
-                  <Avatar className="h-16 w-16">
-                    <AvatarImage src={artist.image ?? ""} />
-                    <AvatarFallback>
-                      <FaUser className="w-8 h-8" />
-                    </AvatarFallback>
-                  </Avatar>
-                  <Link
-                    href={`/artists/${artist.id}`}
-                    className="transition-all underline-offset-2 hover:underline"
-                  >
-                    {artist.name}
-                  </Link>
-                  <span>{getYear(album.releaseDate)}</span>
-                  <Link
-                    href={`/albums/${album.id}`}
-                    className="transition-all underline-offset-2 hover:underline"
-                  >
+                  <h1 className="font-bold text-2xl md:text-5xl">
                     {album.title}
-                  </Link>
-                  <span>
+                  </h1>
+                </div>
+                <RatingStats ratingAvg={album.stats?.ratingAvg} />
+                <div className="flex items-center gap-x-4 text-sm">
+                  <ArtistSmallHeader artist={artist} />
+                  <div className="block md:hidden">
+                    {album.isLiked !== undefined && (
+                      <LikeButton
+                        defaultLikeState={album.isLiked}
+                        entityId={album.id}
+                        type="album"
+                        userId={user?.id}
+                      />
+                    )}
+                  </div>
+
+                  <span className="w-2 h-2 hidden md:block bg-foreground rounded-full"></span>
+                  <span className="hidden md:block">
+                    {getYear(album.releaseDate)}
+                  </span>
+
+                  <span className="w-2 h-2 hidden md:block bg-foreground rounded-full"></span>
+                  <span className="hidden md:block">
                     {album.tracks.length > 1
                       ? `${album.tracks.length} songs`
-                      : `${album.tracks.length} song`}
-                    , {getTime(getFullAlbumTime(album.tracks))}
+                      : `${album.tracks.length} song`}{" "}
+                    / {getTime(getFullAlbumTime(album.tracks))}
                   </span>
-                  {album.isLiked !== undefined ? (
-                    <LikeButton
-                      defaultLikeState={album.isLiked}
-                      entityId={album.id}
-                      type="album"
-                      userId={user?.id}
-                    />
-                  ) : null}
+                  <div className="hidden md:block">
+                    {album.isLiked !== undefined && (
+                      <LikeButton
+                        defaultLikeState={album.isLiked}
+                        entityId={album.id}
+                        type="album"
+                        userId={user?.id}
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -100,17 +107,17 @@ export default async function DiscographyPage({
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[100px]">#</TableHead>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Likes</TableHead>
+                  <TableHead className="w-2/3">Title</TableHead>
+                  <TableHead>Rating</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody className="space-y-4">
                 {album.tracks.map(async (track, idx) => {
                   return (
                     <TableRow key={track.id} className="p-0">
                       <TableCell className="font-medium">{idx + 1}</TableCell>
-                      <TableCell className="flex items-center gap-x-4">
+                      <TableCell className="flex items-center gap-x-4 min-w-[200px]">
                         <Image
                           src={track.image ?? ""}
                           width={70}

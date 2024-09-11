@@ -65,7 +65,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <Card className="w-3/4 text-left border-none">
+    <Card className="w-full md:w-3/4 lg:w-2/4 text-left border-none">
       <CardHeader className="p-0 pb-4">
         <p className="text-2xl font-semibold">Settings</p>
       </CardHeader>

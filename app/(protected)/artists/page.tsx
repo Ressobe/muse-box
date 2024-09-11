@@ -13,8 +13,8 @@ export default async function Artists() {
   return (
     <section className="w-full space-y-20">
       <section>
-        <h1 className="font-bold text-3xl">Top artists</h1>
-        <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
+        <h1 className="font-bold text-2xl md:text-3xl">Top artists</h1>
+        <div className="flex justify-center sm:justify-start flex-wrap gap-y-6 gap-x-10 pt-4">
           {topArtists.map((artist) => {
             return <ArtistCard key={artist.id} artist={artist} />;
           })}
@@ -22,8 +22,8 @@ export default async function Artists() {
       </section>
 
       <section>
-        <h1 className="font-bold text-3xl">Popular artists</h1>
-        <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
+        <h1 className="font-bold text-xl md:text-3xl">Popular artists</h1>
+        <div className="flex justify-center sm:justify-start flex-wrap gap-y-6 gap-x-10 pt-4">
           {popularArtists.map((artist) => {
             return <ArtistCard key={artist.id} artist={artist} />;
           })}
@@ -31,8 +31,8 @@ export default async function Artists() {
       </section>
 
       <section>
-        <h1 className="font-bold text-3xl">New artists</h1>
-        <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
+        <h1 className="font-bold text-xl md:text-3xl">New artists</h1>
+        <div className="flex justify-center sm:justify-start flex-wrap gap-y-6 gap-x-10 pt-4">
           {newArtists.map((artist) => {
             return <ArtistCard key={artist.id} artist={artist} />;
           })}

@@ -1,9 +1,6 @@
-import { UserAvatar } from "@/app/_components/user/user-avatar";
-import Link from "next/link";
 import { currentUser } from "@/lib/auth";
-import { SearchBar } from "@/app/_components/search-bar";
-import { Notifications } from "@/app/_components/notification/notifications";
 import { getUserImage } from "@/data-access/user";
+import { Navigation } from "./navigation";
 
 export async function Topbar() {
   const user = await currentUser();
@@ -14,13 +11,7 @@ export async function Topbar() {
 
   return (
     <header className="border-b p-3 flex justify-between items-center">
-      <SearchBar />
-      <div className="flex gap-x-10 items-center">
-        <Notifications authUserId={user.id} />
-        <Link href={`/profiles/${user?.id}`}>
-          <UserAvatar avatarUrl={image} />
-        </Link>
-      </div>
+      <Navigation userId={user.id} image={image} />
     </header>
   );
 }

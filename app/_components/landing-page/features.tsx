@@ -24,9 +24,9 @@ const FEATURES: {
 
 export function Features() {
   return (
-    <section className="w-full py-52">
+    <section className="w-full">
       <h2 className="w-full text-center text-5xl font-bold">Features</h2>
-      <ul className="grid max-w-5xl items-start gap-6 py-12 grid-cols-2 lg:gap-12">
+      <ul className="grid max-w-5xl items-start gap-6 py-12 grid-cols-1 md:grid-cols-2 lg:gap-12">
         {FEATURES.map((item) => {
           return (
             <li

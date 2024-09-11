@@ -20,6 +20,7 @@ import { PaginationControls } from "@/app/_components/pagination-controls";
 import { ArrowDownNarrowWide } from "lucide-react";
 import { currentUser } from "@/lib/auth";
 import { ContentInteraction } from "@/app/_components/content-interaction";
+import clsx from "clsx";
 
 type ArtistsTableProps = {
   artists: ArtistWithStats[];
@@ -48,8 +49,14 @@ export async function ArtistsTable({
           <TableRow>
             <TableHead className="w-1/5">Place</TableHead>
             <TableHead className="w-2/5">Artist</TableHead>
-            <TableHead className="w-1/5">Rating</TableHead>
-            <TableHead className="w-1/5"></TableHead>
+            <TableHead
+              className={clsx(showContentInteraction ? "w-1/5" : "w-2/5")}
+            >
+              Rating
+            </TableHead>
+            {showContentInteraction && (
+              <TableHead className="w-1/5"></TableHead>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -60,14 +67,18 @@ export async function ArtistsTable({
             }
             return (
               <TableRow key={item.id}>
-                <TableCell className="font-bold text-4xl">{position}</TableCell>
-                <TableCell className="flex items-center gap-4">
-                  <Avatar className="w-20 h-20">
-                    <AvatarImage src={item.image ?? ""} />
-                    <AvatarFallback>
-                      <FaUser className="w-8 h-8" />
-                    </AvatarFallback>
-                  </Avatar>
+                <TableCell className="font-bold text-xl md:text-4xl">
+                  {position}
+                </TableCell>
+                <TableCell className="flex items-center gap-4 min-w-[200px]">
+                  <div>
+                    <Avatar className="w-10 h-10 md:w-20 md:h-20">
+                      <AvatarImage src={item.image ?? ""} />
+                      <AvatarFallback>
+                        <FaUser className="w-4 h-4 md:w-8 md:h-8" />
+                      </AvatarFallback>
+                    </Avatar>
+                  </div>
 
                   <Link
                     href={`/artists/${item.id}`}
@@ -80,10 +91,10 @@ export async function ArtistsTable({
                   <RatingStats
                     ratingAvg={item.stats?.ratingAvg}
                     ratingCount={item.stats?.ratingCount}
-                    size="lg"
+                    size="sm"
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell className="flex">
                   {userId && showContentInteraction ? (
                     <ContentInteraction
                       userId={userId}
@@ -116,9 +127,9 @@ export async function ArtistsTable({
         <div className="mt-8 flex justify-center">
           <Link
             href="/artists/search?sort=highestRating"
-            className="flex items-center gap-2 bg-secondary-foreground py-2 px-4 text-background transition-all rounded hover:bg-secondary-foreground/80 active:scale-110"
+            className="flex items-center gap-2 bg-secondary-foreground  text-sm py-2 md:text-lg px-4 text-background transition-all rounded hover:bg-secondary-foreground/80 active:scale-110"
           >
-            <ArrowDownNarrowWide className="w-6 h-6" />
+            <ArrowDownNarrowWide className="w-4 h-4 md:w-6 md:h-6" />
             See more
           </Link>
         </div>

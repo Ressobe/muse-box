@@ -61,14 +61,7 @@ export function LikeButton({
 
   return (
     <Button onClick={handleClick} variant="ghost" className="p-4">
-      <HeartIcon
-        className={clsx(
-          size === "lg" && "w-8 h-8",
-          size === "md" && "w-6 h-6",
-          "transition-colors",
-        )}
-        fill={like ? "white" : ""}
-      />
+      <HeartIcon className="h-4 w-4 md:h-8 md:w-8" fill={like ? "white" : ""} />
     </Button>
   );
 }

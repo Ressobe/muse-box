@@ -88,11 +88,14 @@ export function DialogRating({
       <DialogTrigger asChild>
         <Button variant="ghost" disabled={isPending}>
           <Star
-            className={clsx("w-8 h-8", defaultRate !== 0 && "fill-foreground")}
+            className={clsx(
+              "h-4 w-4 md:w-8 md:h-8",
+              defaultRate !== 0 && "fill-foreground",
+            )}
           />
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="min-w-fit">
         <DialogHeader className="pt-2 pb-3">
           <DialogTitle>Rate {entityName}</DialogTitle>
         </DialogHeader>

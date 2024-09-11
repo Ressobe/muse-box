@@ -4,8 +4,8 @@ import Link from "next/link";
 
 export function Hero() {
   return (
-    <div className="flex w-full items-center justify-between py-32 gap-10 text-left">
-      <div className="space-y-6">
+    <div className="flex w-full flex-col md:flex-row items-center justify-between gap-10 text-left">
+      <div className="space-y-6 text-center md:text-left">
         <div>
           <span className="text-6xl font-bold tracking-tighter text-gradient bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
             {APP_NAME}

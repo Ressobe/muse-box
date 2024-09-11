@@ -16,21 +16,20 @@ type UserCardProps = {
 
 export function UserCard({ user }: UserCardProps) {
   return (
-    <Link
-      href={`/profiles/${user.id}`}
-      className="flex flex-col items-center text-center cursor-pointer"
-    >
-      <div className="hover:bg-secondary/40 p-4 rounded transition-all">
-        <Avatar className="h-48 w-48 mb-2">
+    <Link href={`/profiles/${user.id}`}>
+      <div className="max-w-[120px] md:max-w-max flex flex-col items-center transition-all p-4 hover:bg-secondary/40 rounded">
+        <Avatar className="h-20 w-20 md:w-32 md:h-32 lg:w-48 lg:h-48">
           <AvatarImage
             src={user.image ?? ""}
             alt={`${user.name} avatar picture`}
           />
           <AvatarFallback>
-            <FaUser className="w-24 h-24" />
+            <FaUser className="h-8 w-8 md:w-12 md:h-12 lg:w-20 lg:h-20" />
           </AvatarFallback>
         </Avatar>
-        <span className="whitespace-normal">{user.name}</span>
+        <div className="pt-4 max-w-[200px] text-sm md:text-lg text-center text-balance">
+          {user.name}
+        </div>
       </div>
     </Link>
   );

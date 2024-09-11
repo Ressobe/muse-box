@@ -20,19 +20,19 @@ export default async function HomePage() {
   return (
     <section className="w-full space-y-20">
       <section>
-        <h1 className="font-bold text-3xl mb-8">Top artists</h1>
+        <h1 className="font-bold text-2xl md:text-3xl mb-8">Top artists</h1>
         <Suspense>
           <ArtistsTable artists={topArtists} showContentInteraction={true} />
         </Suspense>
       </section>
       <section>
-        <h1 className="font-bold text-3xl mb-8">Top albums</h1>
+        <h1 className="font-bold text-2xl md:text-3xl mb-8">Top albums</h1>
         <Suspense>
           <AlbumsTable albums={topAlbums} showContentInteraction={true} />
         </Suspense>
       </section>
       <section>
-        <h1 className="font-bold text-3xl mb-8">Top tracks</h1>
+        <h1 className="font-bold text-2xl md:text-3xl mb-8">Top tracks</h1>
         <Suspense>
           <TracksTable tracks={topTracks} showContentInteraction={true} />
         </Suspense>

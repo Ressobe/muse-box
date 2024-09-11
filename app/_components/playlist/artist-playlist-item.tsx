@@ -29,18 +29,20 @@ export async function ArtistPlaylistItem({
 
   return (
     <section className="space-y-12">
-      <div className="flex items-center gap-x-20">
+      <div className="flex flex-col sm:flex-row  items-center gap-x-20">
         <Avatar className="h-40 w-40">
           <AvatarImage src={artist?.image ?? ""} />
           <AvatarFallback>
             <FaUser className="w-20 h-20" />
           </AvatarFallback>
         </Avatar>
-        <div className="text-left">
+        <div className="text-center sm:text-left pt-8 sm:pt-0">
           <div>Artist</div>
-          <div className="relative">
+          <div className="relative flex flex-col items-center gap-4 md:items-start md:flex-row">
             <Link href={`/artists/${artistId}`}>
-              <h1 className="font-bold text-4xl">{artist?.name}</h1>
+              <h1 className="font-bold text-center sm:text-left text-4xl">
+                {artist?.name}
+              </h1>
             </Link>
             <RatingStats
               ratingAvg={artist.stats?.ratingAvg}
@@ -48,7 +50,7 @@ export async function ArtistPlaylistItem({
             />
           </div>
         </div>
-        <div className="flex gap-x-4">
+        <div className="flex pt-4 gap-x-4">
           <LikeButton
             defaultLikeState={true}
             userId={user.id}

@@ -22,15 +22,16 @@ export function RatingStats({
     >
       <span className="text-yellow-500">★</span>
       {!ratingAvg ? (
-        <span
+        <div
           className={clsx(
+            "text-nowrap",
             size === "xl" && "text-xl",
             size === "lg" && "text-lg",
             size === "sm" && "text-sm",
           )}
         >
           Not rated yet!
-        </span>
+        </div>
       ) : (
         <>
           {ratingAvg}{" "}

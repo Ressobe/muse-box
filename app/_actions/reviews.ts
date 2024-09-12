@@ -1,6 +1,6 @@
 "use server";
 
-import { getUserArtistReview } from "@/data-access/user";
+import { getUserArtistReview, getUserLatestReviews } from "@/data-access/user";
 import { currentUser } from "@/lib/auth";
 import { Entity } from "@/types";
 import {
@@ -124,4 +124,9 @@ export async function changeReviewRateAction(
   }
 
   return { error: "review not updated!" };
+}
+
+export async function getUserLatestReviewsAction(profileId: string) {
+  const reviews = await getUserLatestReviews(profileId);
+  return reviews;
 }

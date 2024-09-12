@@ -14,9 +14,10 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
-import { RecentActivity } from "./recent-activity";
 import { FollowersFollowingDialog } from "./followers-following-dialog";
 import { UserProfileAvatar } from "@/app/_components/user/user-profile-avatar";
+import { LatestReviews } from "./latest-reviews";
+import { getUserLatestReviews } from "@/data-access/user";
 
 export default async function ProfilePage({
   params,
@@ -39,6 +40,8 @@ export default async function ProfilePage({
     user.id,
     profileId,
   );
+
+  const latestActivity = await getUserLatestReviews(profileId, 5);
 
   let likedArists = null;
   let likedAlbums = null;
@@ -203,7 +206,7 @@ export default async function ProfilePage({
           )}
         </li>
       </ul>
-      <RecentActivity profileId={profileId} />
+      <LatestReviews profileId={profileId} initialActivity={latestActivity} />
     </section>
   );
 }

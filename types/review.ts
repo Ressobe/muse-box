@@ -66,6 +66,14 @@ export type TAlbumReview = {
     title: string;
     length: number | null;
     releaseDate: Date | null;
+
+    artist: {
+      id: string;
+      name: string;
+      image: string | null;
+      bio: string | null;
+      country: string | null;
+    };
   };
 };
 
@@ -84,5 +92,21 @@ export type TTrackReview = {
     length: number | null;
     albumId: string;
     position: number;
+    album: {
+      id: string;
+      image: string | null;
+      artistId: string;
+      typeId: number;
+      title: string;
+      length: number | null;
+      releaseDate: Date | null;
+      artist: {
+        id: string;
+        name: string;
+        image: string | null;
+        bio: string | null;
+        country: string | null;
+      };
+    };
   };
 };

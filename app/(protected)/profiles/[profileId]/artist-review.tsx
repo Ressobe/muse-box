@@ -14,7 +14,7 @@ type ArtistReviewProps = {
   artistReview: TArtistReview;
 };
 
-export async function ArtistReview({ artistReview }: ArtistReviewProps) {
+export function ArtistReview({ artistReview }: ArtistReviewProps) {
   const [day, month, year] = formatDateToShortMonthDayYear(
     artistReview.createdAt!,
   );

@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { RegisterSchema } from "@/schemas/auth";
 import bcrypt from "bcryptjs";
-import { getUserByEmail, getUserByName } from "@/data-access/user";
+import { getUserByEmail, getUserByName, verifyUser } from "@/data-access/user";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
 import { createUserUseCase } from "@/use-cases/user";
@@ -28,14 +28,15 @@ export async function registerAction(formData: z.infer<typeof RegisterSchema>) {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  await createUserUseCase(email, name, hashedPassword);
+  const newUser = await createUserUseCase(email, name, hashedPassword);
 
-  const verificationToken = await generateVerificationToken(email);
-  if (!verificationToken) {
-    return { error: "Something went wrong!" };
-  }
+  // const verificationToken = await generateVerificationToken(email);
+  // if (!verificationToken) {
+  //   return { error: "Something went wrong!" };
+  // }
 
-  await sendVerificationEmail(verificationToken.email, verificationToken.token);
+  // await sendVerificationEmail(verificationToken.email, verificationToken.token);
+  await verifyUser(newUser.id, newUser.email);
 
   return { sucess: "Confirmation email sent!" };
 }

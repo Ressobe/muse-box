@@ -14,7 +14,7 @@ type NavigationProps = {
 
 export function Navigation({ userId, image }: NavigationProps) {
   const [onlySearch, setOnlySearch] = useState(false);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(true);
 
   useEffect(() => {
     const handleResize = () => {

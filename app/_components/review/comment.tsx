@@ -205,7 +205,7 @@ function ActionMenu({
             <EllipsisVertical />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="absolute top-0 left-1 flex flex-col gap-y-3 items-center text-center w-32">
+        <PopoverContent className="absolute top-0 right-1 sm:left-1  flex flex-col gap-y-3 items-center text-center w-32">
           {editAction ? (
             <>
               <Button

@@ -30,7 +30,7 @@ export default function Rating({
 }: RatingProps) {
   let stars = Array(count || DEFAULT_COUNT).fill(icon || DEFAULT_ICON);
   const [rating, setRating] = useState(defaultRate);
-  const [temporaryRating, setTemporaryRating] = useState(0);
+  const [temporaryRating, setTemporaryRating] = useState(defaultRate);
 
   const handleClick = (rating: number) => {
     setRating(rating);
@@ -38,8 +38,8 @@ export default function Rating({
   };
 
   return (
-    <div className="flex flex-wrap gap-x-2">
-      <>
+    <div className="flex flex-wrap">
+      <div className="flex gap-x-1 items-center">
         {stars.map((_, index) => {
           const isActiveColor =
             (rating || temporaryRating) &&
@@ -58,7 +58,7 @@ export default function Rating({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div
-                    className={`transition-colors duration-300  hover:cursor-pointer ${index + 1 === rating ? "scale-125" : ""}`}
+                    className={`transition-colors duration-300 w-fit  hover:cursor-pointer ${index + 1 === rating ? "scale-125" : ""}`}
                     style={{
                       fontSize: size ? `${size}px` : "14px",
                       color: elementColor,
@@ -88,7 +88,13 @@ export default function Rating({
             </TooltipProvider>
           );
         })}
-      </>
+      </div>
+      <div className="pl-1 pt-2 sm:pl-4 sm:pt-0 text-2xl flex items-center gap-x-4">
+        <div className="transition-transform duration-500 transform-gpu scale-100">
+          {temporaryRating !== 0 ? temporaryRating : rating}/{DEFAULT_COUNT}
+        </div>
+        <div className="text-yellow-500 text-3xl">★</div>
+      </div>
     </div>
   );
 }

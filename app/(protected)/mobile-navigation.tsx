@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { LogOutIcon, XIcon } from "lucide-react";
 import { LogoutButton } from "../_components/auth/logout-button";
+import { APP_NAME } from "@/config";
 
 export function MobileNavigation() {
   const pathname = usePathname();
@@ -38,6 +39,13 @@ export function MobileNavigation() {
       </div>
       {open && (
         <nav className="bg-background fixed inset-0 z-50 w-full flex flex-col items-center justify-center">
+          <div className="absolute top-5 left-2 sm:top-7 sm:left-4 transition-all active:scale-125">
+            <Link href="/">
+              <h1 className="font-bold text-3xl text-gradient bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:brightness-125 transform transition-all active:scale-110">
+                {APP_NAME}
+              </h1>
+            </Link>
+          </div>
           <Button
             variant="ghost"
             onClick={closeNavigation}

@@ -24,12 +24,15 @@ export async function AlbumReview({ albumReview }: AlbumReviewProps) {
     <TableRow>
       <TableCell>
         <Link href={`/albums/${albumReview.album.id}`}>
-          <Image
-            src={albumReview.album.image ?? ""}
-            width={80}
-            height={80}
-            alt={`${albumReview.album.title} cover image`}
-          />
+          <div className="w-[100px] h-[100px] ">
+            <Image
+              src={albumReview.album.image ?? ""}
+              width={80}
+              height={80}
+              alt={`${albumReview.album.title} cover image`}
+              className="object-cover"
+            />
+          </div>
         </Link>
       </TableCell>
       <TableCell className="flex flex-col items-center justify-center gap-2">

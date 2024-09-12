@@ -25,7 +25,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={poppins.className}>
       <link rel="icon" href={LOGO} sizes="any" />
-      <body className="flex flex-col min-h-screen">
+      <body className="flex flex-col min-h-screen overflow-x-hidden">
         <NextTopLoader color="#6d28d9" showSpinner={false} />
         <SessionProvider session={session}>{children}</SessionProvider>
         <Toaster />

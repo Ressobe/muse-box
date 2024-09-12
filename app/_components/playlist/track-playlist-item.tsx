@@ -28,7 +28,7 @@ export async function TrackPlaylistItem({
   return (
     <TableRow key={track.id} className="p-0">
       <TableCell className="font-medium">{position}</TableCell>
-      <TableCell className="flex items-center gap-x-4">
+      <TableCell className="flex items-center gap-x-4 min-w-[200px]">
         <Image
           src={track.album.image ?? ""}
           width={70}

@@ -101,6 +101,7 @@ export async function changeReviewRateAction(
   entityId: string,
   userId: string,
   rating: number,
+  comment: string,
   type: Entity,
 ) {
   const user = await currentUser();
@@ -108,7 +109,13 @@ export async function changeReviewRateAction(
     return { error: "Not authorized access!" };
   }
 
-  const review = await changeReviewRateUseCase(entityId, userId, rating, type);
+  const review = await changeReviewRateUseCase(
+    entityId,
+    userId,
+    rating,
+    comment,
+    type,
+  );
 
   revalidatePath(pathname);
 

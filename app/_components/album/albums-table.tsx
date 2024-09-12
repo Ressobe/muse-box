@@ -43,7 +43,7 @@ export async function AlbumsTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-1/5">Place</TableHead>
+            <TableHead className="w-1/6 sm:w-1/5">Place</TableHead>
             <TableHead className="w-2/5">Album</TableHead>
             <TableHead
               className={clsx(showContentInteraction ? "w-1/5" : "w-2/5")}
@@ -66,7 +66,7 @@ export async function AlbumsTable({
                 <TableCell className="font-bold text-xl md:text-4xl">
                   {position}
                 </TableCell>
-                <TableCell className="flex items-center gap-4 min-w-[200px]">
+                <TableCell className="flex flex-col text-center sm:text-left sm:flex-row items-center gap-4 min-w-[150px] sm:min-w-[200px]">
                   <div className="w-[50px] h-[50px] md:w-[100px] md:h-[100px]">
                     <Image
                       src={item.image ?? ""}
@@ -92,8 +92,8 @@ export async function AlbumsTable({
                   />
                 </TableCell>
                 <TableCell>
-                  {userId && showContentInteraction ? (
-                    <div className="flex">
+                  <div className="flex">
+                    {userId && showContentInteraction ? (
                       <ContentInteraction
                         userId={userId}
                         entityName={item.title}
@@ -101,9 +101,10 @@ export async function AlbumsTable({
                         type="album"
                         isLiked={item.isLiked ?? false}
                         defaultRate={item.defaultRate ?? 0}
+                        defaultReview={item.defaultReview ?? ""}
                       />
-                    </div>
-                  ) : null}
+                    ) : null}
+                  </div>
                 </TableCell>
               </TableRow>
             );

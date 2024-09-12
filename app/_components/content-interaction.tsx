@@ -9,6 +9,7 @@ type ContentInteractionProps = {
   entityName: string;
   isLiked: boolean;
   defaultRate: number;
+  defaultReview: string;
 };
 
 export function ContentInteraction({
@@ -18,6 +19,7 @@ export function ContentInteraction({
   entityName,
   isLiked,
   defaultRate,
+  defaultReview,
 }: ContentInteractionProps) {
   return (
     <>
@@ -34,6 +36,7 @@ export function ContentInteraction({
           userId={userId}
           entityName={entityName}
           defaultRate={defaultRate}
+          defaultReview={defaultReview}
         />
       ) : null}
     </>

@@ -1,19 +1,6 @@
 import { AlbumsTable } from "@/app/_components/album/albums-table";
-import { PaginationControls } from "@/app/_components/pagination-controls";
-import { RatingStats } from "@/app/_components/review/rating-stats";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/app/_components/ui/table";
 import { isValidSortType, SortType } from "@/src/entities/types";
 import { getAlbumsSearchController } from "@/src/interface-adapters/controllers/album/get-albums-search.controller";
-import Image from "next/image";
-import Link from "next/link";
 
 type SearchPageProps = {
   searchParams: {

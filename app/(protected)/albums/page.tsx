@@ -1,4 +1,5 @@
 import { AlbumCard } from "@/app/_components/album/album-card";
+import { SeeMoreButton } from "@/app/_components/see-more-button";
 import { getNewAlbumsController } from "@/src/interface-adapters/controllers/album/get-new-albums.controller";
 import { getPopularAlbumsController } from "@/src/interface-adapters/controllers/album/get-popular-albums.controller";
 import { getTopAlbumsController } from "@/src/interface-adapters/controllers/album/get-top-albums.controller";
@@ -19,6 +20,7 @@ export default async function AlbumsPage() {
             return <AlbumCard key={album.id} album={album} />;
           })}
         </div>
+        <SeeMoreButton href="/albums/search" />
       </section>
 
       <section>
@@ -28,6 +30,7 @@ export default async function AlbumsPage() {
             return <AlbumCard key={album.id} album={album} />;
           })}
         </div>
+        <SeeMoreButton href="/albums/search" />
       </section>
 
       <section>
@@ -37,6 +40,7 @@ export default async function AlbumsPage() {
             return <AlbumCard key={album.id} album={album} />;
           })}
         </div>
+        <SeeMoreButton href="/albums/search" />
       </section>
     </section>
   );

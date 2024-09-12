@@ -1,3 +1,4 @@
+import { SeeMoreButton } from "@/app/_components/see-more-button";
 import { TrackCard } from "@/app/_components/track/track-card";
 import { getNewTracksController } from "@/src/interface-adapters/controllers/track/get-new-tracks.controller";
 import { getPopularTracksController } from "@/src/interface-adapters/controllers/track/get-popular-tracks.controller";
@@ -19,6 +20,7 @@ export default async function TracksPage() {
             return <TrackCard key={track.id} track={track} />;
           })}
         </div>
+        <SeeMoreButton href="/tracks/search" />
       </section>
 
       <section>
@@ -28,6 +30,7 @@ export default async function TracksPage() {
             return <TrackCard key={track.id} track={track} />;
           })}
         </div>
+        <SeeMoreButton href="/tracks/search" />
       </section>
 
       <section>
@@ -37,6 +40,7 @@ export default async function TracksPage() {
             return <TrackCard key={track.id} track={track} />;
           })}
         </div>
+        <SeeMoreButton href="/tracks/search" />
       </section>
     </section>
   );

@@ -25,13 +25,6 @@ export function Hero() {
         </div>
         <p className="text-xs text-gray-500">
           Sign up to get notified when we launch.
-          <span> </span>
-          <Link
-            className="underline underline-offset-2"
-            href="/terms-of-service"
-          >
-            Terms of Service
-          </Link>
         </p>
       </div>
       <Image src={LOGO} width={270} height={270} alt="musebox-logo" />

@@ -16,12 +16,6 @@ export function Footer() {
         >
           Contact
         </Link>
-        <Link
-          className="text-md hover:underline underline-offset-4"
-          href="/terms-of-service"
-        >
-          Terms of Service
-        </Link>
       </nav>
     </footer>
   );

@@ -64,7 +64,7 @@ export function RegisterForm() {
               control={form.control}
               name="email"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="text-sm md:text-lg">
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
@@ -82,7 +82,7 @@ export function RegisterForm() {
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="text-sm md:text-lg">
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
@@ -100,7 +100,7 @@ export function RegisterForm() {
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="text-sm md:text-lg">
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input
@@ -118,7 +118,7 @@ export function RegisterForm() {
               control={form.control}
               name="confirmPassword"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="text-sm md:text-lg">
                   <FormLabel>Confirm Password</FormLabel>
                   <FormControl>
                     <Input

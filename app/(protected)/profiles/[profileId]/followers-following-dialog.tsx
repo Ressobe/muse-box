@@ -65,7 +65,7 @@ export async function FollowersFollowingDialog({
         {formatNumberWithPrefix(amount)}
       </span>
       {amount > 0 ? (
-        <DialogContent className="pt-12">
+        <DialogContent className="pt-12 md:max-w-screen-sm overflow-y-scroll max-h-screen">
           <ScrollArea className="h-96">
             <ul className="p-4 space-y-2 flex flex-col">
               {usersWithFollowState?.map((user) => {
@@ -73,7 +73,7 @@ export async function FollowersFollowingDialog({
                   <li key={user.id}>
                     <Link
                       href={`/profiles/${user.id}`}
-                      className="w-full flex items-center hover:bg-muted-foreground/10 justify-between gap-8 rounded-lg transition-all p-4"
+                      className="w-full flex flex-col sm:flex-row items-center hover:bg-muted-foreground/10 justify-between gap-8 rounded-lg transition-all p-4"
                     >
                       <div className="flex items-center gap-6">
                         <UserAvatar avatarUrl={user.image} size="large" />

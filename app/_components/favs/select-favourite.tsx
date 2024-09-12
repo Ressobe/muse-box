@@ -53,7 +53,7 @@ export function SelectFavourite({
     <button
       onClick={handleClick}
       className={clsx(
-        "w-full flex  items-center gap-8 hover:bg-secondary/80 rounded transition-all p-2",
+        "w-full flex flex-col sm:flex-row  items-center gap-4 sm:gap-8 hover:bg-secondary/80 rounded transition-all p-2",
         isPending && "opacity-50",
       )}
       disabled={isPending}

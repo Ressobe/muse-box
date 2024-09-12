@@ -51,13 +51,13 @@ export default async function ProfilePage({
 
   return (
     <section className="space-y-20">
-      <div className="flex items-center gap-x-20">
+      <div className="flex flex-col justify-center items-center lg:justify-start lg:flex-row  gap-x-20">
         <UserProfileAvatar
           canEdit={isUserOwnsThisProfile}
           authUserId={user.id}
           avatarUrl={profile.user.image}
         />
-        <div className="text-left space-y-6">
+        <div className="text-center md:text-left space-y-6 pb-10 lg:pb-0">
           <h1 className="font-bold text-4xl">{profile.user.name}</h1>
           {!isUserOwnsThisProfile && (
             <FollowButton
@@ -67,7 +67,7 @@ export default async function ProfilePage({
             />
           )}
         </div>
-        <div className="pl-20 flex gap-10">
+        <div className="pl-0 lg:pl-20 flex gap-10">
           <span className="flex flex-col items-center">
             <FollowersFollowingDialog
               profileId={profileId}

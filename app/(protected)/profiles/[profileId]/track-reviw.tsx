@@ -24,12 +24,15 @@ export async function TrackReview({ trackReview }: TrackReviewProps) {
     <TableRow>
       <TableCell>
         <Link href={`/albums/${album.id}`}>
-          <Image
-            src={album.image ?? ""}
-            width={80}
-            height={80}
-            alt={`${album.title} cover image`}
-          />
+          <div className="w-[100px] h-[100px] ">
+            <Image
+              src={album.image ?? ""}
+              width={80}
+              height={80}
+              alt={`${album.title} cover image`}
+              className="object-cover"
+            />
+          </div>
         </Link>
       </TableCell>
       <TableCell className="flex flex-col items-center justify-center gap-2">

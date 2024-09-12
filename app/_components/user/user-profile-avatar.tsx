@@ -63,7 +63,7 @@ export function UserProfileAvatar({
             <PencilIcon className="w-4 h-4" />
           </button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="md:max-w-screen-sm overflow-y-scroll max-h-screen">
           <UserNewAvatar
             authUserId={authUserId}
             closeModal={() => setModalOpen(false)}

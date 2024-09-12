@@ -11,7 +11,7 @@ import { Button } from "@/app/_components/ui/button";
 import { CircleCheck, Star, XIcon } from "lucide-react";
 import { Entity } from "@/types";
 import Rating from "./rating";
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import clsx from "clsx";
 import { useToast } from "@/app/_components/ui/use-toast";
 import { changeReviewRateAction } from "@/app/_actions/reviews";
@@ -24,6 +24,7 @@ type DialogRatingProps = {
   entityName: string;
   type: Entity;
   defaultRate: number;
+  defaultReview?: string;
 };
 
 export function DialogRating({
@@ -32,11 +33,23 @@ export function DialogRating({
   entityName,
   type,
   defaultRate,
+  defaultReview,
 }: DialogRatingProps) {
   const pathname = usePathname();
   const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
+  const [comment, setComment] = useState(defaultReview ?? "");
+
+  useEffect(() => {
+    if (textAreaRef.current) {
+      textAreaRef.current.style.height = "auto";
+      textAreaRef.current.style.height =
+        textAreaRef.current.scrollHeight + "px";
+    }
+  }, [comment]);
 
   const closeDialog = () => setDialogOpen(false);
 
@@ -52,6 +65,7 @@ export function DialogRating({
         entityId,
         userId,
         rating,
+        comment,
         type,
       );
 
@@ -114,6 +128,16 @@ export function DialogRating({
         </DialogHeader>
         <div className="w-full">
           <Rating size={30} defaultRate={defaultRate === 0 ? 1 : defaultRate} />
+          <textarea
+            className="w-full text-md outline-none active:outline-none border-b border-muted-foreground focus:outline-none resize-none bg-background text-foreground  focus:border-b-2 focus:border-foreground mt-4 mb-3 pb-1 pr-3 overflow-y-hidden"
+            rows={1}
+            id="comment"
+            name="comment"
+            placeholder="Type your review here."
+            value={comment}
+            ref={textAreaRef}
+            onChange={(e) => setComment(e.target.value)}
+          />
         </div>
 
         <form className="w-1/3 flex flex-col gap-x-6">

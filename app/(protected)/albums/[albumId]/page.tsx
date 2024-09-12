@@ -21,6 +21,7 @@ import { getAlbumInfoController } from "@/src/interface-adapters/controllers/alb
 import { ContentInteraction } from "@/app/_components/content-interaction";
 import { getTrackRatingOwnedByUserController } from "@/src/interface-adapters/controllers/track/get-track-rating-owned-by-user-controller";
 import { isItemLikedByUserUseCase } from "@/src/application/use-cases/playlist/is-item-liked-by-user.use-case";
+import { getReviewForTrackOwnedByUserUseCase } from "@/src/application/use-cases/review/get-review-for-track-owned-by-user.use-case";
 
 export default async function AlbumPage({
   params,
@@ -42,11 +43,21 @@ export default async function AlbumPage({
   }
 
   const tracksWithLikes = await Promise.all(
-    album.tracks.map(async (track) => ({
-      ...track,
-      defaultRate: await getTrackRatingOwnedByUserController(track.id, user.id),
-      isLiked: await isItemLikedByUserUseCase(user.id, track.id, "track"),
-    })),
+    album.tracks.map(async (track) => {
+      const review = await getReviewForTrackOwnedByUserUseCase(
+        track.id,
+        user.id,
+      );
+      const defaultRate = review?.rating ?? 0;
+      const defaultReview = review?.comment ?? "";
+
+      return {
+        ...track,
+        defaultRate,
+        defaultReview,
+        isLiked: await isItemLikedByUserUseCase(user.id, track.id, "track"),
+      };
+    }),
   );
 
   const reviews = await getAlbumReviewsController(albumId);
@@ -173,6 +184,7 @@ export default async function AlbumPage({
                       type="track"
                       isLiked={track.isLiked ?? false}
                       defaultRate={track.defaultRate ?? 0}
+                      defaultReview={track.defaultReview}
                     />
                   </div>
                 </TableCell>

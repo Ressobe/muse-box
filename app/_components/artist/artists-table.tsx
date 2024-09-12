@@ -47,7 +47,7 @@ export async function ArtistsTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-1/5">Place</TableHead>
+            <TableHead className="w-1/6 sm:w-1/5">Place</TableHead>
             <TableHead className="w-2/5">Artist</TableHead>
             <TableHead
               className={clsx(showContentInteraction ? "w-1/5" : "w-2/5")}
@@ -70,7 +70,7 @@ export async function ArtistsTable({
                 <TableCell className="font-bold text-xl md:text-4xl">
                   {position}
                 </TableCell>
-                <TableCell className="flex items-center gap-4 min-w-[200px]">
+                <TableCell className="flex flex-col text-center sm:flex-row sm:text-left items-center gap-4 w-[150px] sm:min-w-[200px]">
                   <div>
                     <Avatar className="w-10 h-10 md:w-20 md:h-20">
                       <AvatarImage src={item.image ?? ""} />
@@ -94,17 +94,20 @@ export async function ArtistsTable({
                     size="sm"
                   />
                 </TableCell>
-                <TableCell className="flex">
-                  {userId && showContentInteraction ? (
-                    <ContentInteraction
-                      userId={userId}
-                      entityName={item.name}
-                      entityId={item.id}
-                      type="artist"
-                      isLiked={item.isLiked ?? false}
-                      defaultRate={item.defaultRate ?? 0}
-                    />
-                  ) : null}
+                <TableCell>
+                  <div className="flex">
+                    {userId && showContentInteraction ? (
+                      <ContentInteraction
+                        userId={userId}
+                        entityName={item.name}
+                        entityId={item.id}
+                        type="artist"
+                        isLiked={item.isLiked ?? false}
+                        defaultRate={item.defaultRate ?? 0}
+                        defaultReview={item.defaultReview ?? ""}
+                      />
+                    ) : null}
+                  </div>
                 </TableCell>
               </TableRow>
             );

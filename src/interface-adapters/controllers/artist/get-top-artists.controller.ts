@@ -4,6 +4,7 @@ import { getTopArtistsUseCase } from "@/src/application/use-cases/artist/get-top
 import { isItemLikedByUserUseCase } from "@/src/application/use-cases/playlist/is-item-liked-by-user.use-case";
 import { ArtistWithStats } from "@/src/entities/models/artist";
 import { getArtistRatingOwnedByUserController } from "./get-artist-rating-owned-by-user.controller";
+import { getReviewForArtistOwnedByUserUseCase } from "@/src/application/use-cases/review/get-review-for-artist-owned-by-user.use-case";
 
 function presenter(artists: ArtistWithStats[]) {
   return artists.map((item) => ({
@@ -20,6 +21,7 @@ function presenter(artists: ArtistWithStats[]) {
       ratingSum: item.stats?.ratingSum ?? null,
     },
     defaultRate: item.defaultRate ?? undefined,
+    defaultReview: item.defaultReview ?? undefined,
     isLiked: item.isLiked ?? undefined,
   }));
 }
@@ -42,14 +44,17 @@ export async function getTopArtistsController() {
           "artist",
         );
 
-        const defaultRate = await getArtistRatingOwnedByUserController(
+        const review = await getReviewForArtistOwnedByUserUseCase(
           item.id,
           userId,
         );
+        const defaultRate = review?.rating ?? 0;
+        const defaultReview = review?.comment ?? "";
 
         return {
           ...item,
           defaultRate,
+          defaultReview,
           isLiked,
         };
       }),

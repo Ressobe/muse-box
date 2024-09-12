@@ -24,6 +24,7 @@ type TopTracksProps = {
     };
     isLiked: boolean | undefined;
     defaultRate: number | undefined;
+    defaultReview: string | undefined;
   }[];
 };
 
@@ -87,6 +88,7 @@ export async function TopTracks({ topTracks }: TopTracksProps) {
                           type="track"
                           isLiked={item.isLiked ?? false}
                           defaultRate={item.defaultRate ?? 0}
+                          defaultReview={item.defaultReview ?? ""}
                         />
                       </div>
                     ) : null}

@@ -1,4 +1,5 @@
 import { ArtistCard } from "@/app/_components/artist/artist-card";
+import { SeeMoreButton } from "@/app/_components/see-more-button";
 import { getNewArtistsController } from "@/src/interface-adapters/controllers/artist/get-new-artists.controller";
 import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
 import { getTopArtistsController } from "@/src/interface-adapters/controllers/artist/get-top-artists.controller";
@@ -19,6 +20,7 @@ export default async function Artists() {
             return <ArtistCard key={artist.id} artist={artist} />;
           })}
         </div>
+        <SeeMoreButton href="/artists/search" />
       </section>
 
       <section>
@@ -28,6 +30,7 @@ export default async function Artists() {
             return <ArtistCard key={artist.id} artist={artist} />;
           })}
         </div>
+        <SeeMoreButton href="/artists/search" />
       </section>
 
       <section>
@@ -37,6 +40,7 @@ export default async function Artists() {
             return <ArtistCard key={artist.id} artist={artist} />;
           })}
         </div>
+        <SeeMoreButton href="/artists/search" />
       </section>
     </section>
   );

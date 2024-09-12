@@ -39,7 +39,7 @@ export default function Rating({
 
   return (
     <div className="flex flex-wrap">
-      <div className="flex gap-x-1 items-center">
+      <div className="flex flex-wrap gap-x-1 items-center">
         {stars.map((_, index) => {
           const isActiveColor =
             (rating || temporaryRating) &&

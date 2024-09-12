@@ -39,7 +39,7 @@ export default function Rating({
 
   return (
     <div className="flex flex-wrap">
-      <div className="flex flex-wrap gap-x-1 items-center">
+      <div className="flex gap-x-1 items-center">
         {stars.map((_, index) => {
           const isActiveColor =
             (rating || temporaryRating) &&
@@ -58,9 +58,8 @@ export default function Rating({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div
-                    className={`transition-colors duration-300 w-fit  hover:cursor-pointer ${index + 1 === rating ? "scale-125" : ""}`}
+                    className={`transition-colors duration-300 w-fit text-[25px] md:text-[30px]  hover:cursor-pointer ${index + 1 === rating ? "scale-125" : ""}`}
                     style={{
-                      fontSize: size ? `${size}px` : "14px",
                       color: elementColor,
                       filter: `${isActiveColor ? "grayscale(0%)" : "grayscale(100%)"}`,
                     }}

@@ -1,14 +1,9 @@
 import { container } from "@/di/container";
 import { IAuthenticationService } from "@/src/application/services/authentication.service.interface";
 import { isItemLikedByUserUseCase } from "@/src/application/use-cases/playlist/is-item-liked-by-user.use-case";
-import { getReviewForArtistOwnedByUserUseCase } from "@/src/application/use-cases/review/get-review-for-artist-owned-by-user.use-case";
 import { getTopTracksUseCase } from "@/src/application/use-cases/track/get-top-tracks.use-case";
-import { albumSchema } from "@/src/entities/models/album";
 import { z } from "zod";
-import {
-  trackSelectSchema,
-  trackWithAlbumAndRatingAvgSchema,
-} from "@/src/entities/models/track";
+import { trackWithAlbumAndRatingAvgSchema } from "@/src/entities/models/track";
 import { getReviewForTrackOwnedByUserUseCase } from "@/src/application/use-cases/review/get-review-for-track-owned-by-user.use-case";
 
 // use cases are invidual operations

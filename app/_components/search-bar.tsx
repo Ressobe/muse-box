@@ -40,6 +40,7 @@ export function SearchBar({ isOpen, toggleSearch }: SearchBarProps) {
     params.set("query", values.search);
     replace(`/search?${params.toString()}`);
     inputRef.current?.blur();
+    toggleSearch();
   }
 
   return (

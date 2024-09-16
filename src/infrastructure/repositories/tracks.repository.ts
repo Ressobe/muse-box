@@ -6,7 +6,7 @@ import {
   TrackWithAlbumAndRatingAvg,
   TrackWithAlbumAndStats,
 } from "@/src/entities/models/track";
-import { albums, tracks, tracksStats } from "@/drizzle/database/schema";
+import { albums, tracks, tracksStats } from "@/drizzle/database/schemas";
 import { count, desc, asc, eq, sql } from "drizzle-orm";
 
 export class TracksRepository implements ITracksRepository {

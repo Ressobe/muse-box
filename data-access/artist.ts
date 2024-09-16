@@ -1,13 +1,12 @@
 import { db } from "@/drizzle/database/db";
 import {
-  albums,
   artists,
   artistsStats,
   genresToArtists,
   reviewsArtists,
-  tracks,
-  tracksStats,
-} from "@/drizzle/database/schema";
+} from "@/drizzle/database/schemas";
+import { albums } from "@/drizzle/database/schemas";
+import { tracks, tracksStats } from "@/drizzle/database/schemas";
 import { Artist } from "@/schemas/artist";
 import { and, asc, count, desc, eq, or, sql } from "drizzle-orm";
 import { createArtistStat } from "./stat";

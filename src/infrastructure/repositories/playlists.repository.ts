@@ -1,4 +1,4 @@
-import { playlistItems, playlists } from "@/drizzle/database/schema";
+import { playlistItems, playlists } from "@/drizzle/database/schemas";
 import { IPlaylistsRepository } from "@/src/application/repositories/playlists.repository.interface";
 import { db } from "@/drizzle/database/db";
 import {

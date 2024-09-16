@@ -7,7 +7,7 @@ import {
   AlbumWithTracks,
 } from "@/src/entities/models/album";
 import { and, asc, count, desc, eq, or, sql } from "drizzle-orm";
-import { albums, albumsStats } from "@/drizzle/database/schema";
+import { albums, albumsStats } from "@/drizzle/database/schemas";
 
 export class AlbumsRepository implements IAlbumsRepository {
   async getAlbums(limit?: number): Promise<Album[]> {

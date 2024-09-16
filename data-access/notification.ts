@@ -3,7 +3,7 @@ import {
   follows,
   notificationRecipients,
   userNotifications,
-} from "@/drizzle/database/schema";
+} from "@/drizzle/database/schemas";
 import { NotificationType } from "@/types/notification";
 import { and, eq } from "drizzle-orm";
 

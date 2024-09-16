@@ -2,7 +2,7 @@ import {
   albumsStats,
   artistsStats,
   tracksStats,
-} from "@/drizzle/database/schema";
+} from "@/drizzle/database/schemas";
 import { IStatsRepository } from "@/src/application/repositories/stats.repository.interface";
 import { Stat } from "@/src/entities/models/stat";
 import { db } from "@/drizzle/database/db";

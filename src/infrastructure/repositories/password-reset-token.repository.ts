@@ -2,7 +2,7 @@ import { IPasswordResetTokensRepository } from "@/src/application/repositories/p
 import { db } from "@/drizzle/database/db";
 import { PasswordToken } from "@/src/entities/models/password-reset-token";
 import { eq } from "drizzle-orm";
-import { passwordResetTokens } from "@/drizzle/database/schema";
+import { passwordResetTokens } from "@/drizzle/database/schemas";
 
 export class PasswordResetTokenRepository
   implements IPasswordResetTokensRepository

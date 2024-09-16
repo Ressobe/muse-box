@@ -1,5 +1,5 @@
 import { db } from "@/drizzle/database/db";
-import { follows, userProfiles, users } from "@/drizzle/database/schema";
+import { follows, userProfiles, users } from "@/drizzle/database/schemas";
 import { countDistinct, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/sqlite-core";
 

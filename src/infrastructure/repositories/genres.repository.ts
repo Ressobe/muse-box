@@ -2,7 +2,7 @@ import { IGenresRepository } from "@/src/application/repositories/genres.reposit
 import { Genre } from "@/src/entities/models/genre";
 import { db } from "@/drizzle/database/db";
 import { eq } from "drizzle-orm";
-import { genres, genresToArtists } from "@/drizzle/database/schema";
+import { genres, genresToArtists } from "@/drizzle/database/schemas";
 
 export class GenresRepository implements IGenresRepository {
   async getGenresForArtist(artistId: string): Promise<Genre[]> {

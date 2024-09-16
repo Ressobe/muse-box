@@ -2,7 +2,7 @@ import {
   reviewsAlbums,
   reviewsArtists,
   reviewsTracks,
-} from "@/drizzle/database/schema";
+} from "@/drizzle/database/schemas";
 import { ReviewWithUser } from "@/src/entities/models/review";
 
 export type Review = {

@@ -2,7 +2,7 @@ import {
   reviewsAlbums,
   reviewsArtists,
   reviewsTracks,
-} from "@/drizzle/database/schema";
+} from "@/drizzle/database/schemas";
 import { IReviewsRepository } from "@/src/application/repositories/reviews.repository.interface";
 import { Content } from "@/src/entities/models/content";
 import {

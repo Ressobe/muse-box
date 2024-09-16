@@ -1,6 +1,6 @@
 import { IFollowersRepository } from "@/src/application/repositories/followers.repository.interface";
 import { db } from "@/drizzle/database/db";
-import { follows, userProfiles, users } from "@/drizzle/database/schema";
+import { follows, userProfiles, users } from "@/drizzle/database/schemas";
 import { and, countDistinct, eq } from "drizzle-orm";
 import {
   AmountOfFollowersAndFollowing,

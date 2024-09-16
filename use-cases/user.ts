@@ -15,10 +15,8 @@ import {
   getUserNotifications,
   getUserPlaylists,
   getUserTrackReview,
-  removeFavourite,
-  updateFavourite,
 } from "@/data-access/user";
-import { Entity, entityToPlaylists } from "@/types";
+import { entityToPlaylists } from "@/types";
 import {
   AlbumReviewNotification,
   ArtistReviewNotification,
@@ -150,28 +148,6 @@ export async function getUserLikedTracksUseCase(userId: string) {
   );
 
   return tracks;
-}
-
-export async function selectFavouriteUseCase(
-  entityId: string,
-  type: Entity,
-  userId: string,
-) {
-  const user = await getUserById(userId);
-  if (!user) {
-    throw new Error("User not found!");
-  }
-
-  return await updateFavourite(userId, entityId, type);
-}
-
-export async function removeFavouriteUseCase(type: Entity, userId: string) {
-  const user = await getUserById(userId);
-  if (!user) {
-    throw new Error("User not found!");
-  }
-
-  return await removeFavourite(userId, type);
 }
 
 export async function isUserFollowingProfileUseCase(

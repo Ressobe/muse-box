@@ -1,5 +1,5 @@
 import { db } from "@/drizzle/database/db";
-import { albums, albumsStats, reviewsAlbums } from "@/drizzle/database/schema";
+import { albums, albumsStats, reviewsAlbums } from "@/drizzle/database/schemas";
 import { Album } from "@/schemas/album";
 import { asc, count, desc, eq, sql } from "drizzle-orm";
 import { createAlbumStat } from "./stat";

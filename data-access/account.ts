@@ -1,5 +1,5 @@
 import { db } from "@/drizzle/database/db";
-import { accounts } from "@/drizzle/database/schema";
+import { accounts } from "@/drizzle/database/schemas";
 import { eq } from "drizzle-orm";
 
 export async function getAccountByUserId(userId: string) {

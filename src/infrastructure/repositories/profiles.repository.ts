@@ -1,6 +1,6 @@
 import { IProfilesRepository } from "@/src/application/repositories/profiles.repository.interface";
 import { db } from "@/drizzle/database/db";
-import { userProfiles } from "@/drizzle/database/schema";
+import { userProfiles } from "@/drizzle/database/schemas";
 import { Profile } from "@/src/entities/models/profile";
 import { eq } from "drizzle-orm";
 import { Content } from "@/src/entities/models/content";
@@ -35,6 +35,7 @@ export class ProfilesRepository implements IProfilesRepository {
             favoriteArtistId: entityId,
           })
           .where(eq(userProfiles.userId, userId));
+        break;
       case "album":
         await db
           .update(userProfiles)
@@ -42,6 +43,7 @@ export class ProfilesRepository implements IProfilesRepository {
             favoriteAlbumId: entityId,
           })
           .where(eq(userProfiles.userId, userId));
+        break;
       case "track":
         await db
           .update(userProfiles)
@@ -49,6 +51,7 @@ export class ProfilesRepository implements IProfilesRepository {
             favoriteTrackId: entityId,
           })
           .where(eq(userProfiles.userId, userId));
+        break;
 
       default:
         throw new Error(`Unknown item type: ${type}`);
@@ -64,6 +67,7 @@ export class ProfilesRepository implements IProfilesRepository {
             favoriteArtistId: null,
           })
           .where(eq(userProfiles.userId, userId));
+        break;
       case "album":
         await db
           .update(userProfiles)
@@ -71,6 +75,7 @@ export class ProfilesRepository implements IProfilesRepository {
             favoriteAlbumId: null,
           })
           .where(eq(userProfiles.userId, userId));
+        break;
       case "track":
         await db
           .update(userProfiles)
@@ -78,6 +83,7 @@ export class ProfilesRepository implements IProfilesRepository {
             favoriteTrackId: null,
           })
           .where(eq(userProfiles.userId, userId));
+        break;
       default:
         throw new Error(`Unknown item type: ${type}`);
     }

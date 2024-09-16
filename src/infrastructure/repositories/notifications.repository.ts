@@ -8,7 +8,7 @@ import {
 import {
   notificationRecipients,
   userNotifications,
-} from "@/drizzle/database/schema";
+} from "@/drizzle/database/schemas";
 import { eq } from "drizzle-orm";
 import { Follow } from "@/src/entities/models/follow";
 

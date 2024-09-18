@@ -18,6 +18,10 @@ import { RecentActivity } from "./recent-activity";
 import { FollowersFollowingDialog } from "./followers-following-dialog";
 import { UserProfileAvatar } from "@/app/_components/user/user-profile-avatar";
 
+// export async function generateStaticParams() {
+//
+// }
+
 export default async function ProfilePage({
   params,
 }: {

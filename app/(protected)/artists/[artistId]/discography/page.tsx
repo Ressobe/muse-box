@@ -16,11 +16,17 @@ import {
 import { getFullAlbumTime, getTime, getYear } from "@/lib/utils";
 import { getArtistDiscographyController } from "@/src/interface-adapters/controllers/artist/get-artist-discography.controller";
 import { getArtistInfoController } from "@/src/interface-adapters/controllers/artist/get-artist-info.controller";
+import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
 import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FaUser } from "react-icons/fa";
+
+export async function generateStaticParams() {
+  const popularArtists = await getPopularArtistsController();
+  return popularArtists.map((item) => item.id);
+}
 
 export default async function DiscographyPage({
   params,

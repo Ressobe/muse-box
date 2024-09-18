@@ -19,6 +19,12 @@ import { shouldShowAddReviewController } from "@/src/interface-adapters/controll
 import { getAlbumReviewsController } from "@/src/interface-adapters/controllers/album/get-album-reviews.controller";
 import { getAlbumInfoController } from "@/src/interface-adapters/controllers/album/get-album-info.controller";
 import { ContentInteraction } from "@/app/_components/content-interaction";
+import { getPopularAlbumsController } from "@/src/interface-adapters/controllers/album/get-popular-albums.controller";
+
+export async function generateStaticParams() {
+  const popularAlbums = await getPopularAlbumsController();
+  return popularAlbums.map((item) => item.id);
+}
 
 export default async function AlbumPage({
   params,

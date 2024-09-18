@@ -38,6 +38,7 @@ export interface IAlbumsRepository {
   getAlbumsCount(): Promise<number>;
   getAlbumsForArtist(artistId: string, limit?: number): Promise<Album[]>;
   getSinglesEpsForArtist(artistId: string, limit?: number): Promise<Album[]>;
+  getAlbumImage(albumId: string): Promise<string | null>;
 
   getAlbumsWithTracksForArtist(
     artistId: string,

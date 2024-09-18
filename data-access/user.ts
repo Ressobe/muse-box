@@ -9,7 +9,7 @@ import {
   reviewsTracks,
   userProfiles,
   users,
-} from "@/drizzle/database/schema";
+} from "@/drizzle/database/schemas";
 import { and, desc, eq, not, sql } from "drizzle-orm";
 import { Entity } from "@/types";
 import { TAlbumReview, TArtistReview, TTrackReview } from "@/types/review";
@@ -189,35 +189,6 @@ export async function updateFavourite(
         .update(userProfiles)
         .set({
           favoriteTrackId: entityId,
-        })
-        .where(eq(userProfiles.userId, userId));
-
-    default:
-      throw new Error(`Unknown item type: ${type}`);
-  }
-}
-
-export async function removeFavourite(userId: string, type: Entity) {
-  switch (type) {
-    case "artist":
-      return await db
-        .update(userProfiles)
-        .set({
-          favoriteArtistId: null,
-        })
-        .where(eq(userProfiles.userId, userId));
-    case "album":
-      return await db
-        .update(userProfiles)
-        .set({
-          favoriteAlbumId: null,
-        })
-        .where(eq(userProfiles.userId, userId));
-    case "track":
-      return await db
-        .update(userProfiles)
-        .set({
-          favoriteTrackId: null,
         })
         .where(eq(userProfiles.userId, userId));
 

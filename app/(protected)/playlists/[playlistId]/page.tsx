@@ -8,13 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/app/_components/ui/table";
-import {
-  getPlaylistTypeUseCase,
-  getPlaylistUseCase,
-} from "@/use-cases/playlist";
+import { getPlaylistInfoController } from "@/src/interface-adapters/controllers/playlist/get-playlist-info.controller";
 import { notFound } from "next/navigation";
-
-export const dynamic = "force-dynamic";
 
 export default async function PlaylistPage({
   params,
@@ -25,25 +20,22 @@ export default async function PlaylistPage({
 }) {
   const { playlistId } = params;
 
-  const playlist = await getPlaylistUseCase(playlistId);
-
+  const playlist = await getPlaylistInfoController({ playlistId });
   if (!playlist) {
     notFound();
   }
 
-  const playlistType = await getPlaylistTypeUseCase(playlist.id);
-
   return (
     <section className="space-y-20">
       <h2 className="font-bold text-4xl">{playlist.name}</h2>
-      {playlistType === "album" && (
+      {playlist.type === "album" && (
         <>
           {playlist.items.map((album) => {
             return <AlbumPlaylistItem key={album.id} albumId={album.itemId} />;
           })}
         </>
       )}
-      {playlistType === "artist" && (
+      {playlist.type === "artist" && (
         <>
           {playlist.items.map((artist) => {
             return (
@@ -52,7 +44,7 @@ export default async function PlaylistPage({
           })}
         </>
       )}
-      {playlistType === "track" && (
+      {playlist.type === "track" && (
         <Table>
           <TableHeader>
             <TableRow>

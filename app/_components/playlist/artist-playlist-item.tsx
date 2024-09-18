@@ -6,9 +6,9 @@ import {
 } from "@/app/_components/ui/avatar";
 import { FaUser } from "react-icons/fa";
 import Link from "next/link";
-import { getArtistUseCase } from "@/use-cases/artist";
-import { currentUser } from "@/lib/auth";
 import { RatingStats } from "@/app/_components/review/rating-stats";
+import { getArtistInfoController } from "@/src/interface-adapters/controllers/artist/get-artist-info.controller";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 
 type ArtistPlaylistItemProps = {
   artistId: string;
@@ -17,12 +17,12 @@ type ArtistPlaylistItemProps = {
 export async function ArtistPlaylistItem({
   artistId,
 }: ArtistPlaylistItemProps) {
-  const user = await currentUser();
-  if (!user) {
+  const authUserId = await getAuthUserIdController();
+  if (!authUserId) {
     return null;
   }
 
-  const artist = await getArtistUseCase(artistId);
+  const { artist } = await getArtistInfoController(artistId);
   if (!artist) {
     return null;
   }
@@ -31,7 +31,7 @@ export async function ArtistPlaylistItem({
     <section className="space-y-12">
       <div className="flex flex-col sm:flex-row  items-center gap-x-20">
         <Avatar className="h-40 w-40">
-          <AvatarImage src={artist?.image ?? ""} />
+          <AvatarImage src={artist.image ?? ""} />
           <AvatarFallback>
             <FaUser className="w-20 h-20" />
           </AvatarFallback>
@@ -53,7 +53,7 @@ export async function ArtistPlaylistItem({
         <div className="flex pt-4 gap-x-4">
           <LikeButton
             defaultLikeState={true}
-            userId={user.id}
+            userId={authUserId}
             entityId={artist.id}
             type="artist"
           />

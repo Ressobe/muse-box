@@ -8,9 +8,9 @@ import {
 import {
   notificationRecipients,
   userNotifications,
-} from "@/drizzle/database/schema";
+} from "@/drizzle/database/schemas";
 import { eq } from "drizzle-orm";
-import { Follow } from "@/src/entities/models/follow";
+import { Follow, FollowerUser } from "@/src/entities/models/follow";
 
 export class NotificationsRepository implements INotificationsRepository {
   async deleteNotification(notificationId: string): Promise<void> {
@@ -58,14 +58,14 @@ export class NotificationsRepository implements INotificationsRepository {
 
   async sendNotificationToFollowers(
     notificationId: string,
-    followers: Follow[],
+    followers: FollowerUser[],
   ): Promise<void> {
     if (followers.length === 0) return;
 
     for (const item of followers) {
       await db.insert(notificationRecipients).values({
         notificationId,
-        ownerId: item.followerId,
+        ownerId: item.followerUser.id,
       });
     }
   }

@@ -1,31 +1,15 @@
-import { currentUser } from "@/lib/auth";
-import { getPlaylistImageUseCase } from "@/use-cases/playlist";
-import { getUserPlaylistsUseCase } from "@/use-cases/user";
+import { getUserPlaylistsController } from "@/src/interface-adapters/controllers/user/get-user-playlists.controller";
 import Image from "next/image";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
-
 export default async function PlaylistsPage() {
-  const user = await currentUser();
-  if (!user) {
-    return null;
-  }
-
-  const playlists = await getUserPlaylistsUseCase(user.id);
-
-  const playlistsWithImages = await Promise.all(
-    playlists.map(async (playlist) => ({
-      ...playlist,
-      image: await getPlaylistImageUseCase(playlist.id),
-    })),
-  );
+  const playlists = await getUserPlaylistsController();
 
   return (
     <section className="space-y-12">
       <h1 className="font-bold text-4xl">Your playlists</h1>
       <ul className="grid">
-        {playlistsWithImages.map((playlist) => {
+        {playlists.map((playlist) => {
           if (playlist.items.length === 0) {
             return null;
           }

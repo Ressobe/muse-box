@@ -5,9 +5,11 @@ import {
   TrackWithAlbum,
   TrackWithAlbumAndRatingAvg,
   TrackWithAlbumAndStats,
+  TrackWithRelations,
 } from "@/src/entities/models/track";
-import { albums, tracks, tracksStats } from "@/drizzle/database/schema";
+import { albums, tracks, tracksStats } from "@/drizzle/database/schemas";
 import { count, desc, asc, eq, sql } from "drizzle-orm";
+import { DatabaseOperationError } from "@/src/entities/errors/common";
 
 export class TracksRepository implements ITracksRepository {
   async getTracks(limit?: number): Promise<Track[]> {
@@ -20,6 +22,19 @@ export class TracksRepository implements ITracksRepository {
     return await db.query.tracks.findFirst({
       where: eq(tracks.id, trackId),
     });
+  }
+
+  async getTrackImage(trackId: string): Promise<string | null> {
+    const track = await this.getTrack(trackId);
+    if (!track) {
+      throw new DatabaseOperationError("Track not founded");
+    }
+
+    const album = await db.query.albums.findFirst({
+      where: eq(albums.id, track.albumId),
+    });
+
+    return album?.image ?? null;
   }
 
   async insertTrack(newTrack: Track): Promise<Track> {
@@ -346,6 +361,29 @@ export class TracksRepository implements ITracksRepository {
       limit,
       offset,
       orderBy: desc(tracks.title),
+    });
+  }
+
+  async getTrackInfo(trackId: string): Promise<TrackWithRelations | undefined> {
+    return await db.query.tracks.findFirst({
+      where: eq(tracks.id, trackId),
+      with: {
+        album: {
+          with: {
+            artist: true,
+          },
+        },
+        stats: true,
+        artistCredit: {
+          with: {
+            artistsCreditsNames: {
+              with: {
+                artist: true,
+              },
+            },
+          },
+        },
+      },
     });
   }
 }

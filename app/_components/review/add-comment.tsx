@@ -81,13 +81,8 @@ export function AddComment({
 
     addOptimisticReview(reviewOptimistic);
 
-    const response = await addReviewAction(
-      entityId,
-      user.id,
-      comment,
-      rating,
-      type,
-    );
+    const response = await addReviewAction(entityId, comment, rating, type);
+
     if (response.sucess) {
       toast({
         variant: "sucessful",

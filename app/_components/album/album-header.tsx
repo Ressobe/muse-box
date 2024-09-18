@@ -1,5 +1,4 @@
 import { currentUser } from "@/lib/auth";
-import { getAlbumUseCase } from "@/use-cases/album";
 import {
   Avatar,
   AvatarFallback,
@@ -10,14 +9,14 @@ import Link from "next/link";
 import { getFullAlbumTime, getTime, getYear } from "@/lib/utils";
 import { LikeButton } from "@/app/_components/like-button";
 import Image from "next/image";
-import { isUserLikedItUseCase } from "@/use-cases/playlist";
+import { getAlbumInfoController } from "@/src/interface-adapters/controllers/album/get-album-info.controller";
 
 type AlbumHeaderProps = {
   albumId: string;
 };
 
 export async function AlbumHeader({ albumId }: AlbumHeaderProps) {
-  const album = await getAlbumUseCase(albumId);
+  const album = await getAlbumInfoController(albumId);
   if (!album) {
     return null;
   }
@@ -26,8 +25,6 @@ export async function AlbumHeader({ albumId }: AlbumHeaderProps) {
   if (!user) {
     return null;
   }
-
-  const isAlbumLiked = await isUserLikedItUseCase(user.id, album.id, "album");
 
   return (
     <section>
@@ -59,7 +56,7 @@ export async function AlbumHeader({ albumId }: AlbumHeaderProps) {
               </AvatarFallback>
             </Avatar>
             <Link
-              href={`/artists/${album.artistId}`}
+              href={`/artists/${album.artist.id}`}
               className="underline-offset-2 hover:underline"
             >
               <span>{album.artist?.name}</span>
@@ -71,12 +68,14 @@ export async function AlbumHeader({ albumId }: AlbumHeaderProps) {
                 : `${album.tracks.length} song`}
               , {getTime(getFullAlbumTime(album.tracks))}
             </span>
-            <LikeButton
-              defaultLikeState={isAlbumLiked}
-              entityId={album.id}
-              type="album"
-              userId={user.id}
-            />
+            {album.isLiked !== undefined && (
+              <LikeButton
+                defaultLikeState={album.isLiked}
+                entityId={album.id}
+                type="album"
+                userId={user.id}
+              />
+            )}
           </div>
         </div>
       </div>

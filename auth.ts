@@ -2,10 +2,10 @@ import NextAuth from "next-auth";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "./drizzle/database/db";
 import { getUserById } from "./data-access/user";
-import { users } from "./drizzle/database/schema";
 import { eq } from "drizzle-orm";
 import { getAccountByUserId } from "./data-access/account";
 import authConfig from "@/auth.config";
+import { users } from "./drizzle/database/schemas";
 
 export const {
   handlers: { GET, POST },

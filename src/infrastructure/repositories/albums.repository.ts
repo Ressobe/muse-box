@@ -7,7 +7,7 @@ import {
   AlbumWithTracks,
 } from "@/src/entities/models/album";
 import { and, asc, count, desc, eq, or, sql } from "drizzle-orm";
-import { albums, albumsStats } from "@/drizzle/database/schema";
+import { albums, albumsStats } from "@/drizzle/database/schemas";
 
 export class AlbumsRepository implements IAlbumsRepository {
   async getAlbums(limit?: number): Promise<Album[]> {
@@ -308,5 +308,10 @@ export class AlbumsRepository implements IAlbumsRepository {
     const filteredAlbums = await filteredAlbumsQuery;
 
     return filteredAlbums;
+  }
+
+  async getAlbumImage(albumId: string): Promise<string | null> {
+    const album = await this.getAlbum(albumId);
+    return album?.image ?? null;
   }
 }

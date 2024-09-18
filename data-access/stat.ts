@@ -1,9 +1,9 @@
 import { db } from "@/drizzle/database/db";
 import {
-  albumsStats,
   artistsStats,
   tracksStats,
-} from "@/drizzle/database/schema";
+  albumsStats,
+} from "@/drizzle/database/schemas";
 import { Entity } from "@/types";
 import { eq } from "drizzle-orm";
 

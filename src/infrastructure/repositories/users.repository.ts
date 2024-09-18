@@ -1,7 +1,7 @@
 import { IUsersRepository } from "@/src/application/repositories/users.repository.interface";
 import { db } from "@/drizzle/database/db";
 import { eq, sql } from "drizzle-orm";
-import { users } from "@/drizzle/database/schema";
+import { users } from "@/drizzle/database/schemas";
 import { Settings } from "@/src/entities/models/settings";
 
 export class UsersRepository implements IUsersRepository {

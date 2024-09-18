@@ -1,4 +1,4 @@
-import { playlistItems, playlists } from "@/drizzle/database/schema";
+import { playlistItems, playlists } from "@/drizzle/database/schemas";
 import { IPlaylistsRepository } from "@/src/application/repositories/playlists.repository.interface";
 import { db } from "@/drizzle/database/db";
 import {
@@ -51,6 +51,17 @@ export class PlaylistsRepository implements IPlaylistsRepository {
   async getPlaylistsForUser(userId: string): Promise<PlaylistWithItems[]> {
     return await db.query.playlists.findMany({
       where: eq(playlists.userId, userId),
+      with: {
+        items: true,
+      },
+    });
+  }
+
+  async getPlaylistInfo(
+    playlistId: string,
+  ): Promise<PlaylistWithItems | undefined> {
+    return await db.query.playlists.findFirst({
+      where: eq(playlists.id, playlistId),
       with: {
         items: true,
       },

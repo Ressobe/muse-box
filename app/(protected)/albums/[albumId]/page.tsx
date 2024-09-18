@@ -19,9 +19,13 @@ import { shouldShowAddReviewController } from "@/src/interface-adapters/controll
 import { getAlbumReviewsController } from "@/src/interface-adapters/controllers/album/get-album-reviews.controller";
 import { getAlbumInfoController } from "@/src/interface-adapters/controllers/album/get-album-info.controller";
 import { ContentInteraction } from "@/app/_components/content-interaction";
-import { getTrackRatingOwnedByUserController } from "@/src/interface-adapters/controllers/track/get-track-rating-owned-by-user-controller";
-import { isItemLikedByUserUseCase } from "@/src/application/use-cases/playlist/is-item-liked-by-user.use-case";
-import { getReviewForTrackOwnedByUserUseCase } from "@/src/application/use-cases/review/get-review-for-track-owned-by-user.use-case";
+
+import { getPopularAlbumsController } from "@/src/interface-adapters/controllers/album/get-popular-albums.controller";
+
+export async function generateStaticParams() {
+  const popularAlbums = await getPopularAlbumsController();
+  return popularAlbums.map((item) => item.id);
+}
 
 export default async function AlbumPage({
   params,
@@ -42,32 +46,8 @@ export default async function AlbumPage({
     return notFound();
   }
 
-  const tracksWithLikes = await Promise.all(
-    album.tracks.map(async (track) => {
-      const review = await getReviewForTrackOwnedByUserUseCase(
-        track.id,
-        user.id,
-      );
-      const defaultRate = review?.rating ?? 0;
-      const defaultReview = review?.comment ?? "";
-
-      return {
-        ...track,
-        defaultRate,
-        defaultReview,
-        isLiked: await isItemLikedByUserUseCase(user.id, track.id, "track"),
-      };
-    }),
-  );
-
   const reviews = await getAlbumReviewsController(albumId);
   const showAddReview = await shouldShowAddReviewController(albumId, "album");
-
-  const isAlbumLiked = await isItemLikedByUserUseCase(
-    user.id,
-    album.id,
-    "album",
-  );
 
   return (
     <section className="space-y-12">
@@ -89,14 +69,16 @@ export default async function AlbumPage({
           <RatingStats ratingAvg={album.stats?.ratingAvg} />
           <div className="flex items-center gap-x-4 text-sm">
             <ArtistSmallHeader artist={album.artist} />
-            <div className="block md:hidden">
-              <LikeButton
-                defaultLikeState={isAlbumLiked}
-                entityId={album.id}
-                type="album"
-                userId={user.id}
-              />
-            </div>
+            {album.isLiked !== undefined && (
+              <div className="block md:hidden">
+                <LikeButton
+                  defaultLikeState={album.isLiked}
+                  entityId={album.id}
+                  type="album"
+                  userId={user.id}
+                />
+              </div>
+            )}
 
             <span className="w-2 h-2 hidden md:block bg-foreground rounded-full"></span>
             <span className="hidden md:block">
@@ -110,14 +92,15 @@ export default async function AlbumPage({
                 : `${album.tracks.length} song`}{" "}
               / {getTime(getFullAlbumTime(album.tracks))}
             </span>
-            <div className="hidden md:block">
+
+            {album.isLiked !== undefined && (
               <LikeButton
-                defaultLikeState={isAlbumLiked}
+                defaultLikeState={album.isLiked}
                 entityId={album.id}
                 type="album"
                 userId={user.id}
               />
-            </div>
+            )}
           </div>
         </div>
       </div>
@@ -132,7 +115,7 @@ export default async function AlbumPage({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {tracksWithLikes.map((track) => {
+          {album.tracks.map((track) => {
             const artistsCreditsNames = track.artistCredit.artistsCreditsNames;
             return (
               <TableRow key={track.id} className="p-0">
@@ -176,17 +159,19 @@ export default async function AlbumPage({
                   <RatingStats ratingAvg={track.stats?.ratingAvg} size="sm" />
                 </TableCell>
                 <TableCell>
-                  <div className="flex">
-                    <ContentInteraction
-                      userId={user.id}
-                      entityName={track.title}
-                      entityId={track.id}
-                      type="track"
-                      isLiked={track.isLiked ?? false}
-                      defaultRate={track.defaultRate ?? 0}
-                      defaultReview={track.defaultReview}
-                    />
-                  </div>
+                  {track.isLiked !== undefined &&
+                    track.defaultRate !== undefined &&
+                    track.defaultReview !== undefined && (
+                      <ContentInteraction
+                        userId={user.id}
+                        entityName={track.title}
+                        entityId={track.id}
+                        type="track"
+                        isLiked={track.isLiked}
+                        defaultRate={track.defaultRate}
+                        defaultReview={track.defaultReview}
+                      />
+                    )}
                 </TableCell>
               </TableRow>
             );

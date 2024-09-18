@@ -4,7 +4,7 @@ import {
   reviewsTracks,
   tracks,
   tracksStats,
-} from "@/drizzle/database/schema";
+} from "@/drizzle/database/schemas";
 import { Track } from "@/schemas/track";
 import { asc, count, desc, eq, sql } from "drizzle-orm";
 import { createTrackStat } from "./stat";

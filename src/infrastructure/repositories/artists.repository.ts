@@ -6,7 +6,7 @@ import {
 } from "@/src/entities/models/artist";
 import { db } from "@/drizzle/database/db";
 import { asc, count, desc, eq, sql } from "drizzle-orm";
-import { artists, artistsStats } from "@/drizzle/database/schema";
+import { artists, artistsStats } from "@/drizzle/database/schemas";
 
 export class ArtistsRepository implements IArtistsRepository {
   async getArtists(): Promise<ArtistSelect[]> {

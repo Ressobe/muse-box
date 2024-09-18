@@ -1,10 +1,9 @@
 import { AlbumCard } from "@/app/_components/album/album-card";
+import { Album } from "@/src/entities/models/album";
 import { SeeMoreButton } from "@/app/_components/see-more-button";
 import { getNewAlbumsController } from "@/src/interface-adapters/controllers/album/get-new-albums.controller";
 import { getPopularAlbumsController } from "@/src/interface-adapters/controllers/album/get-popular-albums.controller";
 import { getTopAlbumsController } from "@/src/interface-adapters/controllers/album/get-top-albums.controller";
-
-export const dynamic = "force-dynamic";
 
 export default async function AlbumsPage() {
   const topAlbums = await getTopAlbumsController();
@@ -13,35 +12,36 @@ export default async function AlbumsPage() {
 
   return (
     <section className="w-full space-y-20">
-      <section>
-        <h1 className="font-bold text-xl md:text-3xl">Top albums</h1>
-        <div className="flex justify-center sm:justify-start flex-wrap gap-y-6 gap-x-10 pt-4">
-          {topAlbums.map((album) => {
-            return <AlbumCard key={album.id} album={album} />;
-          })}
-        </div>
+      <div>
+        <AlbumsSection title="Top albums" albums={topAlbums} />
         <SeeMoreButton href="/albums/search" />
-      </section>
+      </div>
+      <div>
+        <AlbumsSection title="Popular albums" albums={popularAlbums} />
+        <SeeMoreButton href="/albums/search" />
+      </div>
+      <div>
+        <AlbumsSection title="New albums" albums={newAlbums} />
+        <SeeMoreButton href="/albums/search" />
+      </div>
+    </section>
+  );
+}
 
-      <section>
-        <h1 className="font-bold text-xl md:text-3xl">Popular albums</h1>
-        <div className="flex justify-center sm:justify-start flex-wrap gap-y-6 gap-x-10 pt-4">
-          {popularAlbums.map((album) => {
-            return <AlbumCard key={album.id} album={album} />;
-          })}
-        </div>
-        <SeeMoreButton href="/albums/search" />
-      </section>
+type AlbumsSectionProps = {
+  title: string;
+  albums: Album[];
+};
 
-      <section>
-        <h1 className="font-bold text-xl md:text-3xl">New albums</h1>
-        <div className="flex justify-center sm:justify-start flex-wrap gap-y-6 gap-x-10 pt-4">
-          {newAlbums.map((album) => {
-            return <AlbumCard key={album.id} album={album} />;
-          })}
-        </div>
-        <SeeMoreButton href="/albums/search" />
-      </section>
+function AlbumsSection({ title, albums }: AlbumsSectionProps) {
+  return (
+    <section>
+      <h1 className="font-bold text-3xl">{title}</h1>
+      <div className="flex flex-wrap gap-y-6 gap-x-10 pt-4">
+        {albums.map((album) => {
+          return <AlbumCard key={album.id} album={album} />;
+        })}
+      </div>
     </section>
   );
 }

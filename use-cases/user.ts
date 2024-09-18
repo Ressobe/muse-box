@@ -6,19 +6,14 @@ import { createProfile } from "@/data-access/profile";
 import { getTrack, getTrackById } from "@/data-access/track";
 import {
   createUser,
-  getFilteredUsers,
   getUserAlbumReview,
-  getUserArtistReview,
   getUserArtistReview2,
   getUserById,
   getUserFavourite,
   getUserNotifications,
-  getUserPlaylists,
   getUserTrackReview,
-  removeFavourite,
-  updateFavourite,
 } from "@/data-access/user";
-import { Entity, entityToPlaylists } from "@/types";
+import { entityToPlaylists } from "@/types";
 import {
   AlbumReviewNotification,
   ArtistReviewNotification,
@@ -28,8 +23,6 @@ import {
   TrackReviewNotification,
 } from "@/types/notification";
 
-const LIMIT = 10;
-
 export async function createUserUseCase(
   email: string,
   name: string,
@@ -38,17 +31,6 @@ export async function createUserUseCase(
   const user = await createUser(email, name, password);
   await createProfile(user.id);
   return user;
-}
-
-export async function getUserPlaylistsUseCase(userId: string) {
-  return await getUserPlaylists(userId);
-}
-
-export async function getUserArtistReviewUseCase(
-  userId: string,
-  artistId: string,
-) {
-  return await getUserArtistReview(userId, artistId);
 }
 
 export async function getUserFavourtiesUseCase(userId: string) {
@@ -152,28 +134,6 @@ export async function getUserLikedTracksUseCase(userId: string) {
   return tracks;
 }
 
-export async function selectFavouriteUseCase(
-  entityId: string,
-  type: Entity,
-  userId: string,
-) {
-  const user = await getUserById(userId);
-  if (!user) {
-    throw new Error("User not found!");
-  }
-
-  return await updateFavourite(userId, entityId, type);
-}
-
-export async function removeFavouriteUseCase(type: Entity, userId: string) {
-  const user = await getUserById(userId);
-  if (!user) {
-    throw new Error("User not found!");
-  }
-
-  return await removeFavourite(userId, type);
-}
-
 export async function isUserFollowingProfileUseCase(
   userId: string,
   profileId: string,
@@ -254,14 +214,4 @@ export async function getUserNotificationsUseCase(
   );
 
   return notificationsWithResource;
-}
-
-export async function getFilteredUsersUseCase(query: string) {
-  const lowerCaseQuery = query.toLowerCase();
-
-  if (lowerCaseQuery === "") {
-    return [];
-  }
-
-  return getFilteredUsers(lowerCaseQuery, LIMIT);
 }

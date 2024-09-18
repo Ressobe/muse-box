@@ -19,6 +19,10 @@ import { UserProfileAvatar } from "@/app/_components/user/user-profile-avatar";
 import { LatestReviews } from "./latest-reviews";
 import { getUserLatestReviews } from "@/data-access/user";
 
+// export async function generateStaticParams() {
+//
+// }
+
 export default async function ProfilePage({
   params,
 }: {

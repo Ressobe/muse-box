@@ -1,6 +1,5 @@
 import { currentUser } from "@/lib/auth";
 import { isUserLikedItUseCase } from "@/use-cases/playlist";
-import { getTrackUseCase } from "@/use-cases/track";
 import Image from "next/image";
 import Link from "next/link";
 import { getTime, getYear } from "@/lib/utils";
@@ -8,13 +7,14 @@ import { LikeButton } from "@/app/_components/like-button";
 import { getArtistByAlbumId } from "@/data-access/artist";
 import { RatingStats } from "@/app/_components/review/rating-stats";
 import { ArtistSmallHeader } from "@/app/_components/artist/artist-small-header";
+import { getTrackInfoController } from "@/src/interface-adapters/controllers/track/get-track-info.controller";
 
 type TrackHeaderProps = {
   trackId: string;
 };
 
 export async function TrackHeader({ trackId }: TrackHeaderProps) {
-  const track = await getTrackUseCase(trackId);
+  const track = await getTrackInfoController({ trackId });
   if (!track) {
     return null;
   }

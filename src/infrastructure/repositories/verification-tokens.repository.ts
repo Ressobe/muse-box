@@ -2,7 +2,7 @@ import { IVerificationTokensRepository } from "@/src/application/repositories/ve
 import { VerificationToken } from "@/src/entities/models/verification-token";
 import { db } from "@/drizzle/database/db";
 import { eq } from "drizzle-orm";
-import { verificationTokens } from "@/drizzle/database/schema";
+import { verificationTokens } from "@/drizzle/database/schemas";
 
 export class VerificationTokensRepository
   implements IVerificationTokensRepository

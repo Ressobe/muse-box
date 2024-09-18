@@ -13,14 +13,6 @@ import { AlbumsLoading } from "@/app/_components/loading/albums-loading";
 import { TracksLoading } from "@/app/_components/loading/tracks-loading";
 import { ArtistHeaderLoading } from "@/app/_components/loading/artist-header-loading";
 import { Suspense } from "react";
-import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
-
-export const revalidate = 180;
-export const dynamicParams = true;
-export async function generateStaticParams() {
-  const popularArtists = await getPopularArtistsController();
-  return popularArtists.map((item) => item.id);
-}
 
 export default async function Artist({
   params,
@@ -33,6 +25,7 @@ export default async function Artist({
   const tracksData = getArtistTopTracksController(artistId);
   const singlesEpsData = getArtistSinglesEpsController(artistId);
   const reviewsData = getReviewsForArtistController(artistId);
+
   const showAddReviewData = shouldShowAddReviewController(artistId, "artist");
 
   const [artistInfo, tracks, singlesEps, reviews, showAddReview] =

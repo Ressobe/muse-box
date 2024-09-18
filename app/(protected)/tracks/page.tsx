@@ -4,11 +4,30 @@ import { TrackWithAlbum } from "@/src/entities/models/track";
 import { getNewTracksController } from "@/src/interface-adapters/controllers/track/get-new-tracks.controller";
 import { getPopularTracksController } from "@/src/interface-adapters/controllers/track/get-popular-tracks.controller";
 import { getTopTracksController } from "@/src/interface-adapters/controllers/track/get-top-tracks.controller";
+import { unstable_cache as cache } from "next/cache";
+
+const getCachedTopTracks = cache(
+  async () => getTopTracksController(),
+  ["top-tracks"],
+  { revalidate: 360 },
+);
+
+const getCachedPopularTracks = cache(
+  async () => getPopularTracksController(),
+  ["popular-tracks"],
+  { revalidate: 360 },
+);
+
+const getCachedNewTracks = cache(
+  async () => getNewTracksController(),
+  ["new-tracks"],
+  { revalidate: 360 },
+);
 
 export default async function TracksPage() {
-  const topTracks = await getTopTracksController();
-  const popularTracks = await getPopularTracksController();
-  const newTracks = await getNewTracksController();
+  const topTracks = await getCachedTopTracks();
+  const popularTracks = await getCachedPopularTracks();
+  const newTracks = await getCachedNewTracks();
 
   return (
     <section className="w-full space-y-20">

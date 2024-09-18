@@ -12,14 +12,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTrackInfoController } from "@/src/interface-adapters/controllers/track/get-track-info.controller";
 import { getTrackReviewsController } from "@/src/interface-adapters/controllers/track/get-track-reviews.controller";
-import { getPopularTracksController } from "@/src/interface-adapters/controllers/track/get-popular-tracks.controller";
-
-export const revalidate = 180;
-export const dynamicParams = true;
-export async function generateStaticParams() {
-  const popularTracks = await getPopularTracksController();
-  return popularTracks.map((item) => item.id);
-}
 
 export default async function TrackPage({
   params,

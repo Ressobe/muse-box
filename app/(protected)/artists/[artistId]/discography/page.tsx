@@ -23,10 +23,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
-export async function generateStaticParams() {
-  const popularArtists = await getPopularArtistsController();
-  return popularArtists.map((item) => item.id);
-}
+// export async function generateStaticParams() {
+//   const popularArtists = await getPopularArtistsController();
+//   return popularArtists.map((item) => item.id);
+// }
 
 export default async function DiscographyPage({
   params,

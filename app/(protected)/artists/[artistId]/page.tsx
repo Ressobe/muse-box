@@ -13,12 +13,12 @@ import { AlbumsLoading } from "@/app/_components/loading/albums-loading";
 import { TracksLoading } from "@/app/_components/loading/tracks-loading";
 import { ArtistHeaderLoading } from "@/app/_components/loading/artist-header-loading";
 import { Suspense } from "react";
-import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
-
-export async function generateStaticParams() {
-  const popularArtists = await getPopularArtistsController();
-  return popularArtists.map((item) => item.id);
-}
+// import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
+//
+// export async function generateStaticParams() {
+//   const popularArtists = await getPopularArtistsController();
+//   return popularArtists.map((item) => item.id);
+// }
 
 export default async function Artist({
   params,

@@ -1,6 +1,6 @@
 "use server";
 
-import { getUserArtistReview } from "@/data-access/user";
+import { getUserArtistReview, getUserLatestReviews } from "@/data-access/user";
 import { currentUser } from "@/lib/auth";
 import { createReviewController } from "@/src/interface-adapters/controllers/review/create-review.controller";
 import { Entity } from "@/types";
@@ -99,6 +99,7 @@ export async function changeReviewRateAction(
   entityId: string,
   userId: string,
   rating: number,
+  comment: string,
   type: Entity,
 ) {
   const user = await currentUser();
@@ -106,7 +107,13 @@ export async function changeReviewRateAction(
     return { error: "Not authorized access!" };
   }
 
-  const review = await changeReviewRateUseCase(entityId, userId, rating, type);
+  const review = await changeReviewRateUseCase(
+    entityId,
+    userId,
+    rating,
+    comment,
+    type,
+  );
 
   revalidatePath(pathname);
 
@@ -115,4 +122,9 @@ export async function changeReviewRateAction(
   }
 
   return { error: "review not updated!" };
+}
+
+export async function getUserLatestReviewsAction(profileId: string) {
+  const reviews = await getUserLatestReviews(profileId);
+  return reviews;
 }

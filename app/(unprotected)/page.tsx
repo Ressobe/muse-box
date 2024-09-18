@@ -4,10 +4,10 @@ import { Hero } from "@/app/_components/landing-page/hero";
 
 export default function Home() {
   return (
-    <>
+    <section className="space-y-32 md:space-y-52 py-20">
       <Hero />
       <Features />
       <Faq />
-    </>
+    </section>
   );
 }

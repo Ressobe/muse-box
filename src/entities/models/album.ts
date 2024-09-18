@@ -1,8 +1,6 @@
 import { z } from "zod";
 import { ratingSchema } from "./stat";
-import { artistSchema, artistSelectSchema } from "./artist";
-import { artistCreditSchema } from "./artistCredit";
-import { trackWithStatsSchema } from "./track";
+import { artistSelectSchema } from "./artist";
 import { artistCreditNameSchema } from "./artistCreditName";
 
 export const albumSchema = z.object({
@@ -20,6 +18,7 @@ export type Album = z.infer<typeof albumSchema>;
 export const albumWithStatsSchema = albumSchema.extend({
   stats: ratingSchema.nullable(),
   defaultRate: z.number().nullish(),
+  defaultReview: z.string().nullish(),
   isLiked: z.boolean().nullish(),
 });
 

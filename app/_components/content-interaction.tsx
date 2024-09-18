@@ -1,6 +1,6 @@
 import { Content } from "@/src/entities/models/content";
 import { LikeButton } from "@/app/_components/like-button";
-import { DialogRating } from "@/app/_components/review/dialog-comment";
+import { DialogRating } from "@/app/_components/review/dialog-rating";
 
 type ContentInteractionProps = {
   userId: string;
@@ -9,6 +9,7 @@ type ContentInteractionProps = {
   entityName: string;
   isLiked: boolean;
   defaultRate: number;
+  defaultReview: string;
 };
 
 export function ContentInteraction({
@@ -18,6 +19,7 @@ export function ContentInteraction({
   entityName,
   isLiked,
   defaultRate,
+  defaultReview,
 }: ContentInteractionProps) {
   return (
     <>
@@ -34,6 +36,7 @@ export function ContentInteraction({
           userId={userId}
           entityName={entityName}
           defaultRate={defaultRate}
+          defaultReview={defaultReview}
         />
       ) : null}
     </>

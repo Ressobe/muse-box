@@ -44,6 +44,7 @@ export const trackWithAlbumAndStatsSchema = trackWithAlbumSchema.extend({
     })
     .nullable(),
   defaultRate: z.number().nullish(),
+  defaultReview: z.string().nullish(),
   isLiked: z.boolean().nullish(),
 });
 

@@ -8,7 +8,6 @@ import {
 } from "@/app/_components/ui/table";
 import Image from "next/image";
 import Link from "next/link";
-import { LikeButton } from "@/app/_components/like-button";
 import { currentUser } from "@/lib/auth";
 import { RatingStats } from "@/app/_components/review/rating-stats";
 import { ContentInteraction } from "../content-interaction";
@@ -25,6 +24,7 @@ type TopTracksProps = {
     };
     isLiked: boolean | undefined;
     defaultRate: number | undefined;
+    defaultReview: string | undefined;
   }[];
 };
 
@@ -39,8 +39,8 @@ export async function TopTracks({ topTracks }: TopTracksProps) {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">#</TableHead>
-              <TableHead>Title</TableHead>
-              <TableHead>Album</TableHead>
+              <TableHead className="w-3/5 md:w-2/5">Title</TableHead>
+              <TableHead className="hidden md:block">Album</TableHead>
               <TableHead></TableHead>
               <TableHead></TableHead>
             </TableRow>
@@ -48,9 +48,9 @@ export async function TopTracks({ topTracks }: TopTracksProps) {
           <TableBody>
             {topTracks.map((item, idx) => {
               return (
-                <TableRow key={item.id} className="p-0">
+                <TableRow key={item.id} className="p-0 mr-4">
                   <TableCell className="font-medium">{idx + 1}</TableCell>
-                  <TableCell className="flex items-center gap-x-4">
+                  <TableCell className="flex items-center gap-x-4 min-w-[150px]">
                     <Image
                       src={item.album.image ?? ""}
                       width={70}
@@ -65,12 +65,14 @@ export async function TopTracks({ topTracks }: TopTracksProps) {
                     </Link>
                   </TableCell>
                   <TableCell>
-                    <Link
-                      href={`/albums/${item.album.id}`}
-                      className="transition-all underline-offset-2 hover:underline"
-                    >
-                      {item.album.title}
-                    </Link>
+                    <div className="hidden md:block">
+                      <Link
+                        href={`/albums/${item.album.id}`}
+                        className="transition-all underline-offset-2 hover:underline"
+                      >
+                        {item.album.title}
+                      </Link>
+                    </div>
                   </TableCell>
                   <TableCell>
                     <RatingStats ratingAvg={item.ratingAvg} size="sm" />
@@ -78,14 +80,17 @@ export async function TopTracks({ topTracks }: TopTracksProps) {
 
                   <TableCell>
                     {userId ? (
-                      <ContentInteraction
-                        userId={userId}
-                        entityName={item.title}
-                        entityId={item.id}
-                        type="track"
-                        isLiked={item.isLiked ?? false}
-                        defaultRate={item.defaultRate ?? 0}
-                      />
+                      <div className="flex">
+                        <ContentInteraction
+                          userId={userId}
+                          entityName={item.title}
+                          entityId={item.id}
+                          type="track"
+                          isLiked={item.isLiked ?? false}
+                          defaultRate={item.defaultRate ?? 0}
+                          defaultReview={item.defaultReview ?? ""}
+                        />
+                      </div>
                     ) : null}
                   </TableCell>
                 </TableRow>

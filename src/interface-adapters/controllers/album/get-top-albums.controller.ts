@@ -4,6 +4,8 @@ import { getTopAlbumsUseCase } from "@/src/application/use-cases/album/get-top-a
 import { isItemLikedByUserUseCase } from "@/src/application/use-cases/playlist/is-item-liked-by-user.use-case";
 import { AlbumWithStats } from "@/src/entities/models/album";
 import { getAlbumRatingOwnedByUserController } from "@/src/interface-adapters/controllers/album/get-album-rating-owned-by-user-controller";
+import { getReviewForAlbumOwnedByUserUseCase } from "@/src/application/use-cases/review/get-review-for-album-owned-by-user.use-case";
+
 
 export async function getTopAlbumsController(): Promise<AlbumWithStats[]> {
   let albums = await getTopAlbumsUseCase();
@@ -23,13 +25,18 @@ export async function getTopAlbumsController(): Promise<AlbumWithStats[]> {
           "album",
         );
 
-        const defaultRate = await getAlbumRatingOwnedByUserController(
+        const review = await getReviewForAlbumOwnedByUserUseCase(
           item.id,
           userId,
         );
+
+        const defaultRate = review?.rating ?? 0;
+        const defaultReview = review?.comment ?? "";
+
         return {
           ...item,
           defaultRate,
+          defaultReview,
           isLiked,
         };
       }),

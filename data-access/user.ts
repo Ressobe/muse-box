@@ -216,41 +216,63 @@ export async function getUserNotifications(userId: string) {
 // getLatestReviewsForUser
 export async function getUserLatestReviews(
   userId: string,
+  limit?: number,
 ): Promise<(TArtistReview | TAlbumReview | TTrackReview)[]> {
   const artistReviews = await db.query.reviewsArtists.findMany({
     where: eq(reviewsArtists.userId, userId),
     with: {
       artist: true,
     },
-    limit: LIMIT,
+    limit: limit,
   });
 
   const albumsReviews = await db.query.reviewsAlbums.findMany({
     where: eq(reviewsAlbums.userId, userId),
     with: {
-      album: true,
+      album: {
+        with: {
+          artist: true,
+        },
+      },
     },
-    limit: LIMIT,
+    limit: limit,
   });
 
   const trackReviews = await db.query.reviewsTracks.findMany({
     where: eq(reviewsTracks.userId, userId),
     with: {
-      track: true,
+      track: {
+        with: {
+          album: {
+            with: {
+              artist: true,
+            },
+          },
+        },
+      },
     },
-    limit: LIMIT,
+    limit: limit,
   });
 
   const allReviews = [...artistReviews, ...albumsReviews, ...trackReviews];
 
-  return allReviews
-    .sort((a, b) => {
-      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+  if (limit) {
+    return allReviews
+      .sort((a, b) => {
+        const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
 
-      return dateB - dateA;
-    })
-    .slice(0, LIMIT);
+        return dateB - dateA;
+      })
+      .slice(0, limit);
+  }
+
+  return allReviews.sort((a, b) => {
+    const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+    const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+
+    return dateB - dateA;
+  });
 }
 
 export async function getArtistReviewsWhereUserIsNotOwner(

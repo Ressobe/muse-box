@@ -5,7 +5,6 @@ import { Button } from "@/app/_components/ui/button";
 import { likeAction, unlikeAction } from "@/app/_actions/playlists";
 import { Entity } from "@/types";
 import { useState } from "react";
-import clsx from "clsx";
 import { useToast } from "@/app/_components/ui/use-toast";
 import { capitalizeFirstLetter } from "@/lib/utils";
 
@@ -61,14 +60,7 @@ export function LikeButton({
 
   return (
     <Button onClick={handleClick} variant="ghost" className="p-4">
-      <HeartIcon
-        className={clsx(
-          size === "lg" && "w-8 h-8",
-          size === "md" && "w-6 h-6",
-          "transition-colors",
-        )}
-        fill={like ? "white" : ""}
-      />
+      <HeartIcon className="h-6 w-6 md:h-8 md:w-8" fill={like ? "white" : ""} />
     </Button>
   );
 }

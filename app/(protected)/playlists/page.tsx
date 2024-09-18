@@ -19,7 +19,7 @@ export default async function PlaylistsPage() {
               href={`/playlists/${playlist.id}`}
               className="transition-all p-4 hover:bg-secondary/40 rounded"
             >
-              <li className="flex gap-x-4 items-center">
+              <li className="flex flex-col sm:flex-row gap-x-4 items-center">
                 <div className="w-[200px] h-[200px] relative overflow-hidden">
                   <Image
                     src={playlist.image ?? ""}
@@ -29,8 +29,8 @@ export default async function PlaylistsPage() {
                   />
                 </div>
                 <div className="pt-4">
-                  <div className="text-lg">{playlist.name}</div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-lg text-center">{playlist.name}</div>
+                  <div className="text-sm text-center sm:text-left text-muted-foreground">
                     {playlist.items.length > 1
                       ? `${playlist.items.length} Items`
                       : `${playlist.items.length} Item`}

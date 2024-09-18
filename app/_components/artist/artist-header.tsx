@@ -25,22 +25,22 @@ export async function ArtistHeader({
   const user = await currentUser();
 
   return (
-    <div className="flex items-center gap-x-20">
+    <div className="flex flex-col sm:flex-row items-center gap-x-20">
       <Avatar className="h-40 w-40">
         <AvatarImage src={artist?.image ?? ""} />
         <AvatarFallback>
           <FaUser className="w-20 h-20" />
         </AvatarFallback>
       </Avatar>
-      <div className="text-left">
-        <div>Artist</div>
-        <div className="relative">
+      <div className="flex flex-col items-center sm:items-start text-left">
+        <div className="pt-4">Artist</div>
+        <div className="relative  flex flex-col gap-4 items-center sm:items-start">
           <Link href={`/artists/${artist.id}`}>
-            <h1 className="font-bold text-4xl">{artist?.name}</h1>
+            <h1 className="font-bold text-4xl text-center">{artist?.name}</h1>
           </Link>
           <RatingStats ratingAvg={artist.stats?.ratingAvg} />
         </div>
-        <ul className="flex py-4 gap-x-6">
+        <ul className="flex flex-col sm:flex-row flex-wrap py-4 gap-2 md:gap-6">
           {genres.map((item) => {
             return (
               <li
@@ -51,17 +51,27 @@ export async function ArtistHeader({
               </li>
             );
           })}
+          <div className="hidden sm:flex justify-center gap-x-4">
+            {isLiked !== undefined ? (
+              <LikeButton
+                defaultLikeState={isLiked}
+                userId={user?.id}
+                entityId={artist.id}
+                type="artist"
+              />
+            ) : null}
+          </div>
         </ul>
-      </div>
-      <div className="flex gap-x-4">
-        {isLiked !== undefined ? (
-          <LikeButton
-            defaultLikeState={isLiked}
-            userId={user?.id}
-            entityId={artist.id}
-            type="artist"
-          />
-        ) : null}
+        <div className="flex sm:hidden justify-center gap-x-4">
+          {isLiked !== undefined ? (
+            <LikeButton
+              defaultLikeState={isLiked}
+              userId={user?.id}
+              entityId={artist.id}
+              type="artist"
+            />
+          ) : null}
+        </div>
       </div>
     </div>
   );

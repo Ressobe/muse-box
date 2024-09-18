@@ -14,9 +14,10 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
-import { RecentActivity } from "./recent-activity";
 import { FollowersFollowingDialog } from "./followers-following-dialog";
 import { UserProfileAvatar } from "@/app/_components/user/user-profile-avatar";
+import { LatestReviews } from "./latest-reviews";
+import { getUserLatestReviews } from "@/data-access/user";
 
 // export async function generateStaticParams() {
 //
@@ -44,6 +45,8 @@ export default async function ProfilePage({
     profileId,
   );
 
+  const latestActivity = await getUserLatestReviews(profileId, 5);
+
   let likedArists = null;
   let likedAlbums = null;
   let likedTracks = null;
@@ -55,13 +58,13 @@ export default async function ProfilePage({
 
   return (
     <section className="space-y-20">
-      <div className="flex items-center gap-x-20">
+      <div className="flex flex-col justify-center items-center lg:justify-start lg:flex-row  gap-x-20">
         <UserProfileAvatar
           canEdit={isUserOwnsThisProfile}
           authUserId={user.id}
           avatarUrl={profile.user.image}
         />
-        <div className="text-left space-y-6">
+        <div className="text-center md:text-left space-y-6 pb-10 lg:pb-0">
           <h1 className="font-bold text-4xl">{profile.user.name}</h1>
           {!isUserOwnsThisProfile && (
             <FollowButton
@@ -71,7 +74,7 @@ export default async function ProfilePage({
             />
           )}
         </div>
-        <div className="pl-20 flex gap-10">
+        <div className="pl-0 lg:pl-20 flex gap-10">
           <span className="flex flex-col items-center">
             <FollowersFollowingDialog
               profileId={profileId}
@@ -207,7 +210,7 @@ export default async function ProfilePage({
           )}
         </li>
       </ul>
-      <RecentActivity profileId={profileId} />
+      <LatestReviews profileId={profileId} initialActivity={latestActivity} />
     </section>
   );
 }

@@ -2,7 +2,6 @@ import { TAlbumReview } from "@/types/review";
 import { TableCell, TableRow } from "@/app/_components/ui/table";
 import { formatDateToShortMonthDayYear } from "@/lib/utils";
 import { Stars } from "@/app/_components/review/stars";
-import { getArtist } from "@/data-access/artist";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -10,12 +9,8 @@ type AlbumReviewProps = {
   albumReview: TAlbumReview;
 };
 
-export async function AlbumReview({ albumReview }: AlbumReviewProps) {
-  const artist = await getArtist(albumReview.album.artistId);
-  if (!artist) {
-    return null;
-  }
-
+export function AlbumReview({ albumReview }: AlbumReviewProps) {
+  const artist = albumReview.album.artist;
   const [day, month, year] = formatDateToShortMonthDayYear(
     albumReview.createdAt!,
   );
@@ -24,12 +19,15 @@ export async function AlbumReview({ albumReview }: AlbumReviewProps) {
     <TableRow>
       <TableCell>
         <Link href={`/albums/${albumReview.album.id}`}>
-          <Image
-            src={albumReview.album.image ?? ""}
-            width={80}
-            height={80}
-            alt={`${albumReview.album.title} cover image`}
-          />
+          <div className="w-[100px] h-[100px] ">
+            <Image
+              src={albumReview.album.image ?? ""}
+              width={80}
+              height={80}
+              alt={`${albumReview.album.title} cover image`}
+              className="object-cover"
+            />
+          </div>
         </Link>
       </TableCell>
       <TableCell className="flex flex-col items-center justify-center gap-2">

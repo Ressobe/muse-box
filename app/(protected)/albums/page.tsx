@@ -1,5 +1,6 @@
 import { AlbumCard } from "@/app/_components/album/album-card";
 import { Album } from "@/src/entities/models/album";
+import { SeeMoreButton } from "@/app/_components/see-more-button";
 import { getNewAlbumsController } from "@/src/interface-adapters/controllers/album/get-new-albums.controller";
 import { getPopularAlbumsController } from "@/src/interface-adapters/controllers/album/get-popular-albums.controller";
 import { getTopAlbumsController } from "@/src/interface-adapters/controllers/album/get-top-albums.controller";
@@ -14,6 +15,7 @@ export default async function AlbumsPage() {
       <AlbumsSection title="Top albums" albums={topAlbums} />
       <AlbumsSection title="Popular albums" albums={popularAlbums} />
       <AlbumsSection title="New albums" albums={newAlbums} />
+      <SeeMoreButton href="/albums/search" />
     </section>
   );
 }

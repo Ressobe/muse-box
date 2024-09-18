@@ -3,18 +3,14 @@ import { TableCell, TableRow } from "@/app/_components/ui/table";
 import Image from "next/image";
 import { formatDateToShortMonthDayYear } from "@/lib/utils";
 import { Stars } from "@/app/_components/review/stars";
-import { getAlbum } from "@/data-access/album";
 import Link from "next/link";
 
 type TrackReviewProps = {
   trackReview: TTrackReview;
 };
 
-export async function TrackReview({ trackReview }: TrackReviewProps) {
-  const album = await getAlbum(trackReview.track.albumId);
-  if (!album) {
-    return null;
-  }
+export function TrackReview({ trackReview }: TrackReviewProps) {
+  const album = trackReview.track.album;
 
   const [day, month, year] = formatDateToShortMonthDayYear(
     trackReview.createdAt!,
@@ -23,13 +19,16 @@ export async function TrackReview({ trackReview }: TrackReviewProps) {
   return (
     <TableRow>
       <TableCell>
-        <Link href={`/albums/${album.id}`}>
-          <Image
-            src={album.image ?? ""}
-            width={80}
-            height={80}
-            alt={`${album.title} cover image`}
-          />
+        <Link href={`/albums/${album?.id}`}>
+          <div className="w-[100px] h-[100px] ">
+            <Image
+              src={album.image ?? ""}
+              width={80}
+              height={80}
+              alt={`${album.title} cover image`}
+              className="object-cover"
+            />
+          </div>
         </Link>
       </TableCell>
       <TableCell className="flex flex-col items-center justify-center gap-2">

@@ -1,5 +1,6 @@
 import { ArtistCard } from "@/app/_components/artist/artist-card";
 import { ArtistSelect } from "@/src/entities/models/artist";
+import { SeeMoreButton } from "@/app/_components/see-more-button";
 import { getNewArtistsController } from "@/src/interface-adapters/controllers/artist/get-new-artists.controller";
 import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
 import { getTopArtistsController } from "@/src/interface-adapters/controllers/artist/get-top-artists.controller";
@@ -14,6 +15,7 @@ export default async function Artists() {
       <ArtistsSection title="Top artists" artists={topArtists} />
       <ArtistsSection title="Popular artists" artists={popularArtists} />
       <ArtistsSection title="New artists" artists={newArtists} />
+      <SeeMoreButton href="/artists/search" />
     </section>
   );
 }

@@ -14,7 +14,7 @@ type ArtistReviewProps = {
   artistReview: TArtistReview;
 };
 
-export async function ArtistReview({ artistReview }: ArtistReviewProps) {
+export function ArtistReview({ artistReview }: ArtistReviewProps) {
   const [day, month, year] = formatDateToShortMonthDayYear(
     artistReview.createdAt!,
   );
@@ -23,12 +23,14 @@ export async function ArtistReview({ artistReview }: ArtistReviewProps) {
     <TableRow>
       <TableCell>
         <Link href={`/artists/${artistReview.artist.id}`}>
-          <Avatar className="h-20 w-20">
-            <AvatarImage src={artistReview.artist.image ?? ""} />
-            <AvatarFallback>
-              <FaUser className="w-16 h-16" />
-            </AvatarFallback>
-          </Avatar>
+          <div className="w-[100px] h-[100px] ">
+            <Avatar className="h-20 w-20">
+              <AvatarImage src={artistReview.artist.image ?? ""} />
+              <AvatarFallback>
+                <FaUser className="w-16 h-16" />
+              </AvatarFallback>
+            </Avatar>
+          </div>
         </Link>
       </TableCell>
       <TableCell className="flex flex-col items-center justify-center gap-2 ">

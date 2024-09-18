@@ -91,6 +91,7 @@ export async function changeReviewRateUseCase(
   entityId: string,
   userId: string,
   rating: number,
+  comment: string,
   type: Entity,
 ) {
   let existingReview = await findReview(userId, entityId, type);
@@ -102,7 +103,7 @@ export async function changeReviewRateUseCase(
     existingReview.id,
     existingReview.entityId,
     existingReview.userId,
-    existingReview.comment ?? "",
+    comment,
     rating,
     type,
   );

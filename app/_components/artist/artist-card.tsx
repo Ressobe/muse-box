@@ -5,7 +5,6 @@ import {
   AvatarFallback,
 } from "@/app/_components/ui/avatar";
 import Link from "next/link";
-import clsx from "clsx";
 
 type ArtistCardProps = {
   artist: {
@@ -20,31 +19,20 @@ type ArtistCardProps = {
 
 export function ArtistCard({ artist, size = "xl" }: ArtistCardProps) {
   return (
-    <Link
-      href={`/artists/${artist.id}`}
-      className="flex flex-col items-center text-center cursor-pointer"
-    >
-      <div className="hover:bg-secondary/40 p-4 rounded transition-all">
-        <Avatar
-          className={clsx(
-            "mb-2",
-            size === "xl" && "h-48 w-48 ",
-            size === "lg" && "h-32 w-32",
-            size === "md" && "h-20 w-20",
-          )}
-        >
-          <AvatarImage src={artist.image ?? ""} />
+    <Link href={`/artists/${artist.id}`}>
+      <div className="max-w-[120px] md:max-w-max flex flex-col items-center transition-all p-4 hover:bg-secondary/40 rounded">
+        <Avatar className="h-20 w-20 md:w-32 md:h-32 lg:w-48 lg:h-48">
+          <AvatarImage
+            src={artist.image ?? ""}
+            alt={`${artist.name} avatar picture`}
+          />
           <AvatarFallback>
-            <FaUser
-              className={clsx(
-                size === "xl" && "h-20 w-20 ",
-                size === "lg" && "h-12 w-12",
-                size === "md" && "h-8 w-8",
-              )}
-            />
+            <FaUser className="h-8 w-8 md:w-12 md:h-12 lg:w-20 lg:h-20" />
           </AvatarFallback>
         </Avatar>
-        <span className="whitespace-normal">{artist.name}</span>
+        <div className="pt-4 max-w-[200px] text-sm md:text-lg text-center text-balance">
+          {artist.name}
+        </div>
       </div>
     </Link>
   );

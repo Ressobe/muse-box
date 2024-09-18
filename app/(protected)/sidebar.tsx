@@ -11,7 +11,7 @@ import { icons } from "lucide-react";
 
 type IconName = keyof typeof icons;
 
-const LINKS: {
+export const LINKS: {
   title: string;
   href: string;
   icon: IconName;
@@ -52,7 +52,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="p-4 text-left flex flex-col border-r">
+    <aside className="p-4 hidden md:flex text-left flex-col border-r">
       <Link href="/">
         <h1 className="font-bold  hidden md:block text-3xl text-gradient bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 hover:brightness-125 transform transition-all active:scale-110">
           {APP_NAME}

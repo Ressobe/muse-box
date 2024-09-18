@@ -34,7 +34,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   return (
     <section className="space-y-20">
       <div>
-        <h1 className="font-bold text-4xl">Users</h1>
+        <h1 className="font-bold text-2xl md:text-4xl text-center md:text-left">
+          Users
+        </h1>
         <ul className="pl-4 pt-8 flex flex-wrap">
           <Suspense>
             {users.length > 0 ? (
@@ -49,7 +51,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       </div>
 
       <div>
-        <h1 className="font-bold text-4xl">Artists</h1>
+        <h1 className="font-bold text-2xl md:text-4xl text-center md:text-left">
+          Artists
+        </h1>
         <ul className="pl-4 pt-8 flex flex-wrap">
           <Suspense>
             {artists.length > 0 ? (
@@ -64,7 +68,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       </div>
 
       <div>
-        <h1 className="font-bold text-4xl">Albums</h1>
+        <h1 className="font-bold text-2xl md:text-4xl text-center md:text-left">
+          Albums
+        </h1>
         <ul className="pl-4 pt-8 flex flex-wrap">
           <Suspense>
             {albums.length > 0 ? (
@@ -79,7 +85,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       </div>
 
       <div>
-        <h1 className="font-bold text-4xl">Tracks</h1>
+        <h1 className="font-bold text-2xl md:text-4xl text-center md:text-left">
+          Tracks
+        </h1>
         <ul className="pl-4 pt-8 flex flex-wrap">
           <Suspense>
             {tracks.length > 0 ? (

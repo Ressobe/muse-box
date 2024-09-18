@@ -50,35 +50,40 @@ export default async function TrackPage({
 
   return (
     <section className="space-y-20">
-      <div className="flex items-center gap-x-16">
+      <div className="flex flex-col justify-center sm:justify-start sm:flex-row items-center gap-x-16">
         <Image
           src={track.image ?? ""}
           width={200}
           height={200}
           alt={`${track.title} cover image`}
         />
-        <div className="space-y-8">
+        <div className="pt-12 sm:pt-0 space-y-8">
           <div>
             <div>Song</div>
-            <h1 className="font-bold text-5xl mb-2">{track.title}</h1>
+            <h1 className="font-bold text-3xl md:text-5xl mb-2">
+              {track.title}
+            </h1>
             <RatingStats
               ratingAvg={track.stats?.ratingAvg}
               ratingCount={track.stats?.ratingCount}
             />
           </div>
-          <div className="flex items-center gap-x-4 text-sm">
+          <div className="flex flex-col sm:flex-row gap-y-4 items-center gap-x-4 text-sm">
             <ArtistSmallHeader artist={track.album.artist} />
-            <span className="w-2 h-2 bg-foreground rounded-full"></span>
-            <span>{getYear(track.album.releaseDate)}</span>
-            <span className="w-2 h-2 bg-foreground rounded-full"></span>
+            <span className="w-2 h-2 hidden sm:block bg-foreground rounded-full"></span>
+            <span className="hidden sm:block">
+              {getYear(track.album.releaseDate)}
+            </span>
+            <span className="w-2 h-2 hidden sm:block bg-foreground rounded-full"></span>
             <Link
               href={`/albums/${track.album.id}`}
               className="transition-all underline-offset-2 hover:underline"
             >
               {track.album.title}
             </Link>
-            <span className="w-2 h-2 bg-foreground rounded-full"></span>
-            <span>{getTime(track.length)}</span>
+
+            <span className="w-2 h-2 hidden sm:block bg-foreground rounded-full"></span>
+            <span className="hidden sm:block">{getTime(track.length)}</span>
             {track.isLiked !== undefined && (
               <LikeButton
                 defaultLikeState={track.isLiked}

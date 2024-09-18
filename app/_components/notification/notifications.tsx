@@ -114,7 +114,7 @@ export function Notifications({ authUserId }: NotificationListProps) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="ghost" className="relative">
+        <Button variant="ghost" className="">
           {newNotification ? (
             <BellDot className="w-8 h-8" />
           ) : (
@@ -122,7 +122,7 @@ export function Notifications({ authUserId }: NotificationListProps) {
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[30rem] absolute -right-8">
+      <PopoverContent className="w-[18rem] md:w-[30rem] transform -translate-x-8 mt-2">
         {data.length > 0 ? (
           <ScrollArea className="h-96 p-2">
             <>{renderNotifications()}</>

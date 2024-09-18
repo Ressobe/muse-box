@@ -116,7 +116,7 @@ export function AddComment({
   };
 
   return (
-    <form className="w-1/3 flex flex-col gap-x-6">
+    <form className="w-full md:w-1/3 flex flex-col gap-x-6">
       <div>
         <Rating size={30} defaultRate={1} />
         <textarea
@@ -130,7 +130,7 @@ export function AddComment({
           onChange={(e) => setComment(e.target.value)}
         />
       </div>
-      <div className="w-full space-x-6 py-2">
+      <div className="flex w-full gap-x-6 py-2">
         <Button
           onClick={() => resetForm()}
           type="button"

@@ -1,3 +1,4 @@
+import { SeeMoreButton } from "@/app/_components/see-more-button";
 import { TrackCard } from "@/app/_components/track/track-card";
 import { TrackWithAlbum } from "@/src/entities/models/track";
 import { getNewTracksController } from "@/src/interface-adapters/controllers/track/get-new-tracks.controller";
@@ -14,6 +15,7 @@ export default async function TracksPage() {
       <TracksSection title="Top songs" tracks={topTracks} />
       <TracksSection title="Popular songs" tracks={popularTracks} />
       <TracksSection title="New songs" tracks={newTracks} />
+      <SeeMoreButton href="/tracks/search" />
     </section>
   );
 }

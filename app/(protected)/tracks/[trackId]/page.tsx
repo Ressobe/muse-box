@@ -14,6 +14,8 @@ import { getTrackInfoController } from "@/src/interface-adapters/controllers/tra
 import { getTrackReviewsController } from "@/src/interface-adapters/controllers/track/get-track-reviews.controller";
 import { getPopularTracksController } from "@/src/interface-adapters/controllers/track/get-popular-tracks.controller";
 
+export const revalidate = 180;
+export const dynamicParams = true;
 export async function generateStaticParams() {
   const popularTracks = await getPopularTracksController();
   return popularTracks.map((item) => item.id);

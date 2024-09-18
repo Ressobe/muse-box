@@ -14,6 +14,7 @@ import { useToast } from "@/app/_components/ui/use-toast";
 import { setCanvasPreview } from "@/lib/utils";
 import { newAvatarAction } from "@/app/_actions/new-avatar";
 import { useSession } from "next-auth/react";
+import { default as NextImage } from "next/image";
 
 const AllowedFileExtensions = ["jpg", "jpeg", "png", "webp"];
 const ASPECT_RATIO = 1;
@@ -164,10 +165,12 @@ export function UserNewAvatar({ authUserId, closeModal }: UserNewAvatarProps) {
             aspect={ASPECT_RATIO}
             minWidth={MIN_DIMENSION}
           >
-            <img
+            <NextImage
               src={imgSrc}
               ref={imgRef}
               alt="upload"
+              width={100}
+              height={100}
               style={{ maxHeight: "70vh" }}
               onLoad={handleImageLoad}
             />

@@ -15,6 +15,8 @@ import { ArtistHeaderLoading } from "@/app/_components/loading/artist-header-loa
 import { Suspense } from "react";
 import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
 
+export const revalidate = 180;
+export const dynamicParams = true;
 export async function generateStaticParams() {
   const popularArtists = await getPopularArtistsController();
   return popularArtists.map((item) => item.id);

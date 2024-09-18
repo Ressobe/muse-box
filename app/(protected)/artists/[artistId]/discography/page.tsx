@@ -2,11 +2,6 @@ import { ArtistSmallHeader } from "@/app/_components/artist/artist-small-header"
 import { LikeButton } from "@/app/_components/like-button";
 import { RatingStats } from "@/app/_components/review/rating-stats";
 import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/app/_components/ui/avatar";
-import {
   Table,
   TableBody,
   TableCell,
@@ -23,6 +18,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+export const revalidate = 180;
+export const dynamicParams = true;
 export async function generateStaticParams() {
   const popularArtists = await getPopularArtistsController();
   return popularArtists.map((item) => item.id);

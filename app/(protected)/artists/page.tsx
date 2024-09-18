@@ -12,10 +12,18 @@ export default async function Artists() {
 
   return (
     <section className="w-full space-y-20">
-      <ArtistsSection title="Top artists" artists={topArtists} />
-      <ArtistsSection title="Popular artists" artists={popularArtists} />
-      <ArtistsSection title="New artists" artists={newArtists} />
-      <SeeMoreButton href="/artists/search" />
+      <div>
+        <ArtistsSection title="Top artists" artists={topArtists} />
+        <SeeMoreButton href="/artists/search" />
+      </div>
+      <div>
+        <ArtistsSection title="Popular artists" artists={popularArtists} />
+        <SeeMoreButton href="/artists/search" />
+      </div>
+      <div>
+        <ArtistsSection title="New artists" artists={newArtists} />
+        <SeeMoreButton href="/artists/search" />
+      </div>
     </section>
   );
 }

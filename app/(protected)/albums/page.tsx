@@ -12,10 +12,18 @@ export default async function AlbumsPage() {
 
   return (
     <section className="w-full space-y-20">
-      <AlbumsSection title="Top albums" albums={topAlbums} />
-      <AlbumsSection title="Popular albums" albums={popularAlbums} />
-      <AlbumsSection title="New albums" albums={newAlbums} />
-      <SeeMoreButton href="/albums/search" />
+      <div>
+        <AlbumsSection title="Top albums" albums={topAlbums} />
+        <SeeMoreButton href="/albums/search" />
+      </div>
+      <div>
+        <AlbumsSection title="Popular albums" albums={popularAlbums} />
+        <SeeMoreButton href="/albums/search" />
+      </div>
+      <div>
+        <AlbumsSection title="New albums" albums={newAlbums} />
+        <SeeMoreButton href="/albums/search" />
+      </div>
     </section>
   );
 }

@@ -12,10 +12,18 @@ export default async function TracksPage() {
 
   return (
     <section className="w-full space-y-20">
-      <TracksSection title="Top songs" tracks={topTracks} />
-      <TracksSection title="Popular songs" tracks={popularTracks} />
-      <TracksSection title="New songs" tracks={newTracks} />
-      <SeeMoreButton href="/tracks/search" />
+      <div>
+        <TracksSection title="Top songs" tracks={topTracks} />
+        <SeeMoreButton href="/tracks/search" />
+      </div>
+      <div>
+        <TracksSection title="Popular songs" tracks={popularTracks} />
+        <SeeMoreButton href="/tracks/search" />
+      </div>
+      <div>
+        <TracksSection title="New songs" tracks={newTracks} />
+        <SeeMoreButton href="/tracks/search" />
+      </div>
     </section>
   );
 }

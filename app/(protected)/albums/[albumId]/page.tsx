@@ -27,7 +27,6 @@ export async function generateStaticParams() {
   return popularAlbums.map((item) => item.id);
 }
 
-
 export default async function AlbumPage({
   params,
 }: {
@@ -70,14 +69,16 @@ export default async function AlbumPage({
           <RatingStats ratingAvg={album.stats?.ratingAvg} />
           <div className="flex items-center gap-x-4 text-sm">
             <ArtistSmallHeader artist={album.artist} />
-            <div className="block md:hidden">
-              <LikeButton
-                defaultLikeState={isAlbumLiked}
-                entityId={album.id}
-                type="album"
-                userId={user.id}
-              />
-            </div>
+            {album.isLiked !== undefined && (
+              <div className="block md:hidden">
+                <LikeButton
+                  defaultLikeState={album.isLiked}
+                  entityId={album.id}
+                  type="album"
+                  userId={user.id}
+                />
+              </div>
+            )}
 
             <span className="w-2 h-2 hidden md:block bg-foreground rounded-full"></span>
             <span className="hidden md:block">
@@ -159,7 +160,8 @@ export default async function AlbumPage({
                 </TableCell>
                 <TableCell>
                   {track.isLiked !== undefined &&
-                    track.defaultRate !== undefined && (
+                    track.defaultRate !== undefined &&
+                    track.defaultReview !== undefined && (
                       <ContentInteraction
                         userId={user.id}
                         entityName={track.title}
@@ -167,9 +169,9 @@ export default async function AlbumPage({
                         type="track"
                         isLiked={track.isLiked}
                         defaultRate={track.defaultRate}
+                        defaultReview={track.defaultReview}
                       />
                     )}
-
                 </TableCell>
               </TableRow>
             );

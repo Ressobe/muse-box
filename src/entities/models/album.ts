@@ -85,6 +85,7 @@ export const albumWithRelationsSchema = albumWithTracksSchema.extend({
         artistsCreditsNames: artistCreditNameSchema.array(),
       }),
       defaultRate: z.number().optional(),
+      defaultReview: z.string().optional(),
       isLiked: z.boolean().optional(),
     })
     .array(),

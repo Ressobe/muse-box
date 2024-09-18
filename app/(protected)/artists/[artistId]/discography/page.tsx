@@ -51,7 +51,6 @@ export default async function DiscographyPage({
       {discography.map((album) => {
         return (
           <div key={album.id} className="space-y-12">
-
             <div className="flex flex-col items-center sm:items-start p-8 md:p-0 md:flex-row md:items-center gap-x-16">
               <div className="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px]">
                 <Image
@@ -63,7 +62,6 @@ export default async function DiscographyPage({
                 />
               </div>
               <div className="pt-8 space-y-4 md:pt-0  md:space-y-8">
-
                 <div>
                   <div>{album.albumType.name}</div>
                   <h1 className="font-bold text-2xl md:text-5xl">
@@ -79,7 +77,7 @@ export default async function DiscographyPage({
                         defaultLikeState={album.isLiked}
                         entityId={album.id}
                         type="album"
-                        userId={user?.id}
+                        userId={authUserId}
                       />
                     )}
                   </div>
@@ -106,17 +104,16 @@ export default async function DiscographyPage({
                     />
                   ) : null}
 
-        {album.isLiked !== undefined && authUserId !== undefined ? (
-                  <div className="hidden md:block">
-                
+                  {album.isLiked !== undefined && authUserId !== undefined ? (
+                    <div className="hidden md:block">
                       <LikeButton
                         defaultLikeState={album.isLiked}
                         entityId={album.id}
                         type="album"
-                        userId={user?.id}
+                        userId={authUserId}
                       />
-                 </div>
-                      ) : null}
+                    </div>
+                  ) : null}
                 </div>
               </div>
             </div>

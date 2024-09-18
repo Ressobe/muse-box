@@ -4,7 +4,7 @@ import { getAlbumWithTracksUseCase } from "@/src/application/use-cases/album/get
 import { isItemLikedByUserUseCase } from "@/src/application/use-cases/playlist/is-item-liked-by-user.use-case";
 import { InputParseError, NotFoundError } from "@/src/entities/errors/common";
 import { AlbumWithRelations } from "@/src/entities/models/album";
-import { getTrackRatingOwnedByUserController } from "../track/get-track-rating-owned-by-user-controller";
+import { getReviewForTrackOwnedByUserUseCase } from "@/src/application/use-cases/review/get-review-for-track-owned-by-user.use-case";
 
 function presenter(album: AlbumWithRelations) {
   return {
@@ -19,6 +19,7 @@ function presenter(album: AlbumWithRelations) {
       name: album.albumType.name,
     },
     defaultRate: album.defaultRate ?? undefined,
+    defaultReview: album.defaultReview ?? undefined,
     isLiked: album.isLiked ?? undefined,
   };
 }
@@ -42,14 +43,21 @@ export async function getAlbumInfoController(albumId: string | undefined) {
   if (userId) {
     const isLiked = await isItemLikedByUserUseCase(userId, album.id, "album");
     const tracksWithLikes = await Promise.all(
-      album.tracks.map(async (track) => ({
-        ...track,
-        defaultRate: await getTrackRatingOwnedByUserController(
+      album.tracks.map(async (track) => {
+        const review = await getReviewForTrackOwnedByUserUseCase(
           track.id,
           userId,
-        ),
-        isLiked: await isItemLikedByUserUseCase(userId, track.id, "track"),
-      })),
+        );
+        const defaultRate = review?.rating ?? 0;
+        const defaultReview = review?.comment ?? "";
+
+        return {
+          ...track,
+          defaultRate,
+          defaultReview,
+          isLiked: await isItemLikedByUserUseCase(userId, track.id, "track"),
+        };
+      }),
     );
     return presenter({ ...album, isLiked, tracks: tracksWithLikes });
   }

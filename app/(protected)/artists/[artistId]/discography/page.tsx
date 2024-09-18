@@ -13,10 +13,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/app/_components/ui/table";
-import { currentUser } from "@/lib/auth";
 import { getFullAlbumTime, getTime, getYear } from "@/lib/utils";
 import { getArtistDiscographyController } from "@/src/interface-adapters/controllers/artist/get-artist-discography.controller";
 import { getArtistInfoController } from "@/src/interface-adapters/controllers/artist/get-artist-info.controller";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -35,16 +35,14 @@ export default async function DiscographyPage({
   if (!artistInfo.artist) {
     return notFound();
   }
-
   const artist = artistInfo.artist;
 
   const discography = await getArtistDiscographyController(artistId);
-
-  const user = await currentUser();
+  const authUserId = await getAuthUserIdController();
 
   return (
     <section className="space-y-32">
-      {discography.map(async (album) => {
+      {discography.map((album) => {
         return (
           <div key={album.id} className="space-y-12">
             <div className="flex items-center gap-x-16">
@@ -52,7 +50,7 @@ export default async function DiscographyPage({
                 src={album.image ?? ""}
                 width={200}
                 height={200}
-                alt="dkdk"
+                alt={`${album.title} cover image`}
               />
               <div className="space-y-8">
                 <div>
@@ -85,12 +83,12 @@ export default async function DiscographyPage({
                       : `${album.tracks.length} song`}
                     , {getTime(getFullAlbumTime(album.tracks))}
                   </span>
-                  {album.isLiked !== undefined ? (
+                  {album.isLiked !== undefined && authUserId !== undefined ? (
                     <LikeButton
                       defaultLikeState={album.isLiked}
                       entityId={album.id}
                       type="album"
-                      userId={user?.id}
+                      userId={authUserId}
                     />
                   ) : null}
                 </div>
@@ -106,7 +104,7 @@ export default async function DiscographyPage({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {album.tracks.map(async (track, idx) => {
+                {album.tracks.map((track, idx) => {
                   return (
                     <TableRow key={track.id} className="p-0">
                       <TableCell className="font-medium">{idx + 1}</TableCell>
@@ -115,7 +113,7 @@ export default async function DiscographyPage({
                           src={track.image ?? ""}
                           width={70}
                           height={70}
-                          alt="dkdk"
+                          alt={`${track.title} cover image`}
                         />
                         <Link
                           href={`/tracks/${track.id}`}
@@ -131,12 +129,13 @@ export default async function DiscographyPage({
                         />
                       </TableCell>
                       <TableCell>
-                        {track.isLiked !== undefined ? (
+                        {track.isLiked !== undefined &&
+                        authUserId !== undefined ? (
                           <LikeButton
                             defaultLikeState={track.isLiked}
                             entityId={track.id}
                             type="track"
-                            userId={user?.id}
+                            userId={authUserId}
                           />
                         ) : null}
                       </TableCell>

@@ -5,7 +5,6 @@ import { SinglesEps } from "@/app/_components/album/single-eps";
 import { Reviews } from "@/app/_components/review/reviews";
 import { ArtistHeader } from "@/app/_components/artist/artist-header";
 import { getArtistInfoController } from "@/src/interface-adapters/controllers/artist/get-artist-info.controller";
-import { Suspense } from "react";
 import { getArtistSinglesEpsController } from "@/src/interface-adapters/controllers/artist/get-artist-singles-eps.controller";
 import { getArtistTopTracksController } from "@/src/interface-adapters/controllers/artist/get-artist-top-tracks.controller";
 import { getReviewsForArtistController } from "@/src/interface-adapters/controllers/review/get-reviews-for-artist.controller";
@@ -13,6 +12,7 @@ import { shouldShowAddReviewController } from "@/src/interface-adapters/controll
 import { AlbumsLoading } from "@/app/_components/loading/albums-loading";
 import { TracksLoading } from "@/app/_components/loading/tracks-loading";
 import { ArtistHeaderLoading } from "@/app/_components/loading/artist-header-loading";
+import { Suspense } from "react";
 
 export default async function Artist({
   params,

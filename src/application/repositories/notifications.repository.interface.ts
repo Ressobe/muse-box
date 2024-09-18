@@ -1,11 +1,9 @@
-import { Follow } from "@/src/entities/models/follow";
+import { FollowerUser } from "@/src/entities/models/follow";
 import {
   Notification,
   NotificationRecipientsWithNotification,
   NotificationType,
 } from "@/src/entities/models/notification";
-
-// TODO: Return types
 
 export interface INotificationsRepository {
   deleteNotification(notificationId: string): Promise<void>;
@@ -23,11 +21,9 @@ export interface INotificationsRepository {
     reciverId: string,
   ): Promise<void>;
 
-  // Muszę w use case dla danego użytkownika zdobyć listę jego
-  // followersow
   sendNotificationToFollowers(
     notificationId: string,
-    followers: Follow[],
+    followers: FollowerUser[],
   ): Promise<void>;
 
   getNotificationsForUser(

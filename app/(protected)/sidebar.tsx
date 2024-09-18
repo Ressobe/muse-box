@@ -1,4 +1,5 @@
 "use client";
+
 import { usePathname } from "next/navigation";
 import { LogoutButton } from "@/app/_components/auth/logout-button";
 import { APP_NAME } from "@/config";
@@ -7,6 +8,7 @@ import { cn } from "@/lib/utils";
 import Icon from "@/app/_components/icon";
 import { LogOutIcon } from "lucide-react";
 import { icons } from "lucide-react";
+
 type IconName = keyof typeof icons;
 
 const LINKS: {

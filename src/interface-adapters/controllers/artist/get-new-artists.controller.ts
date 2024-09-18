@@ -8,6 +8,8 @@ function presenter(artists: ArtistSelect[]) {
     bio: item.bio,
     country: item.country,
     image: item.image ?? "",
+    type: null,
+    gender: null,
   }));
 }
 

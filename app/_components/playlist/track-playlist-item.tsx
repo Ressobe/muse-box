@@ -1,10 +1,10 @@
 import { TableRow, TableCell } from "@/app/_components/ui/table";
-import { getTrackUseCase } from "@/use-cases/track";
 import Image from "next/image";
 import Link from "next/link";
 import { LikeButton } from "@/app/_components/like-button";
 import { currentUser } from "@/lib/auth";
 import { RatingStats } from "@/app/_components/review/rating-stats";
+import { getTrackInfoController } from "@/src/interface-adapters/controllers/track/get-track-info.controller";
 
 type TrackPlaylistItemProps = {
   trackId: string;
@@ -20,7 +20,7 @@ export async function TrackPlaylistItem({
     return null;
   }
 
-  const track = await getTrackUseCase(trackId);
+  const track = await getTrackInfoController({ trackId });
   if (!track) {
     return null;
   }

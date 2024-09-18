@@ -2,7 +2,7 @@ import { z } from "zod";
 import { artistSelectSchema } from "./artist";
 import { albumSchema } from "./album";
 import { trackSchema } from "./track";
-import { userSchema } from "./user";
+import { userSchema, userSelectSchema } from "./user";
 
 export const reviewSchema = z.object({
   id: z.string(),
@@ -34,7 +34,7 @@ export const reviewWithTrackSchema = reviewSchema.extend({
 });
 
 export const reviewWithUserSchema = reviewSelectSchema.extend({
-  user: userSchema,
+  user: userSelectSchema,
 });
 
 export const reviewWithTrackAndUserSchema = reviewSchema.extend({

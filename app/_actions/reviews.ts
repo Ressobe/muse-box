@@ -2,10 +2,10 @@
 
 import { getUserArtistReview } from "@/data-access/user";
 import { currentUser } from "@/lib/auth";
+import { createReviewController } from "@/src/interface-adapters/controllers/review/create-review.controller";
 import { Entity } from "@/types";
 import {
   changeReviewRateUseCase,
-  createReviewUseCase,
   editReviewUseCase,
   removeReviewUseCase,
 } from "@/use-cases/review";
@@ -13,7 +13,6 @@ import { revalidatePath } from "next/cache";
 
 export async function addReviewAction(
   entityId: string,
-  userId: string,
   comment: string,
   rating: number,
   type: Entity,
@@ -30,13 +29,12 @@ export async function addReviewAction(
     }
   }
 
-  const review = await createReviewUseCase(
+  const review = await createReviewController({
     entityId,
-    userId,
     comment,
     rating,
     type,
-  );
+  });
 
   revalidatePath(`/${type}s/${entityId}`);
 

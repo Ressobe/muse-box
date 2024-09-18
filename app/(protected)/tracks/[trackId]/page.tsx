@@ -7,11 +7,11 @@ import { Reviews } from "@/app/_components/review/reviews";
 import { getUserTrackReview } from "@/data-access/user";
 import { currentUser } from "@/lib/auth";
 import { getTime, getYear } from "@/lib/utils";
-import { isUserLikedItUseCase } from "@/use-cases/playlist";
-import { getTrackReviewsUseCase, getTrackUseCase } from "@/use-cases/track";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { getTrackInfoController } from "@/src/interface-adapters/controllers/track/get-track-info.controller";
+import { getTrackReviewsController } from "@/src/interface-adapters/controllers/track/get-track-reviews.controller";
 
 export default async function TrackPage({
   params,
@@ -21,7 +21,7 @@ export default async function TrackPage({
   };
 }) {
   const { trackId } = params;
-  const track = await getTrackUseCase(trackId);
+  const track = await getTrackInfoController({ trackId });
 
   if (!track) {
     return notFound();
@@ -31,8 +31,7 @@ export default async function TrackPage({
     return null;
   }
 
-  const reviews = await getTrackReviewsUseCase(track.id);
-  const isTrackLiked = await isUserLikedItUseCase(user.id, track.id, "track");
+  const reviews = await getTrackReviewsController({ trackId: track.id });
 
   let showAddReview = true;
   const session = await auth();
@@ -74,12 +73,14 @@ export default async function TrackPage({
             </Link>
             <span className="w-2 h-2 bg-foreground rounded-full"></span>
             <span>{getTime(track.length)}</span>
-            <LikeButton
-              defaultLikeState={isTrackLiked}
-              entityId={track.id}
-              type="track"
-              userId={user.id}
-            />
+            {track.isLiked !== undefined && (
+              <LikeButton
+                defaultLikeState={track.isLiked}
+                entityId={track.id}
+                type="track"
+                userId={user.id}
+              />
+            )}
           </div>
         </div>
       </div>

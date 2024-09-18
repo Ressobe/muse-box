@@ -8,7 +8,7 @@ export const artistSchema = z.object({
   country: z.string(),
   gender: z.number(),
 
-  image: z.string().default("").optional().nullable(),
+  image: z.string().default("").nullable(),
   bio: z.string().default("").nullable(),
   beginDateYear: z.number().nullable().optional(),
   beginDateMonth: z.number().nullable().optional(),

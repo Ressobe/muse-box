@@ -309,4 +309,9 @@ export class AlbumsRepository implements IAlbumsRepository {
 
     return filteredAlbums;
   }
+
+  async getAlbumImage(albumId: string): Promise<string | null> {
+    const album = await this.getAlbum(albumId);
+    return album?.image ?? null;
+  }
 }

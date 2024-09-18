@@ -1,5 +1,8 @@
 import { z } from "zod";
 import { albumSchema, albumSelectSchema } from "./album";
+import { artistSelectSchema } from "./artist";
+import { artistCreditSchema } from "./artistCredit";
+import { artistCreditNameSchema } from "./artistCreditName";
 
 export const trackSchema = z.object({
   id: z.string(),
@@ -59,3 +62,25 @@ export const trackWithAlbumAndRatingAvgSchema = trackWithRatingAvg.extend({
 export type TrackWithAlbumAndRatingAvg = z.infer<
   typeof trackWithAlbumAndRatingAvgSchema
 >;
+
+const trackWithRelationsSchema = trackSchema.extend({
+  album: albumSchema.extend({
+    artist: artistSelectSchema,
+  }),
+  stats: z.object({
+    ratingAvg: z.number().nullable(),
+    ratingCount: z.number().nullable(),
+    ratingSum: z.number().nullable(),
+  }),
+  artistCredit: z.object({
+    id: z.string(),
+    name: z.string().nullable(),
+    artistsCreditsNames: artistCreditNameSchema
+      .extend({ artist: artistSelectSchema })
+      .array(),
+  }),
+  defaultRate: z.number().optional(),
+  isLiked: z.boolean().optional(),
+});
+
+export type TrackWithRelations = z.infer<typeof trackWithRelationsSchema>;

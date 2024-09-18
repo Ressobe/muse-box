@@ -7,22 +7,22 @@ import {
 } from "@/app/_components/ui/avatar";
 import { FaUser } from "react-icons/fa";
 import { getTime, getYear, getFullAlbumTime } from "@/lib/utils";
-import { currentUser } from "@/lib/auth";
 import { LikeButton } from "@/app/_components/like-button";
-import { getAlbumUseCase } from "@/use-cases/album";
 import { RatingStats } from "@/app/_components/review/rating-stats";
+import { getAlbumInfoController } from "@/src/interface-adapters/controllers/album/get-album-info.controller";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 
 type AlbumPlaylistItemProps = {
   albumId: string;
 };
 
 export async function AlbumPlaylistItem({ albumId }: AlbumPlaylistItemProps) {
-  const user = await currentUser();
-  if (!user) {
+  const authUserId = await getAuthUserIdController();
+  if (!authUserId) {
     return null;
   }
 
-  const album = await getAlbumUseCase(albumId);
+  const album = await getAlbumInfoController(albumId);
   if (!album) {
     return null;
   }
@@ -57,7 +57,7 @@ export async function AlbumPlaylistItem({ albumId }: AlbumPlaylistItemProps) {
               </AvatarFallback>
             </Avatar>
             <Link
-              href={`/artists/${album.artistId}`}
+              href={`/artists/${album.artist.id}`}
               className="underline-offset-2 hover:underline"
             >
               <span>{album.artist?.name}</span>
@@ -73,7 +73,7 @@ export async function AlbumPlaylistItem({ albumId }: AlbumPlaylistItemProps) {
               defaultLikeState={true}
               entityId={album.id}
               type="album"
-              userId={user.id}
+              userId={authUserId}
             />
           </div>
         </div>

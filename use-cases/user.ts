@@ -6,14 +6,11 @@ import { createProfile } from "@/data-access/profile";
 import { getTrack, getTrackById } from "@/data-access/track";
 import {
   createUser,
-  getFilteredUsers,
   getUserAlbumReview,
-  getUserArtistReview,
   getUserArtistReview2,
   getUserById,
   getUserFavourite,
   getUserNotifications,
-  getUserPlaylists,
   getUserTrackReview,
 } from "@/data-access/user";
 import { entityToPlaylists } from "@/types";
@@ -26,8 +23,6 @@ import {
   TrackReviewNotification,
 } from "@/types/notification";
 
-const LIMIT = 10;
-
 export async function createUserUseCase(
   email: string,
   name: string,
@@ -36,17 +31,6 @@ export async function createUserUseCase(
   const user = await createUser(email, name, password);
   await createProfile(user.id);
   return user;
-}
-
-export async function getUserPlaylistsUseCase(userId: string) {
-  return await getUserPlaylists(userId);
-}
-
-export async function getUserArtistReviewUseCase(
-  userId: string,
-  artistId: string,
-) {
-  return await getUserArtistReview(userId, artistId);
 }
 
 export async function getUserFavourtiesUseCase(userId: string) {
@@ -230,14 +214,4 @@ export async function getUserNotificationsUseCase(
   );
 
   return notificationsWithResource;
-}
-
-export async function getFilteredUsersUseCase(query: string) {
-  const lowerCaseQuery = query.toLowerCase();
-
-  if (lowerCaseQuery === "") {
-    return [];
-  }
-
-  return getFilteredUsers(lowerCaseQuery, LIMIT);
 }

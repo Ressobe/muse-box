@@ -56,4 +56,15 @@ export class PlaylistsRepository implements IPlaylistsRepository {
       },
     });
   }
+
+  async getPlaylistInfo(
+    playlistId: string,
+  ): Promise<PlaylistWithItems | undefined> {
+    return await db.query.playlists.findFirst({
+      where: eq(playlists.id, playlistId),
+      with: {
+        items: true,
+      },
+    });
+  }
 }

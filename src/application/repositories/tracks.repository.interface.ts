@@ -3,12 +3,16 @@ import {
   TrackWithAlbum,
   TrackWithAlbumAndRatingAvg,
   TrackWithAlbumAndStats,
+  TrackWithRelations,
 } from "@/src/entities/models/track";
 
 export interface ITracksRepository {
   getTracks(limit?: number): Promise<Track[]>;
   getTrack(trackId: string): Promise<Track | undefined>;
   insertTrack(newTrack: Track): Promise<Track>;
+  getTrackImage(trackId: string): Promise<string | null>;
+
+  getTrackInfo(trackId: string): Promise<TrackWithRelations | undefined>;
 
   getTopTracksForArtist(
     artistId: string,

@@ -1,5 +1,4 @@
 import { ArtistsTable } from "@/app/_components/artist/artists-table";
-import { currentUser } from "@/lib/auth";
 import { isValidSortType, SortType } from "@/src/entities/types";
 import { getArtistsSearchController } from "@/src/interface-adapters/controllers/artist/get-artists-search.controller";
 import { Suspense } from "react";

@@ -19,8 +19,6 @@ import { shouldShowAddReviewController } from "@/src/interface-adapters/controll
 import { getAlbumReviewsController } from "@/src/interface-adapters/controllers/album/get-album-reviews.controller";
 import { getAlbumInfoController } from "@/src/interface-adapters/controllers/album/get-album-info.controller";
 import { ContentInteraction } from "@/app/_components/content-interaction";
-import { getTrackRatingOwnedByUserController } from "@/src/interface-adapters/controllers/track/get-track-rating-owned-by-user-controller";
-import { isItemLikedByUserUseCase } from "@/src/application/use-cases/playlist/is-item-liked-by-user.use-case";
 
 export default async function AlbumPage({
   params,
@@ -41,22 +39,8 @@ export default async function AlbumPage({
     return notFound();
   }
 
-  const tracksWithLikes = await Promise.all(
-    album.tracks.map(async (track) => ({
-      ...track,
-      defaultRate: await getTrackRatingOwnedByUserController(track.id, user.id),
-      isLiked: await isItemLikedByUserUseCase(user.id, track.id, "track"),
-    })),
-  );
-
   const reviews = await getAlbumReviewsController(albumId);
   const showAddReview = await shouldShowAddReviewController(albumId, "album");
-
-  const isAlbumLiked = await isItemLikedByUserUseCase(
-    user.id,
-    album.id,
-    "album",
-  );
 
   return (
     <section className="space-y-12">
@@ -87,12 +71,14 @@ export default async function AlbumPage({
                 : `${album.tracks.length} song`}{" "}
               / {getTime(getFullAlbumTime(album.tracks))}
             </span>
-            <LikeButton
-              defaultLikeState={isAlbumLiked}
-              entityId={album.id}
-              type="album"
-              userId={user.id}
-            />
+            {album.isLiked !== undefined && (
+              <LikeButton
+                defaultLikeState={album.isLiked}
+                entityId={album.id}
+                type="album"
+                userId={user.id}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -107,7 +93,7 @@ export default async function AlbumPage({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {tracksWithLikes.map((track) => {
+          {album.tracks.map((track) => {
             const artistsCreditsNames = track.artistCredit.artistsCreditsNames;
             return (
               <TableRow key={track.id} className="p-0">
@@ -149,14 +135,17 @@ export default async function AlbumPage({
                   <RatingStats ratingAvg={track.stats?.ratingAvg} size="sm" />
                 </TableCell>
                 <TableCell>
-                  <ContentInteraction
-                    userId={user.id}
-                    entityName={track.title}
-                    entityId={track.id}
-                    type="track"
-                    isLiked={track.isLiked ?? false}
-                    defaultRate={track.defaultRate ?? 0}
-                  />
+                  {track.isLiked !== undefined &&
+                    track.defaultRate !== undefined && (
+                      <ContentInteraction
+                        userId={user.id}
+                        entityName={track.title}
+                        entityId={track.id}
+                        type="track"
+                        isLiked={track.isLiked}
+                        defaultRate={track.defaultRate}
+                      />
+                    )}
                 </TableCell>
               </TableRow>
             );

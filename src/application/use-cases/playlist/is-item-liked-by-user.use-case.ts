@@ -2,7 +2,6 @@ import { container } from "@/di/container";
 import { Content } from "@/src/entities/models/content";
 import { IPlaylistsRepository } from "../../repositories/playlists.repository.interface";
 import { entityToPlaylists } from "@/types";
-import { DatabaseOperationError } from "@/src/entities/errors/common";
 
 export async function isItemLikedByUserUseCase(
   userId: string,
@@ -23,9 +22,8 @@ export async function isItemLikedByUserUseCase(
     playlistName,
   );
 
-  // move errors to db
   if (!playlist) {
-    throw new DatabaseOperationError("Playlist does not exist!");
+    return false;
   }
 
   const item = await playlistRepositories.getItemFromPlaylist(

@@ -7,6 +7,9 @@ import {
 export interface IPlaylistsRepository {
   insertPlaylist(userId: string, name: string): Promise<Playlist>;
   getPlaylist(playlistId: string): Promise<Playlist | undefined>;
+
+  getPlaylistInfo(playlistId: string): Promise<PlaylistWithItems | undefined>;
+
   getPlaylistByNameForUser(
     userId: string,
     name: string,

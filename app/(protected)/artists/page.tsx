@@ -4,11 +4,30 @@ import { SeeMoreButton } from "@/app/_components/see-more-button";
 import { getNewArtistsController } from "@/src/interface-adapters/controllers/artist/get-new-artists.controller";
 import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
 import { getTopArtistsController } from "@/src/interface-adapters/controllers/artist/get-top-artists.controller";
+import { unstable_cache as cache } from "next/cache";
+
+const getCachedTopArtists = cache(
+  async () => getTopArtistsController(),
+  ["top-artists"],
+  { revalidate: 600 },
+);
+
+const getCachedPopularArtists = cache(
+  async () => getPopularArtistsController(),
+  ["popular-artists"],
+  { revalidate: 600 },
+);
+
+const getCachedNewArtists = cache(
+  async () => getNewArtistsController(),
+  ["new-artists"],
+  { revalidate: 600 },
+);
 
 export default async function Artists() {
-  const topArtists = await getTopArtistsController();
-  const popularArtists = await getPopularArtistsController();
-  const newArtists = await getNewArtistsController();
+  const topArtists = await getCachedTopArtists();
+  const popularArtists = await getCachedPopularArtists();
+  const newArtists = await getCachedNewArtists();
 
   return (
     <section className="w-full space-y-20">

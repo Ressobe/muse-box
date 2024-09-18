@@ -9,19 +9,19 @@ import { unstable_cache as cache } from "next/cache";
 const getCachedTopTracks = cache(
   async () => getTopTracksController(),
   ["top-tracks"],
-  { revalidate: 360 },
+  { revalidate: 600 },
 );
 
 const getCachedPopularTracks = cache(
   async () => getPopularTracksController(),
   ["popular-tracks"],
-  { revalidate: 360 },
+  { revalidate: 600 },
 );
 
 const getCachedNewTracks = cache(
   async () => getNewTracksController(),
   ["new-tracks"],
-  { revalidate: 360 },
+  { revalidate: 600 },
 );
 
 export default async function TracksPage() {

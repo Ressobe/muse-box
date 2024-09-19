@@ -38,5 +38,5 @@ export async function registerAction(formData: z.infer<typeof RegisterSchema>) {
   // await sendVerificationEmail(verificationToken.email, verificationToken.token);
   await verifyUser(newUser.id, newUser.email);
 
-  return { sucess: "Confirmation email sent!" };
+  return { sucess: "You can log in now" };
 }

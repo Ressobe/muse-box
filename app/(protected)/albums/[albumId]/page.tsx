@@ -15,10 +15,17 @@ import { currentUser } from "@/lib/auth";
 import { LikeButton } from "@/app/_components/like-button";
 import { RatingStats } from "@/app/_components/review/rating-stats";
 import { ArtistSmallHeader } from "@/app/_components/artist/artist-small-header";
-import { shouldShowAddReviewController } from "@/src/interface-adapters/controllers/review/should-show-add-review.controller";
+// import { shouldShowAddReviewController } from "@/src/interface-adapters/controllers/review/should-show-add-review.controller";
 import { getAlbumReviewsController } from "@/src/interface-adapters/controllers/album/get-album-reviews.controller";
 import { getAlbumInfoController } from "@/src/interface-adapters/controllers/album/get-album-info.controller";
 import { ContentInteraction } from "@/app/_components/content-interaction";
+import { getPopularAlbumsController } from "@/src/interface-adapters/controllers/album/get-popular-albums.controller";
+
+export async function generateStaticParams() {
+  const popularAlbums = await getPopularAlbumsController();
+
+  return popularAlbums.map((item) => item.id);
+}
 
 export default async function AlbumPage({
   params,
@@ -40,7 +47,7 @@ export default async function AlbumPage({
   }
 
   const reviews = await getAlbumReviewsController(albumId);
-  const showAddReview = await shouldShowAddReviewController(albumId, "album");
+  // const showAddReview = await shouldShowAddReviewController(albumId, "album");
 
   return (
     <section className="space-y-12">
@@ -174,7 +181,7 @@ export default async function AlbumPage({
 
       <Reviews
         reviews={reviews}
-        showAddReview={showAddReview}
+        showAddReview={false}
         type="album"
         entityId={albumId}
         entityName={album.title}

@@ -34,33 +34,33 @@ export async function getAlbumInfoController(albumId: string | undefined) {
     throw new NotFoundError("Album not founded");
   }
 
-  // const authenticationService = container.get<IAuthenticationService>(
-  //   "IAuthenticationService",
-  // );
-  //
-  // const userId = await authenticationService.getUserId();
-  //
-  // if (userId) {
-  //   const isLiked = await isItemLikedByUserUseCase(userId, album.id, "album");
-  //   const tracksWithLikes = await Promise.all(
-  //     album.tracks.map(async (track) => {
-  //       const review = await getReviewForTrackOwnedByUserUseCase(
-  //         track.id,
-  //         userId,
-  //       );
-  //       const defaultRate = review?.rating ?? 0;
-  //       const defaultReview = review?.comment ?? "";
-  //
-  //       return {
-  //         ...track,
-  //         defaultRate,
-  //         defaultReview,
-  //         isLiked: await isItemLikedByUserUseCase(userId, track.id, "track"),
-  //       };
-  //     }),
-  //   );
-  //   return presenter({ ...album, isLiked, tracks: tracksWithLikes });
-  // }
+  const authenticationService = container.get<IAuthenticationService>(
+    "IAuthenticationService",
+  );
+
+  const userId = await authenticationService.getUserId();
+
+  if (userId) {
+    const isLiked = await isItemLikedByUserUseCase(userId, album.id, "album");
+    const tracksWithLikes = await Promise.all(
+      album.tracks.map(async (track) => {
+        const review = await getReviewForTrackOwnedByUserUseCase(
+          track.id,
+          userId,
+        );
+        const defaultRate = review?.rating ?? 0;
+        const defaultReview = review?.comment ?? "";
+
+        return {
+          ...track,
+          defaultRate,
+          defaultReview,
+          isLiked: await isItemLikedByUserUseCase(userId, track.id, "track"),
+        };
+      }),
+    );
+    return presenter({ ...album, isLiked, tracks: tracksWithLikes });
+  }
 
   return presenter(album);
 }

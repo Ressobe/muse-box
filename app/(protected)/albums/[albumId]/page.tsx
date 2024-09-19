@@ -20,10 +20,15 @@ import { getAlbumReviewsController } from "@/src/interface-adapters/controllers/
 import { getAlbumInfoController } from "@/src/interface-adapters/controllers/album/get-album-info.controller";
 import { ContentInteraction } from "@/app/_components/content-interaction";
 import { getPopularAlbumsController } from "@/src/interface-adapters/controllers/album/get-popular-albums.controller";
+import { getTopAlbumsController } from "@/src/interface-adapters/controllers/album/get-top-albums.controller";
+import { getNewAlbumsController } from "@/src/interface-adapters/controllers/album/get-new-albums.controller";
 
 export async function generateStaticParams() {
+  const topAlbums = await getTopAlbumsController();
   const popularAlbums = await getPopularAlbumsController();
-  return popularAlbums.map((item) => ({
+  const newAlbums = await getNewAlbumsController();
+
+  return [...topAlbums, ...popularAlbums, ...newAlbums].map((item) => ({
     albumId: item.id,
   }));
 }

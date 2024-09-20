@@ -1,14 +1,14 @@
 import { deleteNotification } from "@/data-access/notification";
-import type { AlbumReviewNotification } from "@/types/notification";
-import { markNotificationAsReadedUseCase } from "@/use-cases/notification";
 import { RemoveNotificationButton } from "@/app/_components/notification/remove-notification-button";
 import Link from "next/link";
 import { formatTimeDiff } from "@/lib/utils";
 import { UserAvatar } from "@/app/_components/user/user-avatar";
+import { markNotificationAsReadedController } from "@/src/interface-adapters/controllers/notification/mark-notification-as-readed.controller";
+import { AlbumReviewNotification as AlbumReviewNotificationType } from "@/src/entities/models/notification";
 
 type AlbumReviewNotificationProps = {
   authUserId: string;
-  notification: AlbumReviewNotification;
+  notification: AlbumReviewNotificationType;
   deleteOptimistic: (notificationId: string) => void;
   closePopover: () => void;
 };
@@ -21,7 +21,7 @@ export function AlbumReviewNotification({
 }: AlbumReviewNotificationProps) {
   const handleClick = async () => {
     closePopover();
-    await markNotificationAsReadedUseCase(notification.id);
+    await markNotificationAsReadedController(notification.id);
     setTimeout(async () => {
       await deleteNotification(notification.id);
     }, 50000);

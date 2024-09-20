@@ -1,9 +1,13 @@
 import { Content } from "@/src/entities/models/content";
-import { Profile } from "@/src/entities/models/profile";
+import { Profile, ProfileWithRelations } from "@/src/entities/models/profile";
 
 export interface IProfilesRepository {
   insertProfile(userId: string): Promise<Profile>;
   getProfile(profileId: string): Promise<Profile | undefined>;
+
+  getProfileWithRelations(
+    profileId: string,
+  ): Promise<ProfileWithRelations | undefined>;
 
   updateFavourite(
     userId: string,

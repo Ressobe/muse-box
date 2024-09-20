@@ -5,6 +5,8 @@ import { getNewAlbumsController } from "@/src/interface-adapters/controllers/alb
 import { getPopularAlbumsController } from "@/src/interface-adapters/controllers/album/get-popular-albums.controller";
 import { getTopAlbumsController } from "@/src/interface-adapters/controllers/album/get-top-albums.controller";
 import { unstable_cache as cache } from "next/cache";
+import { Suspense } from "react";
+import { CardsLoading } from "@/app/_components/loading/cards-loading";
 
 const getCachedTopAlbums = cache(
   async () => getTopAlbumsController(),
@@ -32,15 +34,21 @@ export default async function AlbumsPage() {
   return (
     <section className="w-full space-y-20">
       <div>
-        <AlbumsSection title="Top albums" albums={topAlbums} />
+        <Suspense fallback={<CardsLoading />}>
+          <AlbumsSection title="Top albums" albums={topAlbums} />
+        </Suspense>
         <SeeMoreButton href="/albums/search" />
       </div>
       <div>
-        <AlbumsSection title="Popular albums" albums={popularAlbums} />
+        <Suspense fallback={<CardsLoading />}>
+          <AlbumsSection title="Popular albums" albums={popularAlbums} />
+        </Suspense>
         <SeeMoreButton href="/albums/search" />
       </div>
       <div>
-        <AlbumsSection title="New albums" albums={newAlbums} />
+        <Suspense fallback={<CardsLoading />}>
+          <AlbumsSection title="New albums" albums={newAlbums} />
+        </Suspense>
         <SeeMoreButton href="/albums/search" />
       </div>
     </section>

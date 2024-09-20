@@ -1,14 +1,13 @@
-import { getArtistAlbumsController } from "@/src/interface-adapters/controllers/artist/get-artist-albums.controller";
+import { Album } from "@/src/entities/models/album";
 import Image from "next/image";
 import Link from "next/link";
 
 type AlbumsProps = {
   artistId: string;
+  albums: Album[];
 };
 
-export async function Albums({ artistId }: AlbumsProps) {
-  const albums = await getArtistAlbumsController(artistId);
-
+export function Albums({ artistId, albums }: AlbumsProps) {
   return (
     <div>
       <div className="flex flex-col pb-4 sm:pb-0 sm:flex-row  justify-between">

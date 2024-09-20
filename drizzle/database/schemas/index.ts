@@ -1,6 +1,7 @@
 export * from "./accounts";
 export * from "./albums";
 export * from "./artists";
+export * from "./errors";
 export * from "./followers";
 export * from "./genres";
 export * from "./reviews";

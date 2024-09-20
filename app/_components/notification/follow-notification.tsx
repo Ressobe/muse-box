@@ -1,16 +1,16 @@
 "use client";
 
-import type { FollowNotification } from "@/types/notification";
 import { UserAvatar } from "@/app/_components/user/user-avatar";
 import Link from "next/link";
 import { formatTimeDiff } from "@/lib/utils";
 import { RemoveNotificationButton } from "./remove-notification-button";
-import { markNotificationAsReadedUseCase } from "@/use-cases/notification";
 import { deleteNotification } from "@/data-access/notification";
+import { markNotificationAsReadedController } from "@/src/interface-adapters/controllers/notification/mark-notification-as-readed.controller";
+import { FollowNotification as FollowNotificationType } from "@/src/entities/models/notification";
 
 type FollowNotificationProps = {
   authUserId: string;
-  notification: FollowNotification;
+  notification: FollowNotificationType;
   deleteOptimistic: (notificationId: string) => void;
   closePopover: () => void;
 };
@@ -25,7 +25,7 @@ export function FollowNotification({
 
   const handleClick = async () => {
     closePopover();
-    await markNotificationAsReadedUseCase(notification.id);
+    await markNotificationAsReadedController(notification.id);
     setTimeout(async () => {
       await deleteNotification(notification.id);
     }, 50000);

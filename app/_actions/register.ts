@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 import { getUserByEmail, getUserByName, verifyUser } from "@/data-access/user";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
-import { createUserUseCase } from "@/use-cases/user";
+import { createUserController } from "@/src/interface-adapters/controllers/user/create-user.controller";
 
 export async function registerAction(formData: z.infer<typeof RegisterSchema>) {
   const validatedFormData = RegisterSchema.safeParse(formData);
@@ -28,7 +28,11 @@ export async function registerAction(formData: z.infer<typeof RegisterSchema>) {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser = await createUserUseCase(email, name, hashedPassword);
+  const newUser = await createUserController({
+    email,
+    name,
+    password: hashedPassword,
+  });
 
   // const verificationToken = await generateVerificationToken(email);
   // if (!verificationToken) {

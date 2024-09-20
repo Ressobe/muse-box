@@ -1,3 +1,4 @@
+import { Notifications } from "@/src/entities/models/notification";
 import { NotificationT } from "@/types/notification";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -126,7 +127,7 @@ export function formatNumberWithPrefix(num: number): string {
   return formattedNumber + prefixes[prefixIndex];
 }
 
-export function isNewNotification(notifications: NotificationT[]) {
+export function isNewNotification(notifications: Notifications[]) {
   if (!Array.isArray(notifications) || notifications.length === 0) {
     return false;
   }

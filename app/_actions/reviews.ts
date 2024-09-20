@@ -2,13 +2,11 @@
 
 import { getUserArtistReview, getUserLatestReviews } from "@/data-access/user";
 import { currentUser } from "@/lib/auth";
+import { changeReviewRateController } from "@/src/interface-adapters/controllers/review/change-review-rate.controller";
 import { createReviewController } from "@/src/interface-adapters/controllers/review/create-review.controller";
+import { editReviewController } from "@/src/interface-adapters/controllers/review/edit-review.controller";
+import { removeReviewController } from "@/src/interface-adapters/controllers/review/remove-review.controller";
 import { Entity } from "@/types";
-import {
-  changeReviewRateUseCase,
-  editReviewUseCase,
-  removeReviewUseCase,
-} from "@/use-cases/review";
 import { revalidatePath } from "next/cache";
 
 export async function addReviewAction(
@@ -59,7 +57,7 @@ export async function removeReviewAction(
     return { error: "Not authorized access!" };
   }
 
-  await removeReviewUseCase(entityId, type, commentId);
+  await removeReviewController({ entityId, type, reviewId: commentId });
   revalidatePath(`/${type}s/${entityId}`);
 }
 
@@ -76,14 +74,14 @@ export async function editReviewAction(
     return { error: "Not authorized access!" };
   }
 
-  const review = await editReviewUseCase(
-    commentId,
+  const review = await editReviewController({
     entityId,
     userId,
     comment,
     rating,
     type,
-  );
+    reviewId: commentId,
+  });
 
   revalidatePath(`/${type}s/${entityId}`);
 
@@ -107,13 +105,13 @@ export async function changeReviewRateAction(
     return { error: "Not authorized access!" };
   }
 
-  const review = await changeReviewRateUseCase(
+  const review = await changeReviewRateController({
     entityId,
     userId,
     rating,
     comment,
     type,
-  );
+  });
 
   revalidatePath(pathname);
 

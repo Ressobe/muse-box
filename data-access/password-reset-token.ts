@@ -2,12 +2,6 @@ import { db } from "@/drizzle/database/db";
 import { passwordResetTokens } from "@/drizzle/database/schemas";
 import { eq } from "drizzle-orm";
 
-export async function getPasswordResetTokenByToken(token: string) {
-  return await db.query.passwordResetTokens.findFirst({
-    where: eq(passwordResetTokens.token, token),
-  });
-}
-
 export async function getPasswordResetTokenByEmail(email: string) {
   return await db.query.passwordResetTokens.findFirst({
     where: eq(passwordResetTokens.email, email),

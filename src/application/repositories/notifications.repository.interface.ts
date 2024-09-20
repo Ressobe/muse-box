@@ -29,4 +29,6 @@ export interface INotificationsRepository {
   getNotificationsForUser(
     userId: string,
   ): Promise<NotificationRecipientsWithNotification[]>;
+
+  getNotification(notificationId: string): Promise<Notification | undefined>;
 }

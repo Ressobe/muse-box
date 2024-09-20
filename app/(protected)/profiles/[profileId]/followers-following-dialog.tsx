@@ -1,10 +1,5 @@
 import { formatNumberWithPrefix } from "@/lib/utils";
 import {
-  getProfileFollowersUseCase,
-  getProfileFollowingUseCase,
-} from "@/use-cases/profile";
-
-import {
   Dialog,
   DialogTrigger,
   DialogContent,
@@ -13,9 +8,11 @@ import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { currentUser } from "@/lib/auth";
 import { UserAvatar } from "@/app/_components/user/user-avatar";
 import { FollowButton } from "@/app/_components/follow-button";
-import { isUserFollowingProfileUseCase } from "@/use-cases/user";
 import Link from "next/link";
 import { Separator } from "@/app/_components/ui/separator";
+import { getProfileFollowingController } from "@/src/interface-adapters/controllers/profile/get-profile-following.controller";
+import { getProfileFollowersController } from "@/src/interface-adapters/controllers/profile/get-profile-followers.controller";
+import { isUserFollowingProfileController } from "@/src/interface-adapters/controllers/user/is-user-following-profile.controller";
 
 type FollowersFollowingDialogProps = {
   type: "followers" | "following";
@@ -36,11 +33,11 @@ export async function FollowersFollowingDialog({
   let users = null;
 
   if (type === "following") {
-    users = await getProfileFollowingUseCase(profileId);
+    users = await getProfileFollowingController({ profileId });
   }
 
   if (type === "followers") {
-    users = await getProfileFollowersUseCase(profileId);
+    users = await getProfileFollowersController({ profileId });
   }
 
   if (!users) {
@@ -50,7 +47,10 @@ export async function FollowersFollowingDialog({
   const usersWithFollowState = await Promise.all(
     users.map(async (item) => ({
       ...item,
-      isFollowed: await isUserFollowingProfileUseCase(authUser.id, item.id),
+      isFollowed: await isUserFollowingProfileController({
+        userId: authUser.id,
+        profileId: item.id,
+      }),
     })),
   );
 

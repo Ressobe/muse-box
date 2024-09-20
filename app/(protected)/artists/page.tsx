@@ -5,6 +5,8 @@ import { getNewArtistsController } from "@/src/interface-adapters/controllers/ar
 import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
 import { getTopArtistsController } from "@/src/interface-adapters/controllers/artist/get-top-artists.controller";
 import { unstable_cache as cache } from "next/cache";
+import { Suspense } from "react";
+import { CardsLoading } from "@/app/_components/loading/cards-loading";
 
 const getCachedTopArtists = cache(
   async () => getTopArtistsController(),
@@ -32,15 +34,21 @@ export default async function Artists() {
   return (
     <section className="w-full space-y-20">
       <div>
-        <ArtistsSection title="Top artists" artists={topArtists} />
+        <Suspense fallback={<CardsLoading />}>
+          <ArtistsSection title="Top artists" artists={topArtists} />
+        </Suspense>
         <SeeMoreButton href="/artists/search" />
       </div>
       <div>
-        <ArtistsSection title="Popular artists" artists={popularArtists} />
+        <Suspense fallback={<CardsLoading />}>
+          <ArtistsSection title="Popular artists" artists={popularArtists} />
+        </Suspense>
         <SeeMoreButton href="/artists/search" />
       </div>
       <div>
-        <ArtistsSection title="New artists" artists={newArtists} />
+        <Suspense fallback={<CardsLoading />}>
+          <ArtistsSection title="New artists" artists={newArtists} />
+        </Suspense>
         <SeeMoreButton href="/artists/search" />
       </div>
     </section>

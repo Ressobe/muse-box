@@ -1,7 +1,7 @@
 "use server";
 
 import { currentUser } from "@/lib/auth";
-import { removeNotificationUseCase } from "@/use-cases/notification";
+import { removeNotificationController } from "@/src/interface-adapters/controllers/notification/remove-notification.controller";
 import { revalidatePath } from "next/cache";
 
 export async function removeNotificationAction(
@@ -18,7 +18,7 @@ export async function removeNotificationAction(
     return { error: "Access not authorized!" };
   }
 
-  await removeNotificationUseCase(ownerId, notificationId);
+  await removeNotificationController({ ownerId, notificationId });
   // revalidatePath(path);
   return { sucess: "Removed notification" };
 }

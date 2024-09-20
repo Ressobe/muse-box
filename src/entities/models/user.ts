@@ -19,3 +19,5 @@ export const userSelectSchema = z.object({
 });
 
 export type User = z.infer<typeof userSchema>;
+
+export type UserSelect = z.infer<typeof userSelectSchema>;

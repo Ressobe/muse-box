@@ -1,5 +1,5 @@
 import { currentUser } from "@/lib/auth";
-import { getUserNotificationsUseCase } from "@/use-cases/user";
+import { getNotificationsForUserController } from "@/src/interface-adapters/controllers/notification/get-notifications-for-user.controller";
 import { NextResponse } from "next/server";
 
 type Params = {
@@ -17,7 +17,7 @@ export async function GET(_: Request, context: { params: Params }) {
     );
   }
 
-  const notifications = await getUserNotificationsUseCase(userId);
+  const notifications = await getNotificationsForUserController({ userId });
 
   return NextResponse.json(notifications);
 }

@@ -1,9 +1,10 @@
 import { IProfilesRepository } from "@/src/application/repositories/profiles.repository.interface";
 import { db } from "@/drizzle/database/db";
-import { userProfiles } from "@/drizzle/database/schemas";
-import { Profile } from "@/src/entities/models/profile";
-import { eq } from "drizzle-orm";
+import { follows, userProfiles, users } from "@/drizzle/database/schemas";
+import { Profile, ProfileWithRelations } from "@/src/entities/models/profile";
+import { countDistinct, eq } from "drizzle-orm";
 import { Content } from "@/src/entities/models/content";
+import { alias } from "drizzle-orm/sqlite-core";
 
 export class ProfilesRepository implements IProfilesRepository {
   async insertProfile(userId: string): Promise<Profile> {
@@ -87,5 +88,45 @@ export class ProfilesRepository implements IProfilesRepository {
       default:
         throw new Error(`Unknown item type: ${type}`);
     }
+  }
+
+  async getProfileWithRelations(
+    profileId: string,
+  ): Promise<ProfileWithRelations | undefined> {
+    const followersTable = alias(follows, "followers");
+    const followingTable = alias(follows, "following");
+
+    const [profile] = await db
+      .select({
+        userId: userProfiles.userId,
+        favouriteArtistId: userProfiles.favoriteArtistId,
+        favouriteAlbumId: userProfiles.favoriteAlbumId,
+        favouriteTrackId: userProfiles.favoriteTrackId,
+        user: {
+          id: users.id,
+          image: users.image,
+          name: users.name,
+        },
+        amountOfFollowers: countDistinct(followersTable.followerId).as(
+          "amountOfFollowers",
+        ),
+        amountOfFollowing: countDistinct(followingTable.followingId).as(
+          "amountOfFollowing",
+        ),
+      })
+      .from(userProfiles)
+      .where(eq(userProfiles.userId, profileId))
+      .innerJoin(users, eq(userProfiles.userId, users.id))
+      .leftJoin(
+        followersTable,
+        eq(userProfiles.userId, followersTable.followingId),
+      )
+      .leftJoin(
+        followingTable,
+        eq(userProfiles.userId, followingTable.followerId),
+      )
+      .groupBy(userProfiles.userId, users.id);
+
+    return profile;
   }
 }

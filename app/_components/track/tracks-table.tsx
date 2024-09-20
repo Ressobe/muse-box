@@ -36,6 +36,7 @@ export async function TracksTable({
   const userId = authUser?.id;
 
   const withPaggination = pagination !== undefined;
+
   return (
     <>
       <Table>

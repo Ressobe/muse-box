@@ -39,7 +39,6 @@ export async function ArtistsTable({
 }: ArtistsTableProps) {
   const authUser = await currentUser();
   const userId = authUser?.id;
-
   const withPaggination = pagination !== undefined;
 
   return (

@@ -16,6 +16,7 @@ import { Suspense } from "react";
 import { getTopArtistsController } from "@/src/interface-adapters/controllers/artist/get-top-artists.controller";
 import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
 import { getNewArtistsController } from "@/src/interface-adapters/controllers/artist/get-new-artists.controller";
+import { getArtistAlbumsController } from "@/src/interface-adapters/controllers/artist/get-artist-albums.controller";
 
 export async function generateStaticParams() {
   const topArtists = await getTopArtistsController();
@@ -34,24 +35,16 @@ export default async function Artist({
 }) {
   const { artistId } = params;
 
-  const artistInfoData = getArtistInfoController(artistId);
-  const tracksData = getArtistTopTracksController(artistId);
-  const singlesEpsData = getArtistSinglesEpsController(artistId);
-  const reviewsData = getReviewsForArtistController(artistId);
+  const artistInfo = await getArtistInfoController(artistId);
+  const tracks = await getArtistTopTracksController(artistId);
+  const albums = await getArtistAlbumsController(artistId);
+  const singlesEps = await getArtistSinglesEpsController(artistId);
+  const reviews = await getReviewsForArtistController(artistId);
 
-  const showAddReviewData = shouldShowAddReviewController(artistId, "artist");
-
-  const [artistInfo, tracks, singlesEps, reviews, showAddReview] =
-    await Promise.all([
-      artistInfoData,
-      tracksData,
-      singlesEpsData,
-      reviewsData,
-      showAddReviewData,
-    ]);
+  const showAddReview = await shouldShowAddReviewController(artistId, "artist");
 
   if (!artistInfo.artist) {
-    return notFound();
+    notFound();
   }
 
   return (
@@ -72,11 +65,13 @@ export default async function Artist({
       </div>
 
       <Suspense fallback={<AlbumsLoading />}>
-        <Albums artistId={artistId} />
+        <Albums artistId={artistId} albums={albums} />
       </Suspense>
+
       <Suspense fallback={<AlbumsLoading />}>
         <SinglesEps artistId={artistId} singlesEps={singlesEps} />
       </Suspense>
+
       <Suspense>
         <Reviews
           reviews={reviews}

@@ -1,14 +1,14 @@
 import { deleteNotification } from "@/data-access/notification";
-import type { TrackReviewNotification } from "@/types/notification";
-import { markNotificationAsReadedUseCase } from "@/use-cases/notification";
 import { RemoveNotificationButton } from "@/app/_components/notification/remove-notification-button";
 import Link from "next/link";
 import { formatTimeDiff } from "@/lib/utils";
 import { UserAvatar } from "@/app/_components/user/user-avatar";
+import { markNotificationAsReadedController } from "@/src/interface-adapters/controllers/notification/mark-notification-as-readed.controller";
+import { TrackReviewNotification as TrackReviewNotificationType } from "@/src/entities/models/notification";
 
 type TrackReviewNotificationProps = {
   authUserId: string;
-  notification: TrackReviewNotification;
+  notification: TrackReviewNotificationType;
   deleteOptimistic: (notificationId: string) => void;
   closePopover: () => void;
 };
@@ -21,7 +21,7 @@ export function TrackReviewNotification({
 }: TrackReviewNotificationProps) {
   const handleClick = async () => {
     closePopover();
-    await markNotificationAsReadedUseCase(notification.id);
+    await markNotificationAsReadedController(notification.id);
     setTimeout(async () => {
       await deleteNotification(notification.id);
     }, 50000);

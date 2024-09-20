@@ -3,14 +3,6 @@ import { FavouriteMenu } from "@/app/_components/favs/favourite-menu";
 import { FollowButton } from "@/app/_components/follow-button";
 import { Avatar, AvatarFallback } from "@/app/_components/ui/avatar";
 import { currentUser } from "@/lib/auth";
-import { getProfileUseCase } from "@/use-cases/profile";
-import {
-  getUserFavourtiesUseCase,
-  getUserLikedAlbumsUseCase,
-  getUserLikedArtistsUseCase,
-  getUserLikedTracksUseCase,
-  isUserFollowingProfileUseCase,
-} from "@/use-cases/user";
 import Image from "next/image";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
@@ -18,10 +10,12 @@ import { FollowersFollowingDialog } from "./followers-following-dialog";
 import { UserProfileAvatar } from "@/app/_components/user/user-profile-avatar";
 import { LatestReviews } from "./latest-reviews";
 import { getUserLatestReviews } from "@/data-access/user";
-
-// export async function generateStaticParams() {
-//
-// }
+import { getProfileInfoController } from "@/src/interface-adapters/controllers/profile/get-profile-info.controller";
+import { isUserFollowingProfileController } from "@/src/interface-adapters/controllers/user/is-user-following-profile.controller";
+import { getUserFavouritesController } from "@/src/interface-adapters/controllers/user/get-user-favourites.controller";
+import { getUserLikedArtistsController } from "@/src/interface-adapters/controllers/user/get-user-liked-artists.controller";
+import { getUserLikedAlbumsController } from "@/src/interface-adapters/controllers/user/get-user-liked-albums.controller";
+import { getUserLikedTracksController } from "@/src/interface-adapters/controllers/user/get-user-liked-tracks.controller";
 
 export default async function ProfilePage({
   params,
@@ -36,14 +30,14 @@ export default async function ProfilePage({
     return null;
   }
 
-  const profile = await getProfileUseCase(profileId);
-  const fav = await getUserFavourtiesUseCase(profileId);
+  const profile = await getProfileInfoController({ profileId });
+  const fav = await getUserFavouritesController({ userId: profileId });
 
   const isUserOwnsThisProfile = user.id === profileId;
-  const isUserFollowsThisProfile = await isUserFollowingProfileUseCase(
-    user.id,
+  const isUserFollowsThisProfile = await isUserFollowingProfileController({
+    userId: user.id,
     profileId,
-  );
+  });
 
   const latestActivity = await getUserLatestReviews(profileId, 5);
 
@@ -51,9 +45,9 @@ export default async function ProfilePage({
   let likedAlbums = null;
   let likedTracks = null;
   if (isUserOwnsThisProfile) {
-    likedArists = await getUserLikedArtistsUseCase(user.id);
-    likedAlbums = await getUserLikedAlbumsUseCase(user.id);
-    likedTracks = await getUserLikedTracksUseCase(user.id);
+    likedArists = await getUserLikedArtistsController({ userId: user.id });
+    likedAlbums = await getUserLikedAlbumsController({ userId: user.id });
+    likedTracks = await getUserLikedTracksController({ userId: user.id });
   }
 
   return (

@@ -33,7 +33,7 @@ export class ProfilesRepository implements IProfilesRepository {
         await db
           .update(userProfiles)
           .set({
-            favoriteArtistId: entityId,
+            favouriteArtistId: entityId,
           })
           .where(eq(userProfiles.userId, userId));
         break;
@@ -41,7 +41,7 @@ export class ProfilesRepository implements IProfilesRepository {
         await db
           .update(userProfiles)
           .set({
-            favoriteAlbumId: entityId,
+            favouriteAlbumId: entityId,
           })
           .where(eq(userProfiles.userId, userId));
         break;
@@ -49,7 +49,7 @@ export class ProfilesRepository implements IProfilesRepository {
         await db
           .update(userProfiles)
           .set({
-            favoriteTrackId: entityId,
+            favouriteTrackId: entityId,
           })
           .where(eq(userProfiles.userId, userId));
         break;
@@ -65,7 +65,7 @@ export class ProfilesRepository implements IProfilesRepository {
         await db
           .update(userProfiles)
           .set({
-            favoriteArtistId: null,
+            favouriteArtistId: null,
           })
           .where(eq(userProfiles.userId, userId));
         break;
@@ -73,7 +73,7 @@ export class ProfilesRepository implements IProfilesRepository {
         await db
           .update(userProfiles)
           .set({
-            favoriteAlbumId: null,
+            favouriteAlbumId: null,
           })
           .where(eq(userProfiles.userId, userId));
         break;
@@ -81,7 +81,7 @@ export class ProfilesRepository implements IProfilesRepository {
         await db
           .update(userProfiles)
           .set({
-            favoriteTrackId: null,
+            favouriteTrackId: null,
           })
           .where(eq(userProfiles.userId, userId));
         break;
@@ -99,9 +99,9 @@ export class ProfilesRepository implements IProfilesRepository {
     const [profile] = await db
       .select({
         userId: userProfiles.userId,
-        favouriteArtistId: userProfiles.favoriteArtistId,
-        favouriteAlbumId: userProfiles.favoriteAlbumId,
-        favouriteTrackId: userProfiles.favoriteTrackId,
+        favouriteArtistId: userProfiles.favouriteArtistId,
+        favouriteAlbumId: userProfiles.favouriteAlbumId,
+        favouriteTrackId: userProfiles.favouriteTrackId,
         user: {
           id: users.id,
           image: users.image,

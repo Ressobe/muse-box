@@ -1,8 +1,5 @@
 import { db } from "@/drizzle/database/db";
-import * as z from "zod";
-import { SettingsSchema } from "@/schemas/auth";
 import {
-  notificationRecipients,
   playlists,
   reviewsAlbums,
   reviewsArtists,
@@ -10,8 +7,7 @@ import {
   userProfiles,
   users,
 } from "@/drizzle/database/schemas";
-import { and, desc, eq, not, sql } from "drizzle-orm";
-import { Entity } from "@/types";
+import { and, eq } from "drizzle-orm";
 import { TAlbumReview, TArtistReview, TTrackReview } from "@/types/review";
 
 const LIMIT = 5;
@@ -34,22 +30,6 @@ export async function getUserById(userId: string) {
   });
 }
 
-export async function createUser(
-  email: string,
-  name: string,
-  password: string,
-) {
-  const [user] = await db
-    .insert(users)
-    .values({
-      email: email,
-      name: name,
-      password: password,
-    })
-    .returning();
-  return user;
-}
-
 export async function verifyUser(userId: string, email: string) {
   await db
     .update(users)
@@ -57,13 +37,6 @@ export async function verifyUser(userId: string, email: string) {
       email: email,
       emailVerified: new Date(),
     })
-    .where(eq(users.id, userId));
-}
-
-export async function updateUserPassword(userId: string, newPassword: string) {
-  await db
-    .update(users)
-    .set({ password: newPassword })
     .where(eq(users.id, userId));
 }
 
@@ -82,18 +55,6 @@ export async function getUserImage(userId: string) {
   return img.image ?? "";
 }
 
-export async function updateUser(
-  userId: string,
-  values: z.infer<typeof SettingsSchema>,
-) {
-  await db
-    .update(users)
-    .set({
-      ...values,
-    })
-    .where(eq(users.id, userId));
-}
-
 export async function getUserArtistReview(userId: string, artistId: string) {
   return await db.query.reviewsArtists.findFirst({
     where: and(
@@ -101,33 +62,6 @@ export async function getUserArtistReview(userId: string, artistId: string) {
       eq(reviewsArtists.entityId, artistId),
     ),
     with: {
-      user: true,
-    },
-  });
-}
-
-export async function getUserArtistReview2(userId: string, artistId: string) {
-  return await db.query.reviewsArtists.findFirst({
-    where: and(
-      eq(reviewsArtists.userId, userId),
-      eq(reviewsArtists.entityId, artistId),
-    ),
-    with: {
-      artist: true,
-      user: true,
-    },
-  });
-}
-
-// getReviewForAlbumOwnedByUser
-export async function getUserAlbumReview(userId: string, albumId: string) {
-  return await db.query.reviewsAlbums.findFirst({
-    where: and(
-      eq(reviewsAlbums.userId, userId),
-      eq(reviewsAlbums.entityId, albumId),
-    ),
-    with: {
-      album: true,
       user: true,
     },
   });
@@ -161,55 +95,6 @@ export async function getUserPlaylists(userId: string) {
 export async function getUserFavourite(userId: string) {
   return await db.query.userProfiles.findFirst({
     where: eq(userProfiles.userId, userId),
-  });
-}
-
-export async function updateFavourite(
-  userId: string,
-  entityId: string,
-  type: Entity,
-) {
-  switch (type) {
-    case "artist":
-      return await db
-        .update(userProfiles)
-        .set({
-          favoriteArtistId: entityId,
-        })
-        .where(eq(userProfiles.userId, userId));
-    case "album":
-      return await db
-        .update(userProfiles)
-        .set({
-          favoriteAlbumId: entityId,
-        })
-        .where(eq(userProfiles.userId, userId));
-    case "track":
-      return await db
-        .update(userProfiles)
-        .set({
-          favoriteTrackId: entityId,
-        })
-        .where(eq(userProfiles.userId, userId));
-
-    default:
-      throw new Error(`Unknown item type: ${type}`);
-  }
-}
-
-// getNotificationsForUser
-export async function getUserNotifications(userId: string) {
-  const notifications = await db.query.notificationRecipients.findMany({
-    where: eq(notificationRecipients.ownerId, userId),
-    with: {
-      notification: true,
-    },
-  });
-  return notifications.map((item) => {
-    return {
-      ...item.notification,
-      isRead: item.isRead,
-    };
   });
 }
 
@@ -273,42 +158,4 @@ export async function getUserLatestReviews(
 
     return dateB - dateA;
   });
-}
-
-export async function getArtistReviewsWhereUserIsNotOwner(
-  artistId: string,
-  userId: string,
-  limit?: number,
-) {
-  return db.query.reviewsArtists.findMany({
-    where: and(
-      eq(reviewsArtists.entityId, artistId),
-      not(eq(reviewsArtists.userId, userId)),
-    ),
-    with: {
-      user: true,
-    },
-    limit,
-    orderBy: desc(reviewsArtists.createdAt),
-  });
-}
-
-export async function getFilteredUsers(query: string, limit?: number) {
-  const filteredUsersQuery = db
-    .select({
-      id: users.id,
-      name: users.name,
-      email: users.email,
-      image: users.image,
-    })
-    .from(users)
-    .where(sql`${users.name} LIKE ${`%${query}%`} COLLATE NOCASE`);
-
-  if (typeof limit === "number") {
-    filteredUsersQuery.limit(limit);
-  }
-
-  const filteredUsers = await filteredUsersQuery;
-
-  return filteredUsers;
 }

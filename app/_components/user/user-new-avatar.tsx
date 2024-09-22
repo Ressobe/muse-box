@@ -11,7 +11,7 @@ import { Input } from "@/app/_components/ui/input";
 import { FormError } from "@/app/_components/ui/form-error";
 import { Button } from "@/app/_components/ui/button";
 import { useToast } from "@/app/_components/ui/use-toast";
-import { setCanvasPreview } from "@/lib/utils";
+import { setCanvasPreview } from "@/app/_lib/utils";
 import { newAvatarAction } from "@/app/_actions/new-avatar";
 import { useSession } from "next-auth/react";
 import { default as NextImage } from "next/image";

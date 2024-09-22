@@ -1,10 +1,10 @@
-import { deleteNotification } from "@/data-access/notification";
 import { RemoveNotificationButton } from "@/app/_components/notification/remove-notification-button";
 import Link from "next/link";
-import { formatTimeDiff } from "@/lib/utils";
+import { formatTimeDiff } from "@/app/_lib/utils";
 import { UserAvatar } from "@/app/_components/user/user-avatar";
 import { markNotificationAsReadedController } from "@/src/interface-adapters/controllers/notification/mark-notification-as-readed.controller";
 import { ArtistReviewNotification as ArtistReviewNotificationType } from "@/src/entities/models/notification";
+import { removeNotificationController } from "@/src/interface-adapters/controllers/notification/remove-notification.controller";
 
 type ArtistReviewNotificationProps = {
   authUserId: string;
@@ -23,7 +23,7 @@ export function ArtistReviewNotification({
     closePopover();
     await markNotificationAsReadedController(notification.id);
     setTimeout(async () => {
-      await deleteNotification(notification.id);
+      await removeNotificationController({ notificationId: notification.id });
     }, 50000);
   };
 

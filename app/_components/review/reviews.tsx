@@ -1,18 +1,22 @@
 "use client";
 
 import { Button } from "@/app/_components/ui/button";
-import { AddComment } from "./add-comment";
-import { Comment } from "./comment";
-import Link from "next/link";
-import { useOptimistic, useState } from "react";
-import { Entity } from "@/types";
-import { OptimisticActionReview } from "@/types/review";
+import { AddComment } from "@/app/_components/review/add-comment";
+import { Comment } from "@/app/_components/review/comment";
 import { ReviewWithUser } from "@/src/entities/models/review";
+import { Content } from "@/src/entities/models/content";
+import { useOptimistic, useState } from "react";
+import Link from "next/link";
+
+type OptimisticActionReview =
+  | { type: "add"; review: ReviewWithUser }
+  | { type: "edit"; review: ReviewWithUser }
+  | { type: "delete"; reviewId: string };
 
 type ReviewsProps = {
   entityId: string;
   entityName?: string;
-  type: Entity;
+  type: Content;
   reviews: ReviewWithUser[];
   showAddReview: boolean;
   showButtonAllReviews?: boolean;

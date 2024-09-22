@@ -7,14 +7,14 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { SubmitButton } from "@/app/_components/submit-button";
 import { useCurrentUser } from "@/app/_hooks/use-current-user";
 import { editReviewAction } from "@/app/_actions/reviews";
-import { Entity } from "@/types";
 import { CircleCheck, XIcon } from "lucide-react";
 import { ReviewWithUser } from "@/src/entities/models/review";
+import { Content } from "@/src/entities/models/content";
 
 type CommentProps = {
   reviewId: string;
   entityId: string;
-  type: Entity;
+  type: Content;
   editOptimisticReview: (action: ReviewWithUser) => void;
   defaultRate: number;
   defaultComment: string;

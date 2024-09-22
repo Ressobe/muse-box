@@ -1,5 +1,5 @@
 import { container } from "@/di/container";
-import { SettingsSchema } from "@/schemas/auth";
+import { SettingsSchema } from "@/src/entities/models/auth";
 import { IAuthenticationService } from "@/src/application/services/authentication.service.interface";
 import { getUserByEmailUseCase } from "@/src/application/use-cases/user/get-user-by-email.use-case";
 import { getUserByNameUseCase } from "@/src/application/use-cases/user/get-user-by-name.use-case";

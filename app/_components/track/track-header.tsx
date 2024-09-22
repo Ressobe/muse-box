@@ -1,13 +1,12 @@
-import { currentUser } from "@/lib/auth";
 import Image from "next/image";
 import Link from "next/link";
-import { getTime, getYear } from "@/lib/utils";
+import { getTime, getYear } from "@/app/_lib/utils";
 import { LikeButton } from "@/app/_components/like-button";
-import { getArtistByAlbumId } from "@/data-access/artist";
 import { RatingStats } from "@/app/_components/review/rating-stats";
 import { ArtistSmallHeader } from "@/app/_components/artist/artist-small-header";
 import { getTrackInfoController } from "@/src/interface-adapters/controllers/track/get-track-info.controller";
 import { isItemLikedByUserUseCase } from "@/src/application/use-cases/playlist/is-item-liked-by-user.use-case";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 
 type TrackHeaderProps = {
   trackId: string;
@@ -19,18 +18,13 @@ export async function TrackHeader({ trackId }: TrackHeaderProps) {
     return null;
   }
 
-  const artist = await getArtistByAlbumId(track.albumId);
-  if (!artist) {
-    return null;
-  }
-
-  const user = await currentUser();
-  if (!user) {
+  const userId = await getAuthUserIdController();
+  if (!userId) {
     return null;
   }
 
   const isTrackLiked = await isItemLikedByUserUseCase(
-    user.id,
+    userId,
     track.id,
     "track",
   );
@@ -49,7 +43,7 @@ export async function TrackHeader({ trackId }: TrackHeaderProps) {
             />
           </div>
           <div className="flex items-center gap-x-4 text-sm">
-            <ArtistSmallHeader artist={artist} />
+            <ArtistSmallHeader artist={track.album.artist} />
             <span>{getYear(track.album.releaseDate)}</span>
             <Link
               href={`/albums/${track.album.id}`}
@@ -62,7 +56,7 @@ export async function TrackHeader({ trackId }: TrackHeaderProps) {
               defaultLikeState={isTrackLiked}
               entityId={track.id}
               type="track"
-              userId={user.id}
+              userId={userId}
             />
           </div>
         </div>

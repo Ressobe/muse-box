@@ -9,9 +9,8 @@ import {
   TableRow,
 } from "@/app/_components/ui/table";
 import { notFound } from "next/navigation";
-import { getTime, getYear, getFullAlbumTime } from "@/lib/utils";
+import { getTime, getYear, getFullAlbumTime } from "@/app/_lib/utils";
 import { Reviews } from "@/app/_components/review/reviews";
-import { currentUser } from "@/lib/auth";
 import { LikeButton } from "@/app/_components/like-button";
 import { RatingStats } from "@/app/_components/review/rating-stats";
 import { ArtistSmallHeader } from "@/app/_components/artist/artist-small-header";
@@ -22,6 +21,7 @@ import { ContentInteraction } from "@/app/_components/content-interaction";
 import { getPopularAlbumsController } from "@/src/interface-adapters/controllers/album/get-popular-albums.controller";
 import { getTopAlbumsController } from "@/src/interface-adapters/controllers/album/get-top-albums.controller";
 import { getNewAlbumsController } from "@/src/interface-adapters/controllers/album/get-new-albums.controller";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 
 export async function generateStaticParams() {
   const topAlbums = await getTopAlbumsController();
@@ -42,10 +42,8 @@ export default async function AlbumPage({
 }) {
   const { albumId } = params;
 
-  const user = await currentUser();
-  if (!user) {
-    return null;
-  }
+  const authUserId = await getAuthUserIdController();
+  if (!authUserId) return null;
 
   const album = await getAlbumInfoController(albumId);
   if (!album) {
@@ -81,7 +79,7 @@ export default async function AlbumPage({
                   defaultLikeState={album.isLiked}
                   entityId={album.id}
                   type="album"
-                  userId={user.id}
+                  userId={authUserId}
                 />
               </div>
             )}
@@ -104,7 +102,7 @@ export default async function AlbumPage({
                 defaultLikeState={album.isLiked}
                 entityId={album.id}
                 type="album"
-                userId={user.id}
+                userId={authUserId}
               />
             )}
           </div>
@@ -169,7 +167,7 @@ export default async function AlbumPage({
                     track.defaultRate !== undefined &&
                     track.defaultReview !== undefined && (
                       <ContentInteraction
-                        userId={user.id}
+                        userId={authUserId}
                         entityName={track.title}
                         entityId={track.id}
                         type="track"

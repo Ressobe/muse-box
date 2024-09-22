@@ -2,11 +2,11 @@
 
 import { UserAvatar } from "@/app/_components/user/user-avatar";
 import Link from "next/link";
-import { formatTimeDiff } from "@/lib/utils";
+import { formatTimeDiff } from "@/app/_lib/utils";
 import { RemoveNotificationButton } from "./remove-notification-button";
-import { deleteNotification } from "@/data-access/notification";
 import { markNotificationAsReadedController } from "@/src/interface-adapters/controllers/notification/mark-notification-as-readed.controller";
 import { FollowNotification as FollowNotificationType } from "@/src/entities/models/notification";
+import { removeNotificationController } from "@/src/interface-adapters/controllers/notification/remove-notification.controller";
 
 type FollowNotificationProps = {
   authUserId: string;
@@ -27,7 +27,7 @@ export function FollowNotification({
     closePopover();
     await markNotificationAsReadedController(notification.id);
     setTimeout(async () => {
-      await deleteNotification(notification.id);
+      await removeNotificationController({ notificationId: notification.id });
     }, 50000);
   };
 

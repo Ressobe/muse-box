@@ -18,9 +18,9 @@ import { RatingStats } from "@/app/_components/review/rating-stats";
 import { ArtistWithStats } from "@/src/entities/models/artist";
 import { PaginationControls } from "@/app/_components/pagination-controls";
 import { ArrowDownNarrowWide } from "lucide-react";
-import { currentUser } from "@/lib/auth";
 import { ContentInteraction } from "@/app/_components/content-interaction";
 import clsx from "clsx";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 
 type ArtistsTableProps = {
   artists: ArtistWithStats[];
@@ -37,8 +37,7 @@ export async function ArtistsTable({
   pagination,
   showContentInteraction,
 }: ArtistsTableProps) {
-  const authUser = await currentUser();
-  const userId = authUser?.id;
+  const userId = await getAuthUserIdController();
   const withPaggination = pagination !== undefined;
 
   return (

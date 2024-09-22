@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { ResetSchema } from "@/schemas/auth";
+import { ResetSchema } from "@/src/entities/models/auth";
 import {
   Form,
   FormControl,

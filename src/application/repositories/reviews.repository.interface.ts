@@ -3,9 +3,11 @@ import {
   Review,
   ReviewWithAlbum,
   ReviewWithAlbumAndUser,
+  ReviewWithAlbumRelations,
   ReviewWithArtist,
   ReviewWithTrack,
   ReviewWithTrackAndUser,
+  ReviewWithTrackRelations,
   ReviewWithUser,
 } from "@/src/entities/models/review";
 
@@ -82,6 +84,21 @@ export interface IReviewsRepository {
     offset: number,
     limit?: number,
   ): Promise<ReviewWithUser[]>;
+
+  getArtistsReviewsOwnedByUser(
+    userId: string,
+    limit?: number,
+  ): Promise<ReviewWithArtist[]>;
+
+  getAlbumsReviewsOwnedByUser(
+    userId: string,
+    limit?: number,
+  ): Promise<ReviewWithAlbumRelations[]>;
+
+  getTracksReviewsOwnedByUser(
+    userId: string,
+    limit?: number,
+  ): Promise<ReviewWithTrackRelations[]>;
 
   getReviewsCountForArtist(artistId: string): Promise<number>;
   getReviewsCountForAlbum(albumId: string): Promise<number>;

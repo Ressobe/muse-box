@@ -1,4 +1,4 @@
-import { ESubscriptionPeriod } from "@/types";
+import { ESubscriptionPeriod } from "@/src/entities/types";
 import { Check, X } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { APP_NAME } from "@/config";

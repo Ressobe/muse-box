@@ -3,16 +3,16 @@
 import { CircleCheck, HeartIcon } from "lucide-react";
 import { Button } from "@/app/_components/ui/button";
 import { likeAction, unlikeAction } from "@/app/_actions/playlists";
-import { Entity } from "@/types";
 import { useState } from "react";
 import { useToast } from "@/app/_components/ui/use-toast";
-import { capitalizeFirstLetter } from "@/lib/utils";
+import { capitalizeFirstLetter } from "@/app/_lib/utils";
+import { Content } from "@/src/entities/models/content";
 
 type LikeButtonProps = {
   defaultLikeState: boolean;
   userId?: string;
   entityId: string;
-  type: Entity;
+  type: Content;
   size?: "lg" | "md";
 };
 

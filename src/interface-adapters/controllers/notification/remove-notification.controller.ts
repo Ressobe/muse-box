@@ -3,7 +3,6 @@ import { InputParseError } from "@/src/entities/errors/common";
 import { z } from "zod";
 
 const inputSchema = z.object({
-  ownerId: z.string(),
   notificationId: z.string(),
 });
 
@@ -15,7 +14,7 @@ export async function removeNotificationController(input: ControllerInput) {
     throw new InputParseError("Invalid input in removeNotificationController");
   }
 
-  const { ownerId, notificationId } = data;
+  const { notificationId } = data;
 
-  await removeNotificationUseCase(ownerId, notificationId);
+  await removeNotificationUseCase(notificationId);
 }

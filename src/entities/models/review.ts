@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { artistSelectSchema } from "./artist";
+import { artistSchema, artistSelectSchema } from "./artist";
 import { albumSchema } from "./album";
 import { trackSchema } from "./track";
 import { userSchema, userSelectSchema } from "./user";
@@ -51,6 +51,23 @@ export type ReviewWithArtist = z.infer<typeof reviewWithArtistSchema>;
 export type ReviewWithAlbum = z.infer<typeof reviewWithAlbumSchema>;
 export type ReviewWithTrack = z.infer<typeof reviewWithTrackSchema>;
 export type ReviewWithUser = z.infer<typeof reviewWithUserSchema>;
+
+export const reviewWithAlbumRelations = reviewSchema.extend({
+  album: albumSchema.extend({
+    artist: artistSelectSchema,
+  }),
+});
+
+export const reviewWithTrackRelations = reviewSchema.extend({
+  track: trackSchema.extend({
+    album: albumSchema.extend({
+      artist: artistSelectSchema,
+    }),
+  }),
+});
+
+export type ReviewWithAlbumRelations = z.infer<typeof reviewWithAlbumRelations>;
+export type ReviewWithTrackRelations = z.infer<typeof reviewWithTrackRelations>;
 
 export type ReviewWithTrackAndUser = z.infer<
   typeof reviewWithTrackAndUserSchema

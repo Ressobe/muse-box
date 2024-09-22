@@ -4,7 +4,5 @@ import { IUsersRepository } from "@/src/application/repositories/users.repositor
 export async function getUserByIdUseCase(userId: string) {
   const usersRepository = container.get<IUsersRepository>("IUsersRepository");
 
-  const user = usersRepository.getUserById(userId);
-
-  return user;
+  return await usersRepository.getUserById(userId);
 }

@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/app/_components/ui/table";
-import { getFullAlbumTime, getTime, getYear } from "@/lib/utils";
+import { getFullAlbumTime, getTime, getYear } from "@/app/_lib/utils";
 import { getArtistDiscographyController } from "@/src/interface-adapters/controllers/artist/get-artist-discography.controller";
 import { getArtistInfoController } from "@/src/interface-adapters/controllers/artist/get-artist-info.controller";
 import { getNewArtistsController } from "@/src/interface-adapters/controllers/artist/get-new-artists.controller";

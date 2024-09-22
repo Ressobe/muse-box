@@ -15,7 +15,7 @@ import { PencilIcon } from "lucide-react";
 import { useState } from "react";
 import { UserNewAvatar } from "./user-new-avatar";
 import { FaUser } from "react-icons/fa";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/_lib/utils";
 
 type UserProfileAvatarProps = {
   canEdit: boolean;

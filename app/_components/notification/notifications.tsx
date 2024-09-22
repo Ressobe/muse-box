@@ -1,9 +1,8 @@
 "use client";
 
 import useSWR from "swr";
-import { isNewNotification } from "@/lib/utils";
+import { isNewNotification } from "@/app/_lib/utils";
 import { useState } from "react";
-import { notificationTypes } from "@/types/notification";
 import {
   Popover,
   PopoverContent,
@@ -66,7 +65,7 @@ export function Notifications({ authUserId }: NotificationListProps) {
       <ul className="flex flex-col gap-4">
         {data.map((item) => {
           switch (item.type) {
-            case notificationTypes.ARTIST_REVIEW:
+            case "artist_review":
               return (
                 <ArtistReviewNotification
                   key={item.id}
@@ -76,7 +75,7 @@ export function Notifications({ authUserId }: NotificationListProps) {
                   closePopover={() => setOpen(false)}
                 />
               );
-            case notificationTypes.ALBUM_REVIEW:
+            case "album_review":
               return (
                 <AlbumReviewNotification
                   key={item.id}
@@ -86,7 +85,7 @@ export function Notifications({ authUserId }: NotificationListProps) {
                   closePopover={() => setOpen(false)}
                 />
               );
-            case notificationTypes.TRACK_REVIEW:
+            case "track_review":
               return (
                 <TrackReviewNotification
                   key={item.id}
@@ -96,7 +95,7 @@ export function Notifications({ authUserId }: NotificationListProps) {
                   closePopover={() => setOpen(false)}
                 />
               );
-            case notificationTypes.FOLLOW:
+            case "follow":
               return (
                 <FollowNotification
                   key={item.id}

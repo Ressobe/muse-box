@@ -1,9 +1,9 @@
 "use server";
 
 import { auth } from "@/auth";
+import { Content } from "@/src/entities/models/content";
 import { addToPlaylistController } from "@/src/interface-adapters/controllers/playlist/add-to-playlist.controller";
 import { removeFromPlaylistController } from "@/src/interface-adapters/controllers/playlist/remove-from-playlist.controller";
-import { Entity } from "@/types";
 
 const entityToPlaylists = {
   artist: "Favourite Artists",
@@ -14,7 +14,7 @@ const entityToPlaylists = {
 export async function likeAction(
   userId: string,
   entityId: string,
-  type: Entity,
+  type: Content,
 ) {
   const session = await auth();
   if (!session) {
@@ -36,7 +36,7 @@ export async function likeAction(
 export async function unlikeAction(
   userId: string,
   entityId: string,
-  type: Entity,
+  type: Content,
 ) {
   const session = await auth();
   if (!session) {

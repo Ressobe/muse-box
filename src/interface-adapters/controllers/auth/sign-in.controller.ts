@@ -1,12 +1,12 @@
 import { container } from "@/di/container";
-import { sendVerificationEmail } from "@/lib/mail";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import { LoginSchema } from "@/schemas/auth";
 import { IAuthenticationService } from "@/src/application/services/authentication.service.interface";
 import { getUserByEmailUseCase } from "@/src/application/use-cases/user/get-user-by-email.use-case";
 import { generateVerificationTokenUseCase } from "@/src/application/use-cases/verification-token/generate-verification-token.use-case";
 import { AuthenticationError } from "@/src/entities/errors/auth";
+import { LoginSchema } from "@/src/entities/models/auth";
 import { z } from "zod";
+import { sendVerificationEmailController } from "../verification-token/send-verification-email.controller";
 
 const inputSchema = z.object({
   formData: LoginSchema,
@@ -32,10 +32,10 @@ export async function signInController(input: ControllerInput) {
       return { error: "Something went wrong!" };
     }
 
-    await sendVerificationEmail(
-      verificationToken.email,
-      verificationToken.token,
-    );
+    await sendVerificationEmailController({
+      email: verificationToken.email,
+      token: verificationToken.token,
+    });
 
     return { sucess: "Confirmation email sent!" };
   }

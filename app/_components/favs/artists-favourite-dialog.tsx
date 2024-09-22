@@ -7,7 +7,7 @@ import { FaUser } from "react-icons/fa";
 import { SelectFavourite } from "@/app/_components/favs/select-favourite";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { Separator } from "@/app/_components/ui/separator";
-import { LikedArtists } from "@/types";
+import { LikedArtists } from "@/src/entities/types";
 import { Search } from "lucide-react";
 import { Input } from "@/app/_components/ui/input";
 import { useMemo, useState } from "react";

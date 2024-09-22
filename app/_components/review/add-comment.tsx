@@ -6,13 +6,13 @@ import { useToast } from "@/app/_components/ui/use-toast";
 import { useEffect, useRef, useState } from "react";
 import { useCurrentUser } from "@/app/_hooks/use-current-user";
 import { addReviewAction } from "@/app/_actions/reviews";
-import { Entity } from "@/types";
 import { CircleCheck, XIcon } from "lucide-react";
 import { ReviewWithUser } from "@/src/entities/models/review";
+import { Content } from "@/src/entities/models/content";
 
 type CommentProps = {
   entityId: string;
-  type: Entity;
+  type: Content;
   addOptimisticReview: (action: ReviewWithUser) => void;
 };
 

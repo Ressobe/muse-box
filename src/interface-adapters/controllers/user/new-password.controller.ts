@@ -1,4 +1,4 @@
-import { NewPasswordSchema } from "@/schemas/auth";
+import { NewPasswordSchema } from "@/src/entities/models/auth";
 import { getPasswordResetTokenUseCase } from "@/src/application/use-cases/password-reset-tokens/get-password-reset-token.use-case";
 import { getUserByEmailUseCase } from "@/src/application/use-cases/user/get-user-by-email.use-case";
 import { InputParseError } from "@/src/entities/errors/common";

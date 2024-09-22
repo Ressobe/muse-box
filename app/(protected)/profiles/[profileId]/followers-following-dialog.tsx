@@ -1,11 +1,10 @@
-import { formatNumberWithPrefix } from "@/lib/utils";
+import { formatNumberWithPrefix } from "@/app/_lib/utils";
 import {
   Dialog,
   DialogTrigger,
   DialogContent,
 } from "@/app/_components/ui/dialog";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
-import { currentUser } from "@/lib/auth";
 import { UserAvatar } from "@/app/_components/user/user-avatar";
 import { FollowButton } from "@/app/_components/follow-button";
 import Link from "next/link";
@@ -13,6 +12,7 @@ import { Separator } from "@/app/_components/ui/separator";
 import { getProfileFollowingController } from "@/src/interface-adapters/controllers/profile/get-profile-following.controller";
 import { getProfileFollowersController } from "@/src/interface-adapters/controllers/profile/get-profile-followers.controller";
 import { isUserFollowingProfileController } from "@/src/interface-adapters/controllers/user/is-user-following-profile.controller";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 
 type FollowersFollowingDialogProps = {
   type: "followers" | "following";
@@ -25,8 +25,8 @@ export async function FollowersFollowingDialog({
   amount,
   profileId,
 }: FollowersFollowingDialogProps) {
-  const authUser = await currentUser();
-  if (!authUser) {
+  const authUserId = await getAuthUserIdController();
+  if (!authUserId) {
     return null;
   }
 
@@ -48,7 +48,7 @@ export async function FollowersFollowingDialog({
     users.map(async (item) => ({
       ...item,
       isFollowed: await isUserFollowingProfileController({
-        userId: authUser.id,
+        userId: authUserId,
         profileId: item.id,
       }),
     })),
@@ -79,9 +79,9 @@ export async function FollowersFollowingDialog({
                         <UserAvatar avatarUrl={user.image} size="large" />
                         <span className="text-xl">{user.name}</span>
                       </div>
-                      {authUser.id !== user.id && (
+                      {authUserId !== user.id && (
                         <FollowButton
-                          followerId={authUser.id}
+                          followerId={authUserId}
                           followingId={user.id}
                           defaultFollowState={user.isFollowed}
                         />

@@ -1,5 +1,4 @@
 import { Notifications } from "@/src/entities/models/notification";
-import { NotificationT } from "@/types/notification";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 

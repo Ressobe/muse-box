@@ -1,14 +1,14 @@
 "use client";
 
 import { SelectFavourite } from "@/app/_components/favs/select-favourite";
-import Image from "next/image";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import { Separator } from "@/app/_components/ui/separator";
-import { LikedTracks } from "@/types";
-import { Search } from "lucide-react";
+import { LikedTracks } from "@/src/entities/types";
 import { Input } from "@/app/_components/ui/input";
 import { useDebounce } from "@/app/_hooks/use-debounce";
 import { useMemo, useState } from "react";
+import { Search } from "lucide-react";
+import Image from "next/image";
 
 type TracksFavouriteDialog = {
   likedTracks: LikedTracks;

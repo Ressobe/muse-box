@@ -11,4 +11,5 @@ export interface IUsersRepository {
   getUserImage(userId: string): Promise<string>;
   updateUser(userId: string, values: Settings): Promise<void>;
   getFilteredUsers(query: string, limit?: number): Promise<User[]>;
+  updateUserImage(userId: string, newImage: string): Promise<void>;
 }

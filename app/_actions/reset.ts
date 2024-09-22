@@ -1,10 +1,10 @@
 "use server";
 
 import * as z from "zod";
-import { ResetSchema } from "@/schemas/auth";
-import { getUserByEmail } from "@/data-access/user";
-import { sendResetPasswordEmail } from "@/lib/mail";
-import { generatePasswordResetToken } from "@/lib/tokens";
+import { ResetSchema } from "@/src/entities/models/auth";
+import { getUserByEmailUseCase } from "@/src/application/use-cases/user/get-user-by-email.use-case";
+import { generatePasswordResetTokenController } from "@/src/interface-adapters/controllers/password-token/generate-password-reset-token.controller";
+import { sendPasswordResetEmailController } from "@/src/interface-adapters/controllers/password-token/send-password-reset-email";
 
 export async function resetPasswordAction(values: z.infer<typeof ResetSchema>) {
   const validateFields = ResetSchema.safeParse(values);
@@ -14,17 +14,19 @@ export async function resetPasswordAction(values: z.infer<typeof ResetSchema>) {
 
   const { email } = validateFields.data;
 
-  const existingUser = await getUserByEmail(email);
+  const existingUser = await getUserByEmailUseCase(email);
   if (!existingUser) {
     return { error: "Email not found!" };
   }
 
-  const passwordResetToken = await generatePasswordResetToken(email);
+  const passwordResetToken = await generatePasswordResetTokenController({
+    email,
+  });
 
-  await sendResetPasswordEmail(
-    passwordResetToken.email,
-    passwordResetToken.token,
-  );
+  await sendPasswordResetEmailController({
+    email: passwordResetToken.email,
+    token: passwordResetToken.token,
+  });
 
   return { sucess: "Reset email sent" };
 }

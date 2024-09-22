@@ -4,7 +4,7 @@ import {
 } from "@/src/entities/errors/common";
 import { z } from "zod";
 import { getPlaylistByUserIdAndNameUseCase } from "../playlist/get-playlist-by-user-id-and-name.use-case";
-import { entityToPlaylists } from "@/types";
+import { entityToPlaylists } from "@/src/entities/types";
 import { getPlaylistInfoUseCase } from "@/src/application/use-cases/playlist/get-playlist-info.use-case";
 import { getAlbumWithTracksUseCase } from "@/src/application/use-cases/album/get-album-with-tracks.use-case";
 

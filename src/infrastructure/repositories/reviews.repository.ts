@@ -2,6 +2,7 @@ import {
   reviewsAlbums,
   reviewsArtists,
   reviewsTracks,
+  users,
 } from "@/drizzle/database/schemas";
 import { IReviewsRepository } from "@/src/application/repositories/reviews.repository.interface";
 import { Content } from "@/src/entities/models/content";
@@ -9,13 +10,16 @@ import {
   Review,
   ReviewWithAlbum,
   ReviewWithAlbumAndUser,
+  ReviewWithAlbumRelations,
   ReviewWithArtist,
   ReviewWithTrack,
   ReviewWithTrackAndUser,
+  ReviewWithTrackRelations,
   ReviewWithUser,
 } from "@/src/entities/models/review";
 import { db } from "@/drizzle/database/db";
 import { and, count, desc, eq, not } from "drizzle-orm";
+import { DatabaseOperationError } from "@/src/entities/errors/common";
 
 const reviewTables = {
   artist: reviewsArtists,
@@ -321,6 +325,57 @@ export class ReviewsRepository implements IReviewsRepository {
       },
       offset,
       orderBy: desc(reviewsTracks.createdAt),
+      limit,
+    });
+  }
+
+  async getArtistsReviewsOwnedByUser(
+    userId: string,
+    limit?: number,
+  ): Promise<ReviewWithArtist[]> {
+    return await db.query.reviewsArtists.findMany({
+      where: eq(reviewsArtists.userId, userId),
+      with: {
+        artist: true,
+      },
+      limit,
+    });
+  }
+
+  async getAlbumsReviewsOwnedByUser(
+    userId: string,
+    limit?: number,
+  ): Promise<ReviewWithAlbumRelations[]> {
+    return await db.query.reviewsAlbums.findMany({
+      where: eq(reviewsAlbums.userId, userId),
+      with: {
+        album: {
+          with: {
+            artist: true,
+          },
+        },
+      },
+      limit,
+    });
+  }
+
+  async getTracksReviewsOwnedByUser(
+    userId: string,
+    limit?: number,
+  ): Promise<ReviewWithTrackRelations[]> {
+    return await db.query.reviewsTracks.findMany({
+      where: eq(reviewsTracks.userId, userId),
+      with: {
+        track: {
+          with: {
+            album: {
+              with: {
+                artist: true,
+              },
+            },
+          },
+        },
+      },
       limit,
     });
   }

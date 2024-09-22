@@ -13,12 +13,20 @@ import { AlbumsLoading } from "@/app/_components/loading/albums-loading";
 import { TracksLoading } from "@/app/_components/loading/tracks-loading";
 import { ArtistHeaderLoading } from "@/app/_components/loading/artist-header-loading";
 import { Suspense } from "react";
-// import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
-//
-// export async function generateStaticParams() {
-//   const popularArtists = await getPopularArtistsController();
-//   return popularArtists.map((item) => item.id);
-// }
+import { getTopArtistsController } from "@/src/interface-adapters/controllers/artist/get-top-artists.controller";
+import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
+import { getNewArtistsController } from "@/src/interface-adapters/controllers/artist/get-new-artists.controller";
+import { getArtistAlbumsController } from "@/src/interface-adapters/controllers/artist/get-artist-albums.controller";
+
+export async function generateStaticParams() {
+  const topArtists = await getTopArtistsController();
+  const popularArtists = await getPopularArtistsController();
+  const newArtists = await getNewArtistsController();
+
+  return [...topArtists, ...popularArtists, ...newArtists].map((item) => ({
+    artistId: item.id,
+  }));
+}
 
 export default async function Artist({
   params,
@@ -27,23 +35,16 @@ export default async function Artist({
 }) {
   const { artistId } = params;
 
-  const artistInfoData = getArtistInfoController(artistId);
-  const tracksData = getArtistTopTracksController(artistId);
-  const singlesEpsData = getArtistSinglesEpsController(artistId);
-  const reviewsData = getReviewsForArtistController(artistId);
-  const showAddReviewData = shouldShowAddReviewController(artistId, "artist");
+  const artistInfo = await getArtistInfoController(artistId);
+  const tracks = await getArtistTopTracksController(artistId);
+  const albums = await getArtistAlbumsController(artistId);
+  const singlesEps = await getArtistSinglesEpsController(artistId);
+  const reviews = await getReviewsForArtistController(artistId);
 
-  const [artistInfo, tracks, singlesEps, reviews, showAddReview] =
-    await Promise.all([
-      artistInfoData,
-      tracksData,
-      singlesEpsData,
-      reviewsData,
-      showAddReviewData,
-    ]);
+  const showAddReview = await shouldShowAddReviewController(artistId, "artist");
 
   if (!artistInfo.artist) {
-    return notFound();
+    notFound();
   }
 
   return (
@@ -64,11 +65,13 @@ export default async function Artist({
       </div>
 
       <Suspense fallback={<AlbumsLoading />}>
-        <Albums artistId={artistId} />
+        <Albums artistId={artistId} albums={albums} />
       </Suspense>
+
       <Suspense fallback={<AlbumsLoading />}>
         <SinglesEps artistId={artistId} singlesEps={singlesEps} />
       </Suspense>
+
       <Suspense>
         <Reviews
           reviews={reviews}

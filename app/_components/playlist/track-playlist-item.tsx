@@ -2,9 +2,9 @@ import { TableRow, TableCell } from "@/app/_components/ui/table";
 import Image from "next/image";
 import Link from "next/link";
 import { LikeButton } from "@/app/_components/like-button";
-import { currentUser } from "@/lib/auth";
 import { RatingStats } from "@/app/_components/review/rating-stats";
 import { getTrackInfoController } from "@/src/interface-adapters/controllers/track/get-track-info.controller";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 
 type TrackPlaylistItemProps = {
   trackId: string;
@@ -15,8 +15,8 @@ export async function TrackPlaylistItem({
   trackId,
   position,
 }: TrackPlaylistItemProps) {
-  const user = await currentUser();
-  if (!user) {
+  const userId = await getAuthUserIdController();
+  if (!userId) {
     return null;
   }
 
@@ -62,7 +62,7 @@ export async function TrackPlaylistItem({
           defaultLikeState={true}
           entityId={track.id}
           type="track"
-          userId={user.id}
+          userId={userId}
         />
       </TableCell>
     </TableRow>

@@ -1,3 +1,4 @@
+import { Content } from "@/src/entities/models/content";
 import {
   Playlist,
   PlaylistItem,
@@ -21,4 +22,16 @@ export interface IPlaylistsRepository {
   ): Promise<PlaylistItem | undefined>;
 
   getPlaylistsForUser(userId: string): Promise<PlaylistWithItems[]>;
+
+  addItemToPlaylist(
+    entityId: string,
+    type: Content,
+    playlistId: string,
+  ): Promise<PlaylistItem>;
+
+  deleteItemFromPlaylist(
+    entityId: string,
+    type: Content,
+    playlistId: string,
+  ): Promise<PlaylistItem>;
 }

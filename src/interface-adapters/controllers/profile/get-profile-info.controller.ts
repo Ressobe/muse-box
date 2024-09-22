@@ -1,18 +1,26 @@
-import { getProfileFollowersUseCase } from "@/src/application/use-cases/profile/get-profile-followers.use-case";
-import { getProfileFollowingUseCase } from "@/src/application/use-cases/profile/get-profile-following.use-case";
+import { getProfileUseCase } from "@/src/application/use-cases/profile/get-profile.use-case";
 import { InputParseError, NotFoundError } from "@/src/entities/errors/common";
-import { getProfileUseCase } from "@/use-cases/profile";
+import { z } from "zod";
 
-export async function getProfileInfoController(profileId: string | undefined) {
-  if (!profileId) {
-    throw new InputParseError("Profile id not provided");
+const inputSchema = z.object({
+  profileId: z.string(),
+});
+
+type ControllerInput = z.infer<typeof inputSchema>;
+
+export async function getProfileInfoController(input: ControllerInput) {
+  const { error, data } = inputSchema.safeParse(input);
+  if (error) {
+    throw new InputParseError("Invalid input in getProfileInfoController");
   }
 
+  const { profileId } = data;
+
   const profile = await getProfileUseCase(profileId);
+
   if (!profile) {
     throw new NotFoundError("Profile not founded");
   }
 
-  const profileFollowers = await getProfileFollowersUseCase(profileId);
-  const profileFollowing = await getProfileFollowingUseCase(profileId);
+  return profile;
 }

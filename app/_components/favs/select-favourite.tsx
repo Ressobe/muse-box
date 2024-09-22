@@ -1,18 +1,18 @@
 "use client";
 
 import { selectFavouriteAction } from "@/app/_actions/favourites";
-import { Entity } from "@/types";
-import clsx from "clsx";
-import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useToast } from "@/app/_components/ui/use-toast";
+import { capitalizeFirstLetter } from "@/app/_lib/utils";
+import { Content } from "@/src/entities/models/content";
 import { TailSpin } from "react-loader-spinner";
-import { useToast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
 import { CircleCheck } from "lucide-react";
-import { capitalizeFirstLetter } from "@/lib/utils";
+import { useTransition } from "react";
+import clsx from "clsx";
 
 type SelectFavouriteProps = {
   entityId: string;
-  type: Entity;
+  type: Content;
   children?: React.ReactNode;
   closeModal?: () => void;
 };

@@ -1,12 +1,12 @@
 import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 import { Navigation } from "./navigation";
-import { getUserImage } from "@/data-access/user";
+import { getUserImageUseCase } from "@/src/application/use-cases/user/get-user-image.use-case";
 
 export async function Topbar() {
   const userId = await getAuthUserIdController();
   if (!userId) return null;
 
-  const image = await getUserImage(userId);
+  const image = await getUserImageUseCase(userId);
 
   return (
     <header className="border-b p-3 flex justify-between items-center">

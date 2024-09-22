@@ -5,13 +5,13 @@ import {
   AvatarImage,
 } from "@/app/_components/ui/avatar";
 import { TableCell, TableRow } from "@/app/_components/ui/table";
-import { formatDateToShortMonthDayYear } from "@/lib/utils";
-import { TArtistReview } from "@/types/review";
+import { formatDateToShortMonthDayYear } from "@/app/_lib/utils";
+import { ReviewWithArtist } from "@/src/entities/models/review";
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
 
 type ArtistReviewProps = {
-  artistReview: TArtistReview;
+  artistReview: ReviewWithArtist;
 };
 
 export function ArtistReview({ artistReview }: ArtistReviewProps) {

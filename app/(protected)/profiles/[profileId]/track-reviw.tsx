@@ -1,12 +1,12 @@
-import { TTrackReview } from "@/types/review";
 import { TableCell, TableRow } from "@/app/_components/ui/table";
 import Image from "next/image";
-import { formatDateToShortMonthDayYear } from "@/lib/utils";
+import { formatDateToShortMonthDayYear } from "@/app/_lib/utils";
 import { Stars } from "@/app/_components/review/stars";
 import Link from "next/link";
+import { ReviewWithTrackRelations } from "@/src/entities/models/review";
 
 type TrackReviewProps = {
-  trackReview: TTrackReview;
+  trackReview: ReviewWithTrackRelations;
 };
 
 export function TrackReview({ trackReview }: TrackReviewProps) {

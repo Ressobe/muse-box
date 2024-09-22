@@ -1,21 +1,18 @@
 "use server";
 
-import { getUserById, updateUserImage } from "@/data-access/user";
-import { currentUser } from "@/lib/auth";
+import { getUserByIdUseCase } from "@/src/application/use-cases/user/get-user-by-id.use-case";
+import { updateUserImageUseCase } from "@/src/application/use-cases/user/update-user-image.use-case";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
 export async function newAvatarAction(imgSrc: string, userId: string) {
-  const authUser = await currentUser();
-  if (!authUser) {
+  const authUserId = await getAuthUserIdController();
+  if (!authUserId) {
     return { error: "User not found!" };
   }
 
-  if (authUser.id !== userId) {
-    return { error: "User not found!" };
-  }
-
-  const existingUser = await getUserById(userId);
+  const existingUser = await getUserByIdUseCase(userId);
   if (!existingUser) {
     return { error: "User not found!" };
   }
@@ -32,13 +29,10 @@ export async function newAvatarAction(imgSrc: string, userId: string) {
     removeUserAvatar(imgSrc);
   }
 
-  const r = await updateUserImage(
+  await updateUserImageUseCase(
     existingUser.id,
     `${process.env.NEXT_PUBLIC_AVATARS_URL!}/${fileName}`,
   );
-  if (!r) {
-    return { error: "Something went wrong!" };
-  }
 
   return {
     success:

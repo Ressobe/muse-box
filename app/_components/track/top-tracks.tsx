@@ -8,9 +8,9 @@ import {
 } from "@/app/_components/ui/table";
 import Image from "next/image";
 import Link from "next/link";
-import { currentUser } from "@/lib/auth";
 import { RatingStats } from "@/app/_components/review/rating-stats";
-import { ContentInteraction } from "../content-interaction";
+import { ContentInteraction } from "@/app/_components/content-interaction";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 
 type TopTracksProps = {
   topTracks: {
@@ -29,8 +29,7 @@ type TopTracksProps = {
 };
 
 export async function TopTracks({ topTracks }: TopTracksProps) {
-  const authUser = await currentUser();
-  const userId = authUser?.id;
+  const userId = await getAuthUserIdController();
 
   return (
     <>

@@ -7,6 +7,7 @@ import { notificationTypes } from "@/src/entities/models/notification";
 import { z } from "zod";
 import { sendNotificationToFollowersController } from "@/src/interface-adapters/controllers/notification/send-notification-to-followers.controller";
 import { createNotificationUseCase } from "@/src/application/use-cases/notification/create-notification.use-case";
+import { updateStatsForNewRatingUseCase } from "@/src/application/use-cases/stats/update-stats-for-new-rating.use-case";
 
 const inputSchema = z.object({
   entityId: z.string(),
@@ -39,6 +40,8 @@ export async function createReviewController(input: ControllerInput) {
     type,
   );
 
+  await updateStatsForNewRatingUseCase(entityId, type, review.rating);
+
   let notiType = null;
 
   switch (type) {
@@ -58,6 +61,7 @@ export async function createReviewController(input: ControllerInput) {
 
   const { error: errorNotification, data: notificationType } =
     notificationTypes.safeParse(notiType);
+
   if (errorNotification) {
     throw new InputParseError("Invalid type");
   }

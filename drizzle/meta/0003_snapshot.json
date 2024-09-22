@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "235567a5-fdfc-4a7d-83c9-f76e7f19ffe4",
-  "prevId": "f0b7ea6a-a44b-417b-b79d-dba3aec5969b",
+  "id": "9f40ff60-50f7-4cc9-87e0-aee28f5e9ef1",
+  "prevId": "85478978-d7f1-4eb3-a66d-293f0c25c803",
   "tables": {
     "account": {
       "name": "account",
@@ -112,6 +112,145 @@
       },
       "uniqueConstraints": {}
     },
+    "authenticator": {
+      "name": "authenticator",
+      "columns": {
+        "credentialID": {
+          "name": "credentialID",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "providerAccountId": {
+          "name": "providerAccountId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "credentialPublicKey": {
+          "name": "credentialPublicKey",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "counter": {
+          "name": "counter",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "credentialDeviceType": {
+          "name": "credentialDeviceType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "credentialBackedUp": {
+          "name": "credentialBackedUp",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "transports": {
+          "name": "transports",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "authenticator_credentialID_unique": {
+          "name": "authenticator_credentialID_unique",
+          "columns": [
+            "credentialID"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {
+        "authenticator_userId_users_id_fk": {
+          "name": "authenticator_userId_users_id_fk",
+          "tableFrom": "authenticator",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "authenticator_userId_credentialID_pk": {
+          "columns": [
+            "credentialID",
+            "userId"
+          ],
+          "name": "authenticator_userId_credentialID_pk"
+        }
+      },
+      "uniqueConstraints": {}
+    },
+    "session": {
+      "name": "session",
+      "columns": {
+        "sessionToken": {
+          "name": "sessionToken",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires": {
+          "name": "expires",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "session_userId_users_id_fk": {
+          "name": "session_userId_users_id_fk",
+          "tableFrom": "session",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "albums": {
       "name": "albums",
       "columns": {
@@ -165,7 +304,7 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-08-29T11:07:41.459Z\"'"
+          "default": "'\"2024-09-22T15:21:57.682Z\"'"
         }
       },
       "indexes": {},
@@ -194,76 +333,6 @@
             "id"
           ],
           "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "albumsStats": {
-      "name": "albumsStats",
-      "columns": {
-        "entityId": {
-          "name": "entityId",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "likes": {
-          "name": "likes",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        },
-        "popularity": {
-          "name": "popularity",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        },
-        "rating": {
-          "name": "rating",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        },
-        "ratingSum": {
-          "name": "ratingSum",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        },
-        "ratingCount": {
-          "name": "ratingCount",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "albumsStats_entityId_albums_id_fk": {
-          "name": "albumsStats_entityId_albums_id_fk",
-          "tableFrom": "albumsStats",
-          "tableTo": "albums",
-          "columnsFrom": [
-            "entityId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -443,170 +512,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "artistsCredits": {
-      "name": "artistsCredits",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "artistsCreditsName": {
-      "name": "artistsCreditsName",
-      "columns": {
-        "artistCreditId": {
-          "name": "artistCreditId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "artistId": {
-          "name": "artistId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "position": {
-          "name": "position",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "joinPhrase": {
-          "name": "joinPhrase",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "artistsCreditsName_artistCreditId_artistsCredits_id_fk": {
-          "name": "artistsCreditsName_artistCreditId_artistsCredits_id_fk",
-          "tableFrom": "artistsCreditsName",
-          "tableTo": "artistsCredits",
-          "columnsFrom": [
-            "artistCreditId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "artistsCreditsName_artistId_artists_id_fk": {
-          "name": "artistsCreditsName_artistId_artists_id_fk",
-          "tableFrom": "artistsCreditsName",
-          "tableTo": "artists",
-          "columnsFrom": [
-            "artistId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "artistsStats": {
-      "name": "artistsStats",
-      "columns": {
-        "entityId": {
-          "name": "entityId",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "likes": {
-          "name": "likes",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        },
-        "popularity": {
-          "name": "popularity",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        },
-        "rating": {
-          "name": "rating",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        },
-        "ratingSum": {
-          "name": "ratingSum",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        },
-        "ratingCount": {
-          "name": "ratingCount",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "artistsStats_entityId_artists_id_fk": {
-          "name": "artistsStats_entityId_artists_id_fk",
-          "tableFrom": "artistsStats",
-          "tableTo": "artists",
-          "columnsFrom": [
-            "entityId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
     "artistsTypes": {
       "name": "artistsTypes",
       "columns": {
@@ -638,101 +543,6 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "authenticator": {
-      "name": "authenticator",
-      "columns": {
-        "credentialID": {
-          "name": "credentialID",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "userId": {
-          "name": "userId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "providerAccountId": {
-          "name": "providerAccountId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "credentialPublicKey": {
-          "name": "credentialPublicKey",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "counter": {
-          "name": "counter",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "credentialDeviceType": {
-          "name": "credentialDeviceType",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "credentialBackedUp": {
-          "name": "credentialBackedUp",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "transports": {
-          "name": "transports",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "authenticator_credentialID_unique": {
-          "name": "authenticator_credentialID_unique",
-          "columns": [
-            "credentialID"
-          ],
-          "isUnique": true
-        }
-      },
-      "foreignKeys": {
-        "authenticator_userId_users_id_fk": {
-          "name": "authenticator_userId_users_id_fk",
-          "tableFrom": "authenticator",
-          "tableTo": "users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {
-        "authenticator_userId_credentialID_pk": {
-          "columns": [
-            "credentialID",
-            "userId"
-          ],
-          "name": "authenticator_userId_credentialID_pk"
-        }
-      },
-      "uniqueConstraints": {}
-    },
     "countries": {
       "name": "countries",
       "columns": {
@@ -754,6 +564,83 @@
       "indexes": {
         "countries_name_unique": {
           "name": "countries_name_unique",
+          "columns": [
+            "name"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "genders": {
+      "name": "genders",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "genders_name_unique": {
+          "name": "genders_name_unique",
+          "columns": [
+            "name"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "errors": {
+      "name": "errors",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "digset": {
+          "name": "digset",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'\"2024-09-22T15:21:57.685Z\"'"
+        }
+      },
+      "indexes": {
+        "errors_name_unique": {
+          "name": "errors_name_unique",
           "columns": [
             "name"
           ],
@@ -820,37 +707,6 @@
           "name": "follows_followerId_followingId_pk"
         }
       },
-      "uniqueConstraints": {}
-    },
-    "genders": {
-      "name": "genders",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "genders_name_unique": {
-          "name": "genders_name_unique",
-          "columns": [
-            "name"
-          ],
-          "isUnique": true
-        }
-      },
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
     "genres": {
@@ -934,6 +790,267 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
+    "reviewsAlbums": {
+      "name": "reviewsAlbums",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "entityId": {
+          "name": "entityId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rating": {
+          "name": "rating",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "comment": {
+          "name": "comment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'\"2024-09-22T15:21:57.678Z\"'"
+        },
+        "entityType": {
+          "name": "entityType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'album'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "reviewsAlbums_userId_users_id_fk": {
+          "name": "reviewsAlbums_userId_users_id_fk",
+          "tableFrom": "reviewsAlbums",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "reviewsAlbums_entityId_albums_id_fk": {
+          "name": "reviewsAlbums_entityId_albums_id_fk",
+          "tableFrom": "reviewsAlbums",
+          "tableTo": "albums",
+          "columnsFrom": [
+            "entityId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "reviewsArtists": {
+      "name": "reviewsArtists",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "entityId": {
+          "name": "entityId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rating": {
+          "name": "rating",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "comment": {
+          "name": "comment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'\"2024-09-22T15:21:57.678Z\"'"
+        },
+        "entityType": {
+          "name": "entityType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'artist'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "reviewsArtists_userId_users_id_fk": {
+          "name": "reviewsArtists_userId_users_id_fk",
+          "tableFrom": "reviewsArtists",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "reviewsArtists_entityId_artists_id_fk": {
+          "name": "reviewsArtists_entityId_artists_id_fk",
+          "tableFrom": "reviewsArtists",
+          "tableTo": "artists",
+          "columnsFrom": [
+            "entityId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "reviewsTracks": {
+      "name": "reviewsTracks",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "userId": {
+          "name": "userId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "entityId": {
+          "name": "entityId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "rating": {
+          "name": "rating",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "comment": {
+          "name": "comment",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'\"2024-09-22T15:21:57.678Z\"'"
+        },
+        "entityType": {
+          "name": "entityType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'track'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "reviewsTracks_userId_users_id_fk": {
+          "name": "reviewsTracks_userId_users_id_fk",
+          "tableFrom": "reviewsTracks",
+          "tableTo": "users",
+          "columnsFrom": [
+            "userId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "reviewsTracks_entityId_tracks_id_fk": {
+          "name": "reviewsTracks_entityId_tracks_id_fk",
+          "tableFrom": "reviewsTracks",
+          "tableTo": "tracks",
+          "columnsFrom": [
+            "entityId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
     "notificationRecipients": {
       "name": "notificationRecipients",
       "columns": {
@@ -981,6 +1098,72 @@
           "tableTo": "users",
           "columnsFrom": [
             "ownerId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "userNotifications": {
+      "name": "userNotifications",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "senderId": {
+          "name": "senderId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "resourceId": {
+          "name": "resourceId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'\"2024-09-22T15:21:57.695Z\"'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "userNotifications_senderId_users_id_fk": {
+          "name": "userNotifications_senderId_users_id_fk",
+          "tableFrom": "userNotifications",
+          "tableTo": "users",
+          "columnsFrom": [
+            "senderId"
           ],
           "columnsTo": [
             "id"
@@ -1133,66 +1316,43 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "reviewsAlbums": {
-      "name": "reviewsAlbums",
+    "userProfiles": {
+      "name": "userProfiles",
       "columns": {
-        "id": {
-          "name": "id",
+        "userId": {
+          "name": "userId",
           "type": "text",
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
         },
-        "userId": {
-          "name": "userId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "entityId": {
-          "name": "entityId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "rating": {
-          "name": "rating",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "comment": {
-          "name": "comment",
+        "favouriteArtistId": {
+          "name": "favouriteArtistId",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'\"2024-08-29T11:07:41.460Z\"'"
-        },
-        "entityType": {
-          "name": "entityType",
+        "favouriteAlbumId": {
+          "name": "favouriteAlbumId",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'album'"
+          "notNull": false,
+          "autoincrement": false
+        },
+        "favouriteTrackId": {
+          "name": "favouriteTrackId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "reviewsAlbums_userId_users_id_fk": {
-          "name": "reviewsAlbums_userId_users_id_fk",
-          "tableFrom": "reviewsAlbums",
+        "userProfiles_userId_users_id_fk": {
+          "name": "userProfiles_userId_users_id_fk",
+          "tableFrom": "userProfiles",
           "tableTo": "users",
           "columnsFrom": [
             "userId"
@@ -1203,9 +1363,105 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "reviewsAlbums_entityId_albums_id_fk": {
-          "name": "reviewsAlbums_entityId_albums_id_fk",
-          "tableFrom": "reviewsAlbums",
+        "userProfiles_favouriteArtistId_artists_id_fk": {
+          "name": "userProfiles_favouriteArtistId_artists_id_fk",
+          "tableFrom": "userProfiles",
+          "tableTo": "artists",
+          "columnsFrom": [
+            "favouriteArtistId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userProfiles_favouriteAlbumId_albums_id_fk": {
+          "name": "userProfiles_favouriteAlbumId_albums_id_fk",
+          "tableFrom": "userProfiles",
+          "tableTo": "albums",
+          "columnsFrom": [
+            "favouriteAlbumId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "userProfiles_favouriteTrackId_tracks_id_fk": {
+          "name": "userProfiles_favouriteTrackId_tracks_id_fk",
+          "tableFrom": "userProfiles",
+          "tableTo": "tracks",
+          "columnsFrom": [
+            "favouriteTrackId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "albumsStats": {
+      "name": "albumsStats",
+      "columns": {
+        "entityId": {
+          "name": "entityId",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "likes": {
+          "name": "likes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "popularity": {
+          "name": "popularity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "rating": {
+          "name": "rating",
+          "type": "real",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "ratingSum": {
+          "name": "ratingSum",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        },
+        "ratingCount": {
+          "name": "ratingCount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "albumsStats_entityId_albums_id_fk": {
+          "name": "albumsStats_entityId_albums_id_fk",
+          "tableFrom": "albumsStats",
           "tableTo": "albums",
           "columnsFrom": [
             "entityId"
@@ -1220,79 +1476,62 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "reviewsArtists": {
-      "name": "reviewsArtists",
+    "artistsStats": {
+      "name": "artistsStats",
       "columns": {
-        "id": {
-          "name": "id",
+        "entityId": {
+          "name": "entityId",
           "type": "text",
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
         },
-        "userId": {
-          "name": "userId",
-          "type": "text",
+        "likes": {
+          "name": "likes",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
         },
-        "entityId": {
-          "name": "entityId",
-          "type": "text",
+        "popularity": {
+          "name": "popularity",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
         },
         "rating": {
           "name": "rating",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "comment": {
-          "name": "comment",
-          "type": "text",
+          "type": "real",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": 0
         },
-        "createdAt": {
-          "name": "createdAt",
+        "ratingSum": {
+          "name": "ratingSum",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-08-29T11:07:41.460Z\"'"
+          "default": 0
         },
-        "entityType": {
-          "name": "entityType",
-          "type": "text",
+        "ratingCount": {
+          "name": "ratingCount",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
-          "default": "'artist'"
+          "default": 0
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "reviewsArtists_userId_users_id_fk": {
-          "name": "reviewsArtists_userId_users_id_fk",
-          "tableFrom": "reviewsArtists",
-          "tableTo": "users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "reviewsArtists_entityId_artists_id_fk": {
-          "name": "reviewsArtists_entityId_artists_id_fk",
-          "tableFrom": "reviewsArtists",
+        "artistsStats_entityId_artists_id_fk": {
+          "name": "artistsStats_entityId_artists_id_fk",
+          "tableFrom": "artistsStats",
           "tableTo": "artists",
           "columnsFrom": [
             "entityId"
@@ -1307,79 +1546,62 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "reviewsTracks": {
-      "name": "reviewsTracks",
+    "tracksStats": {
+      "name": "tracksStats",
       "columns": {
-        "id": {
-          "name": "id",
+        "entityId": {
+          "name": "entityId",
           "type": "text",
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
         },
-        "userId": {
-          "name": "userId",
-          "type": "text",
+        "likes": {
+          "name": "likes",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
         },
-        "entityId": {
-          "name": "entityId",
-          "type": "text",
+        "popularity": {
+          "name": "popularity",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
+          "notNull": false,
+          "autoincrement": false,
+          "default": 0
         },
         "rating": {
           "name": "rating",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "comment": {
-          "name": "comment",
-          "type": "text",
+          "type": "real",
           "primaryKey": false,
           "notNull": false,
-          "autoincrement": false
+          "autoincrement": false,
+          "default": 0
         },
-        "createdAt": {
-          "name": "createdAt",
+        "ratingSum": {
+          "name": "ratingSum",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false,
-          "default": "'\"2024-08-29T11:07:41.460Z\"'"
+          "default": 0
         },
-        "entityType": {
-          "name": "entityType",
-          "type": "text",
+        "ratingCount": {
+          "name": "ratingCount",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
-          "default": "'track'"
+          "default": 0
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "reviewsTracks_userId_users_id_fk": {
-          "name": "reviewsTracks_userId_users_id_fk",
-          "tableFrom": "reviewsTracks",
-          "tableTo": "users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "reviewsTracks_entityId_tracks_id_fk": {
-          "name": "reviewsTracks_entityId_tracks_id_fk",
-          "tableFrom": "reviewsTracks",
+        "tracksStats_entityId_tracks_id_fk": {
+          "name": "tracksStats_entityId_tracks_id_fk",
+          "tableFrom": "tracksStats",
           "tableTo": "tracks",
           "columnsFrom": [
             "entityId"
@@ -1394,39 +1616,89 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
-    "session": {
-      "name": "session",
+    "artistsCredits": {
+      "name": "artistsCredits",
       "columns": {
-        "sessionToken": {
-          "name": "sessionToken",
+        "id": {
+          "name": "id",
           "type": "text",
           "primaryKey": true,
           "notNull": true,
           "autoincrement": false
         },
-        "userId": {
-          "name": "userId",
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "artistsCreditsName": {
+      "name": "artistsCreditsName",
+      "columns": {
+        "artistCreditId": {
+          "name": "artistCreditId",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "expires": {
-          "name": "expires",
+        "artistId": {
+          "name": "artistId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "position": {
+          "name": "position",
           "type": "integer",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "joinPhrase": {
+          "name": "joinPhrase",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "session_userId_users_id_fk": {
-          "name": "session_userId_users_id_fk",
-          "tableFrom": "session",
-          "tableTo": "users",
+        "artistsCreditsName_artistCreditId_artistsCredits_id_fk": {
+          "name": "artistsCreditsName_artistCreditId_artistsCredits_id_fk",
+          "tableFrom": "artistsCreditsName",
+          "tableTo": "artistsCredits",
           "columnsFrom": [
-            "userId"
+            "artistCreditId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "artistsCreditsName_artistId_artists_id_fk": {
+          "name": "artistsCreditsName_artistId_artists_id_fk",
+          "tableFrom": "artistsCreditsName",
+          "tableTo": "artists",
+          "columnsFrom": [
+            "artistId"
           ],
           "columnsTo": [
             "id"
@@ -1519,232 +1791,6 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "tracksStats": {
-      "name": "tracksStats",
-      "columns": {
-        "entityId": {
-          "name": "entityId",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "likes": {
-          "name": "likes",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        },
-        "popularity": {
-          "name": "popularity",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        },
-        "rating": {
-          "name": "rating",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        },
-        "ratingSum": {
-          "name": "ratingSum",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        },
-        "ratingCount": {
-          "name": "ratingCount",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "tracksStats_entityId_tracks_id_fk": {
-          "name": "tracksStats_entityId_tracks_id_fk",
-          "tableFrom": "tracksStats",
-          "tableTo": "tracks",
-          "columnsFrom": [
-            "entityId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "userNotifications": {
-      "name": "userNotifications",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "senderId": {
-          "name": "senderId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "type": {
-          "name": "type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "resourceId": {
-          "name": "resourceId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "message": {
-          "name": "message",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'\"2024-08-29T11:07:41.460Z\"'"
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "userNotifications_senderId_users_id_fk": {
-          "name": "userNotifications_senderId_users_id_fk",
-          "tableFrom": "userNotifications",
-          "tableTo": "users",
-          "columnsFrom": [
-            "senderId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "userProfiles": {
-      "name": "userProfiles",
-      "columns": {
-        "userId": {
-          "name": "userId",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "favoriteArtistId": {
-          "name": "favoriteArtistId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "favoriteAlbumId": {
-          "name": "favoriteAlbumId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "favoriteTrackId": {
-          "name": "favoriteTrackId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "userProfiles_userId_users_id_fk": {
-          "name": "userProfiles_userId_users_id_fk",
-          "tableFrom": "userProfiles",
-          "tableTo": "users",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        },
-        "userProfiles_favoriteArtistId_artists_id_fk": {
-          "name": "userProfiles_favoriteArtistId_artists_id_fk",
-          "tableFrom": "userProfiles",
-          "tableTo": "artists",
-          "columnsFrom": [
-            "favoriteArtistId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "userProfiles_favoriteAlbumId_albums_id_fk": {
-          "name": "userProfiles_favoriteAlbumId_albums_id_fk",
-          "tableFrom": "userProfiles",
-          "tableTo": "albums",
-          "columnsFrom": [
-            "favoriteAlbumId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        },
-        "userProfiles_favoriteTrackId_tracks_id_fk": {
-          "name": "userProfiles_favoriteTrackId_tracks_id_fk",
-          "tableFrom": "userProfiles",
-          "tableTo": "tracks",
-          "columnsFrom": [
-            "favoriteTrackId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
           "onUpdate": "no action"
         }
       },

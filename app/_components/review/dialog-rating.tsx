@@ -9,7 +9,6 @@ import {
 } from "@/app/_components/ui/dialog";
 import { Button } from "@/app/_components/ui/button";
 import { CircleCheck, Star, XIcon } from "lucide-react";
-import { Entity } from "@/types";
 import Rating from "./rating";
 import { useEffect, useRef, useState, useTransition } from "react";
 import clsx from "clsx";
@@ -17,12 +16,13 @@ import { useToast } from "@/app/_components/ui/use-toast";
 import { changeReviewRateAction } from "@/app/_actions/reviews";
 import { usePathname } from "next/navigation";
 import { TailSpin } from "react-loader-spinner";
+import { Content } from "@/src/entities/models/content";
 
 type DialogRatingProps = {
   userId: string;
   entityId: string;
   entityName: string;
-  type: Entity;
+  type: Content;
   defaultRate: number;
   defaultReview?: string;
 };

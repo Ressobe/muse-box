@@ -9,9 +9,9 @@ export const userProfiles = sqliteTable("userProfiles", {
   userId: text("userId")
     .primaryKey()
     .references(() => users.id, { onDelete: "cascade" }),
-  favoriteArtistId: text("favoriteArtistId").references(() => artists.id),
-  favoriteAlbumId: text("favoriteAlbumId").references(() => albums.id),
-  favoriteTrackId: text("favoriteTrackId").references(() => tracks.id),
+  favouriteArtistId: text("favouriteArtistId").references(() => artists.id),
+  favouriteAlbumId: text("favouriteAlbumId").references(() => albums.id),
+  favouriteTrackId: text("favouriteTrackId").references(() => tracks.id),
 });
 
 export const userProfilesRelations = relations(userProfiles, ({ one }) => ({

@@ -1,4 +1,3 @@
-import { currentUser } from "@/lib/auth";
 import {
   Avatar,
   AvatarFallback,
@@ -6,10 +5,11 @@ import {
 } from "@/app/_components/ui/avatar";
 import { FaUser } from "react-icons/fa";
 import Link from "next/link";
-import { getFullAlbumTime, getTime, getYear } from "@/lib/utils";
+import { getFullAlbumTime, getTime, getYear } from "@/app/_lib/utils";
 import { LikeButton } from "@/app/_components/like-button";
 import Image from "next/image";
 import { getAlbumInfoController } from "@/src/interface-adapters/controllers/album/get-album-info.controller";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 
 type AlbumHeaderProps = {
   albumId: string;
@@ -21,8 +21,8 @@ export async function AlbumHeader({ albumId }: AlbumHeaderProps) {
     return null;
   }
 
-  const user = await currentUser();
-  if (!user) {
+  const authUserId = await getAuthUserIdController();
+  if (!authUserId) {
     return null;
   }
 
@@ -73,7 +73,7 @@ export async function AlbumHeader({ albumId }: AlbumHeaderProps) {
                 defaultLikeState={album.isLiked}
                 entityId={album.id}
                 type="album"
-                userId={user.id}
+                userId={authUserId}
               />
             )}
           </div>

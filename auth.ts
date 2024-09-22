@@ -1,11 +1,10 @@
 import NextAuth from "next-auth";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "./drizzle/database/db";
-import { getUserById } from "./data-access/user";
 import { eq } from "drizzle-orm";
-import { getAccountByUserId } from "./data-access/account";
 import authConfig from "@/auth.config";
 import { users } from "./drizzle/database/schemas";
+import { getAccountByUserIdUseCase } from "./src/application/use-cases/auth/get-account-by-user-id.use-case";
 
 export const {
   handlers: { GET, POST },
@@ -30,7 +29,9 @@ export const {
 
       if (!user.id) return false;
 
-      const existingUser = await getUserById(user.id);
+      const existingUser = await db.query.users.findFirst({
+        where: eq(users.id, user.id),
+      });
 
       if (!existingUser?.emailVerified) return false;
 
@@ -52,10 +53,13 @@ export const {
     async jwt({ token }) {
       if (!token.sub) return token;
 
-      const existingUser = await getUserById(token.sub);
+      const existingUser = await db.query.users.findFirst({
+        where: eq(users.id, token.sub),
+      });
+
       if (!existingUser) return token;
 
-      const account = await getAccountByUserId(existingUser.id);
+      const account = await getAccountByUserIdUseCase(existingUser.id);
 
       token.OAuth = !!account;
       token.name = existingUser.name;

@@ -7,6 +7,7 @@ import { auth } from "@/auth";
 import { SessionProvider } from "next-auth/react";
 import { Poppins } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/react";
 
 const poppins = Poppins({ display: "swap", subsets: ["latin"], weight: "400" });
 
@@ -30,6 +31,7 @@ export default async function RootLayout({
         <SessionProvider session={session}>{children}</SessionProvider>
         <Toaster />
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );

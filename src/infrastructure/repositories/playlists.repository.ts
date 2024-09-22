@@ -1,4 +1,8 @@
-import { playlistItems, playlists } from "@/drizzle/database/schemas";
+import {
+  playlistItems,
+  PlaylistItemType,
+  playlists,
+} from "@/drizzle/database/schemas";
 import { IPlaylistsRepository } from "@/src/application/repositories/playlists.repository.interface";
 import { db } from "@/drizzle/database/db";
 import {
@@ -7,6 +11,7 @@ import {
   PlaylistWithItems,
 } from "@/src/entities/models/playlist";
 import { and, eq } from "drizzle-orm";
+import { Content } from "@/src/entities/models/content";
 
 export class PlaylistsRepository implements IPlaylistsRepository {
   async insertPlaylist(userId: string, name: string): Promise<Playlist> {
@@ -66,5 +71,62 @@ export class PlaylistsRepository implements IPlaylistsRepository {
         items: true,
       },
     });
+  }
+
+  async addItemToPlaylist(
+    entityId: string,
+    type: Content,
+    playlistId: string,
+  ): Promise<PlaylistItem> {
+    let itemType = "";
+    if (type === "album") {
+      itemType = PlaylistItemType.ALBUM;
+    }
+    if (type === "artist") {
+      itemType = PlaylistItemType.ARTIST;
+    }
+
+    if (type === "track") {
+      itemType = PlaylistItemType.TRACK;
+    }
+
+    const [item] = await db
+      .insert(playlistItems)
+      .values({
+        playlistId: playlistId,
+        itemId: entityId,
+        itemType: itemType,
+      })
+      .returning();
+    return item;
+  }
+
+  async deleteItemFromPlaylist(
+    entityId: string,
+    type: Content,
+    playlistId: string,
+  ): Promise<PlaylistItem> {
+    let itemType = "";
+    if (type === "album") {
+      itemType = PlaylistItemType.ALBUM;
+    }
+    if (type === "artist") {
+      itemType = PlaylistItemType.ARTIST;
+    }
+
+    if (type === "track") {
+      itemType = PlaylistItemType.TRACK;
+    }
+
+    const [item] = await db
+      .delete(playlistItems)
+      .where(
+        and(
+          eq(playlistItems.itemId, entityId),
+          eq(playlistItems.playlistId, playlistId),
+        ),
+      )
+      .returning();
+    return item;
   }
 }

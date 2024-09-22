@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/app/_components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/_lib/utils";
 import { signOut } from "next-auth/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 

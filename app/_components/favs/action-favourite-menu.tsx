@@ -7,17 +7,18 @@ import {
 } from "@/app/_components/ui/popover";
 import { Button } from "@/app/_components/ui/button";
 import { CircleCheck, EllipsisVertical, Pencil, Trash } from "lucide-react";
-import { useState } from "react";
-import { Entity, LikedItems } from "@/types";
-import { FavouriteMenu } from "./favourite-menu";
+import { FavouriteMenu } from "@/app/_components/favs/favourite-menu";
 import { removeFavouriteAction } from "@/app/_actions/favourites";
-import { useToast } from "../ui/use-toast";
-import { capitalizeFirstLetter } from "@/lib/utils";
+import { useToast } from "@/app/_components/ui/use-toast";
+import { capitalizeFirstLetter } from "@/app/_lib/utils";
+import { Content } from "@/src/entities/models/content";
+import { useState } from "react";
+import { LikedItems } from "@/src/entities/types";
 
 type ActionFavouriteMenuProps = {
   className?: string;
   likedContent: LikedItems;
-  type: Entity;
+  type: Content;
 };
 
 export function ActionFavouriteMenu({

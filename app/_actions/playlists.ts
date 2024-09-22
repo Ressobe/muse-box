@@ -1,11 +1,9 @@
 "use server";
 
 import { auth } from "@/auth";
-import { Entity } from "@/types";
-import {
-  addToPlaylistUseCase,
-  removeFromPlaylistUseCase,
-} from "@/use-cases/playlist";
+import { Content } from "@/src/entities/models/content";
+import { addToPlaylistController } from "@/src/interface-adapters/controllers/playlist/add-to-playlist.controller";
+import { removeFromPlaylistController } from "@/src/interface-adapters/controllers/playlist/remove-from-playlist.controller";
 
 const entityToPlaylists = {
   artist: "Favourite Artists",
@@ -16,7 +14,7 @@ const entityToPlaylists = {
 export async function likeAction(
   userId: string,
   entityId: string,
-  type: Entity,
+  type: Content,
 ) {
   const session = await auth();
   if (!session) {
@@ -32,13 +30,13 @@ export async function likeAction(
     return { error: "Something went wrong!" };
   }
 
-  await addToPlaylistUseCase(userId, entityId, type, playlistName);
+  await addToPlaylistController({ userId, entityId, type, playlistName });
 }
 
 export async function unlikeAction(
   userId: string,
   entityId: string,
-  type: Entity,
+  type: Content,
 ) {
   const session = await auth();
   if (!session) {
@@ -54,5 +52,5 @@ export async function unlikeAction(
     return { error: "Something went wrong!" };
   }
 
-  await removeFromPlaylistUseCase(userId, entityId, type, playlistName);
+  await removeFromPlaylistController({ userId, entityId, type, playlistName });
 }

@@ -53,10 +53,7 @@ export class UsersRepository implements IUsersRepository {
   }
 
   async updateUserImage(userId: string, newImage: string) {
-    return await db
-      .update(users)
-      .set({ image: newImage })
-      .where(eq(users.id, userId));
+    await db.update(users).set({ image: newImage }).where(eq(users.id, userId));
   }
 
   async getUserImage(userId: string) {

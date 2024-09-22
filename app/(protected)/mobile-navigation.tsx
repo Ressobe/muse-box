@@ -6,7 +6,7 @@ import { Button } from "@/app/_components/ui/button";
 import { LINKS } from "./sidebar";
 import Link from "next/link";
 import Icon from "@/app/_components/icon";
-import { cn } from "@/lib/utils";
+import { cn } from "@/app/_lib/utils";
 import { usePathname } from "next/navigation";
 import { LogOutIcon, XIcon } from "lucide-react";
 import { LogoutButton } from "@/app/_components/auth/logout-button";

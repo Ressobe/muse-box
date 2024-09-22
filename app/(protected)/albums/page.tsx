@@ -4,24 +4,51 @@ import { SeeMoreButton } from "@/app/_components/see-more-button";
 import { getNewAlbumsController } from "@/src/interface-adapters/controllers/album/get-new-albums.controller";
 import { getPopularAlbumsController } from "@/src/interface-adapters/controllers/album/get-popular-albums.controller";
 import { getTopAlbumsController } from "@/src/interface-adapters/controllers/album/get-top-albums.controller";
+import { unstable_cache as cache } from "next/cache";
+import { Suspense } from "react";
+import { CardsLoading } from "@/app/_components/loading/cards-loading";
+
+const getCachedTopAlbums = cache(
+  async () => getTopAlbumsController(),
+  ["top-albums"],
+  { revalidate: 600 },
+);
+
+const getCachedPopularAlbums = cache(
+  async () => getPopularAlbumsController(),
+  ["popular-albums"],
+  { revalidate: 600 },
+);
+
+const getCachedNewAlbums = cache(
+  async () => getNewAlbumsController(),
+  ["new-albums"],
+  { revalidate: 600 },
+);
 
 export default async function AlbumsPage() {
-  const topAlbums = await getTopAlbumsController();
-  const popularAlbums = await getPopularAlbumsController();
-  const newAlbums = await getNewAlbumsController();
+  const topAlbums = await getCachedTopAlbums();
+  const popularAlbums = await getCachedPopularAlbums();
+  const newAlbums = await getCachedNewAlbums();
 
   return (
     <section className="w-full space-y-20">
       <div>
-        <AlbumsSection title="Top albums" albums={topAlbums} />
+        <Suspense fallback={<CardsLoading />}>
+          <AlbumsSection title="Top albums" albums={topAlbums} />
+        </Suspense>
         <SeeMoreButton href="/albums/search" />
       </div>
       <div>
-        <AlbumsSection title="Popular albums" albums={popularAlbums} />
+        <Suspense fallback={<CardsLoading />}>
+          <AlbumsSection title="Popular albums" albums={popularAlbums} />
+        </Suspense>
         <SeeMoreButton href="/albums/search" />
       </div>
       <div>
-        <AlbumsSection title="New albums" albums={newAlbums} />
+        <Suspense fallback={<CardsLoading />}>
+          <AlbumsSection title="New albums" albums={newAlbums} />
+        </Suspense>
         <SeeMoreButton href="/albums/search" />
       </div>
     </section>

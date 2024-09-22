@@ -13,9 +13,9 @@ import { RatingStats } from "@/app/_components/review/rating-stats";
 import { ArrowDownNarrowWide } from "lucide-react";
 import { PaginationControls } from "@/app/_components/pagination-controls";
 import { TrackWithAlbumAndStats } from "@/src/entities/models/track";
-import { currentUser } from "@/lib/auth";
 import { ContentInteraction } from "@/app/_components/content-interaction";
 import clsx from "clsx";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 
 type TracksTableProps = {
   tracks: TrackWithAlbumAndStats[];
@@ -32,10 +32,9 @@ export async function TracksTable({
   pagination,
   showContentInteraction,
 }: TracksTableProps) {
-  const authUser = await currentUser();
-  const userId = authUser?.id;
-
+  const userId = await getAuthUserIdController();
   const withPaggination = pagination !== undefined;
+
   return (
     <>
       <Table>

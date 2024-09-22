@@ -1,9 +1,8 @@
 "use client";
 
 import useSWR from "swr";
-import { isNewNotification } from "@/lib/utils";
+import { isNewNotification } from "@/app/_lib/utils";
 import { useState } from "react";
-import { NotificationT, notificationTypes } from "@/types/notification";
 import {
   Popover,
   PopoverContent,
@@ -16,6 +15,7 @@ import { ArtistReviewNotification } from "@/app/_components/notification/artist-
 import { FollowNotification } from "@/app/_components/notification/follow-notification";
 import { AlbumReviewNotification } from "@/app/_components/notification/album-review-notification";
 import { TrackReviewNotification } from "@/app/_components/notification/track-review-notification";
+import { Notifications as NotificationsType } from "@/src/entities/models/notification";
 
 type NotificationListProps = {
   authUserId: string;
@@ -25,7 +25,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export function Notifications({ authUserId }: NotificationListProps) {
   const apiUrl = `/api/notifications/${authUserId}`;
-  const { data, error, isLoading, mutate } = useSWR<NotificationT[]>(
+  const { data, error, isLoading, mutate } = useSWR<NotificationsType[]>(
     apiUrl,
     fetcher,
   );
@@ -65,7 +65,7 @@ export function Notifications({ authUserId }: NotificationListProps) {
       <ul className="flex flex-col gap-4">
         {data.map((item) => {
           switch (item.type) {
-            case notificationTypes.ARTIST_REVIEW:
+            case "artist_review":
               return (
                 <ArtistReviewNotification
                   key={item.id}
@@ -75,7 +75,7 @@ export function Notifications({ authUserId }: NotificationListProps) {
                   closePopover={() => setOpen(false)}
                 />
               );
-            case notificationTypes.ALBUM_REVIEW:
+            case "album_review":
               return (
                 <AlbumReviewNotification
                   key={item.id}
@@ -85,7 +85,7 @@ export function Notifications({ authUserId }: NotificationListProps) {
                   closePopover={() => setOpen(false)}
                 />
               );
-            case notificationTypes.TRACK_REVIEW:
+            case "track_review":
               return (
                 <TrackReviewNotification
                   key={item.id}
@@ -95,7 +95,7 @@ export function Notifications({ authUserId }: NotificationListProps) {
                   closePopover={() => setOpen(false)}
                 />
               );
-            case notificationTypes.FOLLOW:
+            case "follow":
               return (
                 <FollowNotification
                   key={item.id}

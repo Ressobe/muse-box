@@ -6,7 +6,7 @@ import {
   AvatarImage,
 } from "@/app/_components/ui/avatar";
 import { FaUser } from "react-icons/fa";
-import { getTime, getYear, getFullAlbumTime } from "@/lib/utils";
+import { getTime, getYear, getFullAlbumTime } from "@/app/_lib/utils";
 import { LikeButton } from "@/app/_components/like-button";
 import { RatingStats } from "@/app/_components/review/rating-stats";
 import { getAlbumInfoController } from "@/src/interface-adapters/controllers/album/get-album-info.controller";

@@ -13,9 +13,9 @@ import Image from "next/image";
 import { AlbumWithStats } from "@/src/entities/models/album";
 import { PaginationControls } from "@/app/_components/pagination-controls";
 import { ArrowDownNarrowWide } from "lucide-react";
-import { currentUser } from "@/lib/auth";
 import { ContentInteraction } from "@/app/_components/content-interaction";
 import clsx from "clsx";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 
 type AlbumsTableProps = {
   albums: AlbumWithStats[];
@@ -33,8 +33,7 @@ export async function AlbumsTable({
   pagination,
   showContentInteraction,
 }: AlbumsTableProps) {
-  const authUser = await currentUser();
-  const userId = authUser?.id;
+  const userId = await getAuthUserIdController();
 
   const withPaggination = pagination !== undefined;
 

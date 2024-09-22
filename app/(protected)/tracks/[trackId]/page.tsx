@@ -1,23 +1,29 @@
-import { auth } from "@/auth";
 import { ArtistCard } from "@/app/_components/artist/artist-card";
 import { ArtistSmallHeader } from "@/app/_components/artist/artist-small-header";
 import { LikeButton } from "@/app/_components/like-button";
 import { RatingStats } from "@/app/_components/review/rating-stats";
 import { Reviews } from "@/app/_components/review/reviews";
-import { getUserTrackReview } from "@/data-access/user";
-import { currentUser } from "@/lib/auth";
-import { getTime, getYear } from "@/lib/utils";
+import { getTime, getYear } from "@/app/_lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTrackInfoController } from "@/src/interface-adapters/controllers/track/get-track-info.controller";
 import { getTrackReviewsController } from "@/src/interface-adapters/controllers/track/get-track-reviews.controller";
-// import { getPopularTracksController } from "@/src/interface-adapters/controllers/track/get-popular-tracks.controller";
-//
-// export async function generateStaticParams() {
-//   const popularTracks = await getPopularTracksController();
-//   return popularTracks.map((item) => item.id);
-// }
+import { getTopTracksController } from "@/src/interface-adapters/controllers/track/get-top-tracks.controller";
+import { getPopularTracksController } from "@/src/interface-adapters/controllers/track/get-popular-tracks.controller";
+import { getNewTracksController } from "@/src/interface-adapters/controllers/track/get-new-tracks.controller";
+import { getReviewForTrackOwnedByUserUseCase } from "@/src/application/use-cases/review/get-review-for-track-owned-by-user.use-case";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
+
+export async function generateStaticParams() {
+  const topTracks = await getTopTracksController();
+  const popularTracks = await getPopularTracksController();
+  const newTracks = await getNewTracksController();
+
+  return [...topTracks, ...popularTracks, ...newTracks].map((item) => ({
+    trackId: item.id,
+  }));
+}
 
 export default async function TrackPage({
   params,
@@ -32,19 +38,19 @@ export default async function TrackPage({
   if (!track) {
     return notFound();
   }
-  const user = await currentUser();
-  if (!user) {
+  const authUserId = await getAuthUserIdController();
+  if (!authUserId) {
     return null;
   }
 
   const reviews = await getTrackReviewsController({ trackId: track.id });
 
   let showAddReview = true;
-  const session = await auth();
-  if (session && session.user.id) {
-    const review = await getUserTrackReview(session.user.id, track.id);
-    showAddReview = !review;
-  }
+  const review = await getReviewForTrackOwnedByUserUseCase(
+    authUserId,
+    track.id,
+  );
+  showAddReview = !review;
 
   const credits = track.artistCredit.artistsCreditsNames;
 
@@ -89,7 +95,7 @@ export default async function TrackPage({
                 defaultLikeState={track.isLiked}
                 entityId={track.id}
                 type="track"
-                userId={user.id}
+                userId={authUserId}
               />
             )}
           </div>

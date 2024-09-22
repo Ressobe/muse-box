@@ -1,6 +1,5 @@
 "use client";
 
-import { TAlbumReview, TArtistReview, TTrackReview } from "@/types/review";
 import { ArtistReview } from "@/app/(protected)/profiles/[profileId]/artist-review";
 import { AlbumReview } from "./album-review";
 import { TrackReview } from "./track-reviw";
@@ -15,10 +14,19 @@ import { useState } from "react";
 import { Button } from "@/app/_components/ui/button";
 import { ArrowDownNarrowWide } from "lucide-react";
 import { getUserLatestReviewsAction } from "@/app/_actions/reviews";
+import {
+  ReviewWithAlbumRelations,
+  ReviewWithArtist,
+  ReviewWithTrackRelations,
+} from "@/src/entities/models/review";
 
 type LatestReviewsProps = {
   profileId: string;
-  initialActivity: (TArtistReview | TAlbumReview | TTrackReview)[];
+  initialActivity: (
+    | ReviewWithArtist
+    | ReviewWithAlbumRelations
+    | ReviewWithTrackRelations
+  )[];
 };
 
 export function LatestReviews({
@@ -44,16 +52,22 @@ export function LatestReviews({
               return (
                 <ArtistReview
                   key={item.id}
-                  artistReview={item as TArtistReview}
+                  artistReview={item as ReviewWithArtist}
                 />
               );
             case "album":
               return (
-                <AlbumReview key={item.id} albumReview={item as TAlbumReview} />
+                <AlbumReview
+                  key={item.id}
+                  albumReview={item as ReviewWithAlbumRelations}
+                />
               );
             case "track":
               return (
-                <TrackReview key={item.id} trackReview={item as TTrackReview} />
+                <TrackReview
+                  key={item.id}
+                  trackReview={item as ReviewWithTrackRelations}
+                />
               );
           }
         })}

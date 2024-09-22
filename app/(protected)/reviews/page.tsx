@@ -1,5 +1,4 @@
 import { Reviews } from "@/app/_components/review/reviews";
-import { Entity } from "@/types";
 import { notFound } from "next/navigation";
 import { PaginationControls } from "@/app/_components/pagination-controls";
 import { AlbumHeader } from "@/app/_components/album/album-header";
@@ -58,7 +57,7 @@ export default async function ReviewsPage({ searchParams }: ReviewsPageProps) {
       <Reviews
         reviews={reviews}
         showAddReview={showAddReview}
-        type={type as Entity}
+        type={type as Content}
         entityId={entityId}
         showButtonAllReviews={false}
       />

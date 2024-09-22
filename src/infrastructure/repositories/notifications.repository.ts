@@ -10,7 +10,7 @@ import {
   userNotifications,
 } from "@/drizzle/database/schemas";
 import { eq } from "drizzle-orm";
-import { Follow, FollowerUser } from "@/src/entities/models/follow";
+import { FollowerUser } from "@/src/entities/models/follow";
 
 export class NotificationsRepository implements INotificationsRepository {
   async deleteNotification(notificationId: string): Promise<void> {
@@ -78,6 +78,14 @@ export class NotificationsRepository implements INotificationsRepository {
       with: {
         notification: true,
       },
+    });
+  }
+
+  async getNotification(
+    notificationId: string,
+  ): Promise<Notification | undefined> {
+    return await db.query.userNotifications.findFirst({
+      where: eq(userNotifications.id, notificationId),
     });
   }
 }

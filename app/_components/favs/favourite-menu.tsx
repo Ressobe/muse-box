@@ -7,7 +7,7 @@ import {
 } from "@/app/_components/ui/dialog";
 import { Button } from "@/app/_components/ui/button";
 import { CirclePlus } from "lucide-react";
-import { LikedItems } from "@/types";
+import { LikedItems } from "@/src/entities/types";
 import { ArtistsFavouriteDialog } from "@/app/_components/favs/artists-favourite-dialog";
 import { AlbumsFavouriteDialog } from "@/app/_components/favs/albums-favourite-dialog";
 import { TracksFavouriteDialog } from "@/app/_components/favs/tracks-favourite-dialog";

@@ -9,7 +9,7 @@ import { LikeButton } from "@/app/_components/like-button";
 import { RatingStats } from "@/app/_components/review/rating-stats";
 import { ArtistWithStats } from "@/src/entities/models/artist";
 import { Genre } from "@/src/entities/models/genre";
-import { currentUser } from "@/lib/auth";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 
 type ArtistHeaderProps = {
   artist: ArtistWithStats;
@@ -22,7 +22,7 @@ export async function ArtistHeader({
   genres,
   isLiked,
 }: ArtistHeaderProps) {
-  const user = await currentUser();
+  const userId = await getAuthUserIdController();
 
   return (
     <div className="flex flex-col sm:flex-row items-center gap-x-20">
@@ -55,7 +55,7 @@ export async function ArtistHeader({
             {isLiked !== undefined ? (
               <LikeButton
                 defaultLikeState={isLiked}
-                userId={user?.id}
+                userId={userId}
                 entityId={artist.id}
                 type="artist"
               />
@@ -66,7 +66,7 @@ export async function ArtistHeader({
           {isLiked !== undefined ? (
             <LikeButton
               defaultLikeState={isLiked}
-              userId={user?.id}
+              userId={userId}
               entityId={artist.id}
               type="artist"
             />

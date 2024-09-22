@@ -1,24 +1,18 @@
 "use server";
 
-import { currentUser } from "@/lib/auth";
-import { removeNotificationUseCase } from "@/use-cases/notification";
-import { revalidatePath } from "next/cache";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
+import { removeNotificationController } from "@/src/interface-adapters/controllers/notification/remove-notification.controller";
 
 export async function removeNotificationAction(
   ownerId: string,
   notificationId: string,
   path: string,
 ) {
-  const authUser = await currentUser();
-  if (!authUser) {
+  const authUserId = await getAuthUserIdController();
+  if (!authUserId || authUserId !== ownerId) {
     return { error: "Access not authorized!" };
   }
 
-  if (authUser.id !== ownerId) {
-    return { error: "Access not authorized!" };
-  }
-
-  await removeNotificationUseCase(ownerId, notificationId);
-  // revalidatePath(path);
+  await removeNotificationController({ notificationId });
   return { sucess: "Removed notification" };
 }

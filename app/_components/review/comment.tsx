@@ -1,6 +1,6 @@
 "use client";
 
-import { Entity, options } from "@/types";
+import { options } from "@/src/entities/types";
 import Link from "next/link";
 import { UserAvatar } from "@/app/_components/user/user-avatar";
 import {
@@ -33,10 +33,11 @@ import { useToast } from "@/app/_components/ui/use-toast";
 import { useState } from "react";
 import { EditComment } from "@/app/_components/review/edit-comment";
 import { ReviewWithUser } from "@/src/entities/models/review";
+import { Content } from "@/src/entities/models/content";
 
 type CommentProps = {
   review: ReviewWithUser;
-  type: Entity;
+  type: Content;
   entityId: string;
   editOptimisticReview: (review: ReviewWithUser) => void;
   deleteOptimisticReview: (reviewId: string) => void;
@@ -81,7 +82,7 @@ export function Comment({
 
 type ShowCommentProps = {
   review: ReviewWithUser;
-  type: Entity;
+  type: Content;
   editComment: () => void;
   deleteOptimisticReview: (reviewId: string) => void;
 };
@@ -142,7 +143,7 @@ function ShowComment({
 type ActionMenuProps = {
   editAction: boolean;
   commentId: string;
-  type: Entity;
+  type: Content;
   entityId: string;
   ownerId: string;
   deleteOptimisticReview: (reviewId: string) => void;

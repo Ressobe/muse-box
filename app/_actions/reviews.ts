@@ -1,29 +1,31 @@
 "use server";
 
-import { getUserArtistReview, getUserLatestReviews } from "@/data-access/user";
-import { currentUser } from "@/lib/auth";
+import { getReviewForArtistOwnedByUserUseCase } from "@/src/application/use-cases/review/get-review-for-artist-owned-by-user.use-case";
+import { Content } from "@/src/entities/models/content";
+import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
+import { changeReviewRateController } from "@/src/interface-adapters/controllers/review/change-review-rate.controller";
 import { createReviewController } from "@/src/interface-adapters/controllers/review/create-review.controller";
-import { Entity } from "@/types";
-import {
-  changeReviewRateUseCase,
-  editReviewUseCase,
-  removeReviewUseCase,
-} from "@/use-cases/review";
+import { editReviewController } from "@/src/interface-adapters/controllers/review/edit-review.controller";
+import { getLatestReviewsForUserController } from "@/src/interface-adapters/controllers/review/get-latest-reviews-for-user.controller";
+import { removeReviewController } from "@/src/interface-adapters/controllers/review/remove-review.controller";
 import { revalidatePath } from "next/cache";
 
 export async function addReviewAction(
   entityId: string,
   comment: string,
   rating: number,
-  type: Entity,
+  type: Content,
 ) {
-  const user = await currentUser();
-  if (!user) {
+  const authUserId = await getAuthUserIdController();
+  if (!authUserId) {
     return { error: "Not authorized access!" };
   }
 
   if (type === "artist") {
-    const review = await getUserArtistReview(user.id, entityId);
+    const review = await getReviewForArtistOwnedByUserUseCase(
+      entityId,
+      authUserId,
+    );
     if (review) {
       return { error: "Your review for this artist, already exist!" };
     }
@@ -46,20 +48,16 @@ export async function addReviewAction(
 
 export async function removeReviewAction(
   entityId: string,
-  type: Entity,
+  type: Content,
   ownerId: string,
   commentId: string,
 ) {
-  const user = await currentUser();
-  if (!user) {
+  const authUserId = await getAuthUserIdController();
+  if (!authUserId || authUserId !== ownerId) {
     return { error: "Not authorized access!" };
   }
 
-  if (ownerId !== user.id) {
-    return { error: "Not authorized access!" };
-  }
-
-  await removeReviewUseCase(entityId, type, commentId);
+  await removeReviewController({ entityId, type, reviewId: commentId });
   revalidatePath(`/${type}s/${entityId}`);
 }
 
@@ -69,21 +67,21 @@ export async function editReviewAction(
   userId: string,
   comment: string,
   rating: number,
-  type: Entity,
+  type: Content,
 ) {
-  const user = await currentUser();
-  if (!user || user.id !== userId) {
+  const authUserId = await getAuthUserIdController();
+  if (!authUserId || authUserId !== userId) {
     return { error: "Not authorized access!" };
   }
 
-  const review = await editReviewUseCase(
-    commentId,
+  const review = await editReviewController({
     entityId,
     userId,
     comment,
     rating,
     type,
-  );
+    reviewId: commentId,
+  });
 
   revalidatePath(`/${type}s/${entityId}`);
 
@@ -100,20 +98,20 @@ export async function changeReviewRateAction(
   userId: string,
   rating: number,
   comment: string,
-  type: Entity,
+  type: Content,
 ) {
-  const user = await currentUser();
-  if (!user || user.id !== userId) {
+  const authUserId = await getAuthUserIdController();
+  if (!authUserId || authUserId !== userId) {
     return { error: "Not authorized access!" };
   }
 
-  const review = await changeReviewRateUseCase(
+  const review = await changeReviewRateController({
     entityId,
     userId,
     rating,
     comment,
     type,
-  );
+  });
 
   revalidatePath(pathname);
 
@@ -125,6 +123,9 @@ export async function changeReviewRateAction(
 }
 
 export async function getUserLatestReviewsAction(profileId: string) {
-  const reviews = await getUserLatestReviews(profileId);
+  const reviews = await getLatestReviewsForUserController({
+    userId: profileId,
+  });
+
   return reviews;
 }

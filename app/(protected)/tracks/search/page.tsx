@@ -1,6 +1,4 @@
-import { PaginationControls } from "@/app/_components/pagination-controls";
 import { TracksTable } from "@/app/_components/track/tracks-table";
-import { currentUser } from "@/lib/auth";
 import { isValidSortType, SortType } from "@/src/entities/types";
 import { getTracksSearchController } from "@/src/interface-adapters/controllers/track/get-tracks-search.controller";
 import { Suspense } from "react";

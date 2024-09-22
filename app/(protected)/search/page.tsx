@@ -1,7 +1,8 @@
-import { AlbumCard } from "@/app/_components/album/album-card";
-import { ArtistCard } from "@/app/_components/artist/artist-card";
-import { TrackCard } from "@/app/_components/track/track-card";
-import { UserCard } from "@/app/_components/user/user-card";
+import { AlbumsCards } from "@/app/_components/album/albums-cards";
+import { ArtistsCards } from "@/app/_components/artist/artists-cards";
+import { CardsLoading } from "@/app/_components/loading/cards-loading";
+import { TracksCards } from "@/app/_components/track/tracks-cards";
+import { UsersCards } from "@/app/_components/user/users-cards";
 import { getFilteredAlbumsController } from "@/src/interface-adapters/controllers/album/get-filtered-albums.controller";
 import { getFilteredArtistsController } from "@/src/interface-adapters/controllers/artist/get-filtered-artists.controller";
 import { getFilteredTracksController } from "@/src/interface-adapters/controllers/track/get-filtered-tracks.controller";
@@ -17,19 +18,10 @@ type SearchPageProps = {
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const query = searchParams["query"] ?? "";
 
-  const usersData = getFilteredUsersController(query);
-  const artistsData = getFilteredArtistsController(query);
-  const albumsData = getFilteredAlbumsController(query);
-  const tracksData = getFilteredTracksController(query);
-
-  const [users, artists, albums, tracks] = await Promise.all([
-    usersData,
-    artistsData,
-    albumsData,
-    tracksData,
-  ]);
-
-  // TODO: add loading states for data
+  const users = await getFilteredUsersController(query);
+  const artists = await getFilteredArtistsController(query);
+  const albums = await getFilteredAlbumsController(query);
+  const tracks = await getFilteredTracksController(query);
 
   return (
     <section className="space-y-20">
@@ -38,14 +30,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           Users
         </h1>
         <ul className="pl-4 pt-8 flex flex-wrap">
-          <Suspense>
-            {users.length > 0 ? (
-              users.map((item) => {
-                return <UserCard key={item.id} user={item} />;
-              })
-            ) : (
-              <span className="pl-4 pt-8 text-lg">No users</span>
-            )}
+          <Suspense fallback={<CardsLoading />}>
+            <UsersCards users={users} />
           </Suspense>
         </ul>
       </div>
@@ -55,14 +41,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           Artists
         </h1>
         <ul className="pl-4 pt-8 flex flex-wrap">
-          <Suspense>
-            {artists.length > 0 ? (
-              artists.map((item) => {
-                return <ArtistCard key={item.id} artist={item} />;
-              })
-            ) : (
-              <span className="pl-4 pt-8 text-lg">No artists</span>
-            )}
+          <Suspense fallback={<CardsLoading />}>
+            <ArtistsCards artists={artists} />
           </Suspense>
         </ul>
       </div>
@@ -72,14 +52,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           Albums
         </h1>
         <ul className="pl-4 pt-8 flex flex-wrap">
-          <Suspense>
-            {albums.length > 0 ? (
-              albums.map((item) => {
-                return <AlbumCard key={item.id} album={item} />;
-              })
-            ) : (
-              <span className="pl-4 pt-8 text-lg">No albums</span>
-            )}
+          <Suspense fallback={<CardsLoading />}>
+            <AlbumsCards albums={albums} />
           </Suspense>
         </ul>
       </div>
@@ -89,14 +63,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           Tracks
         </h1>
         <ul className="pl-4 pt-8 flex flex-wrap">
-          <Suspense>
-            {tracks.length > 0 ? (
-              tracks.map((item) => {
-                return <TrackCard key={item.id} track={item} />;
-              })
-            ) : (
-              <span className="pl-4 pt-8 text-lg">No tracks</span>
-            )}
+          <Suspense fallback={<CardsLoading />}>
+            <TracksCards tracks={tracks} />
           </Suspense>
         </ul>
       </div>

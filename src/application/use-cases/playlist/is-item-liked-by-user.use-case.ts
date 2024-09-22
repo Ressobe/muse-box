@@ -1,7 +1,7 @@
 import { container } from "@/di/container";
 import { Content } from "@/src/entities/models/content";
 import { IPlaylistsRepository } from "@/src/application/repositories/playlists.repository.interface";
-import { entityToPlaylists } from "@/types";
+import { entityToPlaylists } from "@/src/entities/types";
 
 export async function isItemLikedByUserUseCase(
   userId: string,

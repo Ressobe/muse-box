@@ -3,9 +3,8 @@ import { createClient } from "@libsql/client";
 import * as schema from "./schemas/index";
 
 const client = createClient({
-  url: "libsql://muse-box-ressobe.turso.io",
-  authToken:
-    "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MjQ4MzI4NTEsInAiOnsicnciOnsibnMiOlsiZGRjMzcxZDgtZTI2ZC00YzYxLWJhNGMtNWFhZWM0NzE5ZDExIl19fX0.nSZV_tWgXIVXFhtiPce1OjMK6SBF5LHqcpj9ekboC2BAMgsu3Ta4rrfvNlwZ_wBQCUpJt2-TlN5HLPgfuV0iCQ",
+  url: process.env.TURSO_DATABASE_URL!,
+  authToken: process.env.TURSO_AUTH_TOKEN!,
 });
 
 declare global {

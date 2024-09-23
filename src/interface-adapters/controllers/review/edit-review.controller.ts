@@ -1,5 +1,7 @@
 import { editReviewUseCase } from "@/src/application/use-cases/review/edit-review.use-case";
-import { InputParseError } from "@/src/entities/errors/common";
+import { findReviewUseCase } from "@/src/application/use-cases/review/find-review.use-case";
+import { updateStatsForUpdateRatingUseCase } from "@/src/application/use-cases/stats/update-stats-for-update-rating.use-case";
+import { InputParseError, NotFoundError } from "@/src/entities/errors/common";
 import { contentSchema } from "@/src/entities/models/content";
 import { z } from "zod";
 
@@ -21,6 +23,18 @@ export async function editReviewController(input: ControllerInput) {
   }
 
   const { reviewId, entityId, userId, comment, rating, type } = data;
+
+  const existingReview = await findReviewUseCase(userId, entityId, type);
+  if (!existingReview) {
+    throw new NotFoundError("Review not founded");
+  }
+
+  await updateStatsForUpdateRatingUseCase(
+    entityId,
+    type,
+    existingReview.rating,
+    rating,
+  );
 
   const updatedReview = await editReviewUseCase(
     reviewId,

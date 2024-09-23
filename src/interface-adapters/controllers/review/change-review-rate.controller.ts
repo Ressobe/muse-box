@@ -3,6 +3,7 @@ import { findReviewUseCase } from "@/src/application/use-cases/review/find-revie
 import { updateReviewUseCase } from "@/src/application/use-cases/review/update-review.use-case";
 import { InputParseError } from "@/src/entities/errors/common";
 import { contentSchema } from "@/src/entities/models/content";
+import { updateStatsForUpdateRatingUseCase } from "@/src/application/use-cases/stats/update-stats-for-update-rating.use-case";
 import { z } from "zod";
 
 const inputSchema = z.object({
@@ -28,6 +29,13 @@ export async function changeReviewRateController(input: ControllerInput) {
   if (!review) {
     review = await createReviewUseCase(entityId, userId, comment, rating, type);
   }
+
+  await updateStatsForUpdateRatingUseCase(
+    entityId,
+    type,
+    review.rating,
+    rating,
+  );
 
   return await updateReviewUseCase(
     review.id,

@@ -102,15 +102,6 @@ export default async function DiscographyPage({
                     </span>
 
                     {album.isLiked !== undefined && authUserId !== undefined ? (
-                      <LikeButton
-                        defaultLikeState={album.isLiked}
-                        entityId={album.id}
-                        type="album"
-                        userId={authUserId}
-                      />
-                    ) : null}
-
-                    {album.isLiked !== undefined && authUserId !== undefined ? (
                       <div className="hidden md:block">
                         <LikeButton
                           defaultLikeState={album.isLiked}

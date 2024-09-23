@@ -45,12 +45,10 @@ export default async function TrackPage({
 
   const reviews = await getTrackReviewsController({ trackId: track.id });
 
-  let showAddReview = true;
-  const review = await getReviewForTrackOwnedByUserUseCase(
-    authUserId,
+  const showAddReview = !(await getReviewForTrackOwnedByUserUseCase(
     track.id,
-  );
-  showAddReview = !review;
+    authUserId,
+  ));
 
   const credits = track.artistCredit.artistsCreditsNames;
 

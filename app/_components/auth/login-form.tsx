@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -28,17 +28,20 @@ export function LoginForm() {
   const [sucess, setSucess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
   const searchParams = useSearchParams();
+
   const urlError =
     searchParams.get("error") === "OAuthAccountNotLinked"
       ? "Email already in use with diffrent provider"
       : "";
   const callbackUrl = searchParams.get("callbackUrl");
+  const guest = searchParams.get("guest");
+  const isGuest = Boolean(guest);
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: isGuest ? "guest@gmail.com" : "",
+      password: isGuest ? "guest123" : "",
     },
   });
 
@@ -52,6 +55,19 @@ export function LoginForm() {
       setSucess(response.sucess);
     });
   };
+
+  useEffect(() => {
+    if (isGuest) {
+      startTransition(async () => {
+        const response = await loginAction(
+          { email: "guest@gmail.com", password: "guest123" },
+          callbackUrl,
+        );
+        setError(response.error);
+        setSucess(response.sucess);
+      });
+    }
+  }, [callbackUrl, isGuest]);
 
   return (
     <CardWrapper

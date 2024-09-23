@@ -5,7 +5,7 @@ import * as schema from "./schemas/index";
 const client = createClient({
   url: "libsql://muse-box-ressobe.turso.io",
   authToken:
-    "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MjQ4MzI4NTEsInAiOnsicnciOnsibnMiOlsiZGRjMzcxZDgtZTI2ZC00YzYxLWJhNGMtNWFhZWM0NzE5ZDExIl19fX0.nSZV_tWgXIVXFhtiPce1OjMK6SBF5LHqcpj9ekboC2BAMgsu3Ta4rrfvNlwZ_wBQCUpJt2-TlN5HLPgfuV0iCQ",
+    "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3MjcwOTU0MzUsImlkIjoiMDMwN2VjYmUtNjY5Mi00YjI2LWIxOTUtMjNhMzEwMTVkNjc4In0.dXKwKRTldkvN1g1oXW-YXHrI0vm45GbqdIGH2LJA_aDtcBeAh0e6N1RNm1utmm4tH4RHYzUUDiyxtYCW1tPBDg",
 });
 
 declare global {

@@ -36,6 +36,20 @@
       "when": 1727019179679,
       "tag": "0004_lush_wallow",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1727095209089,
+      "tag": "0005_icy_magus",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1727095525119,
+      "tag": "0006_cynical_cobalt_man",
+      "breakpoints": true
     }
   ]
 }

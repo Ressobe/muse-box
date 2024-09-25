@@ -1,10 +1,11 @@
 import { drizzle, LibSQLDatabase } from "drizzle-orm/libsql";
 import { createClient } from "@libsql/client";
 import * as schema from "./schemas/index";
+import { configEnv } from "@/configEnv";
 
 const client = createClient({
-  url: process.env.VERCEL_TURSO_DATABASE_URL!,
-  authToken: process.env.VERCEL_TURSO_AUTH_TOKEN!,
+  url: configEnv.TURSO_DATABASE_URL,
+  authToken: configEnv.TURSO_AUTH_TOKEN,
 });
 
 declare global {

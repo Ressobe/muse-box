@@ -13,20 +13,20 @@ import { AlbumsLoading } from "@/app/_components/loading/albums-loading";
 import { TracksLoading } from "@/app/_components/loading/tracks-loading";
 import { ArtistHeaderLoading } from "@/app/_components/loading/artist-header-loading";
 import { Suspense } from "react";
-import { getTopArtistsController } from "@/src/interface-adapters/controllers/artist/get-top-artists.controller";
-import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
-import { getNewArtistsController } from "@/src/interface-adapters/controllers/artist/get-new-artists.controller";
+// import { getTopArtistsController } from "@/src/interface-adapters/controllers/artist/get-top-artists.controller";
+// import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
+// import { getNewArtistsController } from "@/src/interface-adapters/controllers/artist/get-new-artists.controller";
 import { getArtistAlbumsController } from "@/src/interface-adapters/controllers/artist/get-artist-albums.controller";
 
-export async function generateStaticParams() {
-  const topArtists = await getTopArtistsController();
-  const popularArtists = await getPopularArtistsController();
-  const newArtists = await getNewArtistsController();
-
-  return [...topArtists, ...popularArtists, ...newArtists].map((item) => ({
-    artistId: item.id,
-  }));
-}
+// export async function generateStaticParams() {
+//   const topArtists = await getTopArtistsController();
+//   const popularArtists = await getPopularArtistsController();
+//   const newArtists = await getNewArtistsController();
+//
+//   return [...topArtists, ...popularArtists, ...newArtists].map((item) => ({
+//     artistId: item.id,
+//   }));
+// }
 
 export default async function Artist({
   params,

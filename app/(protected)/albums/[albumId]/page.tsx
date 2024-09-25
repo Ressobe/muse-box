@@ -18,20 +18,20 @@ import { shouldShowAddReviewController } from "@/src/interface-adapters/controll
 import { getAlbumReviewsController } from "@/src/interface-adapters/controllers/album/get-album-reviews.controller";
 import { getAlbumInfoController } from "@/src/interface-adapters/controllers/album/get-album-info.controller";
 import { ContentInteraction } from "@/app/_components/content-interaction";
-import { getPopularAlbumsController } from "@/src/interface-adapters/controllers/album/get-popular-albums.controller";
-import { getTopAlbumsController } from "@/src/interface-adapters/controllers/album/get-top-albums.controller";
-import { getNewAlbumsController } from "@/src/interface-adapters/controllers/album/get-new-albums.controller";
+// import { getPopularAlbumsController } from "@/src/interface-adapters/controllers/album/get-popular-albums.controller";
+// import { getTopAlbumsController } from "@/src/interface-adapters/controllers/album/get-top-albums.controller";
+// import { getNewAlbumsController } from "@/src/interface-adapters/controllers/album/get-new-albums.controller";
 import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 
-export async function generateStaticParams() {
-  const topAlbums = await getTopAlbumsController();
-  const popularAlbums = await getPopularAlbumsController();
-  const newAlbums = await getNewAlbumsController();
-
-  return [...topAlbums, ...popularAlbums, ...newAlbums].map((item) => ({
-    albumId: item.id,
-  }));
-}
+// export async function generateStaticParams() {
+//   const topAlbums = await getTopAlbumsController();
+//   const popularAlbums = await getPopularAlbumsController();
+//   const newAlbums = await getNewAlbumsController();
+//
+//   return [...topAlbums, ...popularAlbums, ...newAlbums].map((item) => ({
+//     albumId: item.id,
+//   }));
+// }
 
 export default async function AlbumPage({
   params,

@@ -12,24 +12,24 @@ import {
 import { getFullAlbumTime, getTime, getYear } from "@/app/_lib/utils";
 import { getArtistDiscographyController } from "@/src/interface-adapters/controllers/artist/get-artist-discography.controller";
 import { getArtistInfoController } from "@/src/interface-adapters/controllers/artist/get-artist-info.controller";
-import { getNewArtistsController } from "@/src/interface-adapters/controllers/artist/get-new-artists.controller";
-import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
-import { getTopArtistsController } from "@/src/interface-adapters/controllers/artist/get-top-artists.controller";
+// import { getNewArtistsController } from "@/src/interface-adapters/controllers/artist/get-new-artists.controller";
+// import { getPopularArtistsController } from "@/src/interface-adapters/controllers/artist/get-popular-artists.controller";
+// import { getTopArtistsController } from "@/src/interface-adapters/controllers/artist/get-top-artists.controller";
 import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
-export async function generateStaticParams() {
-  const topArtists = await getTopArtistsController();
-  const popularArtists = await getPopularArtistsController();
-  const newArtists = await getNewArtistsController();
-
-  return [...topArtists, ...popularArtists, ...newArtists].map((item) => ({
-    artistId: item.id,
-  }));
-}
+// export async function generateStaticParams() {
+//   const topArtists = await getTopArtistsController();
+//   const popularArtists = await getPopularArtistsController();
+//   const newArtists = await getNewArtistsController();
+//
+//   return [...topArtists, ...popularArtists, ...newArtists].map((item) => ({
+//     artistId: item.id,
+//   }));
+// }
 
 export default async function DiscographyPage({
   params,

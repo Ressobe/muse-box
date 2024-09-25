@@ -9,21 +9,21 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTrackInfoController } from "@/src/interface-adapters/controllers/track/get-track-info.controller";
 import { getTrackReviewsController } from "@/src/interface-adapters/controllers/track/get-track-reviews.controller";
-import { getTopTracksController } from "@/src/interface-adapters/controllers/track/get-top-tracks.controller";
-import { getPopularTracksController } from "@/src/interface-adapters/controllers/track/get-popular-tracks.controller";
-import { getNewTracksController } from "@/src/interface-adapters/controllers/track/get-new-tracks.controller";
+// import { getTopTracksController } from "@/src/interface-adapters/controllers/track/get-top-tracks.controller";
+// import { getPopularTracksController } from "@/src/interface-adapters/controllers/track/get-popular-tracks.controller";
+// import { getNewTracksController } from "@/src/interface-adapters/controllers/track/get-new-tracks.controller";
 import { getReviewForTrackOwnedByUserUseCase } from "@/src/application/use-cases/review/get-review-for-track-owned-by-user.use-case";
 import { getAuthUserIdController } from "@/src/interface-adapters/controllers/auth/get-auth-user-id.controller";
 
-export async function generateStaticParams() {
-  const topTracks = await getTopTracksController();
-  const popularTracks = await getPopularTracksController();
-  const newTracks = await getNewTracksController();
-
-  return [...topTracks, ...popularTracks, ...newTracks].map((item) => ({
-    trackId: item.id,
-  }));
-}
+// export async function generateStaticParams() {
+//   const topTracks = await getTopTracksController();
+//   const popularTracks = await getPopularTracksController();
+//   const newTracks = await getNewTracksController();
+//
+//   return [...topTracks, ...popularTracks, ...newTracks].map((item) => ({
+//     trackId: item.id,
+//   }));
+// }
 
 export default async function TrackPage({
   params,

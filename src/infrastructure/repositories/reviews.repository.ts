@@ -2,7 +2,6 @@ import {
   reviewsAlbums,
   reviewsArtists,
   reviewsTracks,
-  users,
 } from "@/drizzle/database/schemas";
 import { IReviewsRepository } from "@/src/application/repositories/reviews.repository.interface";
 import { Content } from "@/src/entities/models/content";
@@ -19,7 +18,6 @@ import {
 } from "@/src/entities/models/review";
 import { db } from "@/drizzle/database/db";
 import { and, count, desc, eq, not } from "drizzle-orm";
-import { DatabaseOperationError } from "@/src/entities/errors/common";
 
 const reviewTables = {
   artist: reviewsArtists,

@@ -9,7 +9,7 @@ import { unstable_cache as cache } from "next/cache";
 import { Suspense } from "react";
 
 const getCachedTopTracks = cache(
-  async () => getTopTracksController(),
+  async () => getTopTracksController({ withAuthUserInfo: false }),
   ["top-tracks"],
   { revalidate: 600 },
 );

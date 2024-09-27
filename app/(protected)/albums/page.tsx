@@ -9,7 +9,7 @@ import { Suspense } from "react";
 import { CardsLoading } from "@/app/_components/loading/cards-loading";
 
 const getCachedTopAlbums = cache(
-  async () => getTopAlbumsController(),
+  async () => getTopAlbumsController({ withAuthUserInfo: false }),
   ["top-albums"],
   { revalidate: 600 },
 );

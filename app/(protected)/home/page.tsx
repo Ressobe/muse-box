@@ -8,9 +8,9 @@ import { getTopTracksController } from "@/src/interface-adapters/controllers/tra
 import { Suspense } from "react";
 
 export default async function HomePage() {
-  const topArtists = await getTopArtistsController();
-  const topAlbums = await getTopAlbumsController();
-  const topTracks = await getTopTracksController();
+  const topArtists = await getTopArtistsController({ withAuthUserInfo: true });
+  const topAlbums = await getTopAlbumsController({ withAuthUserInfo: true });
+  const topTracks = await getTopTracksController({ withAuthUserInfo: true });
 
   return (
     <section className="w-full space-y-20">

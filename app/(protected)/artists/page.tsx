@@ -9,7 +9,7 @@ import { Suspense } from "react";
 import { CardsLoading } from "@/app/_components/loading/cards-loading";
 
 const getCachedTopArtists = cache(
-  async () => getTopArtistsController(),
+  async () => getTopArtistsController({ withAuthUserInfo: false }),
   ["top-artists"],
   { revalidate: 600 },
 );
